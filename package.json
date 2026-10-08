@@ -1,0 +1,31 @@
+{
+  "name": "estudio",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Varias páginas web en apps Next.js separadas, con un solo node_modules compartido.",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w thaloz",
+    "dev:thaloz": "npm run dev -w thaloz",
+    "dev:invgate": "npm run dev -w invgate",
+    "build": "npm run build --workspaces",
+    "build:thaloz": "npm run build -w thaloz",
+    "build:invgate": "npm run build -w invgate",
+    "dev:constructora": "npm run dev -w constructora",
+    "build:constructora": "npm run build -w constructora",
+    "dev:inmobiliaria": "npm run dev -w inmobiliaria",
+    "build:inmobiliaria": "npm run build -w inmobiliaria",
+    "dev:salud": "npm run dev -w salud",
+    "build:salud": "npm run build -w salud",
+    "dev:autos": "npm run dev -w autos",
+    "build:autos": "npm run build -w autos",
+    "dev:fitness": "npm run dev -w fitness",
+    "build:fitness": "npm run build -w fitness",
+    "dev:veterinaria": "npm run dev -w veterinaria",
+    "build:veterinaria": "npm run build -w veterinaria",
+    "dev:vinos": "npm run dev -w vinos",
+    "build:vinos": "npm run build -w vinos"
+  }
+}

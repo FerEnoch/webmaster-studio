@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-brand: #5d00ee;
+  --color-ink: #07010f;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #07010f;
+  color: #fff;
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: #5d00ee;
+  color: #fff;
+}
+
+/* Igual que Thaloz "Company Word Changes": 1s quieta, 0.5s ease-in-out al siguiente.
+   5 líneas (la última repite "trusted") para que el loop vuelva a 0% sin salto. */
+@keyframes company-words {
+  0%,
+  16.6% {
+    transform: translateY(0%);
+  }
+  25%,
+  41.6% {
+    transform: translateY(-20%);
+  }
+  50%,
+  66.6% {
+    transform: translateY(-40%);
+  }
+  75%,
+  91.6% {
+    transform: translateY(-60%);
+  }
+  100% {
+    transform: translateY(-80%);
+  }
+}
+
+.company-words {
+  animation: company-words 6s ease-in-out infinite;
+}
+
+/* Remote Title [Scroll IN]: el avatar del centro abre el grupo. */
+.remote-avatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  border: 2px solid #07010f;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.remote-avatar.is-center {
+  z-index: 1;
+  margin-right: -4.4rem;
+  margin-left: -4.4rem;
+  transition:
+    margin 0.5s ease-in-out 0.5s;
+}
+
+.remote-title.is-in .remote-avatar.is-center {
+  margin-right: -2rem;
+  margin-left: -2rem;
+}
+
+/* Impact: cinta horizontal, 60s linear, igual que .impact_marquee-content. */
+.impact-marquee {
+  display: flex;
+  gap: 3rem;
+  overflow: hidden;
+}
+
+.impact-track {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 3rem;
+  min-width: 100%;
+  animation: impact-scroll 60s linear infinite;
+}
+
+.impact-shot {
+  width: min(35rem, 78vw);
+  aspect-ratio: 3 / 2;
+  flex: 0 0 auto;
+  border-radius: 1rem 6rem;
+  object-fit: cover;
+}
+
+@keyframes impact-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 3rem));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .company-words {
+    animation: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  .remote-avatar.is-center {
+    margin-right: -2rem;
+    margin-left: -2rem;
+  }
+
+  .impact-track {
+    animation: none;
+  }
+}
+
+.greek-rule {
+  height: 22px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='22' viewBox='0 0 28 22'%3E%3Cpath d='M1 11h6V3h8v8h6v8h-8v-6H9v6H1V11z' fill='none' stroke='%237a3cff' stroke-width='1.4'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: center;
+  background-size: 28px 22px;
+}
