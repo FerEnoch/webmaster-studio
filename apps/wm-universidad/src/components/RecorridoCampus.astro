@@ -1,0 +1,146 @@
+---
+/**
+ * Seccion "pinned": el recorrido de la visita guiada, minuto a minuto.
+ *
+ * El panel de la izquierda queda fijo mientras se scrollea y cambia con la
+ * parada activa. Es la seccion que cuenta algo: lo que pasa en los 90
+ * minutos de la visita, parada por parada.
+ *
+ * El estado se actualiza con un IntersectionObserver (no hay framework):
+ * cada parada lleva sus datos en `data-*` y el script los copia al panel.
+ */
+import type { Parada } from "../content/universidades";
+import { poster, video } from "@lib/media";
+
+export interface Props {
+  paradas: Parada[];
+  kicker?: string;
+  title?: string;
+  body?: string;
+}
+
+const {
+  paradas,
+  kicker = "Visita guiada",
+  title = "Tu visita, minuto a minuto",
+  body = "Son 90 minutos con un estudiante y una persona de admisiones. Esto es exactamente lo que vas a ver, en orden.",
+} = Astro.props;
+---
+
+<section class="wm-container relative py-20 sm:py-28" id="recorrido">
+  <header class="max-w-2xl">
+    <p class="wm-kicker">{kicker}</p>
+    <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{title}</h2>
+    <p class="mt-5 text-muted">{body}</p>
+  </header>
+
+  <div class="mt-14 grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+    <!-- ── Panel fijo: la parada activa ─────────────────────── -->
+    <div class="lg:sticky lg:top-32 lg:self-start">
+      <div class="overflow-hidden rounded-wm-lg border border-line" data-panel>
+        <div class="wm-grade wm-grain wm-vignette relative h-44 sm:h-56">
+          <video
+            class="h-full w-full object-cover"
+            src={video(3093)}
+            poster={poster(3093)}
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            aria-label="Escalera de piedra del campus de UNIVERSIDAD ALTA (imagen de demostración)."></video>
+          <div
+            class="pointer-events-none absolute inset-0"
+            style="background: linear-gradient(to top, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 20%, transparent) 78%)"
+          >
+          </div>
+          <p
+            class="wm-display absolute bottom-3 left-6 text-[clamp(2.6rem,8vw,4.5rem)] leading-none text-accent"
+            data-panel-numero
+          >
+            01
+          </p>
+        </div>
+
+        <div class="p-6 sm:p-8">
+          <h3 class="wm-display text-2xl leading-tight" data-panel-titulo>{paradas[0]?.titulo}</h3>
+          <p class="mt-2 text-sm font-semibold text-accent" data-panel-minutos>{paradas[0]?.minutos}</p>
+          <p class="mt-5 border-l-2 border-accent pl-4 text-sm text-muted" data-panel-llevas>
+            {paradas[0]?.llevas}
+          </p>
+        </div>
+      </div>
+
+      <p class="mt-4 text-xs leading-relaxed text-muted">
+        Demo de portfolio: el recorrido, los campus y los horarios son ficticios.
+      </p>
+    </div>
+
+    <!-- ── Las paradas ───────────────────────────────────────── -->
+    <ol class="border-t border-line">
+      {
+        paradas.map((p, i) => (
+          <li
+            id={p.id}
+            data-parada
+            data-numero={String(i + 1).padStart(2, "0")}
+            data-titulo={p.titulo}
+            data-minutos={p.minutos}
+            data-llevas={p.llevas}
+            class="border-b border-line py-8 transition-opacity duration-300"
+          >
+            <div class="flex items-baseline gap-5">
+              <span class="wm-display text-2xl text-accent">{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <h3 class="wm-display text-2xl leading-tight sm:text-3xl">{p.titulo}</h3>
+                <p class="mt-1 text-sm font-semibold text-accent">{p.minutos}</p>
+                <p class="mt-4 max-w-xl text-muted">{p.que}</p>
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<script>
+  // La parada activa se detecta con IntersectionObserver y se copia al panel.
+  // Un unico listener, sin rAF: no hay layout que forzar.
+  const init = () => {
+    const paradas = Array.from(document.querySelectorAll<HTMLElement>("[data-parada]"));
+    const panel = document.querySelector<HTMLElement>("[data-panel]");
+    if (!paradas.length || !panel) return;
+
+    const numero = panel.querySelector<HTMLElement>("[data-panel-numero]");
+    const titulo = panel.querySelector<HTMLElement>("[data-panel-titulo]");
+    const minutos = panel.querySelector<HTMLElement>("[data-panel-minutos]");
+    const llevas = panel.querySelector<HTMLElement>("[data-panel-llevas]");
+
+    const activar = (el: HTMLElement) => {
+      paradas.forEach((p) => {
+        p.style.opacity = p === el ? "1" : "0.45";
+      });
+      if (numero) numero.textContent = el.dataset.numero ?? "";
+      if (titulo) titulo.textContent = el.dataset.titulo ?? "";
+      if (minutos) minutos.textContent = el.dataset.minutos ?? "";
+      if (llevas) llevas.textContent = el.dataset.llevas ?? "";
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        const target = visible[0]?.target as HTMLElement | undefined;
+        if (target) activar(target);
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 },
+    );
+
+    paradas.forEach((p) => observer.observe(p));
+  };
+
+  init();
+  document.addEventListener("astro:page-load", init);
+</script>

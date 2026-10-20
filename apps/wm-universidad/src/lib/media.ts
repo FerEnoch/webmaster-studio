@@ -70,8 +70,21 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
     photos: ["1596178065887-1198b6148b2b", "1515377905703-c4788e51af15", "1540555700478-4be289fbecef", "1571019613454-1cb2f99b2d8b"],
   },
   universidad: {
-    videos: [3099, 3119, 3120, 3056],
-    photos: ["1519452575417-564c1401ecc0", "1541339907198-e08756dedf3f", "1562774053-701939374585", "1523240795612-9a054b0db644"],
+    // OJO: el pool del kit (3099/3119/3120/3056) esta mal etiquetado: son un
+    // avion, una bici, una autopista y un edificio abandonado. Los IDs de
+    // abajo se verificaron con `curl -sI -m 15` (HTTP 200) y se revisaron
+    // cuadro a cuadro por poster el 2026-10-20.
+    videos: [3046, 3036, 3090, 3091, 3092, 3093],
+    photos: [
+      "1562774053-701939374585", // campus: edificio + lawn
+      "1509062522246-3755977927d7", // aula con docente y estudiantes
+      "1498243691581-b145c3f54a5a", // biblioteca: estanterias
+      "1522202176988-66273c2fd55f", // grupos de estudio con notebooks
+      "1519452575417-564c1401ecc0", // auditorium / aula magna
+      "1523240795612-9a054b0db644", // estudiantes trabajando con libros
+      "1571260899304-425eee4c7efc", // estudiantes con laptops (modalidad online)
+      "1541339907198-e08756dedf3f", // graduacion: gorros al atardecer
+    ],
   },
   inmobiliaria: {
     videos: [3090, 3092, 3046, 3056],

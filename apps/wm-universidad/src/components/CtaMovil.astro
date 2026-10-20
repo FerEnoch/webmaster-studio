@@ -1,0 +1,42 @@
+---
+/**
+ * CTA fijo de mobile: una sola accion, siempre visible.
+ *
+ * En mobile el scroll es largo y el boton de la portada queda lejos. Este
+ * bar keeps the conversion reachable with the thumb. En desktop se oculta
+ * (`md:hidden`): la firma pide un solo CTA y arriba ya esta.
+ */
+export interface Props {
+  /** Texto del CTA. */
+  label: string;
+  /** Destino del CTA. */
+  href: string;
+  /** WhatsApp como icono, al lado del CTA. */
+  whatsappHref: string;
+  /** Texto accesible del boton de WhatsApp. */
+  whatsappLabel?: string;
+}
+
+const { label, href, whatsappHref, whatsappLabel = "Escribir por WhatsApp" } = Astro.props;
+---
+
+<div
+  class="fixed inset-x-0 bottom-0 z-40 border-t border-line backdrop-blur-xl md:hidden"
+  style="background-color: color-mix(in oklab, var(--wm-bg) 92%, transparent);"
+>
+  <div class="flex items-center gap-3 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+    <a
+      href={whatsappHref}
+      aria-label={whatsappLabel}
+      class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#25d366] text-white"
+    >
+      <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor" aria-hidden="true">
+        <path
+          d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.1.4-.2.7-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.2Z"
+        ></path>
+      </svg>
+    </a>
+
+    <a href={href} class="wm-btn flex-1">{label}</a>
+  </div>
+</div>
