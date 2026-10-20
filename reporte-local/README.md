@@ -18,4 +18,7 @@ Feature doc canónico: `odd/tasks/webmaster-studio.md` (17 tareas, todas cerrada
 
 ## Estado: IMPLEMENTADO
 
-Rama `feature/webmaster-studio-estrategia` — 15 commits, 8 apps Astro + kit compartido, todo verificado. Ver `08-plan-trabajo.md`.
+Rama `feature/webmaster-studio-estrategia` — 17 commits, sin pushear.
+8 apps Astro (`apps/wm-*`) + kit compartido (`packages/webmaster-kit`) + scaffolder.
+Verificación: 8/8 con 0 errores de typecheck, 57 páginas HTML, probe headless de forms 8/8,
+`pnpm audit --audit-level high` limpio, 9/9 apps legacy Next sin regresión.
