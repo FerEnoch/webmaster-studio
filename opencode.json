@@ -8,5 +8,11 @@
     "gentle-ai-verify": {
       "model": "opencode-go/minimax-m3.1-flash-free"
     }
+  },
+  "permission": {
+    "bash": {
+      "rsync": "allow",
+      "rsync *": "allow"
+    }
   }
 }

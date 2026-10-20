@@ -1,0 +1,44 @@
+# ─── WORKSPACE ─────────────────────────────────────────────────────
+packages:
+  - 'apps/*'
+
+# ─── SUPPLY CHAIN SECURITY ─────────────────────────────────────────
+# Overrides globales: pnpm 12 ya NO lee el campo "pnpm" de package.json.
+# Los overrides viven acá (mismo archivo que allowBuilds, trustPolicy...).
+# postcss: 2 vulnerabilidades HIGH sin parche (GHSA-6g55-p6wh-862q,
+# GHSA-r28c-9q8g-f849) llegadas de forma transitiva por `next`. Se
+# fija la versión parcheada para TODO el árbol.
+overrides:
+  postcss: ^8.5.18
+
+# Cuarentena de 3 días (4320 min) para TODAS las deps, incluidas
+# transitivas: la mayoría de los paquetes maliciosos se retiran del
+# registry en horas. (pnpm >= 10.16)
+minimumReleaseAge: 4320
+
+# Nunca `false`: en pnpm >= 11 eso INSTALA la versión que viola la
+# cuarentena (bypass, no fallback).
+minimumReleaseAgeStrict: true
+
+# Falla si un paquete BAJA su nivel de confianza respecto a versiones
+# anteriores (paquete secuestrado que perdió sus credenciales).
+trustPolicy: no-downgrade
+
+# Paquetes mayores a 30 días quedan exentos del trustPolicy.
+trustPolicyIgnoreAfter: 43200
+
+# Las dependencias TRANSITIVAS solo pueden venir del registry.
+# Fuentes exóticas (git, tarball URLs) solo como dependencias directas.
+blockExoticSubdeps: true
+
+# Lista blanca de paquetes que pueden ejecutar scripts de instalación
+# (preinstall/install/postinstall). Deny-by-default.
+allowBuilds:
+  esbuild: true                 # binarios nativos de Vite/Astro
+  '@tailwindcss/oxide': true     # backend nativo de Tailwind v4
+  sharp: true                   # servicio de imágenes de Astro
+  '@parcel/watcher': true       # file watching en dev
+  unrs-resolver: true           # resolver de eslint-config-next
+
+# Scripts de build no aprobados = ERROR de instalación (no warning).
+strictDepBuilds: true
