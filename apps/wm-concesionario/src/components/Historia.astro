@@ -1,0 +1,63 @@
+---
+/**
+ * Seccion "pinned": la historia del concesionario.
+ *
+ * El panel de la izquierda queda pegado (sticky) mientras la linea de tiempo
+ * de la derecha se scrollea. Es la seccion que cuenta algo: por que esta casa
+ * publica el precio final y el peritaje.
+ */
+export interface Hito {
+  anio: string;
+  titulo: string;
+  texto: string;
+}
+
+export interface Props {
+  hitos: Hito[];
+  kicker?: string;
+  title?: string;
+}
+
+const { hitos, kicker = "Nuestra historia", title = "Empezamos con un lote y una promesa" } =
+  Astro.props;
+---
+
+<section class="wm-container relative py-20 sm:py-28">
+  <div class="grid gap-12 lg:grid-cols-[minmax(0,22rem)_1fr] lg:gap-20">
+    <!-- Panel pegado: la idea que no se negocia. -->
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <p class="wm-kicker">{kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.9rem,4.5vw,3rem)]">{title}</h2>
+      <p class="mt-5 text-muted">
+        No vendemos el auto más caro de la cuadra: vendemos el auto que podés
+        pagar con números que no cambian en el mostrador. Esa diferencia
+        empezó en 1978 y no se negocia.
+      </p>
+      <p class="mt-6 border-l-2 border-accent pl-4 text-sm text-muted">
+        Demo de portfolio: la casa, las sucursales y las fechas son ficticias.
+      </p>
+    </div>
+
+    <!-- Linea de tiempo: lo que cuenta. -->
+    <ol class="relative border-l border-line">
+      {
+        hitos.map((hito, i) => (
+          <li class="relative grid gap-3 border-b border-line py-8 pl-8 sm:pl-12">
+            <span
+              aria-hidden="true"
+              class="absolute top-9 -left-[0.42rem] flex h-3 w-3 rounded-full bg-accent"
+            />
+            <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <span class="wm-display text-3xl leading-none text-accent">{hito.anio}</span>
+              <span class="text-xs uppercase tracking-[0.24em] text-muted">
+                Hito {String(i + 1).padStart(2, "0")}
+              </span>
+            </div>
+            <h3 class="wm-display text-xl leading-tight">{hito.titulo}</h3>
+            <p class="max-w-2xl text-muted">{hito.texto}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

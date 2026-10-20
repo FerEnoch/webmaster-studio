@@ -1,23 +1,312 @@
 ---
-/**
- * PLACEHOLDER — el writer reemplaza este archivo por la portada real.
- * Es standalone a proposito: una app recien scaffoldeada compila sin
- * todavia tener el archivo `src/content/<rubro>.ts`.
- */
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/ui/PageHero.astro";
+import LiveNow from "../components/ui/LiveNow.astro";
+import AutoCard from "../components/AutoCard.astro";
+import Historia from "../components/Historia.astro";
+import SucursalCard from "../components/SucursalCard.astro";
+import TestDriveBooking from "../components/TestDriveBooking.tsx";
+import { concesionario, fotos, usados, nuevos, stock } from "../content/concesionario";
+import { poster, video } from "@lib/media";
+
+const [usadosSection, nuevosSection, financiacionSection, sucursalesSection, faq] =
+  concesionario.sections;
+
+const hitos = [
+  {
+    anio: "1978",
+    titulo: "Un lote en Dock Sud y dos autos",
+    texto:
+      "Empezamos vendiendo dos unidades por semana en un lote prestado. La regla fue una desde el primer día: el precio que se publica es el precio que se paga.",
+  },
+  {
+    anio: "1996",
+    titulo: "El peritaje, adentro de la casa",
+    texto:
+      "Trajimos el peritaje al local. Antes de publicar cualquier usado pasa por nuestro taller y queda con un informe firmado que el cliente se lleva.",
+  },
+  {
+    anio: "2009",
+    titulo: "La cuota a la vista",
+    texto:
+      "Empezamos a publicar la cuota mensual junto al precio. Es la mitad de las consultas: nadie quiere hacer cuentas en el mostrador con el celular lleno de avisos de crédito.",
+  },
+  {
+    anio: "2019",
+    titulo: "Tres casas, un mismo service",
+    texto:
+      "Dock Sud, el Norte y La Plata. El service, la garantía y los precios son los mismos en las tres: si hay una diferencia entre sucursales, es un problema nuestro.",
+  },
+  {
+    anio: "2026",
+    titulo: "Reservá el test drive desde la web",
+    texto:
+      "Elegís la unidad, el turno y te damos el pase con código. Es el mismo mostrador, pero sin hacer fila.",
+  },
+];
 ---
 
-<!doctype html>
-<html lang="es-AR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Webmaster Studio</title>
-  </head>
-  <body style="font-family: system-ui, sans-serif; padding: 3rem; line-height: 1.6">
-    <h1>App scaffolded</h1>
-    <p>
-      Reemplazá <code>src/pages/index.astro</code> por la portada del rubro y
-      creá <code>src/content/&lt;rubro&gt;.ts</code>.
+<Base content={concesionario}>
+  <PageHero hero={concesionario.hero} brand={concesionario.brand} />
+
+  <!-- 1) La objecion, respondida de entrada. -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">La promesa</p>
+        <p class="wm-display mt-5 text-[clamp(1.8rem,4.4vw,3rem)] leading-tight">
+          {concesionario.objeccion}
+        </p>
+        <p class="mt-6 max-w-xl text-muted">
+          En AUTOPISTA el precio publicado ya incluye IVA, el peritaje esta
+          hecho antes de que vengas y la cuota se calcula con la tasa real del
+          mes. Si algo no cierra, te lo decimos nosotros primero.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="#testdrive" class="wm-btn">Agendar test drive</a>
+          <a href="/usados" class="wm-btn wm-btn--ghost">Ver el stock</a>
+        </div>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.testDrive}
+          alt="Manos al volante durante una prueba de manejo (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 2) Señal de stock en vivo. -->
+  <section class="border-y border-line">
+    <div class="wm-container flex flex-wrap items-center justify-between gap-6 py-6">
+      <div class="flex flex-wrap items-center gap-x-8 gap-y-3">
+        <span class="text-sm text-accent">
+          <LiveNow
+            signal={{
+              label: "En stock ahora",
+              count: 7,
+              min: 5,
+              max: 9,
+              unit: "unidades publicadas",
+              interval: 5000,
+            }}
+          />
+        </span>
+        <span class="text-xs uppercase tracking-[0.18em] text-muted">
+          Stock actualizado hace 2 min
+        </span>
+      </div>
+      <a
+        href="/usados"
+        class="text-sm font-semibold uppercase tracking-[0.12em] text-accent underline underline-offset-4"
+      >
+        Filtrar el stock
+      </a>
+    </div>
+  </section>
+
+  <!-- 3) Usados destacados -->
+  <section class="wm-container py-16 sm:py-20" id="usados">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{usadosSection.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{usadosSection.title}</h2>
+      <p class="mt-5 text-muted">{usadosSection.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {usados.map((auto) => <AutoCard auto={auto} />)}
+    </div>
+
+    <p class="mt-8 text-sm text-muted">
+      <a href="/usados" class="font-semibold text-accent underline underline-offset-4">
+        Ver los {usados.length} usados con filtros de marca, modelo, precio y kilometraje
+      </a>
     </p>
-  </body>
-</html>
+  </section>
+
+  <!-- 4) Seccion "pinned": la historia que hay que contar -->
+  <Historia hitos={hitos} />
+
+  <!-- 5) Nuevos -->
+  <section class="wm-container py-16 sm:py-20" id="nuevos">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{nuevosSection.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{nuevosSection.title}</h2>
+      <p class="mt-5 text-muted">{nuevosSection.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {nuevos.map((auto) => <AutoCard auto={auto} href={`/nuevos/${auto.id}`} />)}
+    </div>
+
+    <p class="mt-8 text-sm text-muted">
+      <a href="/nuevos" class="font-semibold text-accent underline underline-offset-4">
+        Ver los 0 km con entrega inmediata
+      </a>
+    </p>
+  </section>
+
+  <!-- 6) Banda de video: el test drive -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(4207)}
+        poster={poster(4207)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Autos circulando por una avenida vista desde el aire (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 70%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-32">
+      <p class="wm-kicker">Test drive</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        Manévalo antes de hablar de cuotas
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        45 minutos, la unidad que te interesa y la ruta que elijas vos. Si el
+        auto no te gusta, no pasa nada: lo decis ahí, sin compromiso.
+      </p>
+      <a href="#testdrive" class="wm-btn mt-8">Agendar mi test drive</a>
+    </div>
+  </section>
+
+  <!-- 7) Conversion principal: termina en el pase -->
+  <section id="testdrive" class="wm-container scroll-mt-24 py-20 sm:py-28">
+    <div class="max-w-2xl">
+      <p class="wm-kicker">{concesionario.conversion.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
+        {concesionario.conversion.title}
+      </h2>
+      <p class="mt-5 text-muted">{concesionario.conversion.body}</p>
+    </div>
+
+    <ol class="mt-10 grid gap-4 sm:grid-cols-3">
+      {
+        concesionario.conversion.steps.map((step, i) => (
+          <li class="rounded-wm border border-line p-5">
+            <span class="wm-display text-3xl text-accent">{String(i + 1).padStart(2, "0")}</span>
+            <p class="mt-2 font-semibold">{step}</p>
+            <p class="mt-1 text-sm text-muted">
+              {i === 0 && "Elegís la unidad y cargás tus datos."}
+              {i === 1 && "Ves los turnos con lugares disponibles."}
+              {i === 2 && "Recibís el pase con código para el mostrador."}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="mt-12">
+      <TestDriveBooking
+        client:load
+        brand={concesionario.brand}
+        title={concesionario.conversion.title}
+        kicker={concesionario.conversion.kicker}
+        body={concesionario.conversion.body}
+        steps={concesionario.conversion.steps}
+        autos={stock}
+        slots={concesionario.conversion.slots}
+        demoNotice={concesionario.conversion.demoNotice}
+        confirmLabel="Confirmar mi test drive"
+      />
+    </div>
+  </section>
+
+  <!-- 8) Financiacion -->
+  <section class="wm-container py-16 sm:py-20" id="financiacion">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{financiacionSection.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{financiacionSection.title}</h2>
+      <p class="mt-5 text-muted">{financiacionSection.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 lg:grid-cols-3">
+      {
+        financiacionSection.items?.map((item) => (
+          <article class="wm-card flex h-full flex-col">
+            <h3 class="wm-display text-2xl leading-tight">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
+            {item.points?.length ? (
+              <ul class="mt-4 space-y-1.5 text-sm text-muted">
+                {item.points.map((p) => (
+                  <li class="flex gap-2">
+                    <span aria-hidden="true" class="text-accent">→</span>
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            {item.meta?.length ? (
+              <p class="mt-5 text-sm font-semibold text-accent">
+                {item.meta.map((m) => `${m.label}: ${m.value}`).join(" · ")}
+              </p>
+            ) : null}
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="mt-8 text-sm text-muted">
+      <a href="/financiacion" class="font-semibold text-accent underline underline-offset-4">
+        Calcular mi cuota con el simulador
+      </a>
+    </p>
+  </section>
+
+  <!-- 9) Sucursales -->
+  <section class="wm-container py-16 sm:py-20" id="sucursales">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{sucursalesSection.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{sucursalesSection.title}</h2>
+      <p class="mt-5 text-muted">{sucursalesSection.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-3">
+      {
+        sucursalesSection.items?.map((sucursal) => (
+          <SucursalCard item={sucursal} mapsUrl={concesionario.contact.mapsUrl} />
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 10) FAQ -->
+  <section class="wm-container py-16 sm:py-20" id="faq">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{faq.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{faq.title}</h2>
+    </header>
+
+    <div class="mt-12 divide-y divide-line border-y border-line">
+      {
+        faq.items?.map((item) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6">
+              <span class="wm-display text-xl leading-snug">{item.title}</span>
+              <span
+                aria-hidden="true"
+                class="text-2xl text-accent transition-transform group-open:rotate-45"
+              >
+                +
+              </span>
+            </summary>
+            <p class="mt-4 max-w-3xl text-muted">{item.body}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+</Base>

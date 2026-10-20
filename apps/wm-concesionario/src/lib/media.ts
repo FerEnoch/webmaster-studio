@@ -27,6 +27,17 @@ export function img(id: string, w = 1200, h?: number): string {
 }
 
 /**
+ * URL de una foto de Unsplash con recorte controlado.
+ *
+ * La galeria de la ficha de un auto muestra la misma foto con recortes
+ * distintos (`entropy`, `top`, `bottom`): tres encuadres de la unidad sin
+ * bajar imagenes nuevas del CDN.
+ */
+export function imgCrop(id: string, w: number, h: number, crop = "entropy"): string {
+  return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&crop=${crop}&w=${w}&h=${h}&q=75`;
+}
+
+/**
  * Pool de medios verificados por rubro.
  *
  * `videos`: ids de Mixkit (720p). `photos`: ids de Unsplash.
@@ -52,13 +63,24 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
       "1522071820081-009f0129c71c", // equipo multidisciplinary
     ],
   },
+  /**
+   * Concesionario. Pool revisado foto por foto (los ids del kit no garantizan
+   * que la imagen sea del rubro: `1515187029135-18ee286d815b` era una sala de
+   * subasta de arte y `4227` era un bebe, asi que quedaron fuera).
+   */
   concesionario: {
-    videos: [4189, 4191, 4207, 4227],
+    // 4207 = autos desde el aire (banda de test drive) · 4189 = convertible en
+    // ruta (hero) · 4191 = camioneta clasica (banda de usados).
+    videos: [4207, 4189, 4191],
     photos: [
-      "1515187029135-18ee286d815b",
-      "1493238792000-8113da705763",
-      "1503376780353-7e6692767b70",
-      "1449965408869-eaa3f722e40d",
+      "1549317661-bd32c8ce0db2", // Fiat 500 celeste (usado)
+      "1541899481282-d53bffe3c35d", // VW Golf azul (usado)
+      "1550355291-bbee04a92027", // Hyundai Tucson rojo (usado)
+      "1533473359331-0135ef1b58bf", // Ford Expedition blanco (usado)
+      "1560958089-b8a1929cea89", // Tesla Model 3 blanco (nuevo)
+      "1600661653561-629509216228", // Tesla Model Y blanco (nuevo)
+      "1502877338535-766e1452684a", // BMW M4 azul (nuevo)
+      "1449965408869-eaa3f722e40d", // manos al volante (banda test drive)
     ],
   },
   lavadero: {

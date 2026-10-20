@@ -1,0 +1,201 @@
+---
+/**
+ * VDP de una unidad: galeria, ficha tecnica, historial y la conversion
+ * (test drive) con el pase.
+ *
+ * El mismo componente sirve para un usado (`/usados/<id>`) y para un 0 km
+ * (`/nuevos/<id>`): lo que cambia es el crumb y el enlace a "otras unidades".
+ *
+ * La reserva va con `lockUnit`: la unidad de la ficha ya viene elegida, asi
+ * que el pasante no tiene que volver a buscarla. El flujo termina igual en el
+ * ticket con codigo.
+ */
+import AutoCard from "./AutoCard.astro";
+import TestDriveBooking from "./TestDriveBooking.tsx";
+import { ars, concesionario, galeria, km, type Auto } from "../content/concesionario";
+
+export interface Props {
+  auto: Auto;
+  /** Otras unidades para mostrar al pie (mismo tipo de stock). */
+  otros: Auto[];
+  /** "usados" o "nuevos": define el crumb y el enlace de vuelta. */
+  kind: "usados" | "nuevos";
+}
+
+const { auto, otros, kind } = Astro.props;
+
+const fotos = galeria(auto);
+const etiqueta = kind === "nuevos" ? "Nuevos" : "Usados";
+const esNuevo = auto.estado === "Nuevo";
+---
+
+<article class="wm-container pt-36 pb-20 sm:pt-44">
+  <!-- 1) Miga + titulo -->
+  <nav aria-label="Ruta" class="text-sm text-muted">
+    <a href="/" class="hover:text-fg">Inicio</a>
+    <span aria-hidden="true" class="mx-2">/</span>
+    <a href={`/${kind}`} class="hover:text-fg">{etiqueta}</a>
+    <span aria-hidden="true" class="mx-2">/</span>
+    <span class="text-fg">{auto.marca} {auto.modelo}</span>
+  </nav>
+
+  <header class="mt-8 flex flex-wrap items-end justify-between gap-6">
+    <div>
+      <p class="wm-kicker">{auto.marca} · {auto.version}</p>
+      <h1 class="wm-display mt-5 text-[clamp(2.4rem,7vw,4.6rem)]">
+        {auto.modelo} <span class="text-accent">{auto.anio}</span>
+      </h1>
+      <p class="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted">
+        <span>{auto.estado}</span>
+        <span>{auto.km === 0 ? "0 km" : km(auto.km)}</span>
+        <span>{auto.combustible}</span>
+        <span>{auto.caja}</span>
+        <span>{auto.color}</span>
+        <span>{auto.sucursal}</span>
+      </p>
+    </div>
+
+    <div class="text-left lg:text-right">
+      <p class="wm-display text-[clamp(2.2rem,5vw,3.4rem)] leading-none text-accent">
+        {ars(auto.precio)}
+      </p>
+      <p class="text-xs text-muted">precio final, IVA incluido</p>
+      <p class="mt-2 text-sm text-muted">
+        Cuota estimada{" "}
+        <span class="font-semibold text-fg">{ars(auto.cuota)}/mes</span>
+      </p>
+    </div>
+  </header>
+
+  <!-- 2) Galeria + ficha -->
+  <div class="wm-ficha mt-12">
+    <div>
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos[0].src}
+          alt={fotos[0].alt}
+          loading="eager"
+          decoding="async"
+          class={`${fotos[0].aspect} w-full object-cover`}
+        />
+      </div>
+      <ul class="mt-4 grid grid-cols-2 items-start gap-4">
+        {
+          fotos.slice(1).map((foto) => (
+            <li class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm">
+              <img
+                src={foto.src}
+                alt={foto.alt}
+                loading="lazy"
+                decoding="async"
+                class={`${foto.aspect} w-full object-cover`}
+              />
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-3 text-xs text-muted">
+        Imágenes de demostración: la unidad publicada en esta web es ficticia.
+      </p>
+    </div>
+
+    <div class="flex flex-col">
+      <!-- Datos de la ficha -->
+      <section>
+        <p class="wm-kicker">Ficha</p>
+        <dl class="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
+          {
+            auto.ficha.map((dato) => (
+              <div class="border-b border-line pb-3">
+                <dt class="text-xs uppercase tracking-[0.14em] text-muted">{dato.label}</dt>
+                <dd class="mt-1 font-semibold">{dato.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+
+      <!-- Puntos fuertes -->
+      <section class="mt-10">
+        <p class="wm-kicker">Lo que vas a ver</p>
+        <ul class="mt-4 space-y-2 text-sm text-muted">
+          {
+            auto.highlights.map((punto) => (
+              <li class="flex gap-3">
+                <span aria-hidden="true" class="text-accent">→</span>
+                <span>{punto}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Historial -->
+      <section class="mt-10">
+        <p class="wm-kicker">Estado e historial</p>
+        <ul class="mt-4 space-y-3 text-sm text-muted">
+          {
+            auto.historial.map((linea) => (
+              <li class="flex gap-3">
+                <span aria-hidden="true" class="text-accent">→</span>
+                <span>{linea}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <!-- 3) Conversion: el test drive de ESTA unidad, hasta el ticket -->
+  <section id="testdrive" class="mt-24 scroll-mt-24">
+    <div class="max-w-2xl">
+      <p class="wm-kicker">{concesionario.conversion.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.4rem)]">
+        Probá {auto.marca} {auto.modelo}
+      </h2>
+      <p class="mt-5 text-muted">
+        {esNuevo
+          ? "Son 45 minutos con la unidad de fábrica, en el circuito de la casa. Te damos el pase con código para el mostrador."
+          : "Son 45 minutos con esta unidad, en la ruta que elijas. Te damos el pase con código para el mostrador."}
+      </p>
+    </div>
+
+    <div class="mt-12">
+      <TestDriveBooking
+        client:load
+        brand={concesionario.brand}
+        title="Elegí el turno y llevate el pase"
+        kicker={concesionario.conversion.kicker}
+        body={concesionario.conversion.body}
+        steps={concesionario.conversion.steps}
+        autos={[auto]}
+        lockUnit
+        slots={concesionario.conversion.slots}
+        demoNotice={concesionario.conversion.demoNotice}
+        confirmLabel="Confirmar mi test drive"
+      />
+    </div>
+  </section>
+
+  <!-- 4) Otras unidades -->
+  {
+    otros.length ? (
+      <section class="mt-24">
+        <h2 class="wm-display text-[clamp(1.8rem,4.2vw,2.6rem)]">
+          Otras unidades {kind === "nuevos" ? "0 km" : "en stock"}
+        </h2>
+        <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {otros.map((otra) => (
+            <AutoCard auto={otra} href={`/${kind}/${otra.id}`} />
+          ))}
+        </div>
+        <p class="mt-8 text-sm text-muted">
+          <a href={`/${kind}`} class="font-semibold text-accent underline underline-offset-4">
+            Volver a todos los {kind}
+          </a>
+        </p>
+      </section>
+    ) : null
+  }
+</article>

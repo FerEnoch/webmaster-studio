@@ -1,0 +1,144 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import SucursalCard from "../components/SucursalCard.astro";
+import { concesionario } from "../content/concesionario";
+import { waLink } from "@lib/whatsapp";
+
+const sucursales = concesionario.sections.find((s) => s.id === "sucursales")!;
+const whatsappHref = waLink(
+  concesionario.contact.whatsapp,
+  "Hola, quiero consultar por un auto en AUTOPISTA.",
+);
+---
+
+<Base content={concesionario} title={`Contacto · ${concesionario.brand}`}>
+  <PageHead
+    kicker="Contacto"
+    title="Tres casas, un WhatsApp"
+    subtitle="Elegí la sucursal que te queda más cerca y reservá online, o escribinos y lo resolvemos con el equipo de ventas."
+  />
+
+  <section class="wm-container pb-16">
+    <div class="grid gap-5 md:grid-cols-3">
+      {
+        sucursales.items?.map((sucursal) => (
+          <SucursalCard item={sucursal} mapsUrl={concesionario.contact.mapsUrl} />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="wm-container pb-20">
+    <div class="grid gap-10 lg:grid-cols-2">
+      <div class="rounded-wm-lg border border-line p-8">
+        <p class="wm-kicker">Datos</p>
+        <dl class="mt-6 space-y-4 text-muted">
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Teléfono</dt>
+            <dd class="mt-1 text-lg text-fg">{concesionario.contact.phone}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Email</dt>
+            <dd class="mt-1 text-lg text-fg">
+              <a href={`mailto:${concesionario.contact.email}`} class="hover:text-accent">
+                {concesionario.contact.email}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Horarios</dt>
+            <dd class="mt-1 text-lg text-fg">{concesionario.contact.hours}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Dirección</dt>
+            <dd class="mt-1 text-lg text-fg">{concesionario.contact.address}</dd>
+          </div>
+        </dl>
+
+        <a href={whatsappHref} class="wm-btn mt-8">Escribir por WhatsApp</a>
+      </div>
+
+      <div>
+        <p class="wm-kicker">Consulta</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Contanos qué buscás y te respondemos en el día
+        </h2>
+        <p class="mt-5 text-muted">
+          Si ya viste una unidad en el sitio, mandanos el nombre del modelo y
+          la sucursal que te queda cerca. Si querés un test drive, el formulario
+          de la portada te arma el pase en un minuto.
+        </p>
+
+        <form class="mt-8 grid gap-4" data-wm-demo-form>
+          <label class="block text-sm">
+            <span class="text-muted">Nombre</span>
+            <input
+              required
+              placeholder="Ana Gomez"
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            />
+          </label>
+          <label class="block text-sm">
+            <span class="text-muted">Teléfono o email</span>
+            <input
+              required
+              placeholder="11 1234 5678"
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            />
+          </label>
+          <label class="block text-sm">
+            <span class="text-muted">¿Qué modelo miraste?</span>
+            <textarea
+              rows="4"
+              placeholder="VW Vento, un SUV, un 0 km..."
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            ></textarea>
+          </label>
+          <button type="submit" class="wm-btn w-full">Enviar consulta</button>
+          <p class="text-xs text-muted">Demo: no se envían datos.</p>
+        </form>
+
+        <p class="mt-4 rounded-wm border border-accent p-4 text-sm" data-wm-demo-done hidden>
+          Consulta tomada. En esta demo no se envía nada: así se vería la
+          confirmación.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Formulario de contacto (demo): no manda datos, muestra la confirmación.
+  //
+  // TRAMPA (Astro 7 + ClientRouter): el `<ClientRouter/>` del kit registra un
+  // listener de "submit" en `document` que intercepta el envio, hace
+  // preventDefault() y navega (swap) a la misma pagina. Como esta en el
+  // `<head>`, corre ANTES que este script y el swap vuelve a pintar el
+  // formulario: el demo no se ve.
+  //
+  // Fix: escuchar en fase CAPTURE. Asi este handler corre primero, marca
+  // `defaultPrevented` y el router de Astro lo deja pasar (su propio guard es
+  // `ev.defaultPrevented`).
+  //
+  // OJO (trampa del kit): `form.hidden = true` no oculta nada si el form
+  // tiene una utilidad de `display` (aca `grid`): gana la utilidad y el
+  // atributo `hidden` de la UA queda sin efecto. Por eso se oculta con
+  // `style.display`. Y el mensaje se oculta con el ATRIBUTO `hidden` (sin la
+  // clase utilitaria `hidden`), asi `done.hidden = false` lo muestra.
+  document.addEventListener(
+    "submit",
+    (event) => {
+      const form = event.target as HTMLFormElement | null;
+      if (!form || !form.matches("[data-wm-demo-form]")) return;
+      event.preventDefault();
+      form.style.display = "none";
+      const done = document.querySelector<HTMLElement>("[data-wm-demo-done]");
+      if (done) {
+      done.classList.remove("hidden");
+      done.removeAttribute("hidden");
+    }
+    },
+    true,
+  );
+</script>

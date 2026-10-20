@@ -1,0 +1,124 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import CuotaCalculator from "../components/CuotaCalculator.tsx";
+import { concesionario, usados } from "../content/concesionario";
+
+const financiacion = concesionario.sections.find((s) => s.id === "financiacion")!;
+---
+
+<Base content={concesionario} title={`Financiación · ${concesionario.brand}`}>
+  <PageHead
+    kicker="Financiación"
+    title="La cuota, calculada antes de que vengas"
+    subtitle="Tasa fija, plazo fijo y el número exacto que vas a pagar. Si el auto no te cierra con anticipo del 30%, te decimos qué auto sí te cierra."
+  />
+
+  <!-- 1) Modos de financiacion -->
+  <section class="wm-container pb-16 sm:pb-24">
+    <div class="grid gap-5 lg:grid-cols-3">
+      {
+        financiacion.items?.map((item) => (
+          <article class="wm-card flex h-full flex-col">
+            <h2 class="wm-display text-2xl leading-tight">{item.title}</h2>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
+            {item.points?.length ? (
+              <ul class="mt-4 space-y-1.5 text-sm text-muted">
+                {item.points.map((p) => (
+                  <li class="flex gap-2">
+                    <span aria-hidden="true" class="text-accent">→</span>
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            {item.meta?.length ? (
+              <p class="mt-5 text-sm font-semibold text-accent">
+                {item.meta.map((m) => `${m.label}: ${m.value}`).join(" · ")}
+              </p>
+            ) : null}
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 2) Simulador de cuota -->
+  <section class="wm-container pb-16 sm:pb-24">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">Simulador</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.2rem)]">
+        Movés el anticipo y el plazo, mirás la cuota
+      </h2>
+      <p class="mt-5 text-muted">
+        Es el mismo cálculo que hacemos en el mostrador: mismo precio, misma
+        tasa, mismo plazo. Lo que cambia el resultado es el anticipo.
+      </p>
+    </header>
+
+    <div class="mt-12">
+      <CuotaCalculator client:visible autos={usados} />
+    </div>
+  </section>
+
+  <!-- 3) Requisitos y parte de pago -->
+  <section class="wm-container pb-20 sm:pb-28">
+    <div class="grid gap-10 lg:grid-cols-2">
+      <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+        <p class="wm-kicker">Para el crédito</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.2vw,2.6rem)]">
+          Qué necesitás traer
+        </h2>
+        <ul class="mt-6 space-y-3 text-muted">
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-accent">→</span>
+            <span>DNI con domicilio actual y el de la persona garante, si corresponde.</span>
+          </li>
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-accent">→</span>
+            <span>Constancia de ingresos de los últimos 3 meses.</span>
+          </li>
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-accent">→</span>
+            <span>Un comprobante de vivienda (servicio o alquiler).</span>
+          </li>
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-accent">→</span>
+            <span>CBU de la cuenta donde se debitan las cuotas.</span>
+          </li>
+        </ul>
+        <p class="mt-6 text-sm text-muted">
+          Con plan de pago directo no hace falta informe crediticio: alcanza con
+          el anticipo y la seña.
+        </p>
+      </div>
+
+      <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+        <p class="wm-kicker">Parte de pago</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.2vw,2.6rem)]">
+          Tu auto entra en la operación
+        </h2>
+        <p class="mt-5 text-muted">
+          La tasación es presencial y sin cargo. Tomamos el valor de mercado del
+          vehículo, no una tasación de Crash: el número que te dice el tasador
+          es el número que descontamos de tu operación.
+        </p>
+        <ol class="mt-6 space-y-4 text-sm text-muted">
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-accent">01</span>
+            <span>Traés el auto a la sucursal y lo tasamos en 30 minutos.</span>
+          </li>
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-accent">02</span>
+            <span>Te damos el valor por escrito y lo descontamos del precio final.</span>
+          </li>
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-accent">03</span>
+            <span>Si te sirve, también podés quedártelo como unidad usada.</span>
+          </li>
+        </ol>
+        <a href="/contacto" class="wm-btn mt-8">Pedir una tasación</a>
+      </div>
+    </div>
+  </section>
+</Base>
