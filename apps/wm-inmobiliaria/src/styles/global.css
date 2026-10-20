@@ -1,0 +1,10 @@
+/* Entrada de estilos de una app del kit webmaster.
+   1) Tailwind v4 (genera las utilidades)
+   2) Tokens + utilidades de la firma (copiados del kit)
+   3) Estilos propios de la app
+*/
+
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* ─── Estilos propios de la app (agregar aca) ────────────────── */

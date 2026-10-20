@@ -1,0 +1,160 @@
+---
+/**
+ * Footer legal AR: Defense del Consumidor, precios con impuestos,
+ * boton de arrepentimiento/baja (Res. 316/2018 y 271/2020) y datos de contacto.
+ */
+import { waLink } from "@lib/whatsapp";
+import type { Contact, Legal, NavItem } from "@lib/types";
+
+export interface Props {
+  nav: NavItem[];
+  brand: string;
+  legal: Legal;
+  contact: Contact;
+}
+
+const { nav, brand, legal, contact } = Astro.props;
+const whatsappHref = waLink(contact.whatsapp, `Hola, escribo desde la web de ${brand}.`);
+const year = new Date().getFullYear();
+---
+
+<footer class="relative mt-24 border-t border-line">
+  <div class="wm-container pt-16 pb-10">
+    <div class="grid gap-12 lg:grid-cols-[1.1fr_1fr_1fr]">
+      <div>
+        <p class="wm-display text-5xl leading-none">
+          {brand}<span class="text-accent">.</span>
+        </p>
+        <p class="mt-4 max-w-xs text-muted">{legal.company}</p>
+        <a href={whatsappHref} class="wm-btn mt-6 px-5 py-3 text-xs">WhatsApp</a>
+      </div>
+
+      <nav aria-label="Pie de pagina">
+        <p class="wm-kicker">Secciones</p>
+        <ul class="mt-5 space-y-2">
+          {
+            nav.map((item) => (
+              <li>
+                <a href={item.href} class="text-muted transition-colors hover:text-fg">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div>
+        <p class="wm-kicker">Contacto</p>
+        <ul class="mt-5 space-y-2 text-muted">
+          <li>{contact.phone}</li>
+          <li>
+            <a href={`mailto:${contact.email}`} class="transition-colors hover:text-fg">
+              {contact.email}
+            </a>
+          </li>
+          <li>{contact.address}</li>
+          <li>{contact.hours}</li>
+          <li>CUIT {legal.cuit}</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Precios finales + nota de impuestos. -->
+    {
+      legal.pricesIncludeTaxes && (
+        <p class="mt-12 rounded-wm border border-line p-4 text-sm text-muted">
+          <strong class="text-fg">Precios finales.</strong>{" "}
+          {legal.taxNote ?? "Todos los precios publicados incluyen impuestos."}
+        </p>
+      )
+    }
+
+    <!-- Boton de baja / arrepentimiento (Res. 316/2018 y 271/2020). -->
+    {
+      legal.withdrawal.enabled && (
+        <details class="group mt-4 rounded-wm border border-line">
+          <summary class="cursor-pointer list-none px-4 py-3 text-sm font-semibold text-accent">
+            {legal.withdrawal.label}
+          </summary>
+          <div class="border-t border-line px-4 py-4">
+            <p class="text-sm text-muted">{legal.withdrawal.note}</p>
+            <p class="mt-2 text-xs text-muted">{legal.withdrawal.resolution}</p>
+            <form class="mt-4 grid gap-3 sm:grid-cols-2" data-wm-baja-form>
+              <label class="block text-sm">
+                <span class="text-muted">DNI</span>
+                <input
+                  required
+                  name="dni"
+                  placeholder="12.345.678"
+                  class="mt-1 w-full rounded-wm border border-line bg-bg px-3 py-2.5 outline-none focus:border-accent"
+                />
+              </label>
+              <label class="block text-sm">
+                <span class="text-muted">Email de la compra</span>
+                <input
+                  required
+                  type="email"
+                  name="email"
+                  placeholder="vos@email.com"
+                  class="mt-1 w-full rounded-wm border border-line bg-bg px-3 py-2.5 outline-none focus:border-accent"
+                />
+              </label>
+              <button type="submit" class="wm-btn mt-2 sm:col-span-2">
+                Confirmar baja
+              </button>
+              <p class="text-xs text-muted sm:col-span-2">
+                Demo: no se envian datos. En produccion se conecta al backend.
+              </p>
+            </form>
+            <p
+              data-wm-baja-done
+              hidden
+              class="mt-4 rounded-wm border border-accent p-4 text-sm"
+            >
+              Listo: registramos tu solicitud de baja. En la demo no se guarda
+              ningun dato.
+            </p>
+          </div>
+        </details>
+      )
+    }
+
+    <div class="mt-12 flex flex-col gap-4 border-t border-line pt-8 text-sm text-muted lg:flex-row lg:items-center lg:justify-between">
+      <ul class="flex flex-wrap gap-x-6 gap-y-2">
+        {
+          legal.documents.map((doc) => (
+            <li>
+              <a href={doc.href} class="transition-colors hover:text-fg">
+                {doc.label}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a
+            href={legal.consumerDefense.url}
+            target="_blank"
+            rel="noreferrer noopener"
+            class="transition-colors hover:text-fg"
+          >
+            {legal.consumerDefense.label}
+          </a>
+        </li>
+      </ul>
+      <p>&copy; {year} {legal.company} · Plantilla de demostracion</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Baja (demo): no manda datos, muestra la confirmacion en el lugar.
+  document.addEventListener("submit", (event) => {
+    const form = event.target as HTMLFormElement | null;
+    if (!form || !form.matches("[data-wm-baja-form]")) return;
+    event.preventDefault();
+    form.hidden = true;
+    const done = document.querySelector<HTMLElement>("[data-wm-baja-done]");
+    if (done) done.hidden = false;
+  });
+</script>

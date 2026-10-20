@@ -1,0 +1,62 @@
+---
+/**
+ * Señal "en vivo" creible: "Abierto ahora · 3 lugares".
+ *
+ * Parametrizada por rubro. El numero fluctua como si fuera real, con un
+ * intervalo propio. Es HTML + un script chico: no necesita hidratacion React.
+ */
+import type { LiveSignal } from "@lib/types";
+
+export interface Props {
+  signal: LiveSignal;
+}
+
+const { signal } = Astro.props;
+const min = signal.min ?? Math.max(0, signal.count - 3);
+const max = signal.max ?? signal.count + 3;
+const interval = signal.interval ?? 3200;
+---
+
+<span
+  class="inline-flex items-center gap-2 whitespace-nowrap"
+  data-wm-live
+  data-min={min}
+  data-max={max}
+  data-interval={interval}
+>
+  <span class="wm-live-dot text-emerald-400" aria-hidden="true"></span>
+  <span>{signal.label}</span>
+  <span aria-hidden="true" class="text-muted">&middot;</span>
+  <span class="tabular-nums font-semibold" data-wm-live-value>{signal.count}</span>
+  {signal.unit && <span class="text-muted">{signal.unit}</span>}
+</span>
+
+<script>
+  // El numero "vive". Se re-inicializa en cada navegacion (astro:page-load).
+  const timers = new WeakMap<Element, number>();
+
+  const start = () => {
+    document.querySelectorAll<HTMLElement>("[data-wm-live]").forEach((el) => {
+      const existing = timers.get(el);
+      if (existing) window.clearInterval(existing);
+
+      const min = Number(el.dataset.min ?? 0);
+      const max = Number(el.dataset.max ?? 10);
+      const interval = Number(el.dataset.interval ?? 3200);
+      const value = el.querySelector<HTMLElement>("[data-wm-live-value]");
+      if (!value) return;
+
+      let current = Number(value.textContent ?? String(min));
+      const step = () => {
+        const delta = Math.round((Math.random() - 0.5) * 4);
+        current = Math.min(max, Math.max(min, current + delta));
+        value.textContent = String(current);
+      };
+
+      timers.set(el, window.setInterval(step, interval));
+    });
+  };
+
+  start();
+  document.addEventListener("astro:page-load", start);
+</script>

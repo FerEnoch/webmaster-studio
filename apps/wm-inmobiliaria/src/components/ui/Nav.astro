@@ -1,0 +1,165 @@
+---
+/**
+ * Header del kit: se esconde al scrollear hacia abajo, vuelve al subir.
+ * Nav con transicion de pastilla (transition:name) y menu mobile con clip-path.
+ */
+import { waLink } from "@lib/whatsapp";
+import type { Contact, NavItem } from "@lib/types";
+
+export interface Props {
+  nav: NavItem[];
+  brand: string;
+  contact: Contact;
+}
+
+const { nav, brand, contact } = Astro.props;
+const current = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isActive = (href: string) => (href === "/" ? current === "/" : current.startsWith(href));
+const whatsappHref = waLink(contact.whatsapp, `Hola, escribo desde la web de ${brand}.`);
+---
+
+<header
+  data-wm-header
+  data-hidden="false"
+  class="wm-header fixed inset-x-0 top-0 z-50 border-b border-line backdrop-blur-xl"
+>
+  <div class="wm-container flex items-center justify-between gap-4 py-3.5">
+    <a href="/" class="wm-display text-2xl leading-none">
+      {brand}<span class="text-accent">.</span>
+    </a>
+
+    <nav aria-label="Principal" class="hidden md:block">
+      <ul class="wm-surface flex items-center gap-1 rounded-full border border-line p-1">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isActive(item.href) ? "page" : undefined}
+                class="relative block rounded-full px-4 py-2 text-sm transition-colors"
+              >
+                {isActive(item.href) && (
+                  <span
+                    transition:name="wm-nav-pill"
+                    class="absolute inset-0 rounded-full bg-fg"
+                  />
+                )}
+                <span
+                  class:list={[
+                    "relative",
+                    isActive(item.href) ? "text-bg" : "text-muted hover:text-fg",
+                  ]}
+                >
+                  {item.label}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href={whatsappHref} class="wm-btn hidden px-5 py-2.5 text-xs sm:inline-flex">
+        WhatsApp
+      </a>
+
+      <button
+        data-nav-toggle
+        type="button"
+        aria-expanded="false"
+        aria-controls="wm-menu-mobile"
+        class="flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-full border border-line md:hidden"
+      >
+        <span class="sr-only">Abrir menu</span>
+        <span class="wm-bar wm-bar--top h-0.5 w-5 rounded-full bg-fg"></span>
+        <span class="wm-bar wm-bar--bottom h-0.5 w-5 rounded-full bg-fg"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Menu mobile: clip-path, no modal. -->
+<div
+  id="wm-menu-mobile"
+  data-wm-menu-panel
+  data-open="false"
+  class="wm-menu fixed inset-0 z-40 flex flex-col justify-end bg-bg px-6 pt-28 pb-10 md:hidden"
+>
+  <nav aria-label="Menu mobile">
+    <ul>
+      {
+        nav.map((item, i) => (
+          <li
+            class="border-b border-line"
+            style={`--wm-line-index:${i}`}
+          >
+            <a
+              href={item.href}
+              data-wm-menu-link
+              class="wm-display block py-3 text-[clamp(2.2rem,11vw,4rem)]"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <a href={whatsappHref} class="wm-btn mt-8 w-full">Escribir por WhatsApp</a>
+  <p class="mt-4 text-sm text-muted">{contact.hours}</p>
+</div>
+
+<script>
+  // El header se esconde al bajar y vuelve al subir. Listener en window:
+  // sobrevive al swap de DOM de astro:transitions.
+  let last = 0;
+  let ticking = false;
+
+  const update = () => {
+    const header = document.querySelector<HTMLElement>("[data-wm-header]");
+    const panel = document.querySelector<HTMLElement>("[data-wm-menu-panel]");
+    const menuOpen = panel?.dataset.open === "true";
+    const y = window.scrollY;
+    if (header) header.dataset.hidden = String(y > 220 && y > last && !menuOpen);
+    last = y;
+    ticking = false;
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    },
+    { passive: true },
+  );
+
+  // Toggle del menu por delegacion: el nodo cambia en cada navegacion.
+  document.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement | null;
+    if (!target) return;
+
+    const toggle = target.closest<HTMLElement>("[data-nav-toggle]");
+    if (toggle) {
+      const panel = document.querySelector<HTMLElement>("[data-wm-menu-panel]");
+      if (panel) {
+        const open = panel.dataset.open === "true";
+        panel.dataset.open = String(!open);
+        toggle.setAttribute("aria-expanded", String(!open));
+        document.documentElement.style.overflow = !open ? "hidden" : "";
+      }
+      return;
+    }
+
+    if (target.closest("[data-wm-menu-link]")) {
+      const panel = document.querySelector<HTMLElement>("[data-wm-menu-panel]");
+      if (panel) {
+        panel.dataset.open = "false";
+        document.documentElement.style.overflow = "";
+      }
+    }
+  });
+</script>
