@@ -1,0 +1,36 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import StudyCard from "../components/StudyCard.astro";
+import { clinica } from "../content/clinica";
+
+const servicios = clinica.sections.find((s) => s.id === "servicios")!;
+---
+
+<Base content={clinica} title={`Servicios · ${clinica.brand}`}>
+  <PageHead
+    kicker={servicios.kicker ?? "Qué hacemos"}
+    title="Consultas que no te derivan a otro lado"
+    subtitle={servicios.body}
+  />
+
+  <section class="wm-container pb-20 sm:pb-28">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {servicios.items?.map((item, i) => <StudyCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <section class="wm-container pb-24">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+      <p class="wm-kicker">¿Listo para tu turno?</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Elegí estudio y horario, y te damos el pase
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        La reserva de turno está en la portada: son tres pasos y no te lleva
+        más de un minuto.
+      </p>
+      <a href="/#turno" class="wm-btn mt-8">Ir a sacar el turno</a>
+    </div>
+  </section>
+</Base>

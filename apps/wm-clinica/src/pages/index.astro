@@ -1,0 +1,197 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/ui/PageHero.astro";
+import PrepTimeline from "../components/PrepTimeline.astro";
+import SedeCard from "../components/SedeCard.astro";
+import StudyCard from "../components/StudyCard.astro";
+import TurnoSteps from "../components/TurnoSteps.astro";
+import { clinica, fotos } from "../content/clinica";
+import { poster, video } from "@lib/media";
+import { RUBROS } from "@lib/rubros";
+
+const rubro = RUBROS.find((r) => r.id === "clinica")!;
+const [servicios, estudios, sedes, faq] = clinica.sections;
+---
+
+<Base content={clinica}>
+  <PageHero hero={clinica.hero} brand={clinica.brand} />
+
+  <!-- 1) La objecion, respondida de entrada. -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">La promesa</p>
+        <p class="wm-display mt-5 text-[clamp(1.8rem,4.4vw,3rem)] leading-tight">
+          {clinica.objeccion}
+        </p>
+        <p class="mt-6 max-w-xl text-muted">
+          En CLÍNICA AURA el turno de consulta y el estudio son el mismo día, en
+          el mismo edificio. Pedís la hora, llegás, te atienden y después
+          descansás en la sala hasta que sale el resultado.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="#turno" class="wm-btn">Sacar mi turno</a>
+          <a href="/estudios" class="wm-btn wm-btn--ghost">Ver los estudios</a>
+        </div>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.instrumental}
+          alt="Instrumental médico de CLÍNICA AURA sobre una mesa (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 2) Servicios -->
+  <section class="wm-container py-16 sm:py-20" id="servicios">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{servicios.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{servicios.title}</h2>
+      <p class="mt-5 text-muted">{servicios.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {servicios.items?.map((item, i) => <StudyCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <!-- 3) Estudios -->
+  <section class="wm-container py-16 sm:py-20" id="estudios">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{estudios.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{estudios.title}</h2>
+      <p class="mt-5 text-muted">{estudios.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {estudios.items?.map((item, i) => <StudyCard item={item} index={i} />)}
+    </div>
+
+    <p class="mt-8 text-sm text-muted">
+      <a href="/estudios" class="font-semibold text-accent underline underline-offset-4">
+        Ver la preparación completa de cada estudio
+      </a>
+    </p>
+  </section>
+
+  <!-- 4) Seccion "pinned": la preparacion (la historia que hay que contar) -->
+  <PrepTimeline
+    items={estudios.items ?? []}
+    kicker="Preparación"
+    title="Cada estudio, un protocolo distinto"
+  />
+
+  <!-- 4b) Banda de video: pediatria -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(4219)}
+        poster={poster(4219)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Bebé en la consulta de pediatría de CLÍNICA AURA (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 70%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-32">
+      <p class="wm-kicker">Pediatría</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        Los chicos no esperan en la sala
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        Guardia propia de pediatría de 8 a 20 h, con plantillas de
+        vacunación sin turno y un espacio para que los padres acompañen. Si el
+        cuadro necesita un estudio, se hace en el momento.
+      </p>
+      <a href="#turno" class="wm-btn mt-8">Pedir turno de pediatría</a>
+    </div>
+  </section>
+
+  <!-- 5) Sedes -->
+  <section class="wm-container py-16 sm:py-20" id="sedes">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{sedes.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{sedes.title}</h2>
+      <p class="mt-5 text-muted">{sedes.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-3">
+      {sedes.items?.map((sede) => <SedeCard item={sede} mapsUrl={clinica.contact.mapsUrl} />)}
+    </div>
+  </section>
+
+  <!-- 6) Conversion principal -->
+  <TurnoSteps
+    conversion={clinica.conversion}
+    brand={clinica.brand}
+    whatsapp={rubro.whatsapp}
+  />
+
+  <!-- 7) FAQ -->
+  <section class="wm-container py-16 sm:py-20" id="faq">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{faq.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{faq.title}</h2>
+    </header>
+
+    <div class="mt-12 divide-y divide-line border-y border-line">
+      {
+        faq.items?.map((item) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6">
+              <span class="wm-display text-xl leading-snug">{item.title}</span>
+              <span aria-hidden="true" class="text-2xl text-accent transition-transform group-open:rotate-45">
+                +
+              </span>
+            </summary>
+            <p class="mt-4 max-w-3xl text-muted">{item.body}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 8) Equipo -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.equipo}
+          alt="Equipo médico de CLÍNICA AURA en una reunión (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+      <div>
+        <p class="wm-kicker">El equipo</p>
+        <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.2rem)]">
+          Quien te atiende, te lo explica
+        </h2>
+        <p class="mt-5 text-muted">
+          Cada profesional de CLÍNICA AURA tiene su especialidad y su turno
+          fijo. Si el estudio necesita un criterio que se escapa del informe,
+          el caso se discute en sesión clínica y te llamamos: no te hacemos
+          repetir la consulta.
+        </p>
+        <p class="mt-6 text-sm text-muted">
+          Demo de portfolio: los profesionales, las sedes y los precios son
+          ficticios.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>

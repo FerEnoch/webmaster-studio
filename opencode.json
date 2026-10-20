@@ -12,7 +12,13 @@
   "permission": {
     "bash": {
       "rsync": "allow",
-      "rsync *": "allow"
+      "rsync *": "allow",
+      "git push": "deny",
+      "git push *": "deny",
+      "git push --force*": "deny"
+    },
+    "external_directory": {
+      "/tmp/*": "allow"
     }
   }
 }

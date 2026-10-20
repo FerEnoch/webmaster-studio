@@ -1,0 +1,117 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import SedeCard from "../components/SedeCard.astro";
+import { clinica } from "../content/clinica";
+import { waLink } from "@lib/whatsapp";
+
+const sedes = clinica.sections.find((s) => s.id === "sedes")!;
+const whatsappHref = waLink(
+  clinica.contact.whatsapp,
+  "Hola, quiero información sobre las sedes y los horarios de CLÍNICA AURA.",
+);
+---
+
+<Base content={clinica} title={`Contacto · ${clinica.brand}`}>
+  <PageHead
+    kicker="Contacto"
+    title="Tres sedes, un WhatsApp"
+    subtitle="Elegí la sede que te queda más cerca y reservá online, o escribinos y lo resolvemos con el equipo."
+  />
+
+  <section class="wm-container pb-16">
+    <div class="grid gap-5 md:grid-cols-3">
+      {sedes.items?.map((sede) => <SedeCard item={sede} mapsUrl={clinica.contact.mapsUrl} />)}
+    </div>
+  </section>
+
+  <section class="wm-container pb-20">
+    <div class="grid gap-10 lg:grid-cols-2">
+      <div class="rounded-wm-lg border border-line p-8">
+        <p class="wm-kicker">Datos</p>
+        <dl class="mt-6 space-y-4 text-muted">
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Teléfono</dt>
+            <dd class="mt-1 text-lg text-fg">{clinica.contact.phone}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Email</dt>
+            <dd class="mt-1 text-lg text-fg">
+              <a href={`mailto:${clinica.contact.email}`} class="hover:text-accent">
+                {clinica.contact.email}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Horarios</dt>
+            <dd class="mt-1 text-lg text-fg">{clinica.contact.hours}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Dirección</dt>
+            <dd class="mt-1 text-lg text-fg">{clinica.contact.address}</dd>
+          </div>
+        </dl>
+
+        <a href={whatsappHref} class="wm-btn mt-8">Escribir por WhatsApp</a>
+      </div>
+
+      <div>
+        <p class="wm-kicker">Mensaje</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Escribinos y te contestamos en el día
+        </h2>
+        <p class="mt-5 text-muted">
+          Si tenés un resultado de un estudio anterior y querés que lo mire el
+          equipo, mandalo por WhatsApp. La primera lectura va sin cargo dentro
+          de los 30 días.
+        </p>
+
+        <form class="mt-8 grid gap-4" data-wm-demo-form>
+          <label class="block text-sm">
+            <span class="text-muted">Nombre</span>
+            <input
+              required
+              placeholder="Ana Gomez"
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            />
+          </label>
+          <label class="block text-sm">
+            <span class="text-muted">Teléfono o email</span>
+            <input
+              required
+              placeholder="11 1234 5678"
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            />
+          </label>
+          <label class="block text-sm">
+            <span class="text-muted">¿Qué necesitás?</span>
+            <textarea
+              rows="4"
+              placeholder="Consulta, estudio, cobertura..."
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            ></textarea>
+          </label>
+          <button type="submit" class="wm-btn w-full">Enviar mensaje</button>
+          <p class="text-xs text-muted">Demo: no se envían datos.</p>
+        </form>
+
+        <p class="mt-4 hidden rounded-wm border border-accent p-4 text-sm" data-wm-demo-done>
+          Mensaje tomado. En esta demo no se envía nada: así se vería la
+          confirmación.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Formulario de contacto (demo): no manda datos, muestra la confirmación.
+  document.addEventListener("submit", (event) => {
+    const form = event.target as HTMLFormElement | null;
+    if (!form || !form.matches("[data-wm-demo-form]")) return;
+    event.preventDefault();
+    form.hidden = true;
+    const done = document.querySelector<HTMLElement>("[data-wm-demo-done]");
+    if (done) done.hidden = false;
+  });
+</script>
