@@ -1,0 +1,108 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import PlanCard from "../components/PlanCard.astro";
+import { portfolio } from "../content/portfolio";
+
+const servicios = portfolio.sections.find((s) => s.id === "servicios")!;
+const precios = portfolio.sections.find((s) => s.id === "precios")!;
+const proceso = portfolio.sections.find((s) => s.id === "proceso")!;
+---
+
+<Base content={portfolio} title={`Servicios y precios · ${portfolio.brand}`}>
+  <PageHead
+    kicker="Servicios"
+    title="Qué hago y cuánto sale"
+    subtitle="Sin paquetes cerrados a ciegas: cada web se cotiza por lo que tu rubro necesita. Los precios de referencia son los de abajo."
+  />
+
+  <section class="wm-container pb-20">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{servicios.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{servicios.title}</h2>
+      <p class="mt-5 text-muted">{servicios.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {servicios.items?.map((item, i) => <PlanCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <section class="wm-container pb-20">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{precios.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{precios.title}</h2>
+      <p class="mt-5 text-muted">{precios.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2">
+      {precios.items?.map((item, i) => <PlanCard item={item} index={i} />)}
+    </div>
+
+    <p class="mt-8 rounded-wm border border-line p-4 text-sm text-muted">
+      <strong class="text-fg">Precios finales.</strong>{" "}
+      {portfolio.legal.taxNote}
+    </p>
+  </section>
+
+  <section class="wm-container pb-20">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{proceso.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{proceso.title}</h2>
+      <p class="mt-5 text-muted">{proceso.body}</p>
+    </header>
+
+    <ol class="mt-12 border-l border-line">
+      {
+        proceso.items?.map((item, i) => (
+          <li class="relative grid gap-4 border-b border-line py-8 pl-8 md:grid-cols-[minmax(0,16rem)_1fr] md:gap-10 md:pl-12">
+            <span
+              aria-hidden="true"
+              class="absolute top-8 -left-[0.42rem] flex h-3 w-3 rounded-full bg-accent"
+            />
+            <div>
+              <p class="text-xs uppercase tracking-[0.24em] text-muted">
+                Paso {String(i + 1).padStart(2, "0")}
+              </p>
+              <h3 class="wm-display mt-2 text-2xl leading-tight">{item.title}</h3>
+              {item.meta?.length ? (
+                <p class="mt-2 text-sm text-muted">
+                  {item.meta.map((m) => `${m.label}: ${m.value}`).join(" · ")}
+                </p>
+              ) : null}
+            </div>
+            <div>
+              <p class="text-muted">{item.body}</p>
+              {item.points?.length ? (
+                <ul class="mt-4 space-y-2 text-muted">
+                  {item.points.map((p) => (
+                    <li class="flex gap-3">
+                      <span aria-hidden="true" class="text-accent">
+                        →
+                      </span>
+                      <span>{p}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="wm-container pb-24">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+      <p class="wm-kicker">Empezar</p>
+      <h2 class="wm-display mt-4 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Arrancamos por la demo gratis
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        Son cuatro pasos y te devuelvo un ticket con el código. Si te gusta lo
+        que sale, el primer pago se descuenta del proyecto.
+      </p>
+      <a href="/#demo" class="wm-btn mt-8">Pedir mi demo gratis</a>
+    </div>
+  </section>
+</Base>

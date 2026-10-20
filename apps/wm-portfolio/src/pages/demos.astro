@@ -1,0 +1,69 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import RubroCard from "../components/ui/RubroCard.astro";
+import RubroFilter from "../components/RubroFilter.tsx";
+import { portfolio, demoImages } from "../content/portfolio";
+import { RUBROS } from "@lib/rubros";
+
+const chips = RUBROS.map((r) => ({
+  id: r.id,
+  nombre: r.nombre,
+  accent: r.palette.accent,
+}));
+---
+
+<Base content={portfolio} title={`Demos por rubro · ${portfolio.brand}`}>
+  <PageHead
+    kicker="Portfolio filtrable"
+    title="Siete demos, siete rubros"
+    subtitle="Filtrá por rubro y abrí la demo viva de cada uno. Cada web resuelve una objeción distinta de su rubro y termina en un ticket."
+  />
+
+  <div class="wm-demos-block">
+    <div class="wm-filter-bar">
+      <div class="wm-container">
+        <RubroFilter client:load rubros={chips} total={RUBROS.length} />
+      </div>
+    </div>
+
+    <section class="wm-container pb-20 sm:pb-28">
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          RUBROS.map((r, i) => (
+            <div
+              data-wm-rubro-card={r.id}
+              class="wm-rubro-item"
+              style={`--wm-stagger:${i}; --wm-accent:${r.palette.accent}`}
+            >
+              <RubroCard
+                rubro={r}
+                image={demoImages[r.id]}
+                imageAlt={`${r.rubro}: foto de demostración`}
+              />
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="mt-10 text-sm text-muted">
+        Demo de portfolio: las marcas, los precios, los teléfonos y los
+        formularios de cada web son ficticios y no envían datos.
+      </p>
+    </section>
+  </div>
+
+  <section class="wm-container pb-24">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+      <p class="wm-kicker">La tuya</p>
+      <h2 class="wm-display mt-4 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Falta la demo de tu rubro
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        Me decis el rubro y te armo la home en 48 horas, con tu nombre y tu
+        contenido. Es sin costo y no te compromete a nada.
+      </p>
+      <a href="/#demo" class="wm-btn mt-8">Pedir mi demo gratis</a>
+    </div>
+  </section>
+</Base>

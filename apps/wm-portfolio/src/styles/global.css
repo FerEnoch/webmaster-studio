@@ -7,4 +7,124 @@
 @import "tailwindcss";
 @import "./tokens.css";
 
-/* ─── Estilos propios de la app (agregar aca) ────────────────── */
+/* ─── Estilos propios de la app (agregar aca) ──────────────────
+   Todo lo de abajo va SIN capa (@layer): en CSS, las reglas sin capa
+   ganan a las de Tailwind, asi que pisan a las utilidades.           */
+
+/* ─── 1. Filtro por rubro ───────────────────────────────────────
+   Las cards las renderiza Astro (RubroCard.astro). La isla React
+   solo alterna `.is-out`. Al volver a mostrarse, la animacion
+   reinicia sola (display:none cancela la animacion; al restaurarla
+   vuelve a empezar).                                              */
+
+.wm-rubro-item {
+  animation: wm-fade-up 520ms var(--wm-ease) both;
+  animation-delay: calc(var(--wm-stagger, 0) * 45ms);
+}
+
+.wm-rubro-item.is-out {
+  display: none;
+}
+
+@keyframes wm-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Barra de filtros: se pega debajo del header. */
+.wm-filter-bar {
+  position: sticky;
+  top: 3.75rem;
+  z-index: 30;
+  padding-block: 0.75rem;
+  background-color: color-mix(in oklab, var(--wm-bg) 88%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid color-mix(in oklab, var(--wm-fg) 12%, transparent);
+}
+
+.wm-demos-block {
+  position: relative;
+}
+
+/* ─── 2. Seccion pinned ───────────────────────────────────────── */
+
+.wm-pinned-frame {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  pointer-events: none;
+  transition:
+    opacity 520ms var(--wm-ease),
+    transform 520ms var(--wm-ease);
+}
+
+.wm-pinned-frame.is-active {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.wm-pinned-progress {
+  width: 100%;
+  max-width: 22rem;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: color-mix(in oklab, var(--wm-fg) 14%, transparent);
+}
+
+.wm-pinned-progress > span {
+  display: block;
+  height: 100%;
+  background-color: var(--wm-accent);
+  transform: scaleX(var(--wm-pinned-progress, 0));
+  transform-origin: left center;
+}
+
+/* ─── 3. CTA fijo en mobile ────────────────────────────────────
+   En desktop no se muestra: el hero ya tiene su CTA. El boton de
+   WhatsApp flotante sube para no quedar tapado.                    */
+
+.wm-mobile-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  background-color: var(--wm-accent);
+  color: var(--wm-bg);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--wm-bg) 22%, transparent);
+}
+
+@media (min-width: 768px) {
+  .wm-mobile-cta {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 3.75rem;
+  }
+
+  .wm-float-wa {
+    bottom: 4.5rem;
+  }
+}
+
+/* Con el menu mobile abierto, el CTA fijo estorba (mismo criterio que el
+   boton de WhatsApp flotante del kit). */
+html:has([data-wm-menu-panel][data-open="true"]) .wm-mobile-cta {
+  display: none !important;
+}

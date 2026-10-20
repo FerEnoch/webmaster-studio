@@ -81,4 +81,24 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
     videos: [3256, 3091, 3093, 3036],
     photos: ["1487958449943-2429e8be8625", "1497366754035-f200968a6e72", "1600585154340-be6161a56a0c", "1518005020951-eccb494ad742"],
   },
+  /**
+   * Portfolio madre.
+   *
+   * Los ids salen de los pools de arriba (una foto por rubro, para la tapa de
+   * cada card) mas el video de fondo. Todos verificados con
+   * `curl -sI -m 15` (HTTP 200) desde esta app: 8 fotos y 4 videos.
+   */
+  portfolio: {
+    videos: [3256, 3091, 3093, 4219],
+    photos: [
+      "1553877522-43269d4ea984", // clinica
+      "1503376780353-7e6692767b70", // concesionario
+      "1637430308606-86576d8fef3c", // lavadero
+      "1596178065887-1198b6148b2b", // estetica
+      "1562774053-701939374585", // universidad
+      "1512917774080-9991f1c4c750", // inmobiliaria
+      "1487958449943-2429e8be8625", // arquitectura
+      "1497366754035-f200968a6e72", // el estudio
+    ],
+  },
 };
