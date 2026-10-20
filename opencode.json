@@ -13,12 +13,16 @@
     "bash": {
       "rsync": "allow",
       "rsync *": "allow",
+      "rm": "allow",
+      "rm *": "allow",
       "git push": "deny",
       "git push *": "deny",
       "git push --force*": "deny"
     },
     "external_directory": {
-      "/tmp/*": "allow"
+      "/tmp/*": "allow",
+      "/home/ferenoch/.playwright-cli/*": "allow",
+      "/home/ferenoch/.cache/*": "allow"
     }
   }
 }

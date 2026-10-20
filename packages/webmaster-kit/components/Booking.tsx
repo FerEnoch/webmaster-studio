@@ -8,7 +8,10 @@
  * Sin backend: el submit SIMULA y deja TODO el estado visible (panel de
  * resumen). El aviso "Demo: no se envian datos" esta siempre a la vista.
  *
- * Es una isla React: `client:visible`.
+ * Es una isla React. La conversion principal la monta el sitio con
+ * `client:load` (NO `client:visible`): antes de hidratar hay una ventana en la
+ * que el submit nativo hace GET a la misma URL y borra lo que el usuario
+ * escribio.
  */
 
 import { useMemo, useState, type ChangeEvent, type SyntheticEvent } from "react";
