@@ -61,9 +61,32 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
       "1449965408869-eaa3f722e40d",
     ],
   },
+  /**
+   * LAVADERO — pool revisado a mano (2026-10-20).
+   *
+   * Los ids que traia el kit NO correspondian al rubro (4345 = una PC con
+   * codigo, 1637430308606 = un gimnasio, 1521543387600 = una casa de campo),
+   * asi que se re-verificaron todos por poster con `curl -sI -m 15` + revision
+   * visual de la hoja de contactos.
+   *
+   * Videos (5): 4307 agua a presion (hero) · 4293 barista · 4295 barra de
+   * copas · 3082 cafe + alfajores · 4189 auto clasico.
+   * Fotos (8): auto en tunel con luz turquesa, auto iluminado, garage
+   * oscuro, tecnico en el motor, auto chico, interior de bar, medialunas y
+   * un brindis.
+   */
   lavadero: {
-    videos: [4345, 4189],
-    photos: ["1637430308606-86576d8fef3c", "1600661653561-629509216228", "1558618666-fcd25c85cd64", "1521543387600-c745f8e83d77"],
+    videos: [4307, 4293, 4295, 3082, 4189],
+    photos: [
+      "1626668893632-6f3a4466d22f", // auto en tunel con luz turquesa
+      "1590362891991-f776e747a588", // auto blanco en garage iluminado
+      "1492144534655-ae79c964c9d7", // garage oscuro + auto
+      "1625047509248-ec889cbff17f", // tecnico trabajando en el motor
+      "1549317661-bd32c8ce0db2", // auto chico (tamanos)
+      "1517248135467-4c7edcad34c4", // interior de bar
+      "1530610476181-d83430b64dcd", // medialunas / facturas
+      "1470337458703-46ad1756a187", // brindis (servicio a la barra)
+    ],
   },
   estetica: {
     videos: [4210, 4212, 4258, 4346],

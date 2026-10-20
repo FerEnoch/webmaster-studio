@@ -1,0 +1,150 @@
+---
+/**
+ * SECCION PINNED — la idea del rubro: el auto entra al lavado y la espera se
+ * convierte en consumo en la barra.
+ *
+ * En desktop la columna izquierda queda "pinned" (sticky) mientras la
+ * derecha avanza: asi se lee como una sola escena, no como una lista.
+ */
+import LiveNow from "./ui/LiveNow.astro";
+import BarItem from "./BarItem.astro";
+import type { CatalogItem, LiveSignal } from "@lib/types";
+
+export interface Props {
+  carta: CatalogItem[];
+  live: LiveSignal;
+  foto: string;
+  fotoAlt: string;
+}
+
+const { carta, live, foto, fotoAlt } = Astro.props;
+
+/** La carta agrupada por rubro (Cafe de barra / Para esperar / ...). */
+const grupos = [...new Set(carta.map((i) => i.kicker ?? "Carta"))].map((nombre) => ({
+  nombre,
+  items: carta.filter((i) => (i.kicker ?? "Carta") === nombre),
+}));
+
+/** Los momentos de la espera, con horario. */
+const momentos = [
+  {
+    hora: "15:40",
+    titulo: "Dejás el auto",
+    texto: "Entregás la llave y la patente. Te damos el número de box y arrancamos.",
+  },
+  {
+    hora: "15:42",
+    titulo: "Te sentás",
+    texto: "El café de cortesía ya está servido. La barra tiene lugar, y la luz es suave.",
+  },
+  {
+    hora: "16:05",
+    titulo: "Elegís algo más",
+    texto: "Medialunas, un cortado, un vermut. Lo pagás en la barra, con el mismo turno.",
+  },
+  {
+    hora: "16:25",
+    titulo: "Te avisamos",
+    texto: "Te escribimos por WhatsApp cuando el auto sale del box. No tenés que preguntar.",
+  },
+  {
+    hora: "16:30",
+    titulo: "Retirás",
+    texto: "El auto está esperando con el pase. La barra sigue abierta un rato más.",
+  },
+];
+---
+
+<section id="espera" class="wm-container relative py-20 sm:py-28">
+  <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16">
+    <!-- ── Columna pinned: la promesa del rubro ─────────────── -->
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <p class="wm-kicker">La espera</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
+        Tu auto tarda 45 minutos.<br />
+        <span class="text-accent">Vos, un café.</span>
+      </h2>
+      <p class="mt-5 max-w-md text-muted">
+        Acá no te mandan a esperar al auto. Entrás, te dan un lugar en la barra
+        y el café de cortesía va por nuestra cuenta. La espera es parte del
+        servicio: por eso la barra está abierta todos los días de la semana.
+      </p>
+
+      <div class="mt-8 space-y-4 border-t border-line pt-6">
+        <p class="text-accent">
+          <LiveNow signal={live} />
+        </p>
+        <dl class="grid gap-3 text-sm">
+          <div class="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Próximo turno libre</dt>
+            <dd class="font-semibold">Hoy 15:40</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Última reserva tomada</dt>
+            <dd class="font-semibold">14:20</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Entrega estimada</dt>
+            <dd class="font-semibold">45 min desde tu turno</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette mt-8 overflow-hidden rounded-wm-lg">
+        <img
+          src={foto}
+          alt={fotoAlt}
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+
+    <!-- ── Columna que avanza: el recorrido de la espera ────── -->
+    <div>
+      <ol class="border-l border-line">
+        {
+          momentos.map((m, i) => (
+            <li class="relative border-b border-line py-7 pl-8 md:pl-12">
+              <span
+                aria-hidden="true"
+                class="absolute top-9 -left-[0.42rem] flex h-3 w-3 rounded-full bg-accent"
+              />
+              <p class="text-xs uppercase tracking-[0.24em] text-muted">
+                {String(i).padStart(2, "0")} · {m.hora}
+              </p>
+              <h3 class="wm-display mt-2 text-2xl leading-tight">{m.titulo}</h3>
+              <p class="mt-2 max-w-lg text-muted">{m.texto}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="mt-16">
+        <p class="wm-kicker">La carta</p>
+        <h3 class="wm-display mt-4 text-[clamp(1.8rem,4vw,2.8rem)]">
+          Lo que podés pedir mientras esperan
+        </h3>
+
+        {
+          grupos.map((grupo) => (
+            <div class="mt-8">
+              <p class="text-xs uppercase tracking-[0.22em] text-muted">{grupo.nombre}</p>
+              <ul class="mt-2">
+                {grupo.items.map((item) => (
+                  <BarItem item={item} />
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+
+        <p class="mt-8 text-sm text-muted">
+          El café de cortesía del turno no se cobra. Todo lo demás de la carta
+          se paga en la barra.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,23 +1,295 @@
 ---
-/**
- * PLACEHOLDER — el writer reemplaza este archivo por la portada real.
- * Es standalone a proposito: una app recien scaffoldeada compila sin
- * todavia tener el archivo `src/content/<rubro>.ts`.
- */
+import Base from "../layouts/Base.astro";
+import MobileCta from "../components/MobileCta.astro";
+import PageHero from "../components/ui/PageHero.astro";
+import LiveNow from "../components/ui/LiveNow.astro";
+import BarPinned from "../components/BarPinned.astro";
+import LavadoCard from "../components/LavadoCard.astro";
+import ReservaSteps from "../components/ReservaSteps.astro";
+import {
+  lavadero,
+  tamanos,
+  servicios,
+  addons,
+  paquetes,
+  carta,
+  fotos,
+  PRECIOS,
+  PRECIOS_ADDONS,
+  SENIA_PORCENTAJE,
+} from "../content/lavadero";
+import { video, poster } from "@lib/media";
+
+const [lavados, serviciosSection, paquetesSection, , faq] = lavadero.sections;
+
+/** Señal en vivo de la barra (creible: lugares, no métricas inventadas). */
+const liveBarra = {
+  label: "Abierto ahora",
+  count: 2,
+  min: 1,
+  max: 3,
+  unit: "lugares en la barra",
+  interval: 3800,
+};
 ---
 
-<!doctype html>
-<html lang="es-AR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Webmaster Studio</title>
-  </head>
-  <body style="font-family: system-ui, sans-serif; padding: 3rem; line-height: 1.6">
-    <h1>App scaffolded</h1>
-    <p>
-      Reemplazá <code>src/pages/index.astro</code> por la portada del rubro y
-      creá <code>src/content/&lt;rubro&gt;.ts</code>.
+<Base content={lavadero}>
+  <PageHero hero={lavadero.hero} brand={lavadero.brand} />
+
+  <!-- 1) La objecion, respondida de entrada. -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">La promesa</p>
+        <p class="wm-display mt-5 text-[clamp(1.8rem,4.4vw,3rem)] leading-tight">
+          {lavadero.objeccion}
+        </p>
+        <p class="mt-6 max-w-xl text-muted">
+          En ESQUINA BRILLO el lavado lo hace gente que trabaja con autos
+          todos los días: dos manos, esponja de microfibra, producto diluido
+          como corresponde y una ronda final de agua limpia. Después del box,
+          el interior se entrega perfumado, no rociado.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="/reservar" class="wm-btn">Reservar mi lavado</a>
+          <a href="/servicios" class="wm-btn wm-btn--ghost">Ver los servicios</a>
+        </div>
+        <p class="mt-6 text-sm text-muted">
+          <LiveNow signal={liveBarra} />
+        </p>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.tunel}
+          alt="Auto dentro del túnel de lavado iluminado de ESQUINA BRILLO (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 2) Como funciona: la idea del rubro en tres pasos. -->
+  <section class="wm-container pb-16 sm:pb-20">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">Cómo funciona</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.4rem)]">
+        Reservás, dejás el auto, te sentás
+      </h2>
+    </header>
+
+    <ol class="mt-12 grid gap-5 md:grid-cols-3">
+      {
+        [
+          {
+            n: "01",
+            t: "Reservás online",
+            b: "Tamaño de auto, nivel de lavado, extras y horario. Pagás el 20% de seña y quedás con un pase.",
+          },
+          {
+            n: "02",
+            t: "El auto entra al box",
+            b: "Lo dejamos nosotros. Vos entregás la llave y te sentás en la barra: café de cortesía incluido.",
+          },
+          {
+            n: "03",
+            t: "Te avisamos y retirás",
+            b: "Te escribimos por WhatsApp cuando sale del box. El pase dice la hora exacta de entrega.",
+          },
+        ].map((p) => (
+          <li class="wm-card">
+            <span class="wm-display text-3xl text-accent">{p.n}</span>
+            <h3 class="wm-display mt-3 text-2xl leading-tight">{p.t}</h3>
+            <p class="mt-3 text-sm text-muted">{p.b}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- 3) Seccion "pinned": la espera en la barra (la idea del rubro). -->
+  <BarPinned
+    carta={carta}
+    live={liveBarra}
+    foto={fotos.barra}
+    fotoAlt="Interior de la barra de ESQUINA BRILLO (imagen de demostración)."
+  />
+
+  <!-- 4) Lavados por tamano de auto. -->
+  <section class="wm-container py-16 sm:py-20" id="lavados">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{lavados.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{lavados.title}</h2>
+      <p class="mt-5 text-muted">{lavados.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {tamanos.map((item, i) => <LavadoCard item={item} index={i} />)}
+    </div>
+
+    <p class="mt-8 text-sm text-muted">
+      <a href="/servicios" class="font-semibold text-accent underline underline-offset-4">
+        Ver los tres niveles de lavado y los extras
+      </a>
     </p>
-  </body>
-</html>
+  </section>
+
+  <!-- 4b) Los tres niveles, en una linea. -->
+  <section class="wm-container pb-16 sm:pb-20">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-10">
+      <p class="wm-kicker">{serviciosSection.kicker}</p>
+      <h2 class="wm-display mt-4 text-[clamp(1.6rem,4vw,2.4rem)]">{serviciosSection.title}</h2>
+
+      <ul class="mt-8 divide-y divide-line border-y border-line">
+        {
+          servicios.map((s) => (
+            <li class="flex flex-wrap items-baseline justify-between gap-4 py-4">
+              <span class="wm-display text-xl">{s.title}</span>
+              <span class="text-sm text-muted">
+                {s.meta?.find((m) => m.label === "Duración")?.value}
+              </span>
+              <span class="font-semibold text-accent">desde {s.price?.amount}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <a
+        href="/servicios"
+        class="mt-8 inline-block text-sm font-semibold text-accent underline underline-offset-4"
+      >
+        Ver el detalle de cada nivel y los extras
+      </a>
+    </div>
+  </section>
+
+  <!-- 5) Paquetes con precio fijo y sena. -->
+  <section class="wm-container py-16 sm:py-20" id="paquetes">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{paquetesSection.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{paquetesSection.title}</h2>
+      <p class="mt-5 text-muted">{paquetesSection.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {paquetes.map((item, i) => <LavadoCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <!-- 6) Banda de video: el auto y la calle. -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(4189)}
+        poster={poster(4189)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Auto clásico circulando por la costa (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 70%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-32">
+      <p class="wm-kicker">El detalle</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        El auto entra, el café sale
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        Un lavado no es una fila de autos: es una hora que no querés perder.
+        Por eso la barra abre cuando abre el box, y el café de cortesía viene
+        con el turno, siempre.
+      </p>
+      <a href="/reservar" class="wm-btn mt-8">Reservar mi lavado</a>
+    </div>
+  </section>
+
+  <!-- 7) Conversion principal: 4 pasos hasta el ticket. -->
+  <ReservaSteps
+    conversion={lavadero.conversion}
+    brand={lavadero.brand}
+    rubroId={lavadero.id}
+    servicios={servicios}
+    addons={addons}
+    precios={PRECIOS}
+    preciosAddons={PRECIOS_ADDONS}
+    sena={SENIA_PORCENTAJE}
+  />
+
+  <!-- 8) FAQ -->
+  <section class="wm-container py-16 sm:py-20" id="faq">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{faq.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{faq.title}</h2>
+    </header>
+
+    <div class="mt-12 divide-y divide-line border-y border-line">
+      {
+        faq.items?.map((item) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6">
+              <span class="wm-display text-xl leading-snug">{item.title}</span>
+              <span
+                aria-hidden="true"
+                class="text-2xl text-accent transition-transform group-open:rotate-45"
+              >
+                +
+              </span>
+            </summary>
+            <p class="mt-4 max-w-3xl text-muted">{item.body}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 9) Sede y horarios. -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.tecnico}
+          alt="Técnico de ESQUINA BRILLO trabajando en el motor de un auto (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+      <div>
+        <p class="wm-kicker">Dónde estamos</p>
+        <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.2rem)]">
+          Barracas, con el box a la vista
+        </h2>
+        <p class="mt-5 text-muted">
+          {lavadero.contact.address}. El lavadero abre de lunes a sábado y la
+          barra de martes a domingo: hay un box siempre funcionando y una
+          persona siempre en la barra.
+        </p>
+        <dl class="mt-6 grid gap-3 text-sm">
+          <div class="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Horarios</dt>
+            <dd class="text-right font-medium">{lavadero.contact.hours}</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Teléfono</dt>
+            <dd class="text-right font-medium">{lavadero.contact.phone}</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Email</dt>
+            <dd class="text-right font-medium">{lavadero.contact.email}</dd>
+          </div>
+        </dl>
+        <a href="/contacto" class="wm-btn mt-8">Ver contacto y horarios</a>
+      </div>
+    </div>
+  </section>
+  <MobileCta contact={lavadero.contact} brand={lavadero.brand} />
+</Base>

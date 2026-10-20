@@ -1,0 +1,147 @@
+---
+import Base from "../layouts/Base.astro";
+import MobileCta from "../components/MobileCta.astro";
+import PageHead from "../components/PageHead.astro";
+import LavadoCard from "../components/LavadoCard.astro";
+import { lavadero, tamanos, servicios, addons, fotos } from "../content/lavadero";
+import { video, poster } from "@lib/media";
+
+const [lavados, serviciosSection] = lavadero.sections;
+---
+
+<Base content={lavadero} title={`Servicios · ${lavadero.brand}`}>
+  <PageHead
+    kicker={serviciosSection.kicker ?? "Qué hacemos"}
+    title="Lavados con precio a la vista"
+    subtitle="Los precios son finales, con impuestos incluidos, y salen del tamaño de tu auto y del nivel de lavado que elijas. No hay que pedir un presupuesto."
+  />
+
+  <!-- Precios por tamano -->
+  <section class="wm-container pb-16">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{lavados.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">{lavados.title}</h2>
+      <p class="mt-4 text-muted">{lavados.body}</p>
+    </header>
+
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {tamanos.map((item, i) => <LavadoCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <!-- Niveles de lavado -->
+  <section class="wm-container pb-16">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{serviciosSection.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">{serviciosSection.title}</h2>
+      <p class="mt-4 text-muted">{serviciosSection.body}</p>
+    </header>
+
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {servicios.map((item, i) => <LavadoCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <!-- Add-ons -->
+  <section class="wm-container pb-20">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">Extras</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Sumá lo que tu auto pida
+      </h2>
+      <p class="mt-4 text-muted">
+        Se suman al lavado que elijas y se calculan con el mismo 20% de seña.
+        Todo precio publicado es final.
+      </p>
+    </header>
+
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {addons.map((item, i) => <LavadoCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <!-- Banda de video: el box -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(4307)}
+        poster={poster(4307)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Agua a presión en el box de lavado de ESQUINA BRILLO (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 72%, transparent) 52%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-28">
+      <p class="wm-kicker">El box</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.2rem)]">
+        Agua limpia, dos manos, un solo box
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        Trabajamos con un solo box, y se usa por vez. Por eso el horario te lo
+        reservamos: no hay cola y no hay que esperar parado.
+      </p>
+    </div>
+  </section>
+
+  <!-- Que incluye cada nivel -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">Lo que siempre incluye</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Lo básico no se cobra aparte
+        </h2>
+        <ul class="mt-6 space-y-3 text-muted">
+          {
+            [
+              "Precipitado con espuma activa y lavado a mano",
+              "Secado sin contacto con aire comprimido",
+              "Limpieza de ruedas, cauces y paragolpes",
+              "Revisión final antes de la entrega del auto",
+              "Café de cortesía en la barra durante el turno",
+            ].map((t) => (
+              <li class="flex gap-3">
+                <span aria-hidden="true" class="text-accent">→</span>
+                <span>{t}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.box}
+          alt="Auto iluminado dentro del box de lavado de ESQUINA BRILLO (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="wm-container pb-24">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+      <p class="wm-kicker">¿Listo para reservar?</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Cuatro pasos y te queda el pase
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        Tamaño de auto, nivel de lavado, turno y seña. El pase sale con código,
+        la hora exacta de entrega y el monto de la seña.
+      </p>
+      <a href="/reservar" class="wm-btn mt-8">Ir a reservar</a>
+    </div>
+  </section>
+  <MobileCta contact={lavadero.contact} brand={lavadero.brand} />
+</Base>

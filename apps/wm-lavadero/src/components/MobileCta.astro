@@ -1,0 +1,64 @@
+---
+/**
+ * CTA fijo de mobile: la conversion principal, siempre a mano.
+ *
+ * En mobile el boton del hero se va con el scroll: esta barra aparece
+ * cuando el hero sale de pantalla y se esconde sola. En desktop no existe
+ * (el nav y el hero ya resuelven).
+ */
+import { waLink } from "@lib/whatsapp";
+import type { Contact } from "@lib/types";
+
+export interface Props {
+  contact: Contact;
+  brand: string;
+  label?: string;
+  href?: string;
+}
+
+const { contact, brand, label = "Reservar mi lavado", href = "/reservar" } = Astro.props;
+const whatsappHref = waLink(
+  contact.whatsapp,
+  `Hola, escribo desde la web de ${brand}. Quiero reservar un lavado.`,
+);
+---
+
+<div data-wm-mobile-cta data-visible="false" class="wm-mobile-cta fixed inset-x-0 bottom-0 z-40 md:hidden">
+  <div class="wm-container flex items-center gap-3 py-3">
+    <a
+      href={whatsappHref}
+      aria-label="Escribir por WhatsApp"
+      class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#25d366] text-white"
+    >
+      <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor" aria-hidden="true">
+        <path
+          d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.1.4-.2.7-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.2Z"
+        ></path>
+      </svg>
+    </a>
+
+    <a href={href} class="wm-btn w-full py-4">{label}</a>
+  </div>
+</div>
+
+<script>
+  // La barra aparece cuando el hero sale de pantalla.
+  const setupMobileCta = () => {
+    const bar = document.querySelector<HTMLElement>("[data-wm-mobile-cta]");
+    const hero = document.querySelector<HTMLElement>("[data-wm-hero]");
+    if (!bar || !hero || bar.dataset.ready === "true") return;
+
+    bar.dataset.ready = "true";
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry) bar.dataset.visible = String(!entry.isIntersecting);
+      },
+      { rootMargin: "-45% 0px 0px 0px" },
+    );
+    observer.observe(hero);
+  };
+
+  setupMobileCta();
+  document.addEventListener("astro:page-load", setupMobileCta);
+</script>

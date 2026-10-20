@@ -1,0 +1,98 @@
+---
+import Base from "../layouts/Base.astro";
+import MobileCta from "../components/MobileCta.astro";
+import PageHead from "../components/PageHead.astro";
+import ReservaSteps from "../components/ReservaSteps.astro";
+import { lavadero, servicios, addons, PRECIOS, PRECIOS_ADDONS, SENIA_PORCENTAJE, fotos } from "../content/lavadero";
+import { waLink } from "@lib/whatsapp";
+
+const whatsappHref = waLink(
+  lavadero.contact.whatsapp,
+  "Hola, quiero reservar un lavado en ESQUINA BRILLO. ¿Me pasás los turnos de hoy?",
+);
+---
+
+<Base content={lavadero} title={`Reservar · ${lavadero.brand}`}>
+  <PageHead
+    kicker="Reserva de lavado"
+    title="Reservá tu lavado y quedá con el pase"
+    subtitle="Cuatro pasos: tamaño de auto, lavado y extras, turno y seña, y tu pase con código. La seña es el 20% y se descuenta del total."
+  />
+
+  <ReservaSteps
+    conversion={lavadero.conversion}
+    brand={lavadero.brand}
+    rubroId={lavadero.id}
+    servicios={servicios}
+    addons={addons}
+    precios={PRECIOS}
+    preciosAddons={PRECIOS_ADDONS}
+    sena={SENIA_PORCENTAJE}
+  />
+
+  <!-- Que pasa despues -->
+  <section class="wm-container pb-20">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">Después de reservar</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Qué pasa cuando llegás
+      </h2>
+    </header>
+
+    <ol class="mt-10 grid gap-5 md:grid-cols-3">
+      {
+        [
+          {
+            n: "01",
+            t: "Mostrás el pase",
+            b: "En recepción te lo pedimos. Con el código alcanza: no hace falta que digas nada.",
+          },
+          {
+            n: "02",
+            t: "Pagás la seña",
+            b: "Transferencia o efectivo en la barra. Se descuenta del total del lavado.",
+          },
+          {
+            n: "03",
+            t: "Te avisamos por WhatsApp",
+            b: "Cuando el auto sale del box te escribimos con la hora exacta de entrega.",
+          },
+        ].map((p) => (
+          <li class="wm-card">
+            <span class="wm-display text-3xl text-accent">{p.n}</span>
+            <h3 class="wm-display mt-3 text-2xl leading-tight">{p.t}</h3>
+            <p class="mt-3 text-sm text-muted">{p.b}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Si no querés reservar online -->
+  <section class="wm-container pb-24">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">¿Preferís WhatsApp?</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          También reservamos por mensaje
+        </h2>
+        <p class="mt-5 text-muted">
+          Escribinos con el tamaño de tu auto y qué necesitás. Te pasamos los
+          turnos disponibles y el precio final antes de que reserves nada.
+        </p>
+        <a href={whatsappHref} class="wm-btn mt-8">Escribir por WhatsApp</a>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.garage}
+          alt="Auto esperando en el box de ESQUINA BRILLO (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+  <MobileCta contact={lavadero.contact} brand={lavadero.brand} />
+</Base>

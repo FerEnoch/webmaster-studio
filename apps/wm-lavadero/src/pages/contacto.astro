@@ -1,0 +1,176 @@
+---
+import Base from "../layouts/Base.astro";
+import MobileCta from "../components/MobileCta.astro";
+import PageHead from "../components/PageHead.astro";
+import { lavadero, fotos } from "../content/lavadero";
+import { waLink } from "@lib/whatsapp";
+
+const whatsappHref = waLink(
+  lavadero.contact.whatsapp,
+  "Hola, escribo desde la web de ESQUINA BRILLO. Quiero información sobre turnos y horarios.",
+);
+---
+
+<Base content={lavadero} title={`Contacto · ${lavadero.brand}`}>
+  <PageHead
+    kicker="Contacto"
+    title="Un WhatsApp y te contests en el día"
+    subtitle="El box abre de lunes a sábado y la barra de martes a domingo. Para reservar online, el pase sale en un minuto; para todo lo demás, escribinos."
+  />
+
+  <section class="wm-container pb-16">
+    <div class="grid gap-5 md:grid-cols-3">
+      <div class="wm-card">
+        <p class="wm-kicker">Lavadero</p>
+        <p class="wm-display mt-4 text-2xl leading-tight">Lunes a sábado</p>
+        <p class="mt-2 text-sm text-muted">De 8 a 20 h, con último box a las 19 h.</p>
+      </div>
+      <div class="wm-card">
+        <p class="wm-kicker">Barra</p>
+        <p class="wm-display mt-4 text-2xl leading-tight">Martes a domingo</p>
+        <p class="mt-2 text-sm text-muted">De 10 a 22 h. Los domingos hasta las 20 h.</p>
+      </div>
+      <div class="wm-card">
+        <p class="wm-kicker">Reservas online</p>
+        <p class="wm-display mt-4 text-2xl leading-tight">Todo el día</p>
+        <p class="mt-2 text-sm text-muted">El formulario de reservas está disponible las 24 h.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wm-container pb-20">
+    <div class="grid gap-10 lg:grid-cols-2">
+      <div class="rounded-wm-lg border border-line p-8">
+        <p class="wm-kicker">Datos</p>
+        <dl class="mt-6 space-y-4 text-muted">
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Teléfono</dt>
+            <dd class="mt-1 text-lg text-fg">{lavadero.contact.phone}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Email</dt>
+            <dd class="mt-1 text-lg text-fg">
+              <a href={`mailto:${lavadero.contact.email}`} class="hover:text-accent">
+                {lavadero.contact.email}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Horarios</dt>
+            <dd class="mt-1 text-lg text-fg">{lavadero.contact.hours}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Dirección</dt>
+            <dd class="mt-1 text-lg text-fg">{lavadero.contact.address}</dd>
+          </div>
+        </dl>
+
+        {
+          lavadero.contact.mapsUrl && (
+            <a
+              href={lavadero.contact.mapsUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              class="mt-6 inline-block text-sm font-semibold underline underline-offset-4"
+            >
+              Cómo llegar
+            </a>
+          )
+        }
+
+        <a href={whatsappHref} class="wm-btn mt-8">Escribir por WhatsApp</a>
+      </div>
+
+      <div>
+        <p class="wm-kicker">Mensaje</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Mandanos el auto que tenés
+        </h2>
+        <p class="mt-5 text-muted">
+          Si no sabés qué nivel de lavado te conviene, contanos el estado del
+          auto y te decimos cuál te conviene con el precio final. También
+          resolvemos dudas de la barra, turnos para grupos y FACTURAS.
+        </p>
+
+        <form class="mt-8 grid gap-4" data-wm-demo-form>
+          <label class="block text-sm">
+            <span class="text-muted">Nombre</span>
+            <input
+              required
+              placeholder="Ana Gomez"
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            />
+          </label>
+          <label class="block text-sm">
+            <span class="text-muted">Teléfono o email</span>
+            <input
+              required
+              placeholder="11 1234 5678"
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            />
+          </label>
+          <label class="block text-sm">
+            <span class="text-muted">¿Qué necesitás?</span>
+            <textarea
+              rows="4"
+              placeholder="Lavado de una camioneta, turno para el sábado..."
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            ></textarea>
+          </label>
+          <button type="submit" class="wm-btn w-full">Enviar mensaje</button>
+          <p class="text-xs text-muted">Demo: no se envían datos.</p>
+        </form>
+
+        <p class="mt-4 rounded-wm border border-accent p-4 text-sm" data-wm-demo-done hidden>
+          Mensaje tomado. En esta demo no se envía nada: así se vería la
+          confirmación.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wm-container pb-24">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.chico}
+          alt="Auto chico esperando su turno en ESQUINA BRILLO (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/5] w-full object-cover"
+        />
+      </div>
+      <div>
+        <p class="wm-kicker">Reservar online</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Cuatro pasos y un pase con código
+        </h2>
+        <p class="mt-5 text-muted">
+          Tamaño de auto, nivel de lavado, extras, turno y seña. Te queda el
+          pase con la hora exacta de entrega y el monto de la seña.
+        </p>
+        <a href="/reservar" class="wm-btn mt-8">Ir a reservar</a>
+      </div>
+    </div>
+  </section>
+  <MobileCta contact={lavadero.contact} brand={lavadero.brand} />
+</Base>
+
+<script>
+  // Formulario de contacto (demo): no manda datos, muestra la confirmacion.
+  document.addEventListener(
+    "submit",
+    (event) => {
+    const form = event.target as HTMLFormElement | null;
+    if (!form || !form.matches("[data-wm-demo-form]")) return;
+    event.preventDefault();
+    form.style.display = "none";
+    const done = document.querySelector<HTMLElement>("[data-wm-demo-done]");
+    if (done) {
+      done.classList.remove("hidden");
+      done.removeAttribute("hidden");
+    }
+    },
+    true,
+  );
+</script>

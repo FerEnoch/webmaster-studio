@@ -1,0 +1,175 @@
+---
+import Base from "../layouts/Base.astro";
+import MobileCta from "../components/MobileCta.astro";
+import PageHead from "../components/PageHead.astro";
+import BarItem from "../components/BarItem.astro";
+import LiveNow from "../components/ui/LiveNow.astro";
+import { lavadero, carta, fotos } from "../content/lavadero";
+import { video, poster } from "@lib/media";
+
+const grupos = [...new Set(carta.map((i) => i.kicker ?? "Carta"))].map((nombre) => ({
+  nombre,
+  items: carta.filter((i) => (i.kicker ?? "Carta") === nombre),
+}));
+
+const liveBarra = {
+  label: "Barra abierta",
+  count: 2,
+  min: 1,
+  max: 3,
+  unit: "lugares en la barra",
+  interval: 3800,
+};
+---
+
+<Base content={lavadero} title={`Bar · ${lavadero.brand}`}>
+  <PageHead
+    kicker="La barra"
+    title="La carta que podés pedir mientras lavan tu auto"
+    subtitle="La barra abre de martes a domingo, de 10 a 22 h. El café de cortesía viene con el turno de lavado; el resto se paga en el momento, como en cualquier barra."
+  />
+
+  <section class="wm-container pb-12">
+    <p class="text-accent">
+      <LiveNow signal={liveBarra} />
+    </p>
+  </section>
+
+  <!-- Banda de video: el barista -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(4293)}
+        poster={poster(4293)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Barista preparando un trago en la barra de ESQUINA BRILLO (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 74%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-28">
+      <p class="wm-kicker">Detrás de la barra</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        Siempre hay alguien en la barra
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        No es un vending machine con café. Hay barraista, hay medialunas
+        recién hechas a las 9 y a las 16, y hay algo para picar mientras el auto
+        se lava.
+      </p>
+    </div>
+  </section>
+
+  <!-- La carta -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+      <div>
+        {
+          grupos.map((grupo) => (
+            <div class="mb-12 last:mb-0">
+              <p class="text-xs uppercase tracking-[0.22em] text-muted">{grupo.nombre}</p>
+              <ul class="mt-2">
+                {grupo.items.map((item) => (
+                  <BarItem item={item} />
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+
+      <aside class="lg:sticky lg:top-28 lg:self-start">
+        <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+          <img
+            src={fotos.brindis}
+            alt="Brindis en la barra de ESQUINA BRILLO (imagen de demostración)."
+            loading="lazy"
+            decoding="async"
+            class="aspect-[4/5] w-full object-cover"
+          />
+        </div>
+
+        <div class="mt-6 rounded-wm border border-line p-6">
+          <p class="wm-kicker">Horarios de la barra</p>
+          <p class="mt-3 text-muted">
+            Martes a domingo de 10 a 22 h. Domingos hasta las 20 h. Los lunes
+            no abrimos la barra: es el día de mantenimiento del box.
+          </p>
+          <p class="mt-4 border-t border-line pt-4 text-sm text-muted">
+            El café de cortesía corresponde al turno de lavado reservado. Las
+            bebidas y los consumos restantes se pagan por tu cuenta.
+          </p>
+        </div>
+
+        <a href="/reservar" class="wm-btn mt-6 w-full">Reservar un lavado</a>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Medialunas -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(3082)}
+        poster={poster(3082)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Café y medialunas en la barra de ESQUINA BRILLO (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 70%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-28">
+      <p class="wm-kicker">Media hora</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        Con café y medialunas, la espera se ordena
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        Nadie te mira de reojo porque estás esperando: hay lugar en la barra, la
+        luz es suave y la mesa es tuya hasta que te avisemos que el auto
+        salió.
+      </p>
+    </div>
+  </section>
+
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.medialunas}
+          alt="Medialunas recién hechas en la barra de ESQUINA BRILLO (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+      <div>
+        <p class="wm-kicker">El combo</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Lavado Express + café de cortesía
+        </h2>
+        <p class="mt-5 text-muted">
+          El Express de un auto compacto sale con café de cortesía incluido en
+          el turno. Si querés medialunas o un cortado, se suma en la barra.
+        </p>
+        <a href="/reservar" class="wm-btn mt-8">Reservar mi lavado</a>
+      </div>
+    </div>
+  </section>
+  <MobileCta contact={lavadero.contact} brand={lavadero.brand} />
+</Base>
