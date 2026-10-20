@@ -1,0 +1,59 @@
+---
+/**
+ * La conversion principal: los 4 pasos explicados + la isla React que
+ * termina en el ticket del kit.
+ */
+import VisitaBooking from "./VisitaBooking";
+import type { Conversion } from "@lib/types";
+import type { Propiedad } from "../content/inmobiliaria";
+
+export interface Props {
+  conversion: Conversion;
+  brand: string;
+  options: Propiedad[];
+}
+
+const { conversion, brand, options } = Astro.props;
+
+const detalle = [
+  "Elegís la propiedad y ves sus imperfecciones publicadas.",
+  "Ves los turnos con lugares disponibles, agrupados por día.",
+  "Cargás tu nombre, tu teléfono y, si querés, una nota.",
+  "Te damos el pase con código y el link de WhatsApp.",
+];
+---
+
+<section id="visita" class="wm-container relative py-20 sm:py-28">
+  <div class="max-w-2xl">
+    <p class="wm-kicker">{conversion.kicker}</p>
+    <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{conversion.title}</h2>
+    {conversion.body ? <p class="mt-5 text-muted">{conversion.body}</p> : null}
+  </div>
+
+  <ol class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      conversion.steps.map((step, i) => (
+        <li class="rounded-wm border border-line p-5">
+          <span class="wm-display text-3xl text-accent">{String(i + 1).padStart(2, "0")}</span>
+          <p class="mt-2 font-semibold">{step}</p>
+          <p class="mt-1 text-sm text-muted">{detalle[i] ?? ""}</p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="mt-12">
+    <VisitaBooking
+      client:load
+      brand={brand}
+      title={conversion.title}
+      kicker={conversion.kicker}
+      body={conversion.body}
+      steps={conversion.steps}
+      options={options}
+      slots={conversion.slots}
+      demoNotice={conversion.demoNotice}
+      confirmLabel="Confirmar mi visita"
+    />
+  </div>
+</section>

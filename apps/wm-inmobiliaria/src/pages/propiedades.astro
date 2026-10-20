@@ -1,0 +1,32 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import PropertyFinder from "../components/PropertyFinder";
+import { brand, inmobiliaria, propiedades } from "../content/inmobiliaria";
+---
+
+<Base content={inmobiliaria} title={`Propiedades · ${brand}`}>
+  <PageHead
+    kicker="Cartera"
+    title="Seis propiedades, filtros que responden"
+    subtitle="Filtrá por zona, tipo, precio y ambientes. La lista es corta a propósito: son las unidades que realmente tenemos y que podemos mostrar esta semana."
+  />
+
+  <section id="buscador" class="wm-container pb-16 sm:pb-20">
+    <PropertyFinder client:visible properties={propiedades} />
+  </section>
+
+  <section class="wm-container pb-24 sm:pb-28">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+      <p class="wm-kicker">¿Listo para verla?</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Elegí la propiedad, el día y la hora
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        La visita se agenda en la portada: son cuatro pasos y recibís el pase con
+        código al confirmar.
+      </p>
+      <a href="/#visita" class="wm-btn mt-8">Agendar una visita</a>
+    </div>
+  </section>
+</Base>
