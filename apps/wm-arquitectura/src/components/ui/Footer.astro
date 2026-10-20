@@ -149,12 +149,32 @@ const year = new Date().getFullYear();
 
 <script>
   // Baja (demo): no manda datos, muestra la confirmacion en el lugar.
-  document.addEventListener("submit", (event) => {
-    const form = event.target as HTMLFormElement | null;
-    if (!form || !form.matches("[data-wm-baja-form]")) return;
-    event.preventDefault();
-    form.hidden = true;
-    const done = document.querySelector<HTMLElement>("[data-wm-baja-done]");
-    if (done) done.hidden = false;
-  });
+  //
+  // TRAMPA 1 (Astro 7 + ClientRouter): el `<ClientRouter/>` del kit registra
+  // un listener de "submit" en `document` para navegar con view transitions.
+  // Corre en la fase de burbuja sobre `document`, y este script tambien, asi
+  // que el de Astro corre PRIMERO: intercepta, hace preventDefault() y navega
+  // con un swap a la misma pagina. El swap vuelve a pintar el form y la
+  // confirmacion que acabamos de mostrar se pierde.
+  // Fix: escuchar en FASE DE CAPTURA (3er argumento `true`) para correr antes
+  // que el router. El `preventDefault` deja la marca `defaultPrevented`, que
+  // es justo lo que Astro mira para hacer suelta el submit.
+  //
+  // TRAMPA 2 (Tailwind): `form.hidden = true` no oculta nada si el form lleva
+  // una utilidad de `display` (aca `grid`), porque la utilidad gana a la regla
+  // [hidden] del user-agent. Por eso se oculta con `style.display`.
+  document.addEventListener(
+    "submit",
+    (event) => {
+      const form = event.target as HTMLFormElement | null;
+      if (!form || !form.matches("[data-wm-baja-form]")) return;
+      event.preventDefault();
+      form.style.display = "none";
+      const done = document.querySelector<HTMLElement>("[data-wm-baja-done]");
+      if (!done) return;
+      done.hidden = false;
+      done.classList.remove("hidden");
+    },
+    true,
+  );
 </script>
