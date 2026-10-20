@@ -1,26 +1,44 @@
-# 08 — Plan de trabajo (versión mejorada, 7 rubros)
+# 08 — Plan de trabajo: estado real tras la implementación (2026-10-20)
 
-## Orden (1 slice = 1 rubro + firma)
+## Lo que está HECHO (rama `feature/webmaster-studio-estrategia`)
 
-1. Setup Astro + design tokens + `Transition/PageHero/Booking/Ticket/LiveNow/grade` (base firma A).
-2. Pilotos que venden: clínica+dx y lavadero+bar (conversión más clara, T4).
-3. Concesionario + inmobiliaria (VDP + ficha + tour).
-4. Estética+yoga + universidad (doble funnel + buscador).
-5. Arquitectura+diseño (portfolio por obra, cierra con autor).
-6. Portfolio madre filtrable + “demo gratis en 48h” + SEO local + legales.
+### Base compartida — `packages/webmaster-kit/`
+Fuente de verdad del sistema. Se COPIA a cada app (no es paquete npm, evita fricción de build con Astro + Vite).
+`types.ts` (RubroContent, Theme, Section, Legal, Contact, Conversion) · `rubros.ts` (los 7 rubros + `getRubro`) · `whatsapp.ts` (`waLink`, `rubroWhatsapp`) · `media.ts` (medios verificados) · `styles/tokens.css` (@theme Tailwind v4 + `.wm-grade` / `.wm-grain` / `.wm-vignette` / `.wm-curtain`) · `components/` (BaseLayout, Nav, Footer, PageHero, LiveNow, RubroCard, Booking.tsx, Ticket.tsx) · `app-template/` (esqueleto).
 
-## Definición de terminado por rubro
+### 8 apps Astro (1 por rubro + portfolio madre)
+| App | Rubro | Rutas | Conversión principal |
+| --- | --- | --- | --- |
+| wm-clinica | clínica + dx | 5 | turnera por estudio → ticket |
+| wm-concesionario | usados + nuevos | 13 | test drive → ticket |
+| wm-lavadero | lavadero + bar | 6 | reserva con seña → ticket |
+| wm-estetica | estética + yoga | 6 | turno → ticket |
+| wm-universidad | universidad | 6 | admisión / visita → ticket |
+| wm-inmobiliaria | inmobiliaria | 11 | visita → ticket |
+| wm-arquitectura | arquitectura | 5 | cotización → ticket |
+| wm-portfolio | portfolio madre | 5 | demo gratis 48h → ticket |
 
-Astro build sin errores; Lighthouse mobile ≥95 perf; 0 consola; desktop 1440 + mobile 375; conversión punta a punta (reserva/test drive/seña/inscripción/visita/cotización) con ticket; medios propios verificados; precios/horarios/ubicación visibles; WhatsApp prearmado; legales AR.
+Todas: cortina entre rutas, hero de video que se encoge, grade/grano/viñeta, sección pinned, señal en vivo, 1 CTA, WhatsApp prearmado, legales AR (Res. 316/2018, 271/2020, Defensa del Consumidor, precios con impuestos) y contenido ficticio marcado como demo.
 
-## Costo / hosting
+### Scaffolder
+`node scripts/new-app.mjs wm-<rubro>` crea el esqueleto copiando del kit. Para sumar un rubro: scaffolder → `src/content/<rubro>.ts` → reemplazar `src/pages/index.astro` → registrar en `rubros.ts` y en el `package.json` raíz → `pnpm --filter wm-<slug> run check && ... run build`.
 
-Dev en Hobby (personal). Prod cliente: avisar Pro vs Cloudflare según tráfico. No incluir backend real en precio base.
+## Verificación (seam check)
+- 8/8 apps: `astro check` con **0 errores**, build OK, 57 páginas HTML.
+- Probe headless sobre las 8: el form de contacto se oculta, la confirmación aparece, **no navega**, 0 errores de consola.
+- `pnpm audit --audit-level high` → **No known vulnerabilities found**.
+- 9/9 apps Next legacy siguen compilando con pnpm (sin regresión).
+- Sin artefactos de build en git.
 
-## Commits sugeridos
+## Toolchain
+pnpm 12.11.2 (único package manager) con `pnpm-workspace.yaml` endurecido: `minimumReleaseAge` 3 días, `trustPolicy: no-downgrade`, `blockExoticSubdeps`, `allowBuilds` (allowlist) y `strictDepBuilds`. `overrides: postcss ^8.5.18` mata 2 vulnerabilidades HIGH heredadas de `next`. Astro 7.4.1 + React 19 + Tailwind v4.
 
-`feat(setup): astro base + firma`, luego `feat(rubro): <nombre> demo viva + ticket`, 1 commit por rubro (~400 líneas c/u). Branch: `feature/webmaster-studio-estrategia`.
+## Pendientes de decisión (L19)
+1. **Vercel**: los `demoUrl` (`wm-<slug>.vercel.app`) son placeholders. Hobby es "personal, no comercial": para clientes reales hay que avisar Pro ($20/mes + overages) o Cloudflare. Decidir antes de vender.
+2. **Legacy**: ¿las 9 apps Next se archivan o quedan como benchmarks?
+3. **Deploy**: pushear a Vercel es decisión del usuario; la rama tiene 15 commits sin pushear.
 
-## Next inmediato
-
-Elegí piloto (recomiendo clínica+dx) y lo armamos en Astro con tu contenido real.
+## Próximo sprint sugerido
+1. Deploy de las 8 apps a Vercel (8 proyectos, un click c/u) + dominios demo.
+2. Portfolio madre con los links reales a las demos.
+3. Medir: clicks de WhatsApp / reservas iniciadas por rubro durante 2 semanas → ajustar precios del plan de negocios (`05-plan-negocios.md`).

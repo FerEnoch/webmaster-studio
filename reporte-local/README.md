@@ -5,17 +5,17 @@ Alcance acordado 2026-10-20: portfolio freelance / rubros a definir / top 10 glo
 
 ## Documentos
 
-- `01-base-repo.md` — qué trae hoy el repo (HECHO, T1 parcial)
-- `02-ideas-similares.md` — PENDIENTE (T2, explorer global)
-- `03-top10-por-rubro.md` — PENDIENTE (T3, 9 rubros x 10)
-- `04-rubros-para-vos.md` — PENDIENTE (T4, ¿son los mejores?)
-- `05-plan-negocios.md` — PENDIENTE (T5, portfolio freelance)
-- `06-firma.md` — PENDIENTE (T6, rasgo transversal)
-- `07-astro-vercel.md` — PENDIENTE (T7, migración y límites gratis)
-- `08-plan-trabajo.md` — PENDIENTE (T8, roadmap ejecución)
+- `01-base-repo.md` — qué trae hoy el repo (HECHO)
+- `02-ideas-similares.md` — 10 estudios globales que venden por rubro (HECHO)
+- `03-top10-por-rubro.md` — top de diseño por rubro + los 5 rubros nuevos (HECHO)
+- `04-rubros-para-vos.md` — los 7 rubros finales y si son los mejores (HECHO)
+- `05-plan-negocios.md` — oferta, pricing y mantenimiento (HECHO)
+- `06-firma.md` — 3 candidatos de firma + recomendación (HECHO)
+- `07-astro-vercel.md` — Astro vs Next y límites de Vercel gratis (HECHO)
+- `08-plan-trabajo.md` — **estado real tras la implementación** + pendientes (HECHO)
 
-Feature doc canónico: `odd/tasks/webmaster-studio.md` (8 tareas). Mirror Engram: pendiente (ambigüedad cwd, se reintenta con elección explícita).
+Feature doc canónico: `odd/tasks/webmaster-studio.md` (17 tareas, todas cerradas). Mirror Engram: topic `odd/webmaster-studio/tasks`.
 
-## Cómo leerlo
+## Estado: IMPLEMENTADO
 
-Empezá por `01-base-repo.md`. El resto se completa en orden T2→T8. Cada doc cita fuentes con URL y fecha.
+Rama `feature/webmaster-studio-estrategia` — 15 commits, 8 apps Astro + kit compartido, todo verificado. Ver `08-plan-trabajo.md`.
