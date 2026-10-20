@@ -1,0 +1,11 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "gentle-ai-worker": {
+      "model": "opencode-go/minimax-m3.1-flash-free"
+    },
+    "gentle-ai-verify": {
+      "model": "opencode-go/minimax-m3.1-flash-free"
+    }
+  }
+}
