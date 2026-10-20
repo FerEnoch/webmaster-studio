@@ -1,0 +1,139 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import { estetica } from "../content/estetica";
+
+const { legal } = estetica;
+---
+
+<Base content={estetica} title={`Legal · ${estetica.brand}`}>
+  <PageHead
+    kicker="Información legal"
+    title="Precios finales, seña, privacidad y baja"
+    subtitle="Datos de la empresa, precios, condiciones de la reserva y cómo pedir la baja de tus datos."
+  />
+
+  <section class="wm-container pb-20">
+    <div class="grid gap-12 lg:grid-cols-[1fr_1.4fr]">
+      <aside class="rounded-wm-lg border border-line p-6">
+        <p class="wm-kicker">La empresa</p>
+        <dl class="mt-5 space-y-3 text-sm">
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Razón social</dt>
+            <dd class="mt-1">{legal.company}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">CUIT</dt>
+            <dd class="mt-1">{legal.cuit}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Domicilio</dt>
+            <dd class="mt-1">{legal.address}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Teléfono</dt>
+            <dd class="mt-1">{legal.phone}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Email</dt>
+            <dd class="mt-1">{legal.email}</dd>
+          </div>
+        </dl>
+
+        <p class="mt-6 border-t border-line pt-4 text-xs text-muted">
+          Demo de portfolio: la razón social, el CUIT y el domicilio son
+          ficticios.
+        </p>
+      </aside>
+
+      <div class="space-y-12">
+        <article id="precios">
+          <p class="wm-kicker">Precios</p>
+          <h2 class="wm-display mt-4 text-3xl">Precios finales con impuestos</h2>
+          <p class="mt-4 text-muted">{legal.taxNote}</p>
+          <p class="mt-4 text-muted">
+            El precio que ves en cada tratamiento y en cada clase es el que
+            pagás: no se suman cargos en recepción. La seña de la reserva online
+            se descuenta del total, nunca se cobra aparte.
+          </p>
+        </article>
+
+        <article id="terminos">
+          <p class="wm-kicker">Condiciones</p>
+          <h2 class="wm-display mt-4 text-3xl">Términos y condiciones</h2>
+          <ul class="mt-5 space-y-3">
+            {
+              legal.terms?.map((t) => (
+                <li class="flex gap-3 text-muted">
+                  <span aria-hidden="true" class="text-accent">→</span>
+                  <span>{t}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </article>
+
+        <article id="cortesia">
+          <p class="wm-kicker">Lo que prometemos</p>
+          <h2 class="wm-display mt-4 text-3xl">Fotos y resultados</h2>
+          <p class="mt-4 text-muted">
+            La comparativa de antes y después que aparece en esta web es una
+            simulación visual generada con un filtro de color sobre una foto de
+            stock. No son imágenes de clientas ni resultados reales del estudio.
+            Las reseñas, los turnos libres y la ocupación que se muestran son
+            datos de demostración.
+          </p>
+        </article>
+
+        <article id="privacidad">
+          <p class="wm-kicker">Privacidad</p>
+          <h2 class="wm-display mt-4 text-3xl">Política de privacidad</h2>
+          <ul class="mt-5 space-y-3">
+            {
+              legal.privacy?.map((t) => (
+                <li class="flex gap-3 text-muted">
+                  <span aria-hidden="true" class="text-accent">→</span>
+                  <span>{t}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </article>
+
+        <article id="baja">
+          <p class="wm-kicker">Arrepentimiento y baja</p>
+          <h2 class="wm-display mt-4 text-3xl">Botón de baja</h2>
+          <p class="mt-4 text-muted">{legal.withdrawal.note}</p>
+          <p class="mt-3 text-sm text-muted">{legal.withdrawal.resolution}</p>
+          <p class="mt-5 text-sm text-muted">
+            El botón está en el pie de página de todas las páginas. También
+            podés escribirnos a{" "}
+            <a href={`mailto:${legal.email}`} class="text-accent underline underline-offset-4">
+              {legal.email}
+            </a>{" "}
+            y lo tramitamos por email.
+          </p>
+        </article>
+
+        <article id="defensa">
+          <p class="wm-kicker">Defensa del Consumidor</p>
+          <h2 class="wm-display mt-4 text-3xl">Ante un problema</h2>
+          <p class="mt-4 text-muted">
+            Si algo no salió como esperabas, escribinos primero: resolvemos en
+            el momento. Si no llegamos a un acuerdo, podés iniciar un reclamo
+            ante{" "}
+            <a
+              href={legal.consumerDefense.url}
+              target="_blank"
+              rel="noreferrer noopener"
+              class="text-accent underline underline-offset-4"
+            >
+              {legal.consumerDefense.label}
+            </a>
+            .
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+</Base>

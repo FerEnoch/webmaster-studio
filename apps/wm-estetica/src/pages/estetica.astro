@@ -1,0 +1,197 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import LiveNow from "../components/ui/LiveNow.astro";
+import TratamientoCard from "../components/TratamientoCard.astro";
+import { estetica, fotos, clips } from "../content/estetica";
+import { poster, video } from "@lib/media";
+
+const tratamientos = estetica.sections.find((s) => s.id === "estetica")!;
+const faq = estetica.sections.find((s) => s.id === "faq")!;
+
+const pasos = [
+  {
+    t: "La consulta",
+    d: "Diez minutos, sin costo y sin commitment: piel, historial, medicación y qué probaste. Salís con un plan escrito.",
+  },
+  {
+    t: "La sesión",
+    d: "Entre 30 y 90 minutos según el tratamiento. Si en algún momento te incómoda, te lo decimos y paramos.",
+  },
+  {
+    t: "El alta",
+    d: "Te damos la rutina para la casa, qué evitar y cuándo conviene volver. Queda anotado en tu ficha.",
+  },
+];
+---
+
+<Base content={estetica} title={`Estética · ${estetica.brand}`}>
+  <PageHead
+    kicker={tratamientos.kicker ?? "Estética"}
+    title="Seis tratamientos, precios a la vista"
+    subtitle={tratamientos.body}
+  />
+
+  <!-- Señal en vivo -->
+  <div class="wm-container">
+    <div class="wm-card flex flex-wrap items-center justify-between gap-4 border-accent">
+      <p class="text-sm text-accent">
+        <LiveNow signal={{ label: "Quedan lugares en el turno de las 18:00", count: 1, min: 1, max: 2, unit: "lugares" }} />
+      </p>
+      <p class="text-xs text-muted">Señal de demostración: los turnos fluctúan al azar.</p>
+    </div>
+  </div>
+
+  <!-- Los tratamientos -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {tratamientos.items?.map((item, i) => <TratamientoCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <!-- Qué pasa en la sesión -->
+  <section class="border-y border-line">
+    <div class="wm-container grid gap-10 py-16 sm:py-20 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.producto}
+          alt="Frasco de sérum con gotero de LUMEN sobre una mesa oscura (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+
+      <div>
+        <p class="wm-kicker">Cómo trabajamos</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Tres momentos, siempre iguales
+        </h2>
+
+        <ol class="mt-8 border-l border-line">
+          {
+            pasos.map((p, i) => (
+              <li class="relative border-b border-line py-6 pl-8 last:border-b-0">
+                <span
+                  aria-hidden="true"
+                  class="absolute top-8 -left-[0.42rem] flex h-3 w-3 rounded-full bg-accent"
+                />
+                <p class="text-xs uppercase tracking-[0.24em] text-muted">
+                  Paso {String(i + 1).padStart(2, "0")}
+                </p>
+                <h3 class="wm-display mt-2 text-xl leading-tight">{p.t}</h3>
+                <p class="mt-2 max-w-xl text-sm text-muted">{p.d}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Banda de video -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(clips.labios.id)}
+        poster={poster(clips.labios.id)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Detalle de un tratamiento labial en LUMEN (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 74%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-32">
+      <p class="wm-kicker">Detalle</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        El detalle es el trabajo
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        Una limpieza bien hecha no se ve en una foto: se nota en la piel dos
+        días después. Por eso damos tiempo entre sesiones y no vendemos
+        packs apurados.
+      </p>
+      <a href="/reservar" class="wm-btn mt-8">Reservar mi turno</a>
+    </div>
+  </section>
+
+  <!-- Insumos + la foto del espacio -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1.05fr_1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">Qué usamos</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Tres cosas en el baño, y ya está
+        </h2>
+        <p class="mt-5 text-muted">
+          Un limpiador, un activo y un humectante. Nada de diez paso que nadie
+          sigue. Los productos están a la vista en cada gabinete: si te da
+          curiosidad, te los mostramos.
+        </p>
+        <ul class="mt-6 space-y-2 text-muted">
+          {
+            [
+              "Todo sin fragancia o con fragancia suave: te lo preguntamos en la consulta",
+              "Cada cliente tiene su material: no se comparte ni se recicla",
+              "Si tu piel reacciona, lo anotamos en tu ficha y no te lo repetimos",
+            ].map((p) => (
+              <li class="flex gap-2">
+                <span aria-hidden="true" class="text-accent">→</span>
+                <span>{p}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <a href="/reservar" class="wm-btn mt-8">Reservar mi turno</a>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.salon}
+          alt="Interior del estudio LUMEN con plantas y sillón (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ corta -->
+  <section class="wm-container pb-24">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{faq.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">{faq.title}</h2>
+    </header>
+
+    <div class="mt-10 divide-y divide-line border-y border-line">
+      {
+        (faq.items ?? []).slice(0, 4).map((item) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6">
+              <span class="wm-display text-xl leading-snug">{item.title}</span>
+              <span aria-hidden="true" class="text-2xl text-accent transition-transform group-open:rotate-45">
+                +
+              </span>
+            </summary>
+            <p class="mt-4 max-w-3xl text-muted">{item.body}</p>
+          </details>
+        ))
+      }
+    </div>
+
+    <p class="mt-8 text-sm text-muted">
+      <a href="/contacto" class="font-semibold text-accent underline underline-offset-4">
+        Ver todas las preguntas y escribirnos
+      </a>
+    </p>
+  </section>
+</Base>

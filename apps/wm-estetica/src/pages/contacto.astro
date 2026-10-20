@@ -1,0 +1,188 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import { estetica, fotos } from "../content/estetica";
+import { rubroWhatsapp } from "@lib/whatsapp";
+
+const espacio = estetica.sections.find((s) => s.id === "espacio")!;
+const whatsappHref = rubroWhatsapp("estetica", {
+  servicio: "una consulta",
+  dia: "esta semana",
+});
+---
+
+<Base content={estetica} title={`Contacto · ${estetica.brand}`}>
+  <PageHead
+    kicker="Contacto"
+    title="Un WhatsApp y una dirección"
+    subtitle="Si preferís resolverlo hablando, escribinos. Si preferís reservar sin hablar, el formulario te da el pase al instante."
+  />
+
+  <section class="wm-container pb-16">
+    <div class="grid gap-10 lg:grid-cols-2">
+      <div class="rounded-wm-lg border border-line p-8">
+        <p class="wm-kicker">Datos</p>
+        <dl class="mt-6 space-y-4 text-muted">
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Teléfono</dt>
+            <dd class="mt-1 text-lg text-fg">{estetica.contact.phone}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Email</dt>
+            <dd class="mt-1 text-lg text-fg">
+              <a href={`mailto:${estetica.contact.email}`} class="hover:text-accent">
+                {estetica.contact.email}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Horarios</dt>
+            <dd class="mt-1 text-lg text-fg">{estetica.contact.hours}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Dirección</dt>
+            <dd class="mt-1 text-lg text-fg">{estetica.contact.address}</dd>
+          </div>
+        </dl>
+
+        <a href={whatsappHref} class="wm-btn mt-8">Escribir por WhatsApp</a>
+
+        <p class="mt-6 border-t border-line pt-4 text-xs text-muted">
+          Demo de portfolio: el teléfono, el email y el domicilio son ficticios.
+        </p>
+      </div>
+
+      <div>
+        <p class="wm-kicker">Mensaje</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Escribinos y te contestamos en el día
+        </h2>
+        <p class="mt-5 text-muted">
+          Si querés un tratamiento, una clase o la promo de la primera clase,
+          decinos qué te interesa y te pasamos los horarios abiertos. Si ya
+          sabés qué querés, reservá directo y te ahorrás la espera.
+        </p>
+
+        <form class="mt-8 grid gap-4" data-wm-demo-form>
+          <label class="block text-sm">
+            <span class="text-muted">Nombre</span>
+            <input
+              required
+              placeholder="Ana Gómez"
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            />
+          </label>
+          <label class="block text-sm">
+            <span class="text-muted">Teléfono o email</span>
+            <input
+              required
+              placeholder="11 1234 5678"
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            />
+          </label>
+          <label class="block text-sm">
+            <span class="text-muted">¿Qué necesitás?</span>
+            <textarea
+              rows="4"
+              placeholder="Un tratamiento, una clase, la promo..."
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            ></textarea>
+          </label>
+          <button type="submit" class="wm-btn w-full">Enviar mensaje</button>
+          <p class="text-xs text-muted">Demo: no se envían datos.</p>
+        </form>
+
+        {/*
+          El atributo `hidden` (no la clase `.hidden`): el preflight de
+          Tailwind lo oculta con `display:none !important` y, al sacar el
+          atributo, el bloque aparece. Con la clase `.hidden` de Tailwind la
+          confirmación se quedaba invisible para siempre.
+        */}
+        <p hidden class="mt-4 rounded-wm border border-accent p-4 text-sm" data-wm-demo-done>
+          Mensaje tomado. En esta demo no se envía nada: así se vería la
+          confirmación.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cómo llegar -->
+  <section class="border-y border-line">
+    <div class="wm-container grid gap-10 py-16 sm:py-20 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">{espacio.kicker}</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          {espacio.title}
+        </h2>
+        <p class="mt-5 text-muted">{espacio.body}</p>
+
+        <div class="mt-8 grid gap-5 sm:grid-cols-3">
+          {
+            espacio.items?.map((item) => (
+              <article class="wm-card">
+                <h3 class="wm-display text-lg leading-tight">{item.title}</h3>
+                <p class="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
+                {item.points?.length ? (
+                  <ul class="mt-3 space-y-1 text-sm text-muted">
+                    {item.points.map((p) => (
+                      <li class="flex gap-2">
+                        <span aria-hidden="true" class="text-accent">→</span>
+                        <span>{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </article>
+            ))
+          }
+        </div>
+
+        <a
+          href={estetica.contact.mapsUrl}
+          target="_blank"
+          rel="noreferrer noopener"
+          class="wm-btn wm-btn--ghost mt-8"
+        >
+          Cómo llegar
+        </a>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.salon}
+          alt="Interior de LUMEN: sillón, plantas y luz cálida (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Formulario de contacto (demo): no manda datos, muestra la confirmación.
+  //
+  // OJO — el listener va en FASE DE CAPTURA (`true`): el <ClientRouter> de
+  // Astro intercepta los `submit` para navegar con view transitions, y su
+  // listener está en la fase de burbuja sobre `document`. Con dos listeners
+  // en burbuja corre primero el de Astro, navega, y el swap borra la
+  // confirmación que acabamos de mostrar. En captura corremos nosotros
+  // primero: el `preventDefault` deja la marca `defaultPrevented`, que es
+  // justo lo que Astro mira para hacer suelta.
+  document.addEventListener(
+    "submit",
+    (event) => {
+      const form = event.target as HTMLFormElement | null;
+      if (!form || !form.matches("[data-wm-demo-form]")) return;
+      event.preventDefault();
+      form.style.display = "none";
+      const done = document.querySelector<HTMLElement>("[data-wm-demo-done]");
+      if (done) {
+      done.classList.remove("hidden");
+      done.removeAttribute("hidden");
+    }
+    },
+    true,
+  );
+</script>

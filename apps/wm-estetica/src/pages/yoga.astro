@@ -1,0 +1,181 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import LiveNow from "../components/ui/LiveNow.astro";
+import ClaseCard from "../components/ClaseCard.astro";
+import Recorrido from "../components/Recorrido.astro";
+import { estetica, fotos } from "../content/estetica";
+
+const clases = estetica.sections.find((s) => s.id === "yoga")!;
+const equipo = estetica.sections.find((s) => s.id === "equipo")!;
+
+const horario = clases.items?.map((c) => ({
+  titulo: c.title,
+  dia: c.meta?.find((m) => m.label === "Horario")?.value ?? "",
+  docente: c.meta?.find((m) => m.label === "Docente")?.value ?? "",
+  duracion: c.meta?.find((m) => m.label === "Duración")?.value ?? "",
+  precio: c.price?.amount ?? "",
+})) ?? [];
+---
+
+<Base content={estetica} title={`Yoga · ${estetica.brand}`}>
+  <PageHead
+    kicker={clases.kicker ?? "Yoga"}
+    title="Clases por resultado, no por estilo"
+    subtitle={clases.body}
+  />
+
+  <!-- Señal en vivo -->
+  <div class="wm-container">
+    <div class="wm-card flex flex-wrap items-center justify-between gap-4 border-accent">
+      <p class="text-sm text-accent">
+        <LiveNow signal={{ label: "Próxima clase 19:15 · lugares", count: 5, min: 3, max: 7, unit: "libres" }} />
+      </p>
+      <p class="text-xs text-muted">Señal de demostración: los lugares fluctúan al azar.</p>
+    </div>
+  </div>
+
+  <!-- Las cuatro clases -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {clases.items?.map((item, i) => <ClaseCard item={item} index={i} />)}
+    </div>
+
+    <p class="mt-8 max-w-2xl text-sm text-muted">
+      Todas las clases incluyen esterilla, bloques y cintas. La primera vez que
+      venís, la clase es de nivelación: te decimos cómo hacer cada postura y
+      no pasa nada.
+    </p>
+  </section>
+
+  <!-- Horarios de la semana -->
+  <section class="border-y border-line">
+    <div class="wm-container py-16 sm:py-20">
+      <header class="max-w-2xl">
+        <p class="wm-kicker">La semana</p>
+        <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.2rem)]">
+          Cuándo sale cada clase
+        </h2>
+      </header>
+
+      <div class="mt-10 overflow-x-auto">
+        <table class="w-full min-w-[42rem] border-collapse text-left">
+          <thead>
+            <tr class="border-b border-line text-xs uppercase tracking-[0.16em] text-muted">
+              <th scope="col" class="py-4 pr-4 font-medium">Clase</th>
+              <th scope="col" class="py-4 pr-4 font-medium">Horario</th>
+              <th scope="col" class="py-4 pr-4 font-medium">Docente</th>
+              <th scope="col" class="py-4 pr-4 font-medium">Duración</th>
+              <th scope="col" class="py-4 font-medium">Precio</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              horario.map((h) => (
+                <tr class="border-b border-line/70">
+                  <th scope="row" class="py-4 pr-4 font-semibold">
+                    {h.titulo}
+                  </th>
+                  <td class="py-4 pr-4 text-muted">{h.dia}</td>
+                  <td class="py-4 pr-4 text-muted">{h.docente}</td>
+                  <td class="py-4 pr-4 text-muted">{h.duracion}</td>
+                  <td class="py-4 font-semibold text-accent">{h.precio}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mt-6 text-sm text-muted">
+        Pack de 8 clases: $ 148.000 (equivale a $ 18.500 por clase). Vence a los
+        60 días. <a href="/reservar" class="font-semibold text-accent underline underline-offset-4">
+          Reservar mi lugar
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN PINNED: el recorrido del espacio + la promo -->
+  <Recorrido
+    fotos={{ salon: fotos.salon, tratamiento: fotos.tratamiento, sala: fotos.sala }}
+    promo={{
+      titulo: "Primera clase",
+      precio: "$ 9.900",
+      cuerpo:
+        "Tu primera clase de yoga sale a ese precio. Incluye esterilla, props y la charla previa de diez minutos con el docente. Sin pack, sin compromiso.",
+      cta: { label: "Reservar la primera clase", href: "/reservar" },
+    }}
+  />
+
+  <!-- Los docentes -->
+  <section class="wm-container py-16 sm:py-20">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">Quién da cada clase</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        {equipo.title}
+      </h2>
+    </header>
+
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        equipo.items?.map((item) => (
+          <article class="wm-card">
+            <h3 class="wm-display text-xl leading-tight">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
+            {item.meta?.length ? (
+              <p class="mt-4 text-xs uppercase tracking-[0.14em] text-muted">
+                {item.meta.map((m) => `${m.label}: ${m.value}`).join(" · ")}
+              </p>
+            ) : null}
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- La clase en fotos -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <img
+        src={fotos.clase}
+        alt="Clase de yoga grupal en el estudio de LUMEN (imagen de demostración)."
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full object-cover"
+      />
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 70%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-32">
+      <p class="wm-kicker">Antes de la clase</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        Si nunca hiciste yoga
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        Vení diez minutos antes. Te mostramos el espacio, te damos una esterilla
+        y te explicamos las tres posiciones que vamos a usar. Nadie te mira de
+        forma rara: en la sala de 14 hay más gente que no sabe para dónde mira.
+      </p>
+      <a href="/reservar" class="wm-btn mt-8">Reservar mi clase</a>
+    </div>
+  </section>
+
+  <!-- Cierre -->
+  <section class="wm-container pb-24">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-14">
+      <p class="wm-kicker">Primera vez</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        La primera clase sale a $ 9.900
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        Reservás el turno, elegís la clase y te llevás el pase. Si no te sirvió
+        la primera, no tenés que comprar nada más.
+      </p>
+      <a href="/reservar" class="wm-btn mt-8">Reservar mi clase</a>
+    </div>
+  </section>
+</Base>

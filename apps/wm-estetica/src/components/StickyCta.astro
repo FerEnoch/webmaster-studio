@@ -1,0 +1,26 @@
+---
+/**
+ * CTA fijo en mobile: una sola acción, siempre visible.
+ * Se oculta en la propia página de reserva (ahí ya estás haciendo la acción)
+ * y cuando el menú mobile está abierto.
+ */
+const enReserva = Astro.url.pathname.replace(/\/$/, "") === "/reservar";
+---
+
+{
+  !enReserva && (
+    <div class="wm-sticky-cta" data-wm-sticky-cta>
+      <div class="wm-container flex items-center justify-between gap-3 py-2.5">
+        <div class="min-w-0">
+          <p class="truncate text-[0.65rem] uppercase tracking-[0.2em] text-muted">
+            Turnos esta semana
+          </p>
+          <p class="wm-display truncate text-lg leading-tight">Reservá tu lugar</p>
+        </div>
+        <a href="/reservar" class="wm-btn shrink-0 px-5 py-3 text-xs">
+          Reservar
+        </a>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,81 @@
+---
+/**
+ * La conversión principal: los 4 pasos explicados + la isla React del funnel.
+ */
+import ReservaFlow from "./ReservaFlow.tsx";
+import type { CatalogItem, Slot } from "@lib/types";
+
+export interface Props {
+  title: string;
+  kicker?: string;
+  body?: string;
+  /** Titulo corto de la tarjeta del funnel (h3). */
+  islaTitle?: string;
+  steps: string[];
+  options: CatalogItem[];
+  slots: Slot[];
+  idsClases: string[];
+  /** Turnos que corresponden a cada clase de yoga. */
+  slotsPorClase: Record<string, string[]>;
+  demoNotice: string;
+  sena: { monto: string; nota: string };
+  brand: string;
+}
+
+const {
+  title,
+  kicker,
+  body,
+  islaTitle = "Completá tu reserva",
+  steps,
+  options,
+  slots,
+  idsClases,
+  slotsPorClase,
+  demoNotice,
+  sena,
+  brand,
+} = Astro.props;
+
+const copy = [
+  "Elegís si reservás un tratamiento o una clase, y cuál.",
+  "Ves los turnos con los lugares que quedan.",
+  "Cargás tus datos y elegís cómo pagás la seña.",
+  "Te damos el pase con código para mostrar al llegar.",
+];
+---
+
+<section id="reserva" class="wm-container relative pb-20 pt-10 sm:pb-28 sm:pt-14">
+  <div class="max-w-2xl">
+    {kicker ? <p class="wm-kicker">{kicker}</p> : null}
+    <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{title}</h2>
+    {body ? <p class="mt-5 text-muted">{body}</p> : null}
+  </div>
+
+  <ol class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      steps.map((step, i) => (
+        <li class="rounded-wm border border-line p-5">
+          <span class="wm-display text-3xl text-accent">{String(i + 1).padStart(2, "0")}</span>
+          <p class="mt-2 font-semibold">{step}</p>
+          <p class="mt-1 text-sm text-muted">{copy[i]}</p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="mt-12">
+    <ReservaFlow
+      client:load
+      brand={brand}
+      title={islaTitle}
+      steps={steps}
+      options={options}
+      slots={slots}
+      idsClases={idsClases}
+      slotsPorClase={slotsPorClase}
+      demoNotice={demoNotice}
+      sena={sena}
+    />
+  </div>
+</section>
