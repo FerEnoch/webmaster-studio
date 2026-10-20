@@ -106,12 +106,19 @@ const whatsappHref = waLink(
 
 <script>
   // Formulario de contacto (demo): no manda datos, muestra la confirmación.
-  document.addEventListener("submit", (event) => {
+  document.addEventListener(
+    "submit",
+    (event) => {
     const form = event.target as HTMLFormElement | null;
     if (!form || !form.matches("[data-wm-demo-form]")) return;
     event.preventDefault();
-    form.hidden = true;
+    form.style.display = "none";
     const done = document.querySelector<HTMLElement>("[data-wm-demo-done]");
-    if (done) done.hidden = false;
-  });
+    if (done) {
+      done.classList.remove("hidden");
+      done.removeAttribute("hidden");
+    }
+    },
+    true,
+  );
 </script>

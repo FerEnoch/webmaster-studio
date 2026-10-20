@@ -39,7 +39,7 @@ const { conversion, brand, whatsapp } = Astro.props;
 
   <div class="mt-12">
     <Booking
-      client:visible
+      client:load
       brand={brand}
       title={conversion.title}
       steps={conversion.steps}
