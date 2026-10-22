@@ -9,13 +9,13 @@ Son plantillas web por rubro para vender a pymes que no tienen tecnología ni ti
 textos en español rioplatense, mercado Argentina.
 
 Ya existen 7 apps (puertos 3010–3016): thaloz, invgate, constructora (3D), inmobiliaria (3D), salud,
-autos (video) y fitness (NÚCLEO). LA REFERENCIA ES apps/fitness: es la más completa y la que mejor funcionó.
+autos (video) y fitness (NÚCLEO). LA REFERENCIA ES benchmark/apps/fitness: es la más completa y la que mejor funcionó.
 Leela antes de empezar, junto con docs/fitness-investigacion.md (sección 11 = dirección de arte premium).
 
 QUIERO 3 WEBS NUEVAS, una por rubro, en este orden:
-  1. Restaurante / bodegón moderno           → apps/gastro    (puerto 3017)
-  2. Hotel boutique / cabañas de turismo     → apps/hotel     (puerto 3018)
-  3. Barbería / centro de estética premium   → apps/estetica  (puerto 3019)
+  1. Restaurante / bodegón moderno           → benchmark/apps/gastro    (puerto 3017)
+  2. Hotel boutique / cabañas de turismo     → benchmark/apps/hotel     (puerto 3018)
+  3. Barbería / centro de estética premium   → benchmark/apps/estetica  (puerto 3019)
 
 METODOLOGÍA (la que nos dio resultado):
   1. Investigación primero, por rubro, en docs/<rubro>-investigacion.md: mejores webs del mundo del rubro,
@@ -40,7 +40,7 @@ DIRECCIÓN DE ARTE (obligatoria):
   - Señales "en vivo" creíbles (abierto ahora, ocupación, lugares que quedan).
   - CTA fijo en mobile + WhatsApp flotante. Mobile-first: en celular todo tiene que ser rápido de usar.
 
-REUTILIZAR DE apps/fitness (copiar y adaptar, no reinventar):
+REUTILIZAR DE benchmark/apps/fitness (copiar y adaptar, no reinventar):
   Transition.tsx (cortina + TLink), Booking.tsx (drawer en pasos + data-lenis-prevent), ui.tsx (Reveal, Lines,
   Count, LiveNow, Magnetic, Kicker), AutoVideo.tsx, SmoothScroll.tsx, PageHero.tsx, Chrome.tsx (header que se
   esconde, nav con layoutId, menú mobile con clip-path, footer legal), globals.css (grade/grain/vignette,

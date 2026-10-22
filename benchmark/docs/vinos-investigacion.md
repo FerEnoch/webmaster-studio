@@ -1,6 +1,6 @@
 # Boutique de vinos + viajes en Mendoza — investigación y brief
 
-> Rubro 9 del estudio. App `apps/vinos`, puerto **3018**. Base técnica: `apps/veterinaria` (que a su vez sale de fitness).
+> Rubro 9 del estudio. App `benchmark/apps/vinos`, puerto **3018**. Base técnica: `benchmark/apps/veterinaria` (que a su vez sale de fitness).
 > **[verificado]** = comprobado (HTTP 200, fuente leída o revisado a ojo). **[a verificar]** = queda para el cliente real.
 
 ## 1. Qué hacen bien las mejores webs del rubro
@@ -65,4 +65,4 @@ Fuentes (roundups de agencias, con sesgo comercial): [Evey Events](https://www2.
 ## 8. Medios [verificado]
 
 Videos Mixkit (HTTP 200; 30 revisados por póster): viñedos aéreos 14704, 8188, 8198, 8291, 8200, 8293, 8196, 26539, 26545; gente en viñedo 26544, 46906; cosecha 26559, 47663; racimos 6968, 7159, 34630, 17729; servir vino 43893, 43896, 15788, 52406 (chorro sobre negro), 52412, 22735; corchos 28977; montaña/ruta árida 48489, 50199, 41366, 2392 (por título, confirmar al usarlos).
-Fotos Unsplash (HTTP 200, revisadas a ojo): ver objeto `P` en `apps/vinos/src/lib/content.ts`.
+Fotos Unsplash (HTTP 200, revisadas a ojo): ver objeto `P` en `benchmark/apps/vinos/src/lib/content.ts`.

@@ -1,6 +1,6 @@
 # Plantilla Gimnasios / Fitness — Investigación y brief
 
-> Documento para pasarle a Opus antes de codear `apps/fitness`.
+> Documento para pasarle a Opus antes de codear `benchmark/apps/fitness`.
 > Fecha de la investigación: octubre 2026. Hecha con búsqueda web; **muchas cifras vienen de blogs de proveedores** (se marca la confianza de cada dato). Lo que no se pudo verificar está en la sección 9.
 
 ---
@@ -73,7 +73,7 @@
 
 ## 5. Rendimiento y movimiento (cómo hacerlo "moderno" sin que ande mal)
 
-Reglas para el código (de las fuentes + lo que ya aprendimos en `apps/autos`):
+Reglas para el código (de las fuentes + lo que ya aprendimos en `benchmark/apps/autos`):
 
 - **Solo animar `opacity` y `transform`.** Nada de animar width/height/top.
 - **Presupuesto de video:** máximo **1 video de fondo + 1 secundario** reproduciéndose a la vez; `preload="none"`, **póster siempre**, se reproduce solo cuando entra a pantalla (el componente `AutoVideo` de autos ya lo hace). En móvil, considerar **imagen estática o loop más corto** en el hero.
@@ -99,7 +99,7 @@ Reglas para el código (de las fuentes + lo que ya aprendimos en `apps/autos`):
 
 ---
 
-## 7. Propuesta de producto: `apps/fitness`
+## 7. Propuesta de producto: `benchmark/apps/fitness`
 
 **Concepto:** "la onda de autos, más moderna": negro de alto contraste, tipografía display enorme, **video real en movimiento**, y encima **herramientas útiles** (grilla que reserva, planes, aforo). Cada animación tiene un trabajo; ninguna es decorativa.
 
@@ -138,7 +138,7 @@ Reglas para el código (de las fuentes + lo que ya aprendimos en `apps/autos`):
 | Reto/ranking con barras animadas | Comunidad y retención |
 | Magnetic buttons y cursor con intención (solo desktop) | Pulido, sin costo en móvil |
 
-### 7.3 Reutilizar de `apps/autos` (ya probado)
+### 7.3 Reutilizar de `benchmark/apps/autos` (ya probado)
 
 - `AutoVideo.tsx` (video que reproduce solo en pantalla, con póster).
 - Patrón de `Hero` con video que se encoge (`useScroll` + `useTransform`).
@@ -232,7 +232,7 @@ Las fotos de stock vienen de fotógrafos distintos y eso delata "stock". Para qu
 
 ### 11.3 Mostrar bien el gimnasio: el **recorrido del club** (sección nueva, protagonista)
 
-En vez de una galería, **recorrer el club como si entraras**. Reutilizar la idea del "recorrido" de `apps/inmobiliaria`, pero con video y foto del gym:
+En vez de una galería, **recorrer el club como si entraras**. Reutilizar la idea del "recorrido" de `benchmark/apps/inmobiliaria`, pero con video y foto del gym:
 
 1. **Recorrido con scroll anclado** (sticky): cada scroll es una zona. Entrada/recepción → sala de musculación → estudio de funcional → cycling → pilates/reformer → vestuarios → recuperación/café. Transición entre zonas con **máscara que se abre** (clip-path) o **zoom hacia la siguiente** (como inmobiliaria), con el nombre de la zona en tipografía gigante y 2–3 datos ("42 estaciones · 600 m² · abierto 6 a 23 h").
 2. **Mapa de planta interactivo** (SVG simple): las zonas se iluminan mientras recorrés; tocar una zona salta ahí. Muestra **el tamaño real del lugar** (efecto premium por escala).

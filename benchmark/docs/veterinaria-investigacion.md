@@ -1,7 +1,7 @@
 # Clínica veterinaria — investigación y brief
 
 > Rubro 8 del estudio. Misma metodología que fitness: investigar → brief → codear → verificar.
-> App destino: `apps/veterinaria`, puerto **3017**. Referencia técnica: `apps/fitness`.
+> App destino: `benchmark/apps/veterinaria`, puerto **3017**. Referencia técnica: `benchmark/apps/fitness`.
 > Marcado como **[verificado]** lo que comprobé (HTTP 200 o fuente leída) y **[a verificar]** lo que queda para la etapa de código.
 
 ## 0. Resumen ejecutivo
@@ -136,7 +136,7 @@ Descartado: 101239 (HTTP 403). Los clips "101xxx" (serie "girl and dog") convien
 
 ### Fotos Unsplash
 
-**[verificado en la etapa de código]** — 40 IDs elegidos, HTTP 200 y revisados en hoja de contactos; están en `apps/veterinaria/src/lib/content.ts` (objeto `P`). Necesito ~20: equipo veterinario real (no posado), consultorio luminoso, sala de espera, quirófano/instrumental, rayos X/ecógrafo, laboratorio, internación, peluquería, perros/gatos/conejo en consulta, fachada. Procedimiento ya probado: buscar candidatos, verificar HTTP 200 con curl, armar una hoja de contactos temporal en `public/`, mirarla y borrarla (los IDs vienen mal etiquetados seguido).
+**[verificado en la etapa de código]** — 40 IDs elegidos, HTTP 200 y revisados en hoja de contactos; están en `benchmark/apps/veterinaria/src/lib/content.ts` (objeto `P`). Necesito ~20: equipo veterinario real (no posado), consultorio luminoso, sala de espera, quirófano/instrumental, rayos X/ecógrafo, laboratorio, internación, peluquería, perros/gatos/conejo en consulta, fachada. Procedimiento ya probado: buscar candidatos, verificar HTTP 200 con curl, armar una hoja de contactos temporal en `public/`, mirarla y borrarla (los IDs vienen mal etiquetados seguido).
 
 ## 10. Plan de construcción (orden sugerido)
 

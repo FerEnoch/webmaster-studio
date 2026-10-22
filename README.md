@@ -139,12 +139,10 @@ El `pnpm install` de la raíz instala **todas** las apps del workspace
 
 ---
 
-# Las 9 apps Next.js de referencia
+# Las 9 apps Next.js de referencia → `benchmark/`
 
-> Se conservan como benchmark y documentación de la primera versión. Para el
-> trabajo nuevo usar el kit Astro de arriba. El monorepo migró de npm a pnpm:
-> reemplazá `npm install` por `pnpm install` y `npm run dev:x` por
-> `pnpm run dev:x`.
+> Se conservan en `benchmark/` como benchmark y documentación de la primera versión. No es MI proyecto. Para el
+> trabajo nuevo usar el kit Astro de arriba. Comandos con pnpm (`--filter` funciona igual tras la mudanza).
 
 Varias páginas web, cada una en su propia app de Next.js + TypeScript.
 Las dependencias se instalan **una sola vez** en la raíz (`node_modules` compartido)
@@ -152,19 +150,21 @@ gracias a npm workspaces.
 
 ```
 estudio/
-  package.json          ← workspaces: apps/*
+  package.json          ← workspaces: apps/*, benchmark/apps/*
   node_modules/         ← compartido
-  apps/
-    thaloz/             ← réplica de thaloz.com/about-us/company
-    invgate/            ← réplica de invgate.com (home) con animaciones mejoradas
-    constructora/       ← plantilla original de constructora con obra 3D en tiempo real
-    inmobiliaria/       ← catálogo de propiedades, recorridos y terreno 3D
-    salud/              ← clínica: morph de partículas y sistema de turnos
-    autos/              ← concesionaria: video, configurador y animaciones web
-    fitness/            ← gimnasio boutique premium: video, recorrido del club, reservas
-    veterinaria/        ← clínica veterinaria cálida: triage, libreta de salud, turnos, recorrido
-    vinos/              ← boutique de vinos + viajes en Mendoza: tienda, sommelier, itinerarios
-  docs/                 ← investigaciones y briefs por rubro
+  benchmark/
+    README.md           ← qué hay acá y cómo correrlo
+    apps/
+      thaloz/             ← réplica de thaloz.com/about-us/company
+      invgate/            ← réplica de invgate.com (home) con animaciones mejoradas
+      constructora/       ← plantilla original de constructora con obra 3D en tiempo real
+      inmobiliaria/       ← catálogo de propiedades, recorridos y terreno 3D
+      salud/              ← clínica: morph de partículas y sistema de turnos
+      autos/              ← concesionaria: video, configurador y animaciones web
+      fitness/            ← gimnasio boutique premium: video, recorrido del club, reservas
+      veterinaria/        ← clínica veterinaria cálida: triage, libreta de salud, turnos, recorrido
+      vinos/              ← boutique de vinos + viajes en Mendoza: tienda, sommelier, itinerarios
+    docs/                 ← investigaciones y briefs de esos rubros
 ```
 
 | App | Comando | URL |
@@ -211,20 +211,20 @@ Fitness ("NÚCLEO", marca ficticia): `npm run dev:fitness` → http://localhost:
 Multipágina (`/`, `/club`, `/clases`, `/planes`, `/entrenadores`) con transición de cortina entre rutas,
 gradación de color uniforme sobre fotos y videos (`.grade`), recorrido del club por scroll con plano interactivo,
 grilla de clases con cupos y reserva sin registro, y botón de baja visible (Res. 316/2018).
-Investigación y brief en `docs/fitness-investigacion.md`.
+Investigación y brief en `benchmark/docs/fitness-investigacion.md`.
 
 Veterinaria ("MANADA", marca ficticia): `npm run dev:veterinaria` → http://localhost:3017
 Paleta cálida (crema, verde bosque, coral) y serif Fraunces. Hero con "ventana" de video que se abre a pantalla completa,
 beneficios animados, triage "¿Está bien tu mascota?" (rojo → guardia, nunca a la reserva), libreta de salud con línea de
 tiempo por edad que recomienda plan, recorrido de la clínica sala por sala con plano, turnos en pasos con carnet animado.
-Investigación y brief en `docs/veterinaria-investigacion.md`.
+Investigación y brief en `benchmark/docs/veterinaria-investigacion.md`.
 
 Vinos ("ALTURA", marca ficticia): `npm run dev:vinos` → http://localhost:3018
 Nocturna y cálida (vino, crema, latón) con Cormorant Garamond. Hero con video en arco de bodega que se abre y altímetro,
 "La subida" Maipú → Luján → Valle de Uco con cordillera en parallax 2D, sommelier virtual que llena la copa con el color
 del vino recomendado, tienda con carrito y envío gratis, viajes con itinerario hora a hora y mapa que dibuja la ruta,
 voucher tipo pase de embarque, club con suscripción. Aviso de mayoría de edad y leyendas de la Ley 24.788.
-Las botellas son ilustraciones SVG propias (sin marcas reales). Investigación en `docs/vinos-investigacion.md`.
+Las botellas son ilustraciones SVG propias (sin marcas reales). Investigación en `benchmark/docs/vinos-investigacion.md`.
 
 ## Para integrar (colegas)
 
@@ -234,4 +234,4 @@ Las botellas son ilustraciones SVG propias (sin marcas reales). Investigación e
 4. El contenido de cada web está centralizado en `apps/<app>/src/lib/content.ts` (textos, precios, IDs de fotos y videos).
 5. Fotos de Unsplash y videos de Mixkit se cargan por URL (licencias gratuitas); para producción conviene descargarlos y servirlos desde el propio hosting.
 6. Los formularios (turnos, carrito, reservas, bajas) son demostrativos: **no envían datos**. Hay que conectarlos al backend real.
-7. `docs/prompt-nuevos-rubros.md` tiene la metodología para sumar rubros nuevos; `docs/*-investigacion.md`, la investigación de cada uno.
+7. `benchmark/docs/prompt-nuevos-rubros.md` tiene la metodología para sumar rubros nuevos; `benchmark/docs/*-investigacion.md`, la investigación de cada uno.
