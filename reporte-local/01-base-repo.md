@@ -1,47 +1,59 @@
-# 01 — Base del repo (relevamiento 2026-10-20)
+# 01 — Base actual del repo
 
 ## Qué es
 
-Monorepo npm workspaces (`estudio`, `apps/*`, un solo `node_modules`). 9 apps Next.js + TypeScript:
+Portfolio freelance con **8 apps Astro: 7 demos de rubro + 1 portfolio madre**.
+El workspace pnpm incluye `apps/*`; las dependencias se instalan una sola vez
+en la raíz. El kit compartido es fuente que se copia, no un paquete npm.
 
-- thaloz (:3010) — réplica thaloz.com/about-us/company
-- invgate (:3011) — réplica invgate.com home, motion + lenis
-- constructora (:3012) — "Basalto", Three.js/R3F edificio que se construye con scroll
-- inmobiliaria (:3013) — catálogo, recorridos, terreno 3D
-- salud (:3014) — clínica, morph partículas + turnos
-- autos (:3015) — concesionaria, video + configurador
-- fitness (:3016) — "NÚCLEO", la más completa y referencia oficial (ver `docs/prompt-nuevos-rubros.md`)
-- veterinaria (:3017) — "MANADA", triage, libreta salud, turnos pasos
-- vinos (:3018) — "ALTURA", tienda + viajes Mendoza, sommelier, voucher
+| App | Rubro | Puerto | Desarrollo |
+| --- | --- | --- | --- |
+| `wm-clinica` | Clínica + diagnóstico por imágenes | 3020 | `pnpm run dev:clinica` |
+| `wm-concesionario` | Concesionario de autos nuevos y usados | 3021 | `pnpm run dev:concesionario` |
+| `wm-lavadero` | Lavadero de autos con bar | 3022 | `pnpm run dev:lavadero` |
+| `wm-estetica` | Estética y yoga | 3023 | `pnpm run dev:estetica` |
+| `wm-universidad` | Universidad privada | 3024 | `pnpm run dev:universidad` |
+| `wm-inmobiliaria` | Inmobiliaria | 3025 | `pnpm run dev:inmobiliaria` |
+| `wm-arquitectura` | Arquitectura y diseño | 3026 | `pnpm run dev:arquitectura` |
+| `wm-portfolio` | Portfolio madre | 3027 | `pnpm dev` |
 
-Docs existentes: `fitness-investigacion.md`, `veterinaria-investigacion.md`, `vinos-investigacion.md`, `prompt-nuevos-rubros.md` (metodología).
+Cada app tiene scripts `dev`, `check` y `build`. La raíz ofrece aliases
+`dev:<rubro>` y `build:<rubro>` para las ocho apps; `pnpm build` compila todo
+el workspace y `pnpm run check:clinica` conserva el chequeo de referencia.
 
-## Cómo está construido (patrón fitness, a reutilizar)
+## Cómo está construido
 
-- Next.js 15 App Router + Tailwind v4 tokens `@theme` + motion/react + lenis
-- Contenido centralizado en `apps/<app>/src/lib/content.ts` (textos, precios, IDs fotos/videos)
-- Componentes: Transition (cortina + TLink), Booking (drawer pasos + data-lenis-prevent), ui (Reveal, Lines, Count, LiveNow, Magnetic, Kicker), AutoVideo (solo visible, preload none + IO), SmoothScroll, PageHero, Chrome (header hide, nav layoutId, menú mobile clip-path, footer legal), globals.css (grade/grain/vignette, marquee, reduced-motion)
-- Dirección arte obligatoria: nada de 3D salvo constructora/inmobiliaria; mucho video; grade uniforme + grano + viñeta; 1 display + 1 texto; paleta 1 fondo + 1 claro + 1 acento; multipágina 4-5 rutas; hero video que se encoge + titulares máscara línea por línea; 1 sección pinned con historia; 1 conversión demo punta a punta (reserva sin registro + ticket); señales en vivo creíbles; CTA fijo mobile + WhatsApp flotante; mobile-first
-- Medios: Unsplash (fotos, verificar IDs con curl + hoja contactos) y Mixkit (videos, verificar HTTP 200, descartar frames blancos); para prod descargar y servir propio
-- Formularios/carrito/reservas/bajas: demo, no envían datos — hay que conectar backend real
-- Legales AR: arrepentimiento/baja (Res. 316/2018, 271/2020), Defensa Consumidor, precios finales con impuestos, más específico por rubro (ej. Ley 24.788 vinos)
-- Mercado: pymes AR sin tecnología ni tiempo, textos rioplatense, marcas/precios/reviews ficticios a reemplazar
+- **Stack:** Astro 7 + islas React 19 + Tailwind v4 mediante Vite.
+- **Kit canónico:** `packages/webmaster-kit/` contiene tipos, rubros, WhatsApp,
+  medios, tokens, componentes compartidos y `app-template/`.
+- **Contenido:** `apps/wm-<rubro>/src/content/<rubro>.ts`; páginas en `src/pages/`.
+- **Firma compartida:** cortina entre rutas, hero de video que se encoge,
+  grade/grano/viñeta, sección pinned, señal en vivo y conversión con ticket.
+- **Scaffolder:** `scripts/new-app.mjs` copia desde el kit, no desde otra app;
+  rechaza destinos existentes para no sobrescribir trabajo.
+- **Conversión:** WhatsApp con mensaje prearmado. Los formularios y reservas
+  son demos y no envían datos; un backend real se cotiza e integra aparte.
+- **Contenido y legales:** marcas y precios ficticios marcados como demo,
+  precios finales con impuestos, Defensa del Consumidor y baja/arrepentimiento
+  cuando corresponde. Fotos de Unsplash y videos de Mixkit por URL.
 
-## Trampas pisadas (del prompt)
+## Verificación
 
-next/font falla por SSL → <link> Google Fonts; npm strict-ssl false temporal; whileInView enmascarado → useInView contenedor; useAnimate + StrictMode corta intros → animate suelto + cancel + timeout cortina; inline-flex pisa hidden → envolver span; máscaras recortan Í/Á/É → pt/-mt 0.14em; AutoVideo relative+absolute = alto 0; hue-rotate no tiñe grises → overlay mix-blend color; rAF frenado con tab oculta ≠ bug; lenis scroll programático lento → esperar antes de captura.
+```bash
+node --test scripts/workspace.test.mjs
+pnpm --filter wm-clinica run check
+pnpm run build:clinica
+```
 
-## Qué mejorar para tu versión (hipótesis a validar en T2-T7)
+La prueba estructural revisa scripts y referencias operativas; no reemplaza
+los checks y builds de las ocho apps. Para producción faltan contenidos y
+medios propios, integraciones reales y URLs de deploy confirmadas.
 
-1. Performance/SEO: Next multi-app pesado para Vercel gratis → Astro + islas deja landing estática instantánea e hidrata solo Booking/carro/mapas.
-2. Conversión real: conectar WhatsApp deep-link con mensaje prearmado, form → Formspree/Resend/WhatsApp, precios visibles, horarios/ubicación, prueba social reemplazable.
-3. Firma: hoy cada rubro tiene identidad propia pero falta rasgo transversal (candidatos: cortina + hero video que se encoge + grade/grano + LiveNow + ticket/voucher animado).
-4. Costo Vercel gratis: 9 Next apps = 9 proyectos o monorepo pesado; en Astro podés unificar en 1 sitio multi-rubro con colecciones por rubro.
-5. Reposicionamiento: de "réplicas + plantillas ficticias" a "portfolio freelance con demos vendibles + checklist prod (medios propios, backend, legales, tsc clean, 0 errores consola, desktop 1440 + mobile 375)".
+## Fuentes vigentes
 
-## Fuentes
-
-- `README.md`, `package.json`, `docs/prompt-nuevos-rubros.md` (2026-10-20)
-- `apps/fitness/` estructura (referencia a leer completa en T8)
-
-Risk: none (solo docs, sin cambios de código ni datos).
+- [README del proyecto](../README.md) — comandos y procedimiento para sumar rubros.
+- [Configuración raíz](../package.json) y [workspace](../pnpm-workspace.yaml).
+- [Guía del kit](../packages/webmaster-kit/README.md) y
+  [esqueleto canónico](../packages/webmaster-kit/app-template/).
+- [Scaffolder](../scripts/new-app.mjs) — copia, validación del destino y puertos.
+- [App de referencia](../apps/wm-clinica/) — implementación Astro de clínica.

@@ -1,6 +1,13 @@
 # Reanudar — webmaster-studio
 
-**Último estado: 2026-10-20, sesión cerrada.** Rama `feature/webmaster-studio-estrategia`, 18 commits, **sin pushear**. Worktree limpio.
+**Estado de la limpieza:** el usuario decidió eliminar las apps anteriores.
+Scripts y documentación operativa se actualizan para las ocho apps Astro;
+el parent debe completar el borrado y confirmar las pruebas estructurales,
+checks y builds. No hay autorización para commitear ni pushear.
+
+**Estado histórico de la sesión del 2026-10-20:** rama
+`feature/webmaster-studio-estrategia`, 18 commits, sin pushear y worktree
+limpio en ese momento. No describe el árbol de trabajo actual.
 
 ## Qué está hecho
 
@@ -8,21 +15,25 @@
 - Feature doc canónico: `odd/tasks/webmaster-studio.md` (Specs S1-S9, Tasks T1-T17, Log L1-L19).
 - 8 apps Astro en `apps/wm-*` + kit compartido en `packages/webmaster-kit/` + scaffolder `scripts/new-app.mjs`.
 - pnpm 12.11.2 con supply-chain endurecido (`pnpm-workspace.yaml`, `.npmrc`).
-- Verificado: 8/8 `astro check` 0 errores, 57 HTML, `pnpm audit` limpio, 9/9 apps Next legacy sin regresión, probe de forms 8/8 (`.odd/probe-forms.mjs`).
+- Verificación histórica del 2026-10-20: 8/8 `astro check` 0 errores, 57 HTML, `pnpm audit` limpio, 9/9 apps Next legacy sin regresión y probe de forms 8/8. No es evidencia de la limpieza actual ni una instrucción para compilar las apps retiradas.
 
-## Decisiones pendientes (L19)
+## Decisiones pendientes
 
 1. **Vercel**: Hobby es "personal, no comercial" → para clientes reales avisar Pro ($20/mes) o Cloudflare. Los `demoUrl` (`wm-<slug>.vercel.app`) son placeholders.
-2. **Legacy**: ¿las 9 apps Next se archivan o quedan como benchmarks?
-3. **Firma A (ticket)**: ¿te representa? ¿Cerramos los 7 rubros?
-4. **Push**: la rama está sin pushear; el remoto `origin` es el repo de otro autor, NO pushear sin autorización explícita.
+2. **Firma A (ticket)**: ¿te representa? ¿Cerramos los 7 rubros?
+3. **Push**: la rama está sin pushear; el remoto `origin` es el repo de otro autor, NO pushear sin autorización explícita.
+
+La decisión sobre las apps anteriores está resuelta: eliminarlas. El registro
+de su organización previa se conserva solo como histórico en
+`odd/tasks/orden-benchmark.md`.
 
 ## Para retomar
 
 ```bash
-cd /home/ferenoch/Projects/mis_proyectos/webmaster-studio
-git switch feature/webmaster-studio-estrategia
+# Desde la raíz de este repositorio:
+git status --short
 git log --oneline -5
+node --test scripts/workspace.test.mjs
 ```
 
 - Reanudar una feature: `mem_context` → `mem_search` project `webmaster-studio` → leer `odd/tasks/webmaster-studio.md` completo (hasta `## Log`).

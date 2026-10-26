@@ -1,5 +1,12 @@
 # webmaster-studio — versión mejorada para portfolio freelance
 
+> **Registro histórico de la implementación.** Las referencias a las apps
+> anteriores, sus rutas, comandos y verificaciones reflejan el estado de cada
+> entrada, no instrucciones operativas ni enlaces vigentes. El usuario decidió
+> eliminarlas; esa decisión sustituye el pendiente legacy de L19. Para la
+> estructura actual usar `README.md`; para la limpieza, el registro
+> `odd/tasks/orden-benchmark.md` (borrado y GREEN final pendientes del parent).
+
 Objetivo: analizar estudio-webs y armar versión mejorada para promocionar trabajos. Branch: main (feature work en rama aparte si supera 400 líneas). Delivery: ask-on-risk. Forecast inicial ~1800 líneas docs → supera 400, se preguntará estrategia (stacked-to-main vs feature-branch-chain) antes del siguiente commit. Runner: sin runner runnable para docs (excepción test-first, solo checks estructurales).
 
 ## Specs

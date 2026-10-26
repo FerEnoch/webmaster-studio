@@ -23,7 +23,11 @@ Todas: cortina entre rutas, hero de video que se encoge, grade/grano/viñeta, se
 ### Scaffolder
 `node scripts/new-app.mjs wm-<rubro>` crea el esqueleto copiando del kit. Para sumar un rubro: scaffolder → `src/content/<rubro>.ts` → reemplazar `src/pages/index.astro` → registrar en `rubros.ts` y en el `package.json` raíz → `pnpm --filter wm-<slug> run check && ... run build`.
 
-## Verificación (seam check)
+## Verificación histórica (seam check del 2026-10-20)
+
+Esta evidencia corresponde al estado de aquella fecha, no a una verificación
+actual de la limpieza ni a instrucciones para compilar las apps retiradas.
+
 - 8/8 apps: `astro check` con **0 errores**, build OK, 57 páginas HTML.
 - Probe headless sobre las 8: el form de contacto se oculta, la confirmación aparece, **no navega**, 0 errores de consola.
 - `pnpm audit --audit-level high` → **No known vulnerabilities found**.
@@ -33,10 +37,17 @@ Todas: cortina entre rutas, hero de video que se encoge, grade/grano/viñeta, se
 ## Toolchain
 pnpm 12.11.2 (único package manager) con `pnpm-workspace.yaml` endurecido: `minimumReleaseAge` 3 días, `trustPolicy: no-downgrade`, `blockExoticSubdeps`, `allowBuilds` (allowlist) y `strictDepBuilds`. `overrides: postcss ^8.5.18` mata 2 vulnerabilidades HIGH heredadas de `next`. Astro 7.4.1 + React 19 + Tailwind v4.
 
-## Pendientes de decisión (L19)
+## Limpieza de las apps anteriores
+
+La decisión ya está tomada: el usuario pidió eliminarlas, no conservarlas
+como referencia. Scripts raíz y documentación operativa se actualizan para
+las ocho apps Astro. El registro original queda como histórico en
+`odd/tasks/orden-benchmark.md`; el borrado y la verificación final de esta
+limpieza quedan a cargo del parent.
+
+## Pendientes de decisión
 1. **Vercel**: los `demoUrl` (`wm-<slug>.vercel.app`) son placeholders. Hobby es "personal, no comercial": para clientes reales hay que avisar Pro ($20/mes + overages) o Cloudflare. Decidir antes de vender.
-2. **Legacy**: ¿las 9 apps Next se archivan o quedan como benchmarks?
-3. **Deploy**: pushear a Vercel es decisión del usuario; la rama tiene 15 commits sin pushear.
+2. **Deploy**: pushear a Vercel es decisión del usuario; el recuento de commits de la verificación anterior es histórico.
 
 ## Próximo sprint sugerido
 1. Deploy de las 8 apps a Vercel (8 proyectos, un click c/u) + dominios demo.

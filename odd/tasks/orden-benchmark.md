@@ -1,5 +1,11 @@
 # Orden benchmarks vs MI proyecto
 
+> **HISTÓRICO RETIRADO — no usar como guía operativa.** El usuario decidió
+> eliminar las apps anteriores y su investigación. Las Specs, Tasks y entradas
+> L1–L4 se conservan literalmente como registro del estado previo; sus rutas
+> y comandos describen ese estado, no enlaces ni instrucciones vigentes.
+> Directorio eliminado y pruebas estructurales en GREEN (8/8).
+
 Separar las 9 apps Next.js (solo referencia) de las 8 apps Astro (MI proyecto) + ordenar docs por rubro.
 
 ## Specs
@@ -24,3 +30,5 @@ Separar las 9 apps Next.js (solo referencia) de las 8 apps Astro (MI proyecto) +
 - L2 (2026-10-22, pedido original verbatim): "Las 9 app next son solo benchmark - ordenalas dentro del repo. ambién ordena los docs que corresponden a esos rubros. Vamos a dejar separado lo que es de este MI proyecto, a lo que es benchmark"
 - L3 (2026-10-22, decisión): destino `benchmark/` top-level (user choice). Estructura: `benchmark/apps/<9>` + `benchmark/docs/<4>` + `benchmark/README.md`. Workspace: `apps/*` + `benchmark/apps/*`.
 - L4 (2026-10-22, pedido verbatim): "Antes de commitear, vamos a limpiar los repos benchmark para que no ocupen tanto espacio. No los vamos a buildear más. sólo quedan como referencia de UI/UX y validación de ideas." → `.next` borrados + benchmarks fuera del workspace (con nota de reactivación en `pnpm-workspace.yaml` y `benchmark/README.md`). Docs/research se conservan en `benchmark/docs/`.
+- L5 (pedido posterior, verbatim): "Elimina las referencias de benchmark (las apps anteriores). Que no queden referencias rotas". Sustituye la decisión anterior de conservarlas; no reabre las Specs históricas S2–S4.
+- L6 (limpieza, sin commit): pruebas estructurales añadidas antes de editar; RED observado (1 pasa, 7 fallan). Directorio retirado eliminado; GREEN observado (8 pasan, 0 fallan; exit 0). Scripts raíz actualizados para las ocho apps Astro, `dev` dirigido a `wm-portfolio`, aliases anteriores retirados y documentación operativa actualizada; historial preservado. Verificación final: `pnpm -r run check` y `pnpm run build` completados en las ocho apps (ambos exit 0); enlaces Markdown locales de los ocho documentos modificados sin destinos rotos; `git diff --check` exit 0. Código de apps actuales, kit y lockfile intactos. Evaluación nativa de review no disponible (`package-local-binary-missing`); no se creó autoridad de revisión.

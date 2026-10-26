@@ -20,5 +20,6 @@ Feature doc canónico: `odd/tasks/webmaster-studio.md` (17 tareas, todas cerrada
 
 Rama `feature/webmaster-studio-estrategia` — 17 commits, sin pushear.
 8 apps Astro (`apps/wm-*`) + kit compartido (`packages/webmaster-kit`) + scaffolder.
-Verificación: 8/8 con 0 errores de typecheck, 57 páginas HTML, probe headless de forms 8/8,
-`pnpm audit --audit-level high` limpio, 9/9 apps legacy Next sin regresión.
+Verificación histórica de la implementación: 8/8 con 0 errores de typecheck,
+57 páginas HTML, probe headless de forms 8/8 y `pnpm audit --audit-level high` limpio.
+Las apps Next anteriores fueron eliminadas; el inventario vigente está en `01-base-repo.md`.

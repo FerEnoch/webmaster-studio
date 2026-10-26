@@ -23,7 +23,7 @@ Cada demo incluye: hero video que se encoge, 1 sección pinned, 1 conversión pu
 
 ## Qué no hacer
 
-No vendas réplica 1:1 (thaloz/invgate) como producto final: úsalo como benchmark interno. No prometas backend real en plan base: cotizalo aparte (Resend/Formspree/Supabase/MercadoPago).
+No prometas backend real en plan base: cotizalo aparte (Resend/Formspree/Supabase/MercadoPago).
 
 ## Next
 

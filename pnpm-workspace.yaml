@@ -1,9 +1,6 @@
 # ─── WORKSPACE ─────────────────────────────────────────────────────
 packages:
   - 'apps/*'
-  # benchmark/apps/* NO incluido a propósito (2026-10-22): son solo referencia
-  # UI/UX, no se buildean ni se instalan sus deps. Para reactivar uno:
-  #   1. agregar '- benchmark/apps/*' arriba, 2. pnpm install.
 
 # ─── SUPPLY CHAIN SECURITY ─────────────────────────────────────────
 # Overrides globales: pnpm 12 ya NO lee el campo "pnpm" de package.json.
