@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
 import ObraCard from "../components/ObraCard.astro";
@@ -60,7 +61,7 @@ import { poster, video } from "@lib/media";
         Tipo de trabajo, escala, tus datos. Al final te queda un número de consulta
         para el estudio. Sin registro y sin esperas.
       </p>
-      <a href="/#cotizacion" class="wm-btn mt-8">Ir a cotizar</a>
+      <a href={appUrl("/#cotizacion")} class="wm-btn mt-8">Ir a cotizar</a>
     </div>
   </section>
 </Base>

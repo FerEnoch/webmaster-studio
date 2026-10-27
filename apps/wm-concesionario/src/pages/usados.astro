@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
 import StockFilters from "../components/StockFilters.tsx";
@@ -46,7 +47,7 @@ import { poster, video } from "@lib/media";
         Reservás desde la portada, llegás con el pase y salís con la cuota
         decidida o con la unidad comprada.
       </p>
-      <a href="/#testdrive" class="wm-btn mt-8">Agendar test drive</a>
+      <a href={appUrl("/#testdrive")} class="wm-btn mt-8">Agendar test drive</a>
     </div>
   </section>
 
@@ -83,7 +84,7 @@ import { poster, video } from "@lib/media";
           Stock actualizado hace 2 min. Las unidades se reservan por WhatsApp
           hasta que el turno queda confirmado.
         </p>
-        <a href="/#testdrive" class="wm-btn mt-6 w-full">Reservar una unidad</a>
+        <a href={appUrl("/#testdrive")} class="wm-btn mt-6 w-full">Reservar una unidad</a>
       </aside>
     </div>
   </section>

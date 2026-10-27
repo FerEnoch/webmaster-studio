@@ -1,5 +1,6 @@
 ---
 import type { GetStaticPaths } from "astro";
+import { appUrl } from "@lib/urls";
 import Base from "../../layouts/Base.astro";
 import PageHead from "../../components/PageHead.astro";
 import { brand, inmobiliaria, propiedades, type Propiedad } from "../../content/inmobiliaria";
@@ -156,7 +157,7 @@ const fotos = property.fotos.length ? property.fotos : [property.media?.src ?? "
             dura entre 30 y 45 minutos.
           </p>
 
-          <a href={`/?prop=${property.id}#visita`} class="wm-btn mt-6 w-full">
+          <a href={appUrl(`/?prop=${property.id}#visita`)} class="wm-btn mt-6 w-full">
             Agendar una visita
           </a>
           <a href={whatsappHref} class="wm-btn wm-btn--ghost mt-3 w-full">
@@ -170,7 +171,7 @@ const fotos = property.fotos.length ? property.fotos : [property.media?.src ?? "
         </div>
 
         <a
-          href="/propiedades"
+          href={appUrl("/propiedades")}
           class="mt-4 inline-block text-sm text-muted underline underline-offset-4 transition-colors hover:text-fg"
         >
           ← Volver a todas las propiedades

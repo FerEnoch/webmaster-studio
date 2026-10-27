@@ -3,6 +3,7 @@
  * Tarjeta de un barrio: precio medio, distancia a la oficina y perfil.
  * El CTA lleva al buscador con el barrio ya filtrado.
  */
+import { appUrl } from "@lib/urls";
 import type { CatalogItem } from "@lib/types";
 
 export interface Props {
@@ -45,7 +46,7 @@ const datos = (item.meta ?? []).filter((m) => m.label !== "Perfil");
 
   <div class="mt-auto pt-6">
     <a
-      href={`/propiedades?zona=${encodeURIComponent(item.title)}`}
+      href={appUrl(`/propiedades?zona=${encodeURIComponent(item.title)}`)}
       class="wm-btn wm-btn--ghost w-full text-xs"
     >
       Ver propiedades en {item.title}

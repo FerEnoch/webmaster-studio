@@ -4,11 +4,13 @@
  * Se oculta en la propia página de reserva (ahí ya estás haciendo la acción)
  * y cuando el menú mobile está abierto.
  */
-const enReserva = Astro.url.pathname.replace(/\/$/, "") === "/reservar";
+import { appPath, appUrl } from "@lib/urls";
+
+const isBooking = appPath(Astro.url.pathname) === "/reservar";
 ---
 
 {
-  !enReserva && (
+  !isBooking && (
     <div class="wm-sticky-cta" data-wm-sticky-cta>
       <div class="wm-container flex items-center justify-between gap-3 py-2.5">
         <div class="min-w-0">
@@ -17,7 +19,7 @@ const enReserva = Astro.url.pathname.replace(/\/$/, "") === "/reservar";
           </p>
           <p class="wm-display truncate text-lg leading-tight">Reservá tu lugar</p>
         </div>
-        <a href="/reservar" class="wm-btn shrink-0 px-5 py-3 text-xs">
+        <a href={appUrl("/reservar")} class="wm-btn shrink-0 px-5 py-3 text-xs">
           Reservar
         </a>
       </div>

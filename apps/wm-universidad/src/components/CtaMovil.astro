@@ -6,6 +6,8 @@
  * bar keeps the conversion reachable with the thumb. En desktop se oculta
  * (`md:hidden`): la firma pide un solo CTA y arriba ya esta.
  */
+import { appUrl } from "@lib/urls";
+
 export interface Props {
   /** Texto del CTA. */
   label: string;
@@ -37,6 +39,6 @@ const { label, href, whatsappHref, whatsappLabel = "Escribir por WhatsApp" } = A
       </svg>
     </a>
 
-    <a href={href} class="wm-btn flex-1">{label}</a>
+    <a href={appUrl(href)} class="wm-btn flex-1">{label}</a>
   </div>
 </div>

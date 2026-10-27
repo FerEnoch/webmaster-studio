@@ -8,6 +8,7 @@
 import { ClientRouter } from "astro:transitions";
 import Footer from "./Footer.astro";
 import Nav from "./Nav.astro";
+import { appUrl } from "@lib/urls";
 import { waLink } from "@lib/whatsapp";
 import type { Contact, Legal, NavItem, Theme } from "@lib/types";
 
@@ -43,7 +44,7 @@ const {
 
 const origin = Astro.site ? new URL(Astro.site).origin : Astro.url.origin;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, origin).href;
-const ogImg = ogImage ?? new URL("/og.png", origin).href;
+const ogImg = ogImage ?? new URL(appUrl("/og.png"), origin).href;
 
 const fam = (name: string) => name.trim().replace(/\s+/g, "+");
 const fontsHref =

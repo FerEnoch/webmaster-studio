@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import MobileCta from "../components/MobileCta.astro";
 import PageHead from "../components/PageHead.astro";
@@ -149,7 +150,7 @@ const whatsappHref = waLink(
           Tamaño de auto, nivel de lavado, extras, turno y seña. Te queda el
           pase con la hora exacta de entrega y el monto de la seña.
         </p>
-        <a href="/reservar" class="wm-btn mt-8">Ir a reservar</a>
+        <a href={appUrl("/reservar")} class="wm-btn mt-8">Ir a reservar</a>
       </div>
     </div>
   </section>

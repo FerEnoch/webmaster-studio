@@ -6,6 +6,8 @@
  * es la historia del estudio contada con un plano y fotos reales.
  * Cierra con la promo de la primera clase.
  */
+import { appUrl } from "@lib/urls";
+
 export interface Props {
   fotos: {
     salon: string;
@@ -152,7 +154,7 @@ const pasos = [
           <p class="wm-display mt-3 text-3xl">{promo.titulo}</p>
           <p class="wm-display mt-3 text-4xl text-accent">{promo.precio}</p>
           <p class="mt-3 text-sm text-muted">{promo.cuerpo}</p>
-          <a href={promo.cta.href} class="wm-btn mt-5 w-full">{promo.cta.label}</a>
+          <a href={appUrl(promo.cta.href)} class="wm-btn mt-5 w-full">{promo.cta.label}</a>
         </div>
       </div>
 

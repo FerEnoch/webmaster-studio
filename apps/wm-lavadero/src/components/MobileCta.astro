@@ -6,6 +6,7 @@
  * cuando el hero sale de pantalla y se esconde sola. En desktop no existe
  * (el nav y el hero ya resuelven).
  */
+import { appUrl } from "@lib/urls";
 import { waLink } from "@lib/whatsapp";
 import type { Contact } from "@lib/types";
 
@@ -37,7 +38,7 @@ const whatsappHref = waLink(
       </svg>
     </a>
 
-    <a href={href} class="wm-btn w-full py-4">{label}</a>
+    <a href={appUrl(href)} class="wm-btn w-full py-4">{label}</a>
   </div>
 </div>
 

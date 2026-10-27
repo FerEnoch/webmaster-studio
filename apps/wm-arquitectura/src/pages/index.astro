@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHero from "../components/ui/PageHero.astro";
 import LiveNow from "../components/ui/LiveNow.astro";
@@ -31,7 +32,7 @@ const destacadas = obras.slice(0, 2);
         </p>
         <div class="mt-8 flex flex-wrap gap-4">
           <a href="#cotizacion" class="wm-btn">Cotizar mi proyecto</a>
-          <a href="/obras" class="wm-btn wm-btn--ghost">Ver las obras</a>
+          <a href={appUrl("/obras")} class="wm-btn wm-btn--ghost">Ver las obras</a>
         </div>
       </div>
 
@@ -105,7 +106,7 @@ const destacadas = obras.slice(0, 2);
         Cada proyecto que entregamos vuelve con su ficha: año, superficie, estado,
         equipo y qué se entregó. Podés visitarla antes de contratar la próxima.
       </p>
-      <a href="/obras" class="wm-btn mt-8">Ver las cuatro obras</a>
+      <a href={appUrl("/obras")} class="wm-btn mt-8">Ver las cuatro obras</a>
     </div>
   </section>
 
@@ -118,7 +119,7 @@ const destacadas = obras.slice(0, 2);
           La obra como prueba, con su ficha
         </h2>
       </div>
-      <a href="/obras" class="text-sm font-semibold text-accent underline underline-offset-4">
+      <a href={appUrl("/obras")} class="text-sm font-semibold text-accent underline underline-offset-4">
         Ver todas las obras
       </a>
     </header>
@@ -146,7 +147,7 @@ const destacadas = obras.slice(0, 2);
         <p class="mt-6 text-sm text-muted">
           Demo de portfolio: el equipo, las obras y los premios son ficticios.
         </p>
-        <a href="/estudio" class="wm-btn mt-8">Conocer el estudio</a>
+        <a href={appUrl("/estudio")} class="wm-btn mt-8">Conocer el estudio</a>
       </div>
 
       <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm">

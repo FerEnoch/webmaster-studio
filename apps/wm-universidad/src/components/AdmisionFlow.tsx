@@ -13,6 +13,7 @@
  */
 
 import { useMemo, useState, type ChangeEvent, type SyntheticEvent } from "react";
+import { appUrl } from "@lib/urls";
 import Ticket from "./ui/Ticket";
 import { rubroWhatsapp } from "@lib/whatsapp";
 import type { Carrera, Modalidad, Turno } from "../content/universidades";
@@ -394,7 +395,7 @@ export default function AdmisionFlow({
                 <a href={whatsappHref} className="wm-btn">
                   Mandar por WhatsApp
                 </a>
-                <a href={inscriptionHref} className="wm-btn wm-btn--ghost">
+                <a href={appUrl(inscriptionHref)} className="wm-btn wm-btn--ghost">
                   Completar la inscripción
                 </a>
               </div>

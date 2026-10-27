@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
 import PrepTimeline from "../components/PrepTimeline.astro";
@@ -33,7 +34,7 @@ const estudios = clinica.sections.find((s) => s.id === "estudios")!;
         Cuando reservás desde la web, la preparación del estudio aparece en el
         pase, así no llegás sin saber qué hacer.
       </p>
-      <a href="/#turno" class="wm-btn mt-8">Ir a sacar el turno</a>
+      <a href={appUrl("/#turno")} class="wm-btn mt-8">Ir a sacar el turno</a>
     </div>
   </section>
 </Base>

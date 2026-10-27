@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import MobileCta from "../components/MobileCta.astro";
 import PageHero from "../components/ui/PageHero.astro";
@@ -51,8 +52,8 @@ const liveBarra = {
           el interior se entrega perfumado, no rociado.
         </p>
         <div class="mt-8 flex flex-wrap gap-4">
-          <a href="/reservar" class="wm-btn">Reservar mi lavado</a>
-          <a href="/servicios" class="wm-btn wm-btn--ghost">Ver los servicios</a>
+          <a href={appUrl("/reservar")} class="wm-btn">Reservar mi lavado</a>
+          <a href={appUrl("/servicios")} class="wm-btn wm-btn--ghost">Ver los servicios</a>
         </div>
         <p class="mt-6 text-sm text-muted">
           <LiveNow signal={liveBarra} />
@@ -130,7 +131,7 @@ const liveBarra = {
     </div>
 
     <p class="mt-8 text-sm text-muted">
-      <a href="/servicios" class="font-semibold text-accent underline underline-offset-4">
+      <a href={appUrl("/servicios")} class="font-semibold text-accent underline underline-offset-4">
         Ver los tres niveles de lavado y los extras
       </a>
     </p>
@@ -157,7 +158,7 @@ const liveBarra = {
       </ul>
 
       <a
-        href="/servicios"
+        href={appUrl("/servicios")}
         class="mt-8 inline-block text-sm font-semibold text-accent underline underline-offset-4"
       >
         Ver el detalle de cada nivel y los extras
@@ -208,7 +209,7 @@ const liveBarra = {
         Por eso la barra abre cuando abre el box, y el café de cortesía viene
         con el turno, siempre.
       </p>
-      <a href="/reservar" class="wm-btn mt-8">Reservar mi lavado</a>
+      <a href={appUrl("/reservar")} class="wm-btn mt-8">Reservar mi lavado</a>
     </div>
   </section>
 
@@ -287,7 +288,7 @@ const liveBarra = {
             <dd class="text-right font-medium">{lavadero.contact.email}</dd>
           </div>
         </dl>
-        <a href="/contacto" class="wm-btn mt-8">Ver contacto y horarios</a>
+        <a href={appUrl("/contacto")} class="wm-btn mt-8">Ver contacto y horarios</a>
       </div>
     </div>
   </section>

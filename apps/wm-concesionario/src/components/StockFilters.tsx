@@ -10,6 +10,7 @@
  */
 
 import { useMemo, useState } from "react";
+import { appUrl } from "@lib/urls";
 import { img } from "@lib/media";
 import { ars, km, type Auto } from "../content/concesionario";
 
@@ -254,7 +255,7 @@ export default function StockFilters({
                         <span className="font-semibold text-fg">{ars(auto.cuota)}/mes</span>
                       </p>
                       <a
-                        href={`${basePath}/${auto.id}`}
+                        href={appUrl(`${basePath}/${auto.id}`)}
                         className="mt-5 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.12em] text-accent underline underline-offset-4 transition-colors hover:text-fg"
                       >
                         {ctaLabel}

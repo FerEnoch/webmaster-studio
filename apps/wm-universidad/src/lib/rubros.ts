@@ -39,7 +39,7 @@ export const RUBROS: Rubro[] = [
     rubro: "Clínica general y diagnóstico por imágenes",
     tagline: "Tu estudio en un mismo lugar, sin esperas.",
     objeccion: "«No quiero pasar tres horas en una sala de espera»",
-    demoUrl: "https://wm-clinica.vercel.app",
+    demoUrl: "/demos/clinica/",
     port: 3020,
     palette: { bg: "#0E1A1C", fg: "#E9F0EC", accent: "#FF6B4A" },
     whatsapp: {
@@ -54,7 +54,7 @@ export const RUBROS: Rubro[] = [
     rubro: "Concesionario de autos nuevos y usados",
     tagline: "Elegí tu auto con la ficha completa, sin letra chica.",
     objeccion: "«No quiero surprises en la financing ni en el seguro»",
-    demoUrl: "https://wm-concesionario.vercel.app",
+    demoUrl: "/demos/concesionario/",
     port: 3021,
     palette: { bg: "#17130E", fg: "#F1E9DC", accent: "#E3B23C" },
     whatsapp: {
@@ -69,7 +69,7 @@ export const RUBROS: Rubro[] = [
     rubro: "Lavadero de autos con bar",
     tagline: "Lavás tu auto, tomás algo y te vas.",
     objeccion: "«¿Me van a romper la pintura o el interior?»",
-    demoUrl: "https://wm-lavadero.vercel.app",
+    demoUrl: "/demos/lavadero/",
     port: 3022,
     palette: { bg: "#0C1B26", fg: "#E4EEF4", accent: "#2FC2DA" },
     whatsapp: {
@@ -84,7 +84,7 @@ export const RUBROS: Rubro[] = [
     rubro: "Estudio de estética y yoga",
     tagline: "Un lugar para soltar, no para correr.",
     objeccion: "«¿Me van a retocar las fotos sin que me entere?»",
-    demoUrl: "https://wm-estetica.vercel.app",
+    demoUrl: "/demos/estetica/",
     port: 3023,
     palette: { bg: "#1C1518", fg: "#F3EAE6", accent: "#E4A0AE" },
     whatsapp: {
@@ -99,7 +99,7 @@ export const RUBROS: Rubro[] = [
     rubro: "Universidad privada",
     tagline: "La carrera, la beca y la salida laboral, en una página.",
     objeccion: "«¿Termino la carrera y después qué hago?»",
-    demoUrl: "https://wm-universidad.vercel.app",
+    demoUrl: "/demos/universidad/",
     port: 3024,
     palette: { bg: "#141A24", fg: "#EAEFF6", accent: "#C9A227" },
     whatsapp: {
@@ -114,7 +114,7 @@ export const RUBROS: Rubro[] = [
     rubro: "Inmobiliaria",
     tagline: "Fichas completas, fotos reales y visita el fin de semana.",
     objeccion: "«Las fotos del aviso no son la casa»",
-    demoUrl: "https://wm-inmobiliaria.vercel.app",
+    demoUrl: "/demos/inmobiliaria/",
     port: 3025,
     palette: { bg: "#101A17", fg: "#E9F0EB", accent: "#8FC1A9" },
     whatsapp: {
@@ -129,7 +129,7 @@ export const RUBROS: Rubro[] = [
     rubro: "Estudio de arquitectura y diseño",
     tagline: "Del croquis a la obra: el proceso abierto.",
     objeccion: "«¿Cómo sé que no me va a explota el presupuesto?»",
-    demoUrl: "https://wm-arquitectura.vercel.app",
+    demoUrl: "/demos/arquitectura/",
     port: 3026,
     palette: { bg: "#0F1214", fg: "#F0EFEA", accent: "#7FA8C9" },
     whatsapp: {
@@ -147,7 +147,7 @@ export const PORTFOLIO = {
   rubro: "Portfolio de demos por rubro",
   tagline: "Ocho webs, ocho rubros, una sola firma visual.",
   objeccion: "«¿Cada web es un template o está hecha para mi rubro?»",
-  demoUrl: "https://webmaster-studio.vercel.app",
+  demoUrl: "/",
   port: 3027,
   palette: { bg: "#111113", fg: "#EFEFEA", accent: "#D7FF4A" },
 } as const;

@@ -3,6 +3,7 @@
  * Header del kit: se esconde al scrollear hacia abajo, vuelve al subir.
  * Nav con transicion de pastilla (transition:name) y menu mobile con clip-path.
  */
+import { appPath, appUrl } from "@lib/urls";
 import { waLink } from "@lib/whatsapp";
 import type { Contact, NavItem } from "@lib/types";
 
@@ -12,9 +13,13 @@ export interface Props {
   contact: Contact;
 }
 
-const { nav, brand, contact } = Astro.props;
-const current = Astro.url.pathname.replace(/\/$/, "") || "/";
-const isActive = (href: string) => (href === "/" ? current === "/" : current.startsWith(href));
+const { nav: links, brand, contact } = Astro.props;
+const nav = links.map((item) => ({ ...item, href: appUrl(item.href) }));
+const current = appPath(Astro.url.pathname);
+const isActive = (href: string) => {
+  const path = appPath(href.split(/[?#]/)[0]);
+  return path === "/" ? current === "/" : current === path || current.startsWith(path + "/");
+};
 const whatsappHref = waLink(contact.whatsapp, `Hola, escribo desde la web de ${brand}.`);
 ---
 
@@ -24,7 +29,7 @@ const whatsappHref = waLink(contact.whatsapp, `Hola, escribo desde la web de ${b
   class="wm-header fixed inset-x-0 top-0 z-50 border-b border-line backdrop-blur-xl"
 >
   <div class="wm-container flex items-center justify-between gap-4 py-3.5">
-    <a href="/" class="wm-display text-2xl leading-none">
+    <a href={appUrl("/")} class="wm-display text-2xl leading-none">
       {brand}<span class="text-accent">.</span>
     </a>
 

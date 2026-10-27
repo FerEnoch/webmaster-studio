@@ -3,6 +3,7 @@
  * Footer legal AR: Defense del Consumidor, precios con impuestos,
  * boton de arrepentimiento/baja (Res. 316/2018 y 271/2020) y datos de contacto.
  */
+import { appUrl } from "@lib/urls";
 import { waLink } from "@lib/whatsapp";
 import type { Contact, Legal, NavItem } from "@lib/types";
 
@@ -35,7 +36,7 @@ const year = new Date().getFullYear();
           {
             nav.map((item) => (
               <li>
-                <a href={item.href} class="text-muted transition-colors hover:text-fg">
+                <a href={appUrl(item.href)} class="text-muted transition-colors hover:text-fg">
                   {item.label}
                 </a>
               </li>
@@ -125,7 +126,7 @@ const year = new Date().getFullYear();
         {
           legal.documents.map((doc) => (
             <li>
-              <a href={doc.href} class="transition-colors hover:text-fg">
+              <a href={appUrl(doc.href)} class="transition-colors hover:text-fg">
                 {doc.label}
               </a>
             </li>
@@ -142,6 +143,7 @@ const year = new Date().getFullYear();
           </a>
         </li>
       </ul>
+      {import.meta.env.BASE_URL !== "/" && <a href="/" data-astro-reload>Volver al portfolio</a>}
       <p>&copy; {year} {legal.company} · Plantilla de demostracion</p>
     </div>
   </div>

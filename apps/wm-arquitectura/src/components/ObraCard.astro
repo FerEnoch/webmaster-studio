@@ -6,6 +6,7 @@
  * que se entrego y el par antes/después. No es una tarjeta: es una ficha
  * con lineas de plano.
  */
+import { appUrl } from "@lib/urls";
 import type { Obra } from "../content/arquitectura";
 
 export interface Props {
@@ -115,7 +116,7 @@ const n = String(index + 1).padStart(2, "0");
       }
 
       <a
-        href="/#cotizacion"
+        href={appUrl("/#cotizacion")}
         class="mt-8 inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.12em] text-accent transition-colors hover:text-fg"
       >
         Cotizar un proyecto así

@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
 import CuotaCalculator from "../components/CuotaCalculator.tsx";
@@ -117,7 +118,7 @@ const financiacion = concesionario.sections.find((s) => s.id === "financiacion")
             <span>Si te sirve, también podés quedártelo como unidad usada.</span>
           </li>
         </ol>
-        <a href="/contacto" class="wm-btn mt-8">Pedir una tasación</a>
+        <a href={appUrl("/contacto")} class="wm-btn mt-8">Pedir una tasación</a>
       </div>
     </div>
   </section>

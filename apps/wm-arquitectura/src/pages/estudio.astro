@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
 import { arquitectura, equipo, premios, etapas, fotos } from "../content/arquitectura";
@@ -100,7 +101,7 @@ import { poster, video } from "@lib/media";
           Las cuatro etapas, siempre en este orden
         </h2>
       </div>
-      <a href="/#proceso" class="text-sm font-semibold text-accent underline underline-offset-4">
+      <a href={appUrl("/#proceso")} class="text-sm font-semibold text-accent underline underline-offset-4">
         Ver el proceso completo
       </a>
     </header>
@@ -164,8 +165,8 @@ import { poster, video } from "@lib/media";
         estudio. También podés escribirnos directo: contestamos dentro del día.
       </p>
       <div class="mt-8 flex flex-wrap gap-4">
-        <a href="/#cotizacion" class="wm-btn">Cotizar mi proyecto</a>
-        <a href="/contacto" class="wm-btn wm-btn--ghost">Ir a contacto</a>
+        <a href={appUrl("/#cotizacion")} class="wm-btn">Cotizar mi proyecto</a>
+        <a href={appUrl("/contacto")} class="wm-btn wm-btn--ghost">Ir a contacto</a>
       </div>
     </div>
   </section>

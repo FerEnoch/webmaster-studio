@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHero from "../components/ui/PageHero.astro";
 import PropertyCard from "../components/PropertyCard";
@@ -31,7 +32,7 @@ const destacadas = propiedades.filter((p) => p.destacado).slice(0, 3);
         </p>
         <div class="mt-8 flex flex-wrap gap-4">
           <a href="#visita" class="wm-btn">Agendar una visita</a>
-          <a href="/propiedades" class="wm-btn wm-btn--ghost">Ver las 6 propiedades</a>
+          <a href={appUrl("/propiedades")} class="wm-btn wm-btn--ghost">Ver las 6 propiedades</a>
         </div>
       </div>
 
@@ -62,7 +63,7 @@ const destacadas = propiedades.filter((p) => p.destacado).slice(0, 3);
     </div>
 
     <p class="mt-8 text-sm text-muted">
-      <a href="/propiedades" class="font-semibold text-accent underline underline-offset-4">
+      <a href={appUrl("/propiedades")} class="font-semibold text-accent underline underline-offset-4">
         Filtrar las seis propiedades por zona, tipo, precio y ambientes
       </a>
     </p>
@@ -202,7 +203,7 @@ const destacadas = propiedades.filter((p) => p.destacado).slice(0, 3);
     </div>
 
     <p class="mt-8 text-sm text-muted">
-      <a href="/contacto" class="font-semibold text-accent underline underline-offset-4">
+      <a href={appUrl("/contacto")} class="font-semibold text-accent underline underline-offset-4">
         Escribinos por WhatsApp o pasá por la oficina
       </a>
     </p>

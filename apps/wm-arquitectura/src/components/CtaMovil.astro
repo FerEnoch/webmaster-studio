@@ -8,6 +8,7 @@
  * El boton de WhatsApp flotante del kit sube por encima de esta barra
  * (ver `src/styles/global.css`).
  */
+import { appUrl } from "@lib/urls";
 ---
 
 <div
@@ -18,6 +19,6 @@
       <span class="block font-semibold text-fg">¿Tenés un proyecto?</span>
       Cotización en 4 pasos.
     </p>
-    <a href="/#cotizacion" class="wm-btn shrink-0 px-5 py-3 text-xs">Cotizar</a>
+    <a href={appUrl("/#cotizacion")} class="wm-btn shrink-0 px-5 py-3 text-xs">Cotizar</a>
   </div>
 </div>

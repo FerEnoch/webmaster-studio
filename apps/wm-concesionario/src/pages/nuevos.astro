@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
 import AutoCard from "../components/AutoCard.astro";
@@ -53,7 +54,7 @@ import { concesionario, nuevos } from "../content/concesionario";
             ))
           }
         </ol>
-        <a href="/#testdrive" class="wm-btn mt-8">Agendar un test drive</a>
+        <a href={appUrl("/#testdrive")} class="wm-btn mt-8">Agendar un test drive</a>
       </div>
 
       <aside class="wm-card">
@@ -74,7 +75,7 @@ import { concesionario, nuevos } from "../content/concesionario";
             ))
           }
         </ul>
-        <a href="/contacto" class="wm-btn mt-6 w-full">Consultar por un 0 km</a>
+        <a href={appUrl("/contacto")} class="wm-btn mt-6 w-full">Consultar por un 0 km</a>
       </aside>
     </div>
   </section>

@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHero from "../components/ui/PageHero.astro";
 import PrepTimeline from "../components/PrepTimeline.astro";
@@ -31,7 +32,7 @@ const [servicios, estudios, sedes, faq] = clinica.sections;
         </p>
         <div class="mt-8 flex flex-wrap gap-4">
           <a href="#turno" class="wm-btn">Sacar mi turno</a>
-          <a href="/estudios" class="wm-btn wm-btn--ghost">Ver los estudios</a>
+          <a href={appUrl("/estudios")} class="wm-btn wm-btn--ghost">Ver los estudios</a>
         </div>
       </div>
 
@@ -73,7 +74,7 @@ const [servicios, estudios, sedes, faq] = clinica.sections;
     </div>
 
     <p class="mt-8 text-sm text-muted">
-      <a href="/estudios" class="font-semibold text-accent underline underline-offset-4">
+      <a href={appUrl("/estudios")} class="font-semibold text-accent underline underline-offset-4">
         Ver la preparación completa de cada estudio
       </a>
     </p>

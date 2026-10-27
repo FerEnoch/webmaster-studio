@@ -31,35 +31,26 @@ import {
 } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { getRubro, APPS } from "../packages/webmaster-kit/rubros.ts";
+import { siteOrigin } from "./site-config.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const KIT = join(ROOT, "packages", "webmaster-kit");
 const TEMPLATE = join(KIT, "app-template");
 const APPS_DIR = join(ROOT, "apps");
 
-/** App -> puerto. La misma tabla que `packages/webmaster-kit/rubros.ts`. */
-const PORTS = {
-  "wm-clinica": 3020,
-  "wm-concesionario": 3021,
-  "wm-lavadero": 3022,
-  "wm-estetica": 3023,
-  "wm-universidad": 3024,
-  "wm-inmobiliaria": 3025,
-  "wm-arquitectura": 3026,
-  "wm-portfolio": 3027,
-};
-
-/** URL de la demo (Vercel). */
+// Keep scaffold ports and deployment routes aligned with the canonical catalogue.
+const PORTS = Object.fromEntries(APPS.map((app) => [`wm-${app.id}`, app.port]));
 function siteUrl(name) {
-  return name === "wm-portfolio"
-    ? "https://webmaster-studio.vercel.app"
-    : `https://${name}.vercel.app`;
+  const id = name.slice(3);
+  return new URL(getRubro(id)?.demoUrl ?? (id === "portfolio" ? "/" : `/demos/${id}/`), siteOrigin()).href;
 }
 
 /** Archivos del kit que se copian tal cual (fuente -> destino). */
 const KIT_FILES = [
   ["types.ts", "src/lib/types.ts"],
   ["rubros.ts", "src/lib/rubros.ts"],
+  ["urls.ts", "src/lib/urls.ts"],
   ["whatsapp.ts", "src/lib/whatsapp.ts"],
   ["media.ts", "src/lib/media.ts"],
   ["styles/tokens.css", "src/styles/tokens.css"],
@@ -75,6 +66,7 @@ const TEMPLATE_FILES = [
   ["src/layouts/Base.astro", "src/layouts/Base.astro"],
   ["src/styles/global.css", "src/styles/global.css"],
   ["src/pages/index.astro", "src/pages/index.astro"],
+  ["public/404.html", "public/404.html"],
 ];
 
 function usage() {
@@ -89,6 +81,10 @@ Opciones:
   --dry-run   lista lo que crearia, sin escribir nada.
   --port n    puerto de la app (solo necesario para rubros nuevos).
   --help      esta ayuda.
+
+Entorno:
+  PUBLIC_SITE_URL origen HTTP(S) sin ruta, credenciales, query ni fragmento.
+                  Se valida antes de escribir o mostrar el plan de dry-run.
 
 Apps conocidas y sus puertos:
 ${Object.entries(PORTS)
@@ -190,17 +186,24 @@ function main() {
     if (existsSync(item.to)) fail(`Ya existe ${relative(ROOT, item.to)}. Aborto para no pisar nada.`);
   }
 
+  let site;
+  try {
+    site = siteUrl(name);
+  } catch (error) {
+    fail(error.message);
+  }
+
   const rel = (p) => relative(ROOT, p).split(sep).join("/");
   const render = (value) =>
     String(value)
       .replaceAll("__APP_NAME__", name)
       .replaceAll("__PORT__", String(port))
-      .replaceAll("__SITE_URL__", siteUrl(name));
+      .replaceAll("__SITE_URL__", site);
 
   if (options.dryRun) {
     console.log(`\n  Dry run: se crearia ${rel(dest)}/ con ${plan.length} archivos:\n`);
     for (const item of plan) console.log(`    ${rel(item.to)}`);
-    console.log(`\n  Puerto: ${port}   Site: ${siteUrl(name)}`);
+    console.log(`\n  Puerto: ${port}   Site: ${site}`);
     console.log("\n  No se escribio nada.\n");
     return;
   }
@@ -234,7 +237,7 @@ function main() {
 
   console.log(`\n  App creada: ${rel(dest)}`);
   console.log(`  Puerto: ${port}`);
-  console.log(`  Site: ${siteUrl(name)}`);
+  console.log(`  Site: ${site}`);
   console.log(`  Archivos: ${plan.length}\n`);
   console.log("  Siguiente paso (lo escribe el writer de la app):");
   console.log(`    1. Crear ${rel(join(dest, "src", "content", "<rubro>.ts"))} con el RubroContent.`);

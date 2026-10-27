@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
 import StudyCard from "../components/StudyCard.astro";
@@ -30,7 +31,7 @@ const servicios = clinica.sections.find((s) => s.id === "servicios")!;
         La reserva de turno está en la portada: son tres pasos y no te lleva
         más de un minuto.
       </p>
-      <a href="/#turno" class="wm-btn mt-8">Ir a sacar el turno</a>
+      <a href={appUrl("/#turno")} class="wm-btn mt-8">Ir a sacar el turno</a>
     </div>
   </section>
 </Base>

@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHero from "../components/ui/PageHero.astro";
 import LiveNow from "../components/ui/LiveNow.astro";
@@ -64,7 +65,7 @@ const hitos = [
         </p>
         <div class="mt-8 flex flex-wrap gap-4">
           <a href="#testdrive" class="wm-btn">Agendar test drive</a>
-          <a href="/usados" class="wm-btn wm-btn--ghost">Ver el stock</a>
+          <a href={appUrl("/usados")} class="wm-btn wm-btn--ghost">Ver el stock</a>
         </div>
       </div>
 
@@ -101,7 +102,7 @@ const hitos = [
         </span>
       </div>
       <a
-        href="/usados"
+        href={appUrl("/usados")}
         class="text-sm font-semibold uppercase tracking-[0.12em] text-accent underline underline-offset-4"
       >
         Filtrar el stock
@@ -122,7 +123,7 @@ const hitos = [
     </div>
 
     <p class="mt-8 text-sm text-muted">
-      <a href="/usados" class="font-semibold text-accent underline underline-offset-4">
+      <a href={appUrl("/usados")} class="font-semibold text-accent underline underline-offset-4">
         Ver los {usados.length} usados con filtros de marca, modelo, precio y kilometraje
       </a>
     </p>
@@ -144,7 +145,7 @@ const hitos = [
     </div>
 
     <p class="mt-8 text-sm text-muted">
-      <a href="/nuevos" class="font-semibold text-accent underline underline-offset-4">
+      <a href={appUrl("/nuevos")} class="font-semibold text-accent underline underline-offset-4">
         Ver los 0 km con entrega inmediata
       </a>
     </p>
@@ -260,7 +261,7 @@ const hitos = [
     </div>
 
     <p class="mt-8 text-sm text-muted">
-      <a href="/financiacion" class="font-semibold text-accent underline underline-offset-4">
+      <a href={appUrl("/financiacion")} class="font-semibold text-accent underline underline-offset-4">
         Calcular mi cuota con el simulador
       </a>
     </p>

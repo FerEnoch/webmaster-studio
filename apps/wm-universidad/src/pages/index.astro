@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHero from "../components/ui/PageHero.astro";
 import LiveNow from "../components/ui/LiveNow.astro";
@@ -154,7 +155,7 @@ const [seccCarreras, seccAdmision, seccionBecas, seccionCampus, seccionNoticias,
         igual, los horarios se cruzan entre sedes y la biblioteca es una sola:
         el campus es de todos.
       </p>
-      <a href="/campus" class="wm-btn mt-8">Ver los campus</a>
+      <a href={appUrl("/campus")} class="wm-btn mt-8">Ver los campus</a>
     </div>
   </section>
 
@@ -287,7 +288,7 @@ const [seccCarreras, seccAdmision, seccionBecas, seccionCampus, seccionNoticias,
               ? `https://wa.me/${rubro.whatsapp.phone}?text=${encodeURIComponent(
                   "Hola, quiero información sobre las carreras de UNIVERSIDAD ALTA y las becas.",
                 )}`
-              : "/contacto"}
+              : appUrl("/contacto")}
             class="wm-btn wm-btn--ghost"
             target="_blank"
             rel="noreferrer noopener">Escribir por WhatsApp</a

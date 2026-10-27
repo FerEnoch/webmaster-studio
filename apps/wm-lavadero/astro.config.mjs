@@ -4,9 +4,10 @@ import { fileURLToPath } from "node:url";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+import { appConfig } from "../../scripts/site-config.mjs";
 
 export default defineConfig({
-  site: "https://wm-lavadero.vercel.app",
+  ...appConfig("lavadero"),
   server: { port: 3022, host: true },
   preview: { port: 3022, host: true },
   integrations: [react()],

@@ -8,6 +8,7 @@
  * impuestos y las dos acciones (ver la ficha / agendar visita).
  */
 
+import { appUrl } from "@lib/urls";
 import type { CSSProperties } from "react";
 import type { Propiedad } from "../content/inmobiliaria";
 
@@ -29,7 +30,7 @@ export default function PropertyCard({ property, index = 0, compact = false }: P
       className="wm-card group flex h-full flex-col overflow-hidden p-0"
       style={{ "--wm-line-index": index } as CSSProperties}
     >
-      <a href={`/propiedades/${property.id}`} className="block" tabIndex={-1} aria-hidden="true">
+      <a href={appUrl(`/propiedades/${property.id}`)} className="block" tabIndex={-1} aria-hidden="true">
         <div className="wm-grade wm-grain wm-vignette overflow-hidden">
           <img
             src={property.media?.src ?? property.fotos[0]}
@@ -48,7 +49,7 @@ export default function PropertyCard({ property, index = 0, compact = false }: P
         </div>
 
         <h3 className="wm-display mt-3 text-2xl leading-tight">
-          <a href={`/propiedades/${property.id}`} className="transition-colors hover:text-accent">
+          <a href={appUrl(`/propiedades/${property.id}`)} className="transition-colors hover:text-accent">
             {property.title}
           </a>
         </h3>
@@ -76,10 +77,10 @@ export default function PropertyCard({ property, index = 0, compact = false }: P
         ) : null}
 
         <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-          <a href={`/propiedades/${property.id}`} className="wm-btn wm-btn--ghost flex-1 text-xs">
+          <a href={appUrl(`/propiedades/${property.id}`)} className="wm-btn wm-btn--ghost flex-1 text-xs">
             Ver la ficha
           </a>
-          <a href={`/?prop=${property.id}#visita`} className="wm-btn flex-1 text-xs">
+          <a href={appUrl(`/?prop=${property.id}#visita`)} className="wm-btn flex-1 text-xs">
             Agendar visita
           </a>
         </div>

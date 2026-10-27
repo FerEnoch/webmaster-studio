@@ -6,6 +6,7 @@
  * Todo el movimiento es CSS salvo el "encogimiento", que usa un unico
  * listener de scroll con rAF (transform unicamente: no layout).
  */
+import { appUrl } from "@lib/urls";
 import LiveNow from "./LiveNow.astro";
 import type { HeroContent } from "@lib/types";
 
@@ -66,7 +67,7 @@ const { hero, brand } = Astro.props;
             <p class="mt-7 max-w-xl text-lg leading-relaxed text-muted">{hero.subtitle}</p>
 
             <div class="mt-9 flex flex-wrap items-center gap-4">
-              <a href={hero.cta.href} class="wm-btn">{hero.cta.label}</a>
+              <a href={appUrl(hero.cta.href)} class="wm-btn">{hero.cta.label}</a>
               {
                 hero.live && (
                   <span class="text-sm text-accent">

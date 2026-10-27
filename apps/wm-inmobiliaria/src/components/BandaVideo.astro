@@ -4,6 +4,8 @@
  * gradacion de la firma (grade + grain + vignette) y un scrim para que el
  * texto se lea siempre.
  */
+import { appUrl } from "@lib/urls";
+
 export interface Props {
   src: string;
   poster: string;
@@ -42,6 +44,6 @@ const { src, poster, alt, kicker, title, body, cta } = Astro.props;
     <p class="wm-kicker">{kicker}</p>
     <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">{title}</h2>
     <p class="mt-5 max-w-lg text-muted">{body}</p>
-    {cta ? <a href={cta.href} class="wm-btn mt-8">{cta.label}</a> : null}
+    {cta ? <a href={appUrl(cta.href)} class="wm-btn mt-8">{cta.label}</a> : null}
   </div>
 </section>

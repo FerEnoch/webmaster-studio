@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
 import LiveNow from "../components/ui/LiveNow.astro";
@@ -138,7 +139,7 @@ const whatsappHref = waLink(
         Elegís el tipo de proyecto, la escala y dejás tus datos: en cuatro pasos te queda
         un número de consulta para el estudio, sin registro y sin esperas.
       </p>
-      <a href="/#cotizacion" class="wm-btn mt-8">Ir a cotizar</a>
+      <a href={appUrl("/#cotizacion")} class="wm-btn mt-8">Ir a cotizar</a>
     </div>
   </section>
 </Base>

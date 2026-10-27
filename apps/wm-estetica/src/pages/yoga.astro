@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
 import LiveNow from "../components/ui/LiveNow.astro";
@@ -89,7 +90,7 @@ const horario = clases.items?.map((c) => ({
 
       <p class="mt-6 text-sm text-muted">
         Pack de 8 clases: $ 148.000 (equivale a $ 18.500 por clase). Vence a los
-        60 días. <a href="/reservar" class="font-semibold text-accent underline underline-offset-4">
+        60 días. <a href={appUrl("/reservar")} class="font-semibold text-accent underline underline-offset-4">
           Reservar mi lugar
         </a>
       </p>
@@ -160,7 +161,7 @@ const horario = clases.items?.map((c) => ({
         y te explicamos las tres posiciones que vamos a usar. Nadie te mira de
         forma rara: en la sala de 14 hay más gente que no sabe para dónde mira.
       </p>
-      <a href="/reservar" class="wm-btn mt-8">Reservar mi clase</a>
+      <a href={appUrl("/reservar")} class="wm-btn mt-8">Reservar mi clase</a>
     </div>
   </section>
 
@@ -175,7 +176,7 @@ const horario = clases.items?.map((c) => ({
         Reservás el turno, elegís la clase y te llevás el pase. Si no te sirvió
         la primera, no tenés que comprar nada más.
       </p>
-      <a href="/reservar" class="wm-btn mt-8">Reservar mi clase</a>
+      <a href={appUrl("/reservar")} class="wm-btn mt-8">Reservar mi clase</a>
     </div>
   </section>
 </Base>

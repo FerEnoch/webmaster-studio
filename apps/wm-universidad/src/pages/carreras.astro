@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
 import CarreraFinder from "../components/CarreraFinder.tsx";
@@ -47,7 +48,7 @@ import { universidad, carreras, fotos, clips, posters } from "../content/univers
         consignas. La diferencia es dónde te sentás: el campus virtual tiene
         salas de estudio abiertas y tutores de cursada.
       </p>
-      <a href="/admision#admision" class="wm-btn mt-8">Pedir información</a>
+      <a href={appUrl("/admision#admision")} class="wm-btn mt-8">Pedir información</a>
     </div>
   </section>
 
@@ -119,7 +120,7 @@ import { universidad, carreras, fotos, clips, posters } from "../content/univers
                   <span class="mt-1 block text-fg">{c.salida}</span>
                 </p>
 
-                <a href="/admision#admision" class="wm-btn mt-7">
+                <a href={appUrl("/admision#admision")} class="wm-btn mt-7">
                   Pedir información de {c.title.split(" ")[0]}
                 </a>
               </div>
@@ -165,7 +166,7 @@ import { universidad, carreras, fotos, clips, posters } from "../content/univers
         Cuando tengas la tuya, el paso a paso genera el pase con el turno de la
         visita guiada.
       </p>
-      <a href="/admision#admision" class="wm-btn mt-8">Ir al paso a paso</a>
+      <a href={appUrl("/admision#admision")} class="wm-btn mt-8">Ir al paso a paso</a>
     </div>
   </section>
 </Base>

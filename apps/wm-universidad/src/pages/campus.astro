@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
 import SedeCard from "../components/SedeCard.astro";
@@ -106,7 +107,7 @@ const servicios = [
         equipos que vas a usar: un laboratorio de alimentos, uno de datos y las
         salas de simulación de ingeniería.
       </p>
-      <a href="/admision#admision" class="wm-btn mt-8">Agendar mi visita</a>
+      <a href={appUrl("/admision#admision")} class="wm-btn mt-8">Agendar mi visita</a>
     </div>
   </section>
 
@@ -163,7 +164,7 @@ const servicios = [
         Son 90 minutos, no te comprometen con nada y el código de seguimiento
         te queda en el pase.
       </p>
-      <a href="/admision#admision" class="wm-btn mt-8">Agendar mi visita</a>
+      <a href={appUrl("/admision#admision")} class="wm-btn mt-8">Agendar mi visita</a>
     </div>
   </section>
 </Base>

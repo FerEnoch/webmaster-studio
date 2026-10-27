@@ -10,6 +10,7 @@
  * que el pasante no tiene que volver a buscarla. El flujo termina igual en el
  * ticket con codigo.
  */
+import { appUrl } from "@lib/urls";
 import AutoCard from "./AutoCard.astro";
 import TestDriveBooking from "./TestDriveBooking.tsx";
 import { ars, concesionario, galeria, km, type Auto } from "../content/concesionario";
@@ -32,9 +33,9 @@ const esNuevo = auto.estado === "Nuevo";
 <article class="wm-container pt-36 pb-20 sm:pt-44">
   <!-- 1) Miga + titulo -->
   <nav aria-label="Ruta" class="text-sm text-muted">
-    <a href="/" class="hover:text-fg">Inicio</a>
+    <a href={appUrl("/")} class="hover:text-fg">Inicio</a>
     <span aria-hidden="true" class="mx-2">/</span>
-    <a href={`/${kind}`} class="hover:text-fg">{etiqueta}</a>
+    <a href={appUrl(`/${kind}`)} class="hover:text-fg">{etiqueta}</a>
     <span aria-hidden="true" class="mx-2">/</span>
     <span class="text-fg">{auto.marca} {auto.modelo}</span>
   </nav>
@@ -191,7 +192,7 @@ const esNuevo = auto.estado === "Nuevo";
           ))}
         </div>
         <p class="mt-8 text-sm text-muted">
-          <a href={`/${kind}`} class="font-semibold text-accent underline underline-offset-4">
+          <a href={appUrl(`/${kind}`)} class="font-semibold text-accent underline underline-offset-4">
             Volver a todos los {kind}
           </a>
         </p>

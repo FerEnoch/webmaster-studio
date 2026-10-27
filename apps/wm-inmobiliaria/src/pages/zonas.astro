@@ -1,4 +1,5 @@
 ---
+import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import PageHead from "../components/PageHead.astro";
 import ZonaCard from "../components/ZonaCard.astro";
@@ -50,7 +51,7 @@ const metodo = [
             Un precio puesto a ojo hace que se venda lento y que el comprador pida
             discount. El nuestro sale de tres pasos que podés leer antes de la visita.
           </p>
-          <a href="/propiedades" class="wm-btn mt-8">Ver las propiedades</a>
+          <a href={appUrl("/propiedades")} class="wm-btn mt-8">Ver las propiedades</a>
         </div>
 
         <ol class="border-l border-line">
@@ -81,7 +82,7 @@ const metodo = [
         Decinos el barrio, el tipo de propiedad y el rango de precio: armamos una
         búsqueda a medida y te avisamos cuando entre algo.
       </p>
-      <a href="/contacto" class="wm-btn mt-8">Pedir una búsqueda</a>
+      <a href={appUrl("/contacto")} class="wm-btn mt-8">Pedir una búsqueda</a>
     </div>
   </section>
 </Base>

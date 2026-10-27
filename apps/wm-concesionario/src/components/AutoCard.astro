@@ -5,6 +5,7 @@
  * Muestra la foto con el grade de la firma, el precio final con IVA, la cuota
  * estimada y los datos que hacen filtrar (marca, modelo, anio, km).
  */
+import { appUrl } from "@lib/urls";
 import { img } from "@lib/media";
 import { ars, km, type Auto } from "../content/concesionario";
 
@@ -74,7 +75,7 @@ const { auto, plain = false, href = `/usados/${auto.id}` } = Astro.props;
       {
         !plain && (
           <a
-            href={href}
+            href={appUrl(href)}
             class="mt-5 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.12em] text-accent underline underline-offset-4 transition-colors hover:text-fg"
           >
             Ver la ficha

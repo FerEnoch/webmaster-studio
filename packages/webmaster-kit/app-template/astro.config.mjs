@@ -4,9 +4,10 @@ import { fileURLToPath } from "node:url";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+import { appConfig } from "../../scripts/site-config.mjs";
 
 export default defineConfig({
-  site: "__SITE_URL__",
+  ...appConfig("__APP_NAME__".slice(3)),
   server: { port: __PORT__, host: true },
   preview: { port: __PORT__, host: true },
   integrations: [react()],
