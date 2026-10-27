@@ -165,23 +165,30 @@ const whatsappHref = waLink(contact.whatsapp, `Hola, escribo desde la web de ${b
       // Cortina: entra antes de preparar la nueva pagina, sale despues del swap.
       // Red de seguridad: si algo se interrumpe, la cortina nunca tapa la app.
       const curtain = () => document.querySelector<HTMLElement>("[data-wm-curtain]");
-      let safety = 0;
 
       const setState = (state: string) => {
         const el = curtain();
         if (el) el.dataset.state = state;
       };
 
+      // El timer vive en el nodo persistido: este script se re-ejecuta en cada
+      // navegacion y una variable de closure perderia el timer anterior, que
+      // entonces caeria a "idle" en medio de la navegacion siguiente.
+      const armIdle = (ms: number) => {
+        const el = curtain();
+        window.clearTimeout(Number(el?.dataset.safety || 0));
+        const timer = window.setTimeout(() => setState("idle"), ms);
+        if (el) el.dataset.safety = String(timer);
+      };
+
       document.addEventListener("astro:before-preparation", () => {
         setState("cover");
-        window.clearTimeout(safety);
-        safety = window.setTimeout(() => setState("idle"), 2600);
+        armIdle(2600);
       });
 
       document.addEventListener("astro:after-swap", () => {
         setState("reveal");
-        window.clearTimeout(safety);
-        safety = window.setTimeout(() => setState("idle"), 700);
+        armIdle(700);
       });
     </script>
   </body>

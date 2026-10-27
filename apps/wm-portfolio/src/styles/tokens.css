@@ -245,6 +245,13 @@
     transform: translate3d(0, -100%, 0);
   }
 
+  /* El reset a idle nunca anima: ambos extremos estan fuera de pantalla
+     (arriba tras el reveal, abajo en reposo) y animarlo barre la pantalla
+     de arriba hacia abajo unos 700ms despues de cada navegacion. */
+  .wm-curtain[data-state="idle"] {
+    transition: none;
+  }
+
   .wm-curtain__bar {
     position: absolute;
     inset: auto 0 0 0;
