@@ -82,7 +82,7 @@ pnpm run dev:clinica        # http://localhost:3020
 pnpm run build:clinica      # build estático -> apps/wm-clinica/dist
 pnpm run check:clinica      # astro check (typecheck + .astro)
 pnpm build                  # las 8 apps integradas -> dist/
-pnpm preview                # http://127.0.0.1:4321, rutas de producción
+pnpm preview                # http://127.0.0.1:4321, rutas de producción (desde sesión remota: pnpm preview --host 0.0.0.0)
 pnpm check:site             # HTTP: páginas, enlaces/anclas, assets, canonical y 404
 pnpm build:apps             # builds independientes -> apps/wm-*/dist/
 ```
