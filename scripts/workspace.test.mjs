@@ -55,7 +55,8 @@ test("se retiran los aliases de las apps anteriores", () => {
 });
 
 test("se conservan build recursivo y los comandos existentes de clínica", () => {
-  assert.equal(pkg.scripts.build, "pnpm -r run build");
+  assert.equal(pkg.scripts["build:apps"], "pnpm -r run build");
+  assert.equal(pkg.scripts.build, "node scripts/build-site.mjs");
   assert.equal(pkg.scripts["dev:clinica"], "pnpm --filter wm-clinica run dev");
   assert.equal(pkg.scripts["build:clinica"], "pnpm --filter wm-clinica run build");
   assert.equal(pkg.scripts["check:clinica"], "pnpm --filter wm-clinica run check");

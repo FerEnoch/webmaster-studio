@@ -11,6 +11,7 @@ node scripts/new-app.mjs wm-concesionario
 rsync -a --delete packages/webmaster-kit/components/ apps/wm-concesionario/src/components/ui/
 rsync -a packages/webmaster-kit/types.ts      apps/wm-concesionario/src/lib/types.ts
 rsync -a packages/webmaster-kit/rubros.ts     apps/wm-concesionario/src/lib/rubros.ts
+rsync -a packages/webmaster-kit/urls.ts       apps/wm-concesionario/src/lib/urls.ts
 rsync -a packages/webmaster-kit/whatsapp.ts   apps/wm-concesionario/src/lib/whatsapp.ts
 rsync -a packages/webmaster-kit/media.ts      apps/wm-concesionario/src/lib/media.ts
 rsync -a packages/webmaster-kit/styles/tokens.css apps/wm-concesionario/src/styles/tokens.css
@@ -25,6 +26,7 @@ rsync -a packages/webmaster-kit/styles/tokens.css apps/wm-concesionario/src/styl
 | --- | --- | --- |
 | `types.ts` | Contrato de contenido (`RubroContent`, `Theme`, `Section`, `Legal`, ...) | `src/lib/types.ts` |
 | `rubros.ts` | Los 7 rubros: id, rubro, objecion, paleta, WhatsApp, puerto | `src/lib/rubros.ts` |
+| `urls.ts` | `appUrl(href)` y `appPath(pathname)` para bases locales/integradas | `src/lib/urls.ts` |
 | `whatsapp.ts` | `waLink(phone, text)` y `rubroWhatsapp(id, ctx)` | `src/lib/whatsapp.ts` |
 | `media.ts` | Helpers de medios + pool de IDs **verificados** | `src/lib/media.ts` |
 | `styles/tokens.css` | Tokens Tailwind v4 + utilidades de la firma | `src/styles/tokens.css` |
@@ -90,6 +92,29 @@ relativas.
 6. **1 conversion que termina en TICKET** — `Booking.tsx` (3 pasos) renderiza
    `Ticket.tsx`.
 7. **1 solo CTA sobre el fold** — `hero.cta`.
+
+## Rutas y despliegue integrado
+
+- `rubros.ts` sigue siendo el catálogo canónico: `demoUrl` es una ruta del mismo
+  origen (`/demos/<slug>/`), no un dominio de producción.
+- Usar `appUrl("/contacto")`, `appUrl("/#turno")` o
+  `appUrl("/?prop=id#visita")` donde se renderiza un enlace interno (también en
+  React). Conserva query/fragmento, agrega la base y la barra final; deja intactos
+  anclas locales, protocolos externos y enlaces de WhatsApp. No usarlo para los
+  enlaces **entre** apps, que ya contienen la ruta completa del catálogo.
+- `appPath(Astro.url.pathname)` quita la base para comparar la página activa.
+  Los contenidos mantienen rutas locales sin prefijos; Nav, Footer y PageHero
+  las resuelven al renderizar. No guardar URLs de producción en el contenido.
+- Enlaces entre apps: `data-astro-reload`, como RubroCard y la vuelta al portfolio.
+  Evita compartir listeners, islas y estado de `ClientRouter` entre bundles distintos.
+- La plantilla usa `appConfig(id)` de `scripts/site-config.mjs`: desarrollo y
+  builds independientes en `/`, build integrado con `WM_DEPLOYMENT=1` y su base
+  `/demos/<id>/`. El scaffolder copia `urls.ts` y `public/404.html` además del kit,
+  conserva puertos y no sobrescribe destinos. Una app nueva sigue necesitando
+  contenido, registro en el catálogo y aliases en raíz.
+- No copiar a mano un build parcial a `dist/`: el comando raíz compila y combina
+  las ocho apps antes de promover el output completo. La configuración de Pages,
+  Node/pnpm, previews y `PUBLIC_SITE_URL` está en el [README raíz](../../README.md#publicar-bajo-un-solo-dominio-cloudflare-pages).
 
 ## Reglas de contenido
 
