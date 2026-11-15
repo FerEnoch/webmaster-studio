@@ -1,5 +1,5 @@
 /**
- * Los 7 rubros del portfolio + el id del portfolio madre.
+ * Los 6 rubros del portfolio + el id del portfolio madre.
  *
  * Fuente de verdad de: slug, nombre, rubro, bajada, objeción que responde
  * la web, URL de la demo, paleta (1 fondo + 1 claro + 1 acento) y el
@@ -32,21 +32,6 @@ export interface Rubro {
 }
 
 export const RUBROS: Rubro[] = [
-  {
-    id: "clinica",
-    slug: "clinica",
-    nombre: "Clínica + diagnóstico",
-    rubro: "Clínica general y diagnóstico por imágenes",
-    tagline: "Tu estudio en un mismo lugar, sin esperas.",
-    objeccion: "«No quiero pasar tres horas en una sala de espera»",
-    demoUrl: "/demos/clinica/",
-    port: 3020,
-    palette: { bg: "#0E1A1C", fg: "#E9F0EC", accent: "#FF6B4A" },
-    whatsapp: {
-      phone: "5491123456789",
-      template: "Hola, quiero sacar un turno en {sucursal} para {estudio}.",
-    },
-  },
   {
     id: "concesionario",
     slug: "concesionario",
@@ -139,20 +124,20 @@ export const RUBROS: Rubro[] = [
   },
 ];
 
-/** El portfolio madre: no es un rubro, es el índice de las 7 demos. */
+/** El portfolio madre: no es un rubro, es el índice de las 6 demos. */
 export const PORTFOLIO = {
   id: "portfolio",
   slug: "portfolio",
   nombre: "Portfolio",
   rubro: "Portfolio de demos por rubro",
-  tagline: "Ocho webs, ocho rubros, una sola firma visual.",
+  tagline: "Siete webs, seis rubros, una sola firma visual.",
   objeccion: "«¿Cada web es un template o está hecha para mi rubro?»",
   demoUrl: "/",
   port: 3027,
   palette: { bg: "#111113", fg: "#EFEFEA", accent: "#D7FF4A" },
 } as const;
 
-/** Todas las apps del monorepo (7 rubros + portfolio madre). */
+/** Todas las apps del monorepo (6 rubros + portfolio madre). */
 export const APPS: { id: string; nombre: string; rubro: string; demoUrl: string; port: number }[] = [
   ...RUBROS.map((r) => ({
     id: r.id,

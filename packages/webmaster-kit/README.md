@@ -1,6 +1,6 @@
 # webmaster-kit
 
-Carpeta **fuente de verdad** del sistema de diseño de las 8 apps Astro del
+Carpeta **fuente de verdad** del sistema de diseño de las 7 apps Astro del
 portfolio. **No es un paquete npm**: se COPIA dentro de cada app.
 
 ```bash
@@ -25,7 +25,7 @@ rsync -a packages/webmaster-kit/styles/tokens.css apps/wm-concesionario/src/styl
 | Ruta | Que es | Se copia a |
 | --- | --- | --- |
 | `types.ts` | Contrato de contenido (`RubroContent`, `Theme`, `Section`, `Legal`, ...) | `src/lib/types.ts` |
-| `rubros.ts` | Los 7 rubros: id, rubro, objecion, paleta, WhatsApp, puerto | `src/lib/rubros.ts` |
+| `rubros.ts` | Los 6 rubros: id, rubro, objecion, paleta, WhatsApp, puerto | `src/lib/rubros.ts` |
 | `urls.ts` | `appUrl(href)` y `appPath(pathname)` para bases locales/integradas | `src/lib/urls.ts` |
 | `whatsapp.ts` | `waLink(phone, text)` y `rubroWhatsapp(id, ctx)` | `src/lib/whatsapp.ts` |
 | `media.ts` | Helpers de medios + pool de IDs **verificados** | `src/lib/media.ts` |
@@ -44,12 +44,12 @@ cortina) vive en el kit.
 ```ts
 import type { RubroContent } from "@lib/types";
 
-export const clinica: RubroContent = {
-  id: "clinica",
-  brand: "CLÍNICA AURA",
-  rubro: "Clínica general y diagnóstico por imágenes",
-  tagline: "Tu estudio en un mismo lugar, sin esperas.",
-  objeccion: "«No quiero pasar tres horas en una sala de espera»",
+export const concesionario: RubroContent = {
+  id: "concesionario",
+  brand: "AUTOS EJEMPLO",
+  rubro: "Concesionario de autos nuevos y usados",
+  tagline: "Tu próximo auto, sin vueltas.",
+  objeccion: "«No quiero pagar de más por un usado»",
   theme: {
     name: "aura",
     palette: { bg: "#0E1A1C", fg: "#E9F0EC", accent: "#FF6B4A" },
@@ -74,7 +74,7 @@ Los componentes del kit importan los tipos por `@lib/*`:
 Por eso el kit compila solo si el alias esta bien: no cambies `@lib/` por rutas
 relativas.
 
-## La firma (lo que tienen que compartir las 8 webs)
+## La firma (lo que tienen que compartir las 7 webs)
 
 1. **Cortina entre rutas** — `astro:transitions` (`<ClientRouter />`) + overlay
    `.wm-curtain`, animado en `astro:before-preparation` / `astro:after-swap`.
@@ -113,7 +113,7 @@ relativas.
   conserva puertos y no sobrescribe destinos. Una app nueva sigue necesitando
   contenido, registro en el catálogo y aliases en raíz.
 - No copiar a mano un build parcial a `dist/`: el comando raíz compila y combina
-  las ocho apps antes de promover el output completo. La configuración de Pages,
+  las siete apps antes de promover el output completo. La configuración de Pages,
   Node/pnpm, previews y `PUBLIC_SITE_URL` está en el [README raíz](../../README.md#publicar-bajo-un-solo-dominio-cloudflare-pages).
 
 ## Reglas de contenido
@@ -145,7 +145,6 @@ relativas.
 
 | App | Puerto |
 | --- | --- |
-| `wm-clinica` | 3020 |
 | `wm-concesionario` | 3021 |
 | `wm-lavadero` | 3022 |
 | `wm-estetica` | 3023 |

@@ -1,0 +1,53 @@
+# Metadatos — copiado de templates/run.yaml del kit tras preflight Git OK (2026-10-27).
+# Guard: skills/researcher/references/output-guard.md
+# Destino custom autorizado por usuario: research-output/wm-clinica/ (en vez de output/<slug>/).
+research_id: wm-clinica-001
+rubric: clínica general + diagnóstico por imágenes (demo wm-clinica de webmaster-studio)
+market: Argentina nacional, con foco CABA + GBA norte (sedes ficticias de la demo: Palermo, Belgrano, Vicente López)
+stage: lite
+research_goal: inspiration_exploration
+current_decision: qué mejorar primero en la demo wm-clinica (foco integral: conversión/turnos + contenido/confianza); no decidir MVP ni stack
+profile: balanced
+selected_budget:
+  varied_queries_max: 7
+  source_reads_max: 5
+  rationale: equilibrado DEFAULT dentro de 6–8 consultas variadas y 4–6 lecturas; 7/5 deja margen sin llenar cuotas
+orchestrator_model: muse-spark-1.3-contributor (runtime de esta sesión; uno solo, sin adversarial)
+adversarial_model: null
+runtime_evidence:
+  actual_model: muse-spark-1.3-contributor
+  configuration: provider opencode-go
+  evidence: PI_MODEL env observado en runtime, 2026-10-27
+  adversarial: null
+kit:
+  resolved_path: /home/ferenoch/code/active/researcher
+  commit: d7c4bab5937a7c4d4ac03ff9766447e38dd9c39f
+  version: null
+  dirty: false
+  provenance_note: checkout local autorizado; skill instalado por symlink en ~/.agents/skills/researcher
+started_at: 2026-10-27T12:19:59-0300
+ended_at: 2026-10-27T12:22:08-0300
+elapsed_seconds: null
+status: lite-done
+scope:
+  indirect_substitutes: false
+  global_research: true
+  target_market_research: true
+  technical_observation: true
+notes: "Destino custom research-output/wm-clinica/ autorizado por el usuario (custom 'research-output/wm-clinica'); equivale a slug wm-clinica. Preflight Git 2026-10-27: raíz /home/ferenoch/code/active/webmaster-studio, sin rastreados bajo output/ ni research-output/, 8/8 destinos verificados ignorados tras agregar /research-output/* al .gitignore. Sin adversarial en Lite. Consultas variadas (2026-10-27): OAS+no-show; Doctolib/Zocdoc oficial; portal-resultados UX (error proveedor); AR turnos online prepagas; WhatsApp recordatorios ausentismo; portal paciente HIBA; preparacion estudios+precio. Lecturas reales: https://crontu.com.ar/ ; https://guiawabusiness.cliengo.com/recordatorios-turnos-whatsapp (contenido: guia completa 2026) ; https://www.frontiersin.org/journals/digital-health/articles/10.3389/fdgth.2025.1567397/full ; https://calu.app/ . Fallidas (no lectura): zocdoc help 403, HIBA resultados 404, PMC9382371 JS, doctolib zendesk 403. Dirs sources/ vacios: sin artefacto de fuentes en Lite (solo 5 LITE_*.md + run.yaml); se pre-crearon por estructura. Retrofit 2026-10-28: LITE_BRIEF.md citado por decisión con links según protocolo aea2460 (docs(lite): require per-decision source citations with links); LITE_LEDGER/BENCHMARK/TARGET_MARKET con URLs agregadas; fuentes y fechas originales 2026-10-27 preservadas; links re-verificados 2026-10-28 sin nuevas lecturas contadas como evidencia nueva. Completitud 2026-10-28 (protocolo aea2460): DOMAIN con inspección demo ruteada (clinica.ts/pase.ts/legal.astro/contacto.astro) y S1-S3 UNRESOLVED explícitos; LEDGER R1/R2 a PARTIALLY_SUPPORTED (práctica demo SUPPORTED, exigibilidad jurídica UNRESOLVED sin fuente oficial); BENCHMARK tasa PMC 37,6/27% marcada UNRESOLVED; TARGET checks legales con UNRESOLVED + rutas demo; BRIEF Defensa/baja/confirmación con UNRESOLVED y rutas demo. Sin lecturas nuevas; fechas originales 2026-10-27 preservadas."
+lite_measured:
+  varied_queries: 7
+  source_reads: 4
+  fetches: 8
+  searches: 7
+  wall_time_min: null
+  tokens_in: null
+  tokens_out: null
+  cost: null
+  currency: null
+  telemetry_evidence: no medido (runtime no entrega tokens/costo)
+  artifacts: ["research-output/wm-clinica/run.yaml", "research-output/wm-clinica/lite/LITE_DOMAIN.md", "research-output/wm-clinica/lite/LITE_BENCHMARK.md", "research-output/wm-clinica/lite/LITE_TARGET_MARKET.md", "research-output/wm-clinica/lite/LITE_LEDGER.md", "research-output/wm-clinica/lite/LITE_BRIEF.md"]
+  stop_reason: sufficient_coverage
+  remaining_uncertainty: [M3-friccion-DNI-obra-social, M4-diferenciador-plazo-resultado, R3-alcance-juridico-datos-salud]
+  decision_enabled: prototipar flujo C (recordatorio WhatsApp con botones + lista de espera + pase con estado) con medicion antes/despues
+  escalate_to_phase1: solo si la decision exige brief completo; no automatico

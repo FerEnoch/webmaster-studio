@@ -6,7 +6,7 @@ import { apps, noArguments, ROOT, siteOrigin } from "./site-config.mjs";
 
 let stage;
 try {
-  if (noArguments(process.argv.slice(2), "Usage: node scripts/build-site.mjs [--help]\nBuild all eight apps for one Pages deployment into dist/. Set PUBLIC_SITE_URL for canonical URLs.")) {
+  if (noArguments(process.argv.slice(2), "Usage: node scripts/build-site.mjs [--help]\nBuild all seven apps for one Pages deployment into dist/. Set PUBLIC_SITE_URL for canonical URLs.")) {
     const origin = siteOrigin();
     // Astro moves prerendered CSS with rename from the app's .astro directory.
     // Keep generated staging output on the repository filesystem (EXDEV otherwise).

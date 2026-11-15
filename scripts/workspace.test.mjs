@@ -22,7 +22,7 @@ test("pnpm dev abre el portfolio Astro", () => {
 });
 
 test("cada app Astro tiene aliases dev y build válidos en la raíz", () => {
-  assert.equal(apps.length, 8);
+  assert.equal(apps.length, 7);
   const missing = [];
   for (const app of apps) {
     const alias = app.directory.slice(3);
@@ -54,12 +54,9 @@ test("se retiran los aliases de las apps anteriores", () => {
   assert.deepEqual(remaining, []);
 });
 
-test("se conservan build recursivo y los comandos existentes de clínica", () => {
+test("se conservan build recursivo y build agregado", () => {
   assert.equal(pkg.scripts["build:apps"], "pnpm -r run build");
   assert.equal(pkg.scripts.build, "node scripts/build-site.mjs");
-  assert.equal(pkg.scripts["dev:clinica"], "pnpm --filter wm-clinica run dev");
-  assert.equal(pkg.scripts["build:clinica"], "pnpm --filter wm-clinica run build");
-  assert.equal(pkg.scripts["check:clinica"], "pnpm --filter wm-clinica run check");
 });
 
 test("el workspace no ofrece reactivar las apps retiradas", () => {
@@ -77,7 +74,7 @@ test("la documentación operativa no remite a las apps ni a los briefs retirados
   for (const [, alias] of readme.matchAll(/pnpm run ((?:dev|build|check):[a-z-]+)/g)) {
     assert.ok(Object.hasOwn(pkg.scripts, alias), `README: ${alias} debe existir`);
   }
-  assert.match(readme, /7 demos de rubro/);
+  assert.match(readme, /6 demos de rubro/);
   for (const path of ["packages/webmaster-kit/README.md", "packages/webmaster-kit/app-template/", "scripts/new-app.mjs"]) {
     assert.ok(existsSync(new URL(path, root)), fileURLToPath(new URL(path, root)));
   }

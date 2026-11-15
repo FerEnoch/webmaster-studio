@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "version": "0.1.0",
-  "description": "Portfolio freelance: 8 apps Astro (7 demos de rubro + portfolio madre) con kit compartido.",
+  "description": "Portfolio freelance: 7 apps Astro (6 demos de rubro + portfolio madre) con kit compartido.",
   "packageManager": "pnpm@12.11.2",
   "engines": {
     "node": ">=22.22.0",
@@ -15,9 +15,6 @@
     "build:apps": "pnpm -r run build",
     "preview": "node scripts/preview-site.mjs",
     "check:site": "node scripts/check-site.mjs",
-    "dev:clinica": "pnpm --filter wm-clinica run dev",
-    "build:clinica": "pnpm --filter wm-clinica run build",
-    "check:clinica": "pnpm --filter wm-clinica run check",
     "dev:concesionario": "pnpm --filter wm-concesionario run dev",
     "build:concesionario": "pnpm --filter wm-concesionario run build",
     "dev:lavadero": "pnpm --filter wm-lavadero run dev",

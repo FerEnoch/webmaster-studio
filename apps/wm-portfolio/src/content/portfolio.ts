@@ -147,7 +147,7 @@ const proceso: Section = {
       id: "p1",
       title: "Elegís el rubro",
       body: "Abrís las demos, comparás y decís cuál se parece a lo tuyo. Si no sabés, lo resolvemos por WhatsApp.",
-      points: ["7 demos vivas para comparar", "La objeción de cada una, escrita"],
+      points: ["6 demos vivas para comparar", "La objeción de cada una, escrita"],
       meta: [{ label: "Dura", value: "5 min" }],
     },
     {
@@ -192,7 +192,7 @@ const prueba: Section = {
     {
       id: "un-cta",
       title: "Un solo CTA sobre el fold",
-      body: "En las 7 demos hay una sola acción principal. No cinco botones compitiendo por el mismo click.",
+      body: "En las 6 demos hay una sola acción principal. No cinco botones compitiendo por el mismo click.",
       points: ["Acción única arriba", "Secundarias fuera del fold"],
       meta: [{ label: "Regla", value: "1 CTA" }],
     },
@@ -223,7 +223,7 @@ const faq: Section = {
     {
       id: "f1",
       title: "¿Esto es un portfolio o son webs de verdad?",
-      body: "Es un portfolio de demos: las 7 webs que ves funcionan y se pueden recorrer, pero son demos con marcas, precios y datos inventados. Sirven para que veas cómo trabajo, no para que un cliente final las use.",
+      body: "Es un portfolio de demos: las 6 webs que ves funcionan y se pueden recorrer, pero son demos con marcas, precios y datos inventados. Sirven para que veas cómo trabajo, no para que un cliente final las use.",
     },
     {
       id: "f2",
@@ -253,7 +253,7 @@ const faq: Section = {
   ],
 };
 
-/** ── Opciones del paso 1 del formulario: los 7 rubros ─────────────────── */
+/** ── Opciones del paso 1 del formulario: los 6 rubros ─────────────────── */
 const rubroOptions: CatalogItem[] = RUBROS.map((r) => ({
   id: r.id,
   kicker: r.nombre,
@@ -291,18 +291,18 @@ export const portfolio: RubroContent = {
   ],
   hero: {
     kicker: "Portfolio · demos vivas por rubro",
-    title: ["Siete rubros,", "siete webs", "que ya funcionan"],
+    title: ["Seis rubros,", "seis webs", "que ya funcionan"],
     subtitle:
-      "Cada demo responde la objeción real de un rubro: la sala de espera, la letra chica, la pintura rayada. Abrilas, probalas y pedí la tuya: te la armo en 48 horas.",
+      "Cada demo responde la objeción real de un rubro: la letra chica, la pintura rayada. Abrilas, probalas y pedí la tuya: te la armo en 48 horas.",
     cta: { label: "Pedir mi demo gratis", href: "#demo" },
-    secondaryCta: { label: "Ver las 7 demos", href: "/demos" },
+    secondaryCta: { label: "Ver las 6 demos", href: "/demos" },
     video: {
       src: video(3256),
       poster: poster(3256),
       alt: "Plano de una obra en curso que se usa de fondo en el portfolio (imagen de demostración).",
       isVideo: true,
     },
-    live: { label: "Rubros con demo", count: 7, min: 7, max: 7, unit: "rubros", interval: 3400 },
+    live: { label: "Rubros con demo", count: 6, min: 6, max: 6, unit: "rubros", interval: 3400 },
   },
   sections: [servicios, precios, proceso, prueba, faq],
   conversion: {
@@ -373,13 +373,12 @@ export const portfolio: RubroContent = {
 };
 
 /**
- * Foto de portada de cada demo (7 rubros).
+ * Foto de portada de cada demo (6 rubros).
  *
  * IDs del pool verificado de `media.ts`. Cada URL fue verificada con
  * `curl -sI -m 15` (HTTP 200).
  */
 export const demoImages: Record<string, string> = {
-  clinica: img("1553877522-43269d4ea984", 1200),
   concesionario: img("1503376780353-7e6692767b70", 1200),
   lavadero: img("1637430308606-86576d8fef3c", 1200),
   estetica: img("1596178065887-1198b6148b2b", 1200),

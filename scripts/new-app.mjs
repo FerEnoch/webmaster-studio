@@ -3,8 +3,8 @@
  * scaffolder de apps del kit webmaster.
  *
  * Crea el esqueleto de una app nueva COPIANDO DESDE `packages/webmaster-kit/`
- * (la fuente de verdad), NO desde `apps/wm-clinica`: la app de referencia tiene
- * contenido de clinica y cada app nueva arrastraria textos viejos.
+ * (la fuente de verdad), NO copiando otra app: la app de referencia tiene
+ * contenido propio y cada app nueva arrastraria textos viejos.
  *
  *   node scripts/new-app.mjs wm-concesionario
  *   node scripts/new-app.mjs --dry-run wm-concesionario

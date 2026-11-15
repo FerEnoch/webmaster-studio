@@ -103,7 +103,7 @@ try {
         assert.match(response.type, /^text\/html/, "404 MIME");
       }
     }
-    console.log(`Checked 8 roots, ${routes.length} pages, ${assets.length} JS/CSS assets and ${links} links/anchors; canonical origin ${canonicalOrigin}; unknown routes return 404.`);
+    console.log(`Checked ${apps.length} roots, ${routes.length} pages, ${assets.length} JS/CSS assets and ${links} links/anchors; canonical origin ${canonicalOrigin}; unknown routes return 404.`);
   }
 } catch (error) {
   console.error(`Error: ${error.message}`);
