@@ -30,8 +30,7 @@ export function img(id: string, w = 1200, h?: number): string {
  * Pool de medios verificados por rubro.
  *
  * `videos`: ids de Mixkit (720p). `photos`: ids de Unsplash.
- * Todos devuelven HTTP 200 (video + poster). Los de `clinica` fueron ademas
- * revisados cuadro por cuadro; en los demas rubros revisá el poster antes de
+ * Todos devuelven HTTP 200 (video + poster). Revisá el poster antes de
  * usarlo (el id no garantiza que la imagen sea del rubro).
  *
  * Cuando agregues un medio nuevo, verifica y sumalo aca:
@@ -39,19 +38,6 @@ export function img(id: string, w = 1200, h?: number): string {
  *   curl -sI -m 15 "https://assets.mixkit.co/videos/1234/1234-thumb-720-0.jpg"
  */
 export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = {
-  clinica: {
-    videos: [4126, 4219, 3062],
-    photos: [
-      "1771270786606-f5a0e57db762", // instrumental medico sobre madera
-      "1761971975962-9cc397e2ba2a", // corridor / interior de centro medico
-      "1553877522-43269d4ea984", // profesional en consultorio (B&W)
-      "1472099645785-5658abf4ff4e", // profesional (equipo medico)
-      "1500648767791-00dcc994a43e", // profesional (equipo medico)
-      "1573496359142-b8d87734a5a2", // profesional (equipo medico)
-      "1580489944761-15a19d654956", // profesional (equipo medico)
-      "1522071820081-009f0129c71c", // equipo multidisciplinary
-    ],
-  },
   concesionario: {
     videos: [4189, 4191, 4207, 4227],
     photos: [

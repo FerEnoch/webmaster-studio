@@ -74,8 +74,6 @@ function ctxFor(
   const ciudad = datos.ciudad.trim() || "mi zona";
 
   switch (rubroId) {
-    case "clinica":
-      return { sucursal: ciudad, estudio: negocio };
     case "concesionario":
       return { modelo: negocio };
     case "lavadero":

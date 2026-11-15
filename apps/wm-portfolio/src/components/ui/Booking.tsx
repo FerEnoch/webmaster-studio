@@ -8,7 +8,10 @@
  * Sin backend: el submit SIMULA y deja TODO el estado visible (panel de
  * resumen). El aviso "Demo: no se envian datos" esta siempre a la vista.
  *
- * Es una isla React: `client:visible`.
+ * Es una isla React. La conversion principal la monta el sitio con
+ * `client:load` (NO `client:visible`): antes de hidratar hay una ventana en la
+ * que el submit nativo hace GET a la misma URL y borra lo que el usuario
+ * escribio.
  */
 
 import { useMemo, useState, type ChangeEvent, type SyntheticEvent } from "react";
@@ -45,7 +48,7 @@ const EMPTY: Form = { name: "", phone: "", email: "", notes: "" };
 function makeCode(brand: string, seed: string): string {
   let hash = 0;
   for (let i = 0; i < seed.length; i += 1) hash = (hash * 31 + seed.charCodeAt(i)) % 100000;
-  // Prefijo con la inicial de cada palabra: "CLINICA AURA" -> "CA".
+  // Prefijo con la inicial de cada palabra: "CONCESIONARIO EJEMPLO" -> "CE".
   const prefix =
     brand
       .split(/\s+/)

@@ -48,7 +48,7 @@ const EMPTY: Form = { name: "", phone: "", email: "", notes: "" };
 function makeCode(brand: string, seed: string): string {
   let hash = 0;
   for (let i = 0; i < seed.length; i += 1) hash = (hash * 31 + seed.charCodeAt(i)) % 100000;
-  // Prefijo con la inicial de cada palabra: "CLINICA AURA" -> "CA".
+  // Prefijo con la inicial de cada palabra: "CONCESIONARIO EJEMPLO" -> "CE".
   const prefix =
     brand
       .split(/\s+/)

@@ -6,11 +6,11 @@
  * estado del filtro y le dice al DOM que cards mostrar:
  *
  *   - marca/descarta `.is-out` en los `[data-wm-rubro-card]`
- *   - sincroniza el filtro con la URL (?rubro=clinica) para que el link sea
+ *   - sincroniza el filtro con la URL (?rubro=concesionario) para que el link sea
  *     compartible
  *   - anuncia el resultado en una region `aria-live`
  *
- * Es una isla React (`client:load`): sin JS se ven las 7 demos, que es
+ * Es una isla React (`client:load`): sin JS se ven las 6 demos, que es
  * justamente el fallback correcto.
  */
 

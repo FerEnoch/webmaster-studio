@@ -2,7 +2,7 @@
  * TICKET — la firma visual del portfolio.
  *
  * Un voucher/pase con codigo, datos, perforacion, codigo de barras y sello.
- * El mismo componente sirve para un turno de clinica, un test drive, una
+ * El mismo componente sirve para un turno de estética, un test drive, una
  * seña de lavadero o una inscripcion: cambia el color de acento, no la forma.
  */
 

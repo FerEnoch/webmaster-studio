@@ -1,6 +1,6 @@
 # Estudio
 
-Portfolio freelance con **8 apps Astro: 7 demos de rubro + 1 portfolio madre**
+Portfolio freelance con **7 apps Astro: 6 demos de rubro + 1 portfolio madre**
 en `apps/wm-*`. Comparten el kit canónico de `packages/webmaster-kit/`.
 
 El monorepo usa **pnpm** (`pnpm-workspace.yaml`, `apps/*`): las dependencias se
@@ -12,7 +12,7 @@ instalan **una sola vez** en la raíz.
 
 ## Qué es
 
-Un portfolio freelance: **7 demos de rubro** (una web por rubro, cada una
+Un portfolio freelance: **6 demos de rubro** (una web por rubro, cada una
 publicable y vendible) + **1 sitio portfolio madre** que las indexa. Todas
 comparten una misma firma visual, para que se entienda que son el mismo
 portfolio y no templates sueltos.
@@ -21,25 +21,24 @@ portfolio y no templates sueltos.
   (plugin de Vite). Hospedaje: un proyecto estático de Cloudflare Pages.
 - **Kit canónico:** `packages/webmaster-kit/` — no es un paquete npm, es una
   carpeta fuente que se **copia** dentro de cada app. Contiene el contrato de
-  contenido (`types.ts`), los 7 rubros (`rubros.ts`), los deep-links de
+  contenido (`types.ts`), los 6 rubros (`rubros.ts`), los deep-links de
   WhatsApp (`whatsapp.ts`), los tokens y utilidades de la firma
   (`styles/tokens.css`) y los componentes compartidos (`components/`).
-- **App de referencia:** `apps/wm-clinica/` — ejemplo completo del kit.
-  Las apps nuevas se generan desde el kit, no copiando la clínica.
+- **App de referencia:** `apps/wm-concesionario/` — ejemplo del kit.
+  Las apps nuevas se generan desde el kit, no copiando otra demo.
 
 ```
 packages/
   webmaster-kit/      ← kit canónico (se copia a cada app)
     types.ts          ← contrato: RubroContent, Theme, Section, Legal, Contact…
-    rubros.ts         ← los 7 rubros + getRubro(id)
+    rubros.ts         ← los 6 rubros + getRubro(id)
     whatsapp.ts       ← waLink(phone, text) + rubroWhatsapp(id, ctx)
     media.ts          ← helpers de medios + pool de IDs VERIFICADOS
     styles/tokens.css ← @theme de Tailwind v4 + .wm-grade/.wm-grain/.wm-vignette/.wm-curtain
     components/       ← BaseLayout, Nav, Footer, PageHero, LiveNow, RubroCard, Booking, Ticket
     app-template/     ← esqueleto de app que usa el scaffolder
 apps/
-  wm-clinica/        ← app de referencia (Astro)         :3020
-  wm-concesionario/  ← concesionario de autos             :3021
+  wm-concesionario/  ← concesionario de autos (referencia)   :3021
   wm-lavadero/       ← lavadero de autos con bar         :3022
   wm-estetica/       ← estudio de estética y yoga         :3023
   wm-universidad/    ← universidad privada                :3024
@@ -50,12 +49,12 @@ scripts/
   new-app.mjs        ← scaffolder de apps nuevas
 ```
 
-## La firma (idéntica en las 8 webs)
+## La firma (idéntica en las 7 webs)
 
 1. Cortina entre rutas (`astro:transitions` + overlay `.wm-curtain`).
 2. Hero de video que se encoge con el scroll (sticky + `transform`).
 3. Grade / grano / viñeta uniforme sobre fotos y videos.
-4. Una sección "pinned" que cuenta algo (en la clínica: la preparación de cada estudio).
+4. Una sección "pinned" que cuenta algo (en concesionario: la letra chica del usado).
 5. Señal "en vivo" creíble (`LiveNow`: "Abierto ahora · 6 turnos hoy").
 6. Una conversión que termina en **TICKET** animado (reserva en 3 pasos).
 7. Un solo CTA sobre el fold + WhatsApp flotante con mensaje prearmado.
@@ -64,7 +63,6 @@ scripts/
 
 | App | Rubro | Puerto | Comando |
 | --- | --- | --- | --- |
-| `wm-clinica` | Clínica + diagnóstico por imágenes | 3020 | `pnpm run dev:clinica` |
 | `wm-concesionario` | Concesionario de autos nuevos y usados | 3021 | `pnpm run dev:concesionario` |
 | `wm-lavadero` | Lavadero de autos con bar | 3022 | `pnpm run dev:lavadero` |
 | `wm-estetica` | Estudio de estética y yoga | 3023 | `pnpm run dev:estetica` |
@@ -78,24 +76,24 @@ scripts/
 ```bash
 pnpm install --frozen-lockfile # una sola vez, en la raíz
 pnpm dev                    # portfolio madre: http://localhost:3027
-pnpm run dev:clinica        # http://localhost:3020
-pnpm run build:clinica      # build estático -> apps/wm-clinica/dist
-pnpm run check:clinica      # astro check (typecheck + .astro)
-pnpm build                  # las 8 apps integradas -> dist/
+pnpm run dev:concesionario   # http://localhost:3021
+pnpm run build:concesionario # build estático -> apps/wm-concesionario/dist
+pnpm --filter wm-concesionario run check # astro check (typecheck + .astro)
+pnpm build                  # las 7 apps integradas -> dist/
 pnpm preview                # http://127.0.0.1:4321, rutas de producción (desde sesión remota: pnpm preview --host 0.0.0.0)
 pnpm check:site             # HTTP: páginas, enlaces/anclas, assets, canonical y 404
 pnpm build:apps             # builds independientes -> apps/wm-*/dist/
 ```
 
 El `pnpm install` de la raíz instala **todas** las apps del workspace
-(`apps/*`). Para una sola app: `pnpm --filter wm-clinica run dev`.
+(`apps/*`). Para una sola app: `pnpm --filter wm-concesionario run dev`.
 Cada alias `dev:<rubro>` de la tabla tiene su equivalente `build:<rubro>`,
 incluido `pnpm run build:portfolio`.
 
 ## Publicar bajo un solo dominio (Cloudflare Pages)
 
 **Un proyecto, un `dist/` completo:** portfolio en `/`, catálogo en `/demos/`
-y las siete demos en `/demos/<slug>/` (`clinica`, `concesionario`, `lavadero`,
+y las seis demos en `/demos/<slug>/` (`concesionario`, `lavadero`,
 `estetica`, `universidad`, `inmobiliaria`, `arquitectura`). También se publican
 las páginas anidadas de autos y propiedades. Las apps siguen separadas.
 
@@ -126,7 +124,7 @@ navegación: los enlaces entre apps conservan el origen del preview.
 `pnpm build` compila con los prefijos de producción en `.dist-stage-*` (ignorado
 y eliminado al terminar). Astro mueve CSS desde `.astro/` con `rename`, por eso
 el staging debe estar en el mismo filesystem que el repo, no en otro volumen temporal.
-Solo después de completar las ocho apps y la combinación sin colisiones promueve
+Solo después de completar las siete apps y la combinación sin colisiones promueve
 el resultado a `dist/`. Ante un fallo, sale con error y conserva el último output
 completo (si había uno). No publicar ese output antiguo como si fuera el nuevo.
 Cada demo mantiene su propio `_astro/`. La promoción local usa renames en el mismo
@@ -156,7 +154,7 @@ en este repositorio para el flujo de Git de Pages. Confirmar en el primer log de
 Pages que se usaron las versiones fijadas y el lockfile congelado.
 
 Cada preview debe contener portfolio y demos en **su mismo origen**. Probar `/`,
-`/demos/`, `/demos/clinica/estudios/`, una ficha de auto y una de propiedad; una
+`/demos/`, `/demos/concesionario/`, una ficha de auto y una de propiedad; una
 ruta inexistente debe devolver **HTTP 404**, no la portada. `404.html` en raíz
 impide el fallback SPA de Pages. Los cruces entre apps usan `data-astro-reload`;
 las transiciones del router de Astro quedan dentro de cada app.
@@ -175,13 +173,13 @@ Los formularios siguen siendo simulaciones y los medios siguen en sus hosts actu
 node --test scripts/*.test.mjs
 ```
 
-Comprueba los destinos de los scripts raíz, los aliases de las ocho apps y
+Comprueba los destinos de los scripts raíz, los aliases de las siete apps y
 que no reaparezcan las apps anteriores ni sus instrucciones operativas.
 No reemplaza el typecheck ni el build de cada app.
 
 ## Sumar un rubro nuevo
 
-1. **Crear el esqueleto** (copia desde el kit, nunca desde `apps/wm-clinica`):
+1. **Crear el esqueleto** (copia desde el kit, nunca copiando otra demo):
 
    ```bash
    node scripts/new-app.mjs wm-concesionario
@@ -190,7 +188,7 @@ No reemplaza el typecheck ni el build de cada app.
    ```
 
    El scaffolder crea `package.json` (mismo set de dependencias y versiones que
-   `wm-clinica`, con el nombre y el puerto de la app), `astro.config.mjs`,
+   `wm-concesionario`, con el nombre y el puerto de la app), `astro.config.mjs`,
    `tsconfig.json`, `.gitignore`, `src/layouts/Base.astro`,
    `src/styles/global.css`, `src/pages/index.astro` (placeholder) y copia el
    kit a `src/components/ui/` + `src/lib/` + `src/styles/tokens.css`.

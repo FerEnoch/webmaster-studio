@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
-const slugs = ["clinica", "concesionario", "lavadero", "estetica", "universidad", "inmobiliaria", "arquitectura", "portfolio"];
+const slugs = ["concesionario", "lavadero", "estetica", "universidad", "inmobiliaria", "arquitectura", "portfolio"];
 const run = (cwd, script, args = [], env = {}) => spawnSync(process.execPath, [join(cwd, "scripts", script), ...args], {
   cwd, encoding: "utf8", env: { ...process.env, ...env },
 });
@@ -40,8 +40,8 @@ if (slug === 'portfolio') {
  fs.writeFileSync(path.join(out, 'demos/index.html'), 'catalogue');
  fs.writeFileSync(path.join(out, '404.html'), 'Not found');
  if (process.env.COLLISION) {
-  fs.mkdirSync(path.join(out, 'demos/clinica'), { recursive: true });
-  fs.writeFileSync(path.join(out, 'demos/clinica/index.html'), 'collision');
+  fs.mkdirSync(path.join(out, 'demos/concesionario'), { recursive: true });
+  fs.writeFileSync(path.join(out, 'demos/concesionario/index.html'), 'collision');
  }
 }
 `);
@@ -50,11 +50,11 @@ if (slug === 'portfolio') {
   return { dir, env: { PATH: `${join(dir, "bin")}:${process.env.PATH}`, PUBLIC_SITE_URL: "https://studio.example" } };
 }
 
-test("aggregate build publishes eight isolated apps without replacing the catalogue", (t) => {
+test("aggregate build publishes seven isolated apps without replacing the catalogue", (t) => {
   const { dir, env } = fixture(t);
   const result = run(dir, "build-site.mjs", [], env);
   assert.equal(result.status, 0, result.stderr);
-  assert.equal(result.stdout.trim().split("\n").at(-1), "Built 8 apps into dist/.");
+  assert.equal(result.stdout.trim().split("\n").at(-1), "Built 7 apps into dist/.");
   assert.equal(result.stderr, "");
   assert.equal(readFileSync(join(dir, "dist/demos/index.html"), "utf8"), "catalogue");
   for (const slug of slugs) {
@@ -92,7 +92,7 @@ test("failed first build and failed assembly never publish partial output", (t) 
   const collision = run(dir, "build-site.mjs", [], { ...env, COLLISION: "1" });
   assert.equal(collision.status, 1);
   assert.equal(collision.stdout, "");
-  assert.match(collision.stderr, /^Error: Output collision: .*\/demos\/clinica\/index.html\n$/);
+  assert.match(collision.stderr, /^Error: Output collision: .*\/demos\/concesionario\/index.html\n$/);
   assert.deepEqual(readdirSync(join(dir, "dist")), ["previous.txt"]);
   assert.equal(readFileSync(join(dir, "dist/previous.txt"), "utf8"), "complete");
   assert.deepEqual(readdirSync(dir).filter((name) => name.startsWith(".dist-")), []);
@@ -192,9 +192,9 @@ test("preview serves direct routes, slash redirects, MIME and real 404 through i
   put(dir, "dist/index.html", "portfolio");
   put(dir, "dist/404.html", "not found");
   put(dir, "dist/demos/index.html", "catalogue");
-  put(dir, "dist/demos/clinica/estudios/index.html", "studies");
-  put(dir, "dist/demos/clinica/_astro/client.js", "export default 1;");
-  put(dir, "dist/demos/clinica/_astro/style.css", "body {}");
+  put(dir, "dist/demos/concesionario/estudios/index.html", "studies");
+  put(dir, "dist/demos/concesionario/_astro/client.js", "export default 1;");
+  put(dir, "dist/demos/concesionario/_astro/style.css", "body {}");
   const probe = createServer();
   probe.listen(0, "127.0.0.1");
   await once(probe, "listening");
@@ -210,12 +210,12 @@ test("preview serves direct routes, slash redirects, MIME and real 404 through i
   for (const [path, status, text, mime] of [
     ["/", 200, "portfolio", "text/html"],
     ["/demos/", 200, "catalogue", "text/html"],
-    ["/demos/clinica/estudios/", 200, "studies", "text/html"],
-    ["/demos/clinica/_astro/client.js", 200, "export default 1;", "text/javascript"],
-    ["/demos/clinica/_astro/style.css", 200, "body {}", "text/css"],
+    ["/demos/concesionario/estudios/", 200, "studies", "text/html"],
+    ["/demos/concesionario/_astro/client.js", 200, "export default 1;", "text/javascript"],
+    ["/demos/concesionario/_astro/style.css", 200, "body {}", "text/css"],
     ["/unknown", 404, "not found", "text/html"],
-    ["/demos/clinica/unknown/", 404, "not found", "text/html"],
-    ["/demos/clinica/_astro/missing.js", 404, "not found", "text/html"],
+    ["/demos/concesionario/unknown/", 404, "not found", "text/html"],
+    ["/demos/concesionario/_astro/missing.js", 404, "not found", "text/html"],
   ]) {
     const response = await fetch(origin + path);
     assert.equal(response.status, status, path);
