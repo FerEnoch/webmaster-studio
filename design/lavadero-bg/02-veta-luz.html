@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dirección 02 — Veta de luz · GLOSS &amp; GLASS</title>
+<style>
+  :root { --bg: #07080b; --copper: #d08a3e; --ivory: #edeae2; }
+  * { margin: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ivory); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  canvas#bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
+  .sheet { position: relative; z-index: 1; min-height: 200vh; }
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 12vh 8vw; }
+  .kicker { font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--copper); }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 500; font-size: clamp(3rem, 9vw, 7.5rem); line-height: 1.0; margin: 1rem 0; }
+  h1 em { color: var(--copper); }
+  .sub { max-width: 34rem; color: rgba(237,234,226,0.72); line-height: 1.6; }
+  .scroll-hint { margin-top: 3rem; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(237,234,226,0.5); animation: bob 2.4s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(6px); } }
+  .spec { min-height: 100vh; display: flex; align-items: flex-end; padding: 10vh 8vw; }
+  .spec-card { max-width: 36rem; border-left: 2px solid var(--copper); padding-left: 1.5rem; }
+  .spec-card h2 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.6rem, 3.4vw, 2.4rem); margin-bottom: 0.8rem; }
+  .spec-card p, .spec-card li { color: rgba(237,234,226,0.72); line-height: 1.65; font-size: 0.95rem; }
+  .spec-card ul { padding-left: 1.1rem; margin-top: 0.6rem; }
+  .tag { display: inline-block; font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; border: 1px solid rgba(208,138,62,0.5); color: var(--copper); border-radius: 999px; padding: 0.35rem 0.9rem; margin-bottom: 1rem; }
+  @media (prefers-reduced-motion: reduce) { .scroll-hint { animation: none; } }
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="sheet">
+  <section class="hero">
+    <span class="tag">Mock del concepto · canvas 2D</span>
+    <p class="kicker">Dirección 02 — Veta de luz</p>
+    <h1>Una larga <em>exposición</em>.</h1>
+    <p class="sub">Una veta de luz recorre un salón oscuro, como la esponja sobre la pintura. Bajá con scroll: la veta viaja y respira.</p>
+    <p class="scroll-hint">↓ bajá para manejar el fondo</p>
+  </section>
+  <section class="spec">
+    <div class="spec-card">
+      <h2>Cómo se maneja con scroll</h2>
+      <ul>
+        <li>Scroll 0–100%: la veta viaja de izquierda a derecha y su intensidad sube y baja una vez (inhalar/exhalar).</li>
+        <li>El grano y la viñeta del sitio quedan encima; la veta nunca toca el texto.</li>
+        <li>Versión three.js real: un plano con shader (gradiente animado por uniform de scroll); ~200 KB pero trivial de hacer bien.</li>
+        <li>Alternativa honesta: CSS puro con custom properties — 0 KB de JS.</li>
+        <li>Es la más sobria y la más barata. Mi recomendada como base.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+<script>
+  (() => {
+    const cv = document.getElementById("bg");
+    const ctx = cv.getContext("2d");
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W, H;
+    function size() { W = cv.width = innerWidth; H = cv.height = innerHeight; }
+    size(); addEventListener("resize", size);
+    let progress = 0;
+    addEventListener("scroll", () => {
+      const max = document.body.scrollHeight - innerHeight;
+      progress = max > 0 ? scrollY / max : 0;
+    }, { passive: true });
+    let t = 0;
+    function frame() {
+      t += 0.016;
+      ctx.fillStyle = "#07080b";
+      ctx.fillRect(0, 0, W, H);
+      const cx = W * (0.12 + progress * 0.76);
+      const breathe = reduced ? 0.8 : 0.65 + 0.25 * Math.sin(t * 0.7);
+      const g = ctx.createRadialGradient(cx, H * 0.42, 0, cx, H * 0.42, W * 0.45);
+      g.addColorStop(0, `rgba(255,196,120,${(0.34 * breathe).toFixed(3)})`);
+      g.addColorStop(0.35, `rgba(208,138,62,${(0.12 * breathe).toFixed(3)})`);
+      g.addColorStop(1, "rgba(208,138,62,0)");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+      // franja horizontal fina: la "veta"
+      const y = H * (0.30 + progress * 0.24);
+      const lg = ctx.createLinearGradient(0, y - 60, 0, y + 60);
+      lg.addColorStop(0, "rgba(255,220,170,0)");
+      lg.addColorStop(0.5, `rgba(255,220,170,${(0.20 * breathe).toFixed(3)})`);
+      lg.addColorStop(1, "rgba(255,220,170,0)");
+      ctx.fillStyle = lg;
+      ctx.fillRect(0, y - 60, W, 120);
+      if (!reduced) requestAnimationFrame(frame);
+    }
+    frame();
+  })();
+</script>
+</body>
+</html>

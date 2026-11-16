@@ -2,6 +2,7 @@
 import { appUrl } from "@lib/urls";
 import Base from "../layouts/Base.astro";
 import MobileCta from "../components/MobileCta.astro";
+import FondoScroll from "../components/FondoScroll";
 import LiveNow from "../components/ui/LiveNow.astro";
 import BarPinned from "../components/BarPinned.astro";
 import LavadoCard from "../components/LavadoCard.astro";
@@ -34,19 +35,13 @@ const liveBarra = {
 ---
 
 <Base content={lavadero}>
+  <FondoScroll client:visible />
   <!-- 0) Showroom light: el cursor es una fuente de luz. -->
   <section
     data-hero-light
     data-wm-hero
     class="gg-hero relative flex items-end overflow-hidden bg-[#0a0c10]"
   >
-    <img
-      src={fotos.box}
-      alt="Auto bajo la luz del salón de GLOSS & GLASS (imagen de demostración)."
-      loading="eager"
-      decoding="async"
-      class="absolute inset-0 h-full w-full scale-105 object-cover opacity-80"
-    />
     <div
       aria-hidden="true"
       class="gg-hero-shade pointer-events-none absolute inset-0"
@@ -502,6 +497,16 @@ const liveBarra = {
 </Base>
 
 <style>
+  /* Keep every section (including child Astro components) above the fixed
+     decoration without wrapping the content or changing Base's structure. */
+  :global(main:has([data-gg-background]) > section),
+  :global(body:has([data-gg-background]) > footer) {
+    position: relative;
+    z-index: 1;
+  }
+  .gg-hero {
+    background-color: transparent;
+  }
   .gg-hero-shade {
     background:
       linear-gradient(90deg, #08090cdb 0%, #08090c60 60%, #08090c38),
