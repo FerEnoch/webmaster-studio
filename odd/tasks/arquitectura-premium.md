@@ -18,14 +18,14 @@ Header: nueva app `wm-arquitectura-premium` (puerto 3032, slug `/demos/arquitect
 
 ## Tasks
 
-- T1 [S1,S4,S5,S8,S9] Feature doc + rama + research ya escrito — route: inline — commit: —
-- T2 [S8] Scaffold `wm-arquitectura-premium` (scaffolder, puerto 3032) + alta en catálogo canónico + aliases raíz + portfolio madre (solución premium del rubro arquitectura) — route: inline — commit: —
-- T3 [S6,S7,S10] Contenido propio de la app (servicios, obras, proceso, equipo, FAQs, legales) con datos ficticios y precios finales con IVA — route: inline — commit: —
-- T4 [S5,S6,S11] Identidad visual libre: tokens propios, tipografía display propia, layout asimétrico, cero look `wm-card` — route: inline — commit: —
-- T5 [S6,S11] Hero 3D único (isla React liviana) + hotspots + precio live + reduced-motion + fallback sin 3D — route: inline — commit: —
-- T6 [S6,S7] Conversión intacta: cotizador 4 pasos → ticket/pase + WhatsApp lib + contacto — route: inline — commit: —
-- T7 [S8,S9] Vínculo cruzado común↔premium + páginas restantes (obras, estudio, contacto, legal) — route: inline — commit: —
-- T8 [S1,S11] Verificación: `node --test scripts/*.test.mjs`, `pnpm --filter wm-arquitectura-premium run check`, `pnpm build`, `pnpm check:site`, preview 4321 con `/demos/arquitectura-premium/` 200 — route: inline — commit: —
+- T1 [S1,S4,S5,S8,S9] Feature doc + rama + research ya escrito — route: inline — status: done — research untracked en `research/research-output/arquitectura-premium/` (Lite 8 consultas/6 lecturas, stop sufficient_coverage), rama `feat/arquitectura-premium`
+- T2 [S8] Scaffold `wm-arquitectura-premium` (scaffolder, puerto 3032) + alta en catálogo canónico + aliases raíz + portfolio madre (solución premium del rubro arquitectura) — route: inline — status: done — commit: 96a7f82 (catálogo, copias, aliases, tests, READMEs; 305 insertions)
+- T3 [S6,S7,S10] Contenido propio de la app (servicios, obras, proceso, equipo, FAQs, legales) con datos ficticios y precios finales con IVA — route: inline — status: done — commit: de9847c (app en ese commit; verificado hoy: astro check 0 errores)
+- T4 [S5,S6,S11] Identidad visual libre: tokens propios, tipografía display propia, layout asimétrico, cero look `wm-card` — route: inline — status: done — commit: de9847c (verificado hoy en preview: maqueta 3D con volumen real)
+- T5 [S6,S11] Hero 3D único (isla React liviana) + hotspots + precio live + reduced-motion + fallback sin 3D — route: inline — status: done — commit: de9847c (verificado hoy: click real en hotspot activa ambiente; hero 3D CSS puro sin dependencias)
+- T6 [S6,S7] Conversión intacta: cotizador 4 pasos → ticket/pase + WhatsApp lib + contacto — route: inline — status: done — commit: de9847c (verificado hoy: flujo completo hasta pase EV-57067)
+- T7 [S8,S9] Vínculo cruzado común↔premium + páginas restantes (obras, estudio, contacto, legal) — route: inline — status: done — commit: 01962e6 (grupo por id en portfolio + cross-link común→premium y premium→común con data-astro-reload)
+- T8 [S1,S11] Verificación: `node --test scripts/*.test.mjs`, `pnpm --filter wm-arquitectura-premium run check`, `pnpm build`, `pnpm check:site`, preview 4321 con `/demos/arquitectura-premium/` 200 — route: inline — status: done — 17/17 tests, check 0 errores, build 9 apps, check:site 9 roots 64 pages 1790 links, preview 200 x3
 
 ## Log
 
@@ -36,3 +36,8 @@ Header: nueva app `wm-arquitectura-premium` (puerto 3032, slug `/demos/arquitect
 - L5 — 2026-11-16: research Lite cerrado en `research/research-output/arquitectura-premium/` (mercado Argentina, goal explorar/inspirar, 8 consultas / 6 lecturas, stop sufficient_coverage). Recomendación: E1 + un hero 3D + E3.
 - L6 — 2026-11-16: revisión del cambio de estructura → la "firma" (cortina/hero/grade/ticket compartidos) NO se replica en el premium; se conserva SOLO el contrato de conversión (Booking 4 pasos → ticket, WhatsApp, legales, 6 rutas, check-site verde, sin deps nuevas). Demo común intacta.
 - L7 — 2026-11-16: rama `feat/arquitectura-premium` creada desde `main`. Estado de partida del worktree: hay cambios NO committeados de la sesión anterior (README, portfolio mother, kit, pnpm-lock) — no los toco ni los mezclo en los commits de esta feature.
+- L8 — 2026-11-16: reconciliación al retomar. El commit de9847c ya contenía la app premium (T3-T6) pero sin evidencia registrada; los cambios T2/T7 estaban sin commitear en el árbol. Drive-by de 2 líneas en el slice 96a7f82: par de aliases lavadero-premium que faltaba para que workspace.test valide todas las apps. NO se tocan en esta feature: borrados `reporte-local/*` y `research-output/wm-clinica/*`, `M apps/wm-lavadero-premium/src/pages/index.astro`, `?? design/` y `?? FondoScroll.tsx` (trabajo de otras sesiones: diseño de fondo lavadero + three.js scroll).
+- L9 — 2026-11-16: T8 observado de punta a punta. `node --test scripts/*.test.mjs` 17/17; `astro check` premium 0 errores; `pnpm build` 9 apps; `check:site` 9 roots, 64 pages, 1790 links, 404 correctos; preview 4321: 200 en premium, común y catálogo; catálogo enlaza la premium; común enlaza la premium y viceversa (data-astro-reload). Interacción real verificada: hotspot cocina activa ambiente, cotizador 4 pasos emite pase (código EV-57067), chip Arquitectura muestra 2 cards y chip premium 1.
+- L10 — 2026-11-16: fix T7. La premium no enlazaba de vuelta a la común (S9 exigía ambas direcciones): agregada línea "Ver la demo común" → `/demos/arquitectura/` con data-astro-reload en el cierre de la home premium. Re-verificado con build + check:site en verde.
+- L11 — 2026-11-16: RDD por slice. `review assess` sobre 96a7f82 (base de9847c) y 01962e6 (base 96a7f82): ambos `unassessable` — runtime no elegible para receipt review inmutable. Preflight STATUS del slice 1: `immutable_review_transport_unsupported`, `next_action: stop`, `retry_safe: false`. Prueba nativa NO disponible (tipado preservado, sin PASS inventado, sin reintentos). No se tocó el switch (lo owns el usuario).
+- Risk: none (registro aditivo en catálogo + copias; filtro extendido con atributo opcional y comportamiento existente preservado y observado; sin datos, auth, contratos rotos, concurrencia ni delivery). Verificación del writer + spot check del parent cubren el tier; sin verificador independiente.
