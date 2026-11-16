@@ -1,6 +1,6 @@
 # Estudio
 
-Portfolio freelance con **7 apps Astro: 6 demos de rubro + 1 portfolio madre**
+Portfolio freelance con **9 apps Astro: 8 demos (6 rubros, lavadero y arquitectura con edición premium) + 1 portfolio madre**
 en `apps/wm-*`. Comparten el kit canónico de `packages/webmaster-kit/`.
 
 El monorepo usa **pnpm** (`pnpm-workspace.yaml`, `apps/*`): las dependencias se
@@ -12,7 +12,7 @@ instalan **una sola vez** en la raíz.
 
 ## Qué es
 
-Un portfolio freelance: **6 demos de rubro** (una web por rubro, cada una
+Un portfolio freelance: **8 demos de rubro** (una web por rubro —lavadero y arquitectura con edición premium—, cada una
 publicable y vendible) + **1 sitio portfolio madre** que las indexa. Todas
 comparten una misma firma visual, para que se entienda que son el mismo
 portfolio y no templates sueltos.
@@ -21,7 +21,7 @@ portfolio y no templates sueltos.
   (plugin de Vite). Hospedaje: un proyecto estático de Cloudflare Pages.
 - **Kit canónico:** `packages/webmaster-kit/` — no es un paquete npm, es una
   carpeta fuente que se **copia** dentro de cada app. Contiene el contrato de
-  contenido (`types.ts`), los 6 rubros (`rubros.ts`), los deep-links de
+  contenido (`types.ts`), los 8 ejemplos (`rubros.ts`), los deep-links de
   WhatsApp (`whatsapp.ts`), los tokens y utilidades de la firma
   (`styles/tokens.css`) y los componentes compartidos (`components/`).
 - **App de referencia:** `apps/wm-concesionario/` — ejemplo del kit.
@@ -31,7 +31,7 @@ portfolio y no templates sueltos.
 packages/
   webmaster-kit/      ← kit canónico (se copia a cada app)
     types.ts          ← contrato: RubroContent, Theme, Section, Legal, Contact…
-    rubros.ts         ← los 6 rubros + getRubro(id)
+    rubros.ts         ← los 8 ejemplos + getRubro(id)
     whatsapp.ts       ← waLink(phone, text) + rubroWhatsapp(id, ctx)
     media.ts          ← helpers de medios + pool de IDs VERIFICADOS
     styles/tokens.css ← @theme de Tailwind v4 + .wm-grade/.wm-grain/.wm-vignette/.wm-curtain
@@ -40,16 +40,18 @@ packages/
 apps/
   wm-concesionario/  ← concesionario de autos (referencia)   :3021
   wm-lavadero/       ← lavadero de autos con bar         :3022
+  wm-lavadero-premium/ ← lavadero premium Gloss & Glass (2da demo) :3031
   wm-estetica/       ← estudio de estética y yoga         :3023
   wm-universidad/    ← universidad privada                :3024
   wm-inmobiliaria/   ← inmobiliaria                       :3025
   wm-arquitectura/   ← estudio de arquitectura y diseño   :3026
+  wm-arquitectura-premium/ ← arquitectura, edición premium (3D y tour) :3032
   wm-portfolio/      ← portfolio madre (índice de demos)  :3027
 scripts/
   new-app.mjs        ← scaffolder de apps nuevas
 ```
 
-## La firma (idéntica en las 7 webs)
+## La firma (idéntica en las 9 webs)
 
 1. Cortina entre rutas (`astro:transitions` + overlay `.wm-curtain`).
 2. Hero de video que se encoge con el scroll (sticky + `transform`).
@@ -65,10 +67,12 @@ scripts/
 | --- | --- | --- | --- |
 | `wm-concesionario` | Concesionario de autos nuevos y usados | 3021 | `pnpm run dev:concesionario` |
 | `wm-lavadero` | Lavadero de autos con bar | 3022 | `pnpm run dev:lavadero` |
+| `wm-lavadero-premium` | Lavadero de autos con bar (edición premium Gloss & Glass) | 3031 | `pnpm run dev:lavadero-premium` |
 | `wm-estetica` | Estudio de estética y yoga | 3023 | `pnpm run dev:estetica` |
 | `wm-universidad` | Universidad privada | 3024 | `pnpm run dev:universidad` |
 | `wm-inmobiliaria` | Inmobiliaria | 3025 | `pnpm run dev:inmobiliaria` |
 | `wm-arquitectura` | Estudio de arquitectura y diseño | 3026 | `pnpm run dev:arquitectura` |
+| `wm-arquitectura-premium` | Estudio de arquitectura y diseño · edición premium | 3032 | `pnpm run dev:arquitectura-premium` |
 | `wm-portfolio` | Portfolio madre | 3027 | `pnpm run dev:portfolio` |
 
 ## Cómo correr
@@ -79,7 +83,7 @@ pnpm dev                    # portfolio madre: http://localhost:3027
 pnpm run dev:concesionario   # http://localhost:3021
 pnpm run build:concesionario # build estático -> apps/wm-concesionario/dist
 pnpm --filter wm-concesionario run check # astro check (typecheck + .astro)
-pnpm build                  # las 7 apps integradas -> dist/
+pnpm build                  # las 9 apps integradas -> dist/
 pnpm preview                # http://127.0.0.1:4321, rutas de producción (desde sesión remota: pnpm preview --host 0.0.0.0)
 pnpm check:site             # HTTP: páginas, enlaces/anclas, assets, canonical y 404
 pnpm build:apps             # builds independientes -> apps/wm-*/dist/
@@ -93,9 +97,10 @@ incluido `pnpm run build:portfolio`.
 ## Publicar bajo un solo dominio (Cloudflare Pages)
 
 **Un proyecto, un `dist/` completo:** portfolio en `/`, catálogo en `/demos/`
-y las seis demos en `/demos/<slug>/` (`concesionario`, `lavadero`,
-`estetica`, `universidad`, `inmobiliaria`, `arquitectura`). También se publican
-las páginas anidadas de autos y propiedades. Las apps siguen separadas.
+y las ocho demos en `/demos/<slug>/` (`concesionario`, `lavadero`,
+`lavadero-premium`, `estetica`, `universidad`, `inmobiliaria`, `arquitectura`,
+`arquitectura-premium`). También se publican las páginas anidadas de autos y
+propiedades. Las apps siguen separadas.
 
 ### Probar antes de publicar
 
@@ -124,7 +129,7 @@ navegación: los enlaces entre apps conservan el origen del preview.
 `pnpm build` compila con los prefijos de producción en `.dist-stage-*` (ignorado
 y eliminado al terminar). Astro mueve CSS desde `.astro/` con `rename`, por eso
 el staging debe estar en el mismo filesystem que el repo, no en otro volumen temporal.
-Solo después de completar las siete apps y la combinación sin colisiones promueve
+Solo después de completar las ocho apps y la combinación sin colisiones promueve
 el resultado a `dist/`. Ante un fallo, sale con error y conserva el último output
 completo (si había uno). No publicar ese output antiguo como si fuera el nuevo.
 Cada demo mantiene su propio `_astro/`. La promoción local usa renames en el mismo
@@ -173,7 +178,7 @@ Los formularios siguen siendo simulaciones y los medios siguen en sus hosts actu
 node --test scripts/*.test.mjs
 ```
 
-Comprueba los destinos de los scripts raíz, los aliases de las siete apps y
+Comprueba los destinos de los scripts raíz, los aliases de las ocho apps y
 que no reaparezcan las apps anteriores ni sus instrucciones operativas.
 No reemplaza el typecheck ni el build de cada app.
 

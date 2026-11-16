@@ -22,7 +22,7 @@ test("pnpm dev abre el portfolio Astro", () => {
 });
 
 test("cada app Astro tiene aliases dev y build válidos en la raíz", () => {
-  assert.equal(apps.length, 7);
+  assert.equal(apps.length, 9);
   const missing = [];
   for (const app of apps) {
     const alias = app.directory.slice(3);
@@ -67,14 +67,14 @@ test("el workspace no ofrece reactivar las apps retiradas", () => {
 
 test("la documentación operativa no remite a las apps ni a los briefs retirados", () => {
   const obsolete = /benchmark\/|apps\/(?:thaloz|invgate|constructora|inmobiliaria|salud|autos|fitness|veterinaria|vinos)(?:\/|`)|(?:dev|build):(?:thaloz|invgate|constructora|salud|autos|fitness|veterinaria|vinos)|docs\/(?:prompt-nuevos-rubros|(?:fitness|veterinaria|vinos)-investigacion)\.md/;
-  for (const path of ["README.md", "reporte-local/01-base-repo.md", "reporte-local/05-plan-negocios.md"]) {
+  for (const path of ["README.md", "research/reporte-local/01-base-repo.md", "research/reporte-local/05-plan-negocios.md"]) {
     assert.doesNotMatch(read(path), obsolete, path);
   }
   const readme = read("README.md");
   for (const [, alias] of readme.matchAll(/pnpm run ((?:dev|build|check):[a-z-]+)/g)) {
     assert.ok(Object.hasOwn(pkg.scripts, alias), `README: ${alias} debe existir`);
   }
-  assert.match(readme, /6 demos de rubro/);
+  assert.match(readme, /8 demos de rubro/);
   for (const path of ["packages/webmaster-kit/README.md", "packages/webmaster-kit/app-template/", "scripts/new-app.mjs"]) {
     assert.ok(existsSync(new URL(path, root)), fileURLToPath(new URL(path, root)));
   }

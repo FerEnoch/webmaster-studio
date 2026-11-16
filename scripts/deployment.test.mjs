@@ -7,9 +7,10 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
+import { APPS } from "../packages/webmaster-kit/rubros.ts";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
-const slugs = ["concesionario", "lavadero", "estetica", "universidad", "inmobiliaria", "arquitectura", "portfolio"];
+const slugs = APPS.map((app) => app.id);
 const run = (cwd, script, args = [], env = {}) => spawnSync(process.execPath, [join(cwd, "scripts", script), ...args], {
   cwd, encoding: "utf8", env: { ...process.env, ...env },
 });
@@ -50,11 +51,11 @@ if (slug === 'portfolio') {
   return { dir, env: { PATH: `${join(dir, "bin")}:${process.env.PATH}`, PUBLIC_SITE_URL: "https://studio.example" } };
 }
 
-test("aggregate build publishes seven isolated apps without replacing the catalogue", (t) => {
+test(`aggregate build publishes ${APPS.length} isolated apps without replacing the catalogue`, (t) => {
   const { dir, env } = fixture(t);
   const result = run(dir, "build-site.mjs", [], env);
   assert.equal(result.status, 0, result.stderr);
-  assert.equal(result.stdout.trim().split("\n").at(-1), "Built 7 apps into dist/.");
+  assert.equal(result.stdout.trim().split("\n").at(-1), `Built ${APPS.length} apps into dist/.`);
   assert.equal(result.stderr, "");
   assert.equal(readFileSync(join(dir, "dist/demos/index.html"), "utf8"), "catalogue");
   for (const slug of slugs) {
