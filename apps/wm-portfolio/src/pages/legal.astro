@@ -9,8 +9,8 @@ const { legal } = portfolio;
 <Base content={portfolio} title={`Legal · ${portfolio.brand}`}>
   <PageHead
     kicker="Información legal"
-    title="Precios finales, privacidad y baja sin vueltas"
-    subtitle="Datos del estudio, precios, condiciones del servicio y cómo pedir la baja de tus datos."
+    title="Condiciones, precios y privacidad"
+    subtitle="Información de Webmaster Studio y condiciones ilustrativas. Los formularios son simulaciones y los datos legales y de contacto son ficticios."
   />
 
   <section class="wm-container pb-20">
@@ -41,19 +41,20 @@ const { legal } = portfolio;
         </dl>
 
         <p class="mt-6 border-t border-line pt-4 text-xs text-muted">
-          Demo de portfolio: la razón social, el CUIT y el domicilio son
-          ficticios.
+          Información ilustrativa: la razón social, el CUIT, el domicilio y
+          los datos de contacto son ficticios.
         </p>
       </aside>
 
       <div class="space-y-12">
         <article id="precios">
           <p class="wm-kicker">Precios</p>
-          <h2 class="wm-display mt-4 text-3xl">Precios finales con impuestos</h2>
+          <h2 class="wm-display mt-4 text-3xl">Valores de referencia con impuestos</h2>
           <p class="mt-4 text-muted">{legal.taxNote}</p>
           <p class="mt-4 text-muted">
-            El precio que ves en cada plan es el que pagás: no se suman cargos
-            extra por el medio de pago ni cargos de terceros.
+            La cotización de cada proyecto debe detallar el alcance, las
+            integraciones y las condiciones de pago antes de iniciar el trabajo.
+            Esta simulación no permite contratar ni abonar servicios.
           </p>
         </article>
 
@@ -97,12 +98,12 @@ const { legal } = portfolio;
           <p class="mt-4 text-muted">{legal.withdrawal.note}</p>
           <p class="mt-3 text-sm text-muted">{legal.withdrawal.resolution}</p>
           <p class="mt-5 text-sm text-muted">
-            El botón está en el pie de página de todas las páginas. También
-            podés escribirnos a{" "}
+            El formulario del pie de página permite explorar una solicitud de baja
+            sin enviarla. El email publicado es ilustrativo:{" "}
             <a href={`mailto:${legal.email}`} class="text-accent underline underline-offset-4">
               {legal.email}
             </a>{" "}
-            y lo tramitamos por email.
+            y no constituye un canal operativo para tramitar solicitudes.
           </p>
         </article>
 
@@ -110,9 +111,9 @@ const { legal } = portfolio;
           <p class="wm-kicker">Defensa del Consumidor</p>
           <h2 class="wm-display mt-4 text-3xl">Ante un problema</h2>
           <p class="mt-4 text-muted">
-            Si algo no salió como esperabas, escribinos primero: resolvemos en
-            el momento. Si no llegamos a un acuerdo, podés iniciar un reclamo
-            ante{" "}
+            En una contratación real, las condiciones deben indicar los canales
+            de atención y resolución de consultas. Para conocer los mecanismos
+            oficiales de reclamo, podés consultar a{" "}
             <a
               href={legal.consumerDefense.url}
               target="_blank"

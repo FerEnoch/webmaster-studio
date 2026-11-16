@@ -1,0 +1,148 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import MobileCta from "../components/MobileCta.astro";
+import PageHead from "../components/PageHead.astro";
+import LavadoCard from "../components/LavadoCard.astro";
+import Configurador from "../components/Configurador";
+import { lavadero, tamanos, servicios, addons, fotos, PRECIOS, PRECIOS_ADDONS, SENIA_PORCENTAJE } from "../content/lavadero-premium";
+import { video, poster } from "@lib/media";
+
+const [lavados, serviciosSection] = lavadero.sections;
+---
+
+<Base content={lavadero} title={`Servicios · ${lavadero.brand}`}>
+  <PageHead
+    kicker="El atelier · Tratamientos"
+    title="El detalle se diseña. El precio se ve."
+    subtitle="Los precios son finales, con impuestos incluidos, y salen del tamaño de tu auto y del nivel de lavado que elijas. No hay que pedir un presupuesto."
+  />
+
+  <section class="gg-config-section wm-container pb-20" aria-labelledby="gg-config-title">
+    <header class="gg-config-heading">
+      <div>
+        <p class="gg-kicker">Tu auto, bajo otra luz</p>
+        <h2 id="gg-config-title" class="gg-display mt-4">Armá tu tratamiento</h2>
+      </div>
+      <p class="max-w-lg text-sm text-muted">Un auto, tres niveles de cuidado. Elegí el tuyo y explorá los extras sobre la ilustración: el precio se actualiza con cada detalle.</p>
+    </header>
+    <Configurador
+      client:visible
+      tamanos={tamanos}
+      servicios={servicios}
+      addons={addons}
+      PRECIOS={PRECIOS}
+      PRECIOS_ADDONS={PRECIOS_ADDONS}
+      SENIA_PORCENTAJE={SENIA_PORCENTAJE}
+      reservarUrl={appUrl("/reservar")}
+    />
+  </section>
+
+  <section class="gg-service-catalog wm-container">
+    <header class="grid gap-5 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
+      <div>
+        <p class="gg-kicker">{serviciosSection.kicker}</p>
+        <h2 class="gg-display mt-5">{serviciosSection.title}</h2>
+      </div>
+      <p class="max-w-xl text-sm text-muted">{serviciosSection.body}</p>
+    </header>
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
+      {servicios.map((item, i) => <LavadoCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <section class="gg-service-catalog wm-container">
+    <header class="grid gap-5 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
+      <div>
+        <p class="gg-kicker">{lavados.kicker}</p>
+        <h2 class="gg-display mt-5">{lavados.title}</h2>
+      </div>
+      <p class="max-w-xl text-sm text-muted">{lavados.body}</p>
+    </header>
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
+      {tamanos.map((item, i) => <LavadoCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <section class="gg-service-catalog wm-container">
+    <header class="grid gap-5 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
+      <div>
+        <p class="gg-kicker">Extras</p>
+        <h2 class="gg-display mt-5">Sumá lo que tu auto pida</h2>
+      </div>
+      <p class="max-w-xl text-sm text-muted">Se suman al lavado que elijas y se calculan con el mismo 20% de seña. Todo precio publicado es final.</p>
+    </header>
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      {addons.map((item, i) => <LavadoCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <section class="gg-film relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(4307)}
+        poster={poster(4307)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Agua a presión en el box de lavado de GLOSS & GLASS (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 72%, transparent) 52%, transparent 100%)"
+    ></div>
+    <div class="wm-container relative py-24 sm:py-28">
+      <p class="gg-kicker">El box</p>
+      <h2 class="gg-display mt-5 max-w-2xl">Un espacio reservado para el detalle</h2>
+      <p class="mt-5 max-w-lg text-muted">Luz precisa sobre la pintura, técnica en cada pasada y un box dedicado a tu auto. Tu turno tiene su tiempo; vos elegís si lo disfrutás en la barra.</p>
+    </div>
+  </section>
+
+  <section class="wm-container py-16 sm:py-24">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-center lg:gap-20">
+      <div>
+        <p class="gg-kicker">Lo que siempre incluye</p>
+        <h2 class="gg-display mt-5 text-[clamp(2.5rem,4.5vw,4.5rem)]">El cuidado empieza en cada gesto</h2>
+        <ul class="mt-8 space-y-4 text-sm text-muted">
+          {
+            [
+              "Espuma activa y lavado a mano con guante de microfibra",
+              "Secado sin contacto con aire filtrado",
+              "Limpieza de llantas, vidrios y paragolpes",
+              "Revisión final bajo luz de detalle",
+              "Café de especialidad en la barra durante el turno",
+            ].map((t) => (
+              <li class="flex gap-3 border-b border-line pb-4">
+                <span aria-hidden="true" class="text-accent">↗</span>
+                <span>{t}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="gg-photo wm-grade wm-grain overflow-hidden">
+        <img
+          src={fotos.box}
+          alt="Auto iluminado dentro del box de lavado de GLOSS & GLASS (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/5] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="wm-container pb-24">
+    <div class="gg-closing p-8 sm:p-12">
+      <p class="gg-kicker">¿Listo para reservar?</p>
+      <h2 class="gg-display mt-5 text-[clamp(2.5rem,4.5vw,4.5rem)]">Cuatro pasos y te queda el pase</h2>
+      <p class="mt-5 max-w-xl text-muted">Tamaño de auto, nivel de lavado, turno y seña. El pase sale con código, la hora exacta de entrega y el monto de la seña.</p>
+      <a href={appUrl("/reservar")} class="gg-btn mt-8">Ir a reservar</a>
+    </div>
+  </section>
+  <MobileCta contact={lavadero.contact} brand={lavadero.brand} />
+</Base>

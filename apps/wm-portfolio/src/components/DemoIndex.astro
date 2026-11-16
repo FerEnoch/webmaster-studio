@@ -1,14 +1,13 @@
 ---
 /**
- * Indice compacto de las 7 demos: el portfolio como tabla de contenidos.
- * Cada fila lleva el color de acento de su rubro (la identidad de esa demo).
+ * Índice de soluciones por industria con las rutas originales de cada aplicación.
  */
-import { RUBROS } from "@lib/rubros";
+import { solutions } from "../content/portfolio";
 ---
 
 <ul class="divide-y divide-line border-y border-line">
   {
-    RUBROS.map((r) => (
+    solutions.map((r) => (
       <li>
         <a
           href={r.demoUrl}
@@ -25,11 +24,11 @@ import { RUBROS } from "@lib/rubros";
           </span>
 
           <span class="text-sm text-muted">
-            <span class="italic">{r.objeccion}</span>
+            <span>{r.tagline}</span>
           </span>
 
           <span class="text-sm text-accent opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
-            Ver la demo →
+            Explorar solución →
           </span>
         </a>
       </li>

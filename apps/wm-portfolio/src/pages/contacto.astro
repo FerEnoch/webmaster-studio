@@ -6,21 +6,21 @@ import { waLink } from "@lib/whatsapp";
 
 const whatsappHref = waLink(
   portfolio.contact.whatsapp,
-  "Hola, quiero una demo gratis de mi negocio.",
+  "Hola, quisiera consultar por un proyecto y solicitar una cotización a Webmaster Studio. También me interesa evaluar una demo rápida.",
 );
 ---
 
 <Base content={portfolio} title={`Contacto · ${portfolio.brand}`}>
   <PageHead
     kicker="Contacto"
-    title="Un mensaje y te respondo en el día"
-    subtitle="Contame de qué rubro es tu negocio y te digo en qué te puedo ayudar. Si preferís, arrancá por la demo gratis."
+    title="Contacto y cotización"
+    subtitle="Contanos sobre tu proyecto para definir una propuesta. Podemos preparar una demo rápida para evaluar el enfoque. Este formulario es una simulación: no envía solicitudes."
   />
 
   <section class="wm-container pb-16">
     <div class="grid gap-10 lg:grid-cols-2">
       <div class="rounded-wm-lg border border-line p-8">
-        <p class="wm-kicker">Datos</p>
+        <p class="wm-kicker">Datos de contacto ilustrativos</p>
         <dl class="mt-6 space-y-4 text-muted">
           <div>
             <dt class="text-xs uppercase tracking-[0.14em]">Teléfono</dt>
@@ -44,17 +44,21 @@ const whatsappHref = waLink(
           </div>
         </dl>
 
-        <a href={whatsappHref} class="wm-btn mt-8">Escribir por WhatsApp</a>
+        <p class="mt-6 text-sm text-muted">
+          Los datos publicados son ficticios. El enlace abre WhatsApp con un mensaje
+          preparado; no lo envía automáticamente ni constituye un canal operativo.
+        </p>
+        <a href={whatsappHref} class="wm-btn mt-8">Consultar por WhatsApp</a>
       </div>
 
       <div>
         <p class="wm-kicker">Mensaje</p>
         <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
-          Contame del negocio y te digo qué sale
+          Describí el proyecto que necesitás desarrollar
         </h2>
         <p class="mt-5 text-muted">
-          Con el rubro, la ciudad y qué te frena hoy alcanza. No hace falta que
-          tengas listo nada: de eso hablamos nosotros.
+          Podés indicar tu actividad, los objetivos y las funcionalidades que
+          necesitás. Usá datos de ejemplo: esta pantalla solo simula una consulta.
         </p>
 
         <form class="mt-8 grid gap-4" data-wm-demo-form>
@@ -62,7 +66,7 @@ const whatsappHref = waLink(
             <span class="text-muted">Nombre</span>
             <input
               required
-              placeholder="Ana Gomez"
+              placeholder="Ana Gómez"
               class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
             />
           </label>
@@ -75,15 +79,15 @@ const whatsappHref = waLink(
             />
           </label>
           <label class="block text-sm">
-            <span class="text-muted">¿De qué rubro es tu negocio?</span>
+            <span class="text-muted">¿Qué necesitás desarrollar?</span>
             <textarea
               rows="4"
-              placeholder="Lavadero de autos con bar, en Mar del Plata..."
+              placeholder="Un sitio para presentar servicios y gestionar consultas..."
               class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
             ></textarea>
           </label>
-          <button type="submit" class="wm-btn w-full">Enviar mensaje</button>
-          <p class="text-xs text-muted">Demo: no se envían datos.</p>
+          <button type="submit" class="wm-btn w-full">Simular consulta de cotización</button>
+          <p class="text-xs text-muted">Demo: no se envían datos ni se registra una solicitud.</p>
         </form>
 
         <p
@@ -91,8 +95,8 @@ const whatsappHref = waLink(
           data-wm-demo-done
           hidden
         >
-          Mensaje tomado. En esta demo no se envía nada: así se vería la
-          confirmación.
+          Consulta simulada. No se envió ningún mensaje ni se generó una cotización.
+          Esta pantalla muestra únicamente una confirmación de ejemplo.
         </p>
       </div>
     </div>
@@ -100,15 +104,16 @@ const whatsappHref = waLink(
 
   <section class="wm-container pb-24">
     <div class="rounded-wm-lg border border-line p-8 sm:p-12">
-      <p class="wm-kicker">Más rápido</p>
+      <p class="wm-kicker">Evaluación inicial</p>
       <h2 class="wm-display mt-4 text-[clamp(1.8rem,4.5vw,2.8rem)]">
-        Pedí la demo y listo
+        Revisemos el alcance de tu proyecto
       </h2>
       <p class="mt-4 max-w-xl text-muted">
-        Si ya sabés el rubro, el formulario de la portada te arma el ticket de
-        la demo en menos de un minuto.
+        El formulario de la portada permite explorar la consulta de cotización.
+        Podemos preparar una demo rápida según las necesidades del proyecto;
+        su alcance y disponibilidad se acuerdan durante la consulta.
       </p>
-      <a href="/#demo" class="wm-btn mt-8">Pedir mi demo gratis</a>
+      <a href="/#demo" class="wm-btn mt-8">Solicitar cotización</a>
     </div>
   </section>
 </Base>

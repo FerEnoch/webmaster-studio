@@ -1,0 +1,47 @@
+---
+/**
+ * Comparador antes/despues de una obra.
+ *
+ * Es un control nativo de rango (input type=range) sobre dos imagenes: sin
+ * librerias y sin JavaScript. El navegador ya resuelve el arrastre, el
+ * teclado y la lectura por lectores de pantalla.
+ */
+export interface Props {
+  antes: { src: string; alt: string };
+  despues: { src: string; alt: string };
+  /** Texto del borde izquierdo. */
+  etiquetaAntes?: string;
+  /** Texto del borde derecho. */
+  etiquetaDespues?: string;
+  class?: string;
+}
+
+const {
+  antes,
+  despues,
+  etiquetaAntes = "Antes",
+  etiquetaDespues = "Después",
+  class: clase = "",
+} = Astro.props;
+---
+
+<div class={`vt-compare ${clase}`} style="--vt-compare: 50%">
+  <img src={antes.src} alt={antes.alt} loading="lazy" decoding="async" />
+  <img class="vt-compare__after" src={despues.src} alt={despues.alt} loading="lazy" decoding="async" />
+  <span class="vt-compare__divider" aria-hidden="true"></span>
+  <span class="vt-compare__handle" aria-hidden="true">↔</span>
+  <span class="vt-compare__labels" aria-hidden="true">
+    <span>{etiquetaAntes}</span>
+    <span>{etiquetaDespues}</span>
+  </span>
+  <input
+    class="vt-compare__range"
+    type="range"
+    min="0"
+    max="100"
+    value="50"
+    step="1"
+    aria-label={`Comparar ${etiquetaAntes.toLowerCase()} y ${etiquetaDespues.toLowerCase()} de la obra`}
+    oninput="this.parentElement.style.setProperty('--vt-compare', this.value + '%')"
+  />
+</div>

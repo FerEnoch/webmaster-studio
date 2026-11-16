@@ -1,0 +1,22 @@
+---
+/**
+ * Item de la carta del bar: nombre, descripcion y precio.
+ */
+import type { CatalogItem } from "@lib/types";
+
+export interface Props {
+  item: CatalogItem;
+}
+
+const { item } = Astro.props;
+---
+
+<li class="gg-menu-item">
+  <div class="min-w-0">
+    <p class="gg-display text-2xl leading-tight">{item.title}</p>
+    {item.body ? <p class="mt-1 text-sm text-muted">{item.body}</p> : null}
+  </div>
+  {item.price ? (
+    <span class="gg-menu-price">{item.price.amount}</span>
+  ) : null}
+</li>

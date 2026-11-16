@@ -1,0 +1,72 @@
+# Metadatos — copiado desde researcher kit SOLO tras preflight Git.
+# Guard: researcher/skills/researcher/references/output-guard.md (adaptado a research/ por instrucción usuaria)
+# Ausente = null / no medido; 0 solo si fue observado. No inferir del perfil.
+research_id: arquitectura-premium-001
+rubric: estudios de arquitectura y diseño inmobiliario, interiores, decoración
+market: Argentina # obligatorio, elegido por usuario 2026-11-16; global primero + bajada AR independiente
+stage: lite # lite | phase1 | phase2; independiente del objetivo
+research_goal: inspiration_exploration # explorar/inspirar para DEMO PREMIUM, sin apuesta cerrada
+current_decision: Definir propuesta premium para nueva demo (wm-arquitectura-premium) sin reemplazar demo común wm-arquitectura; foco UI 10x con 3D y animaciones de inmuebles, super liviana y rápida
+profile: balanced # exploratory | balanced (DEFAULT Lite) | decision_oriented
+selected_budget:
+  varied_queries_max: 8 # equilibrado 6–8
+  source_reads_max: 6 # equilibrado 4–6
+  rationale: Lite equilibrado para explorar/inspirar; parar por cobertura/saturación, no llenar cuotas
+orchestrator_model: opencode-go/muse-spark-1.3-contributor # selección solicitada, no evidencia de ejecución
+adversarial_model: null # no se usa en Lite
+runtime_evidence:
+  actual_model: opencode-go/muse-spark-1.3-contributor
+  configuration: null # parámetros observables, nunca secretos
+  evidence: modelo de sesión declarado por runtime 2026-11-16
+  adversarial: null # evidencia solo Fase 1/2; no es fuente independiente
+kit:
+  resolved_path: /home/ferenoch/code/active/researcher
+  commit: aea24604cea7fe65819c62f689d10b54b14ea1fa
+  version: null # solo si hay evidencia explícita
+  dirty: false
+  provenance_note: KIT resuelto por ruta candidata autorizada por usuario ("~/code/active/research", interpretado como ~/code/active/researcher por existir y contener protocols/templates/docs); rev-parse HEAD + status limpio observados 2026-11-16
+started_at: 2026-11-16T09:10:19-03:00 # timestamp con zona; observado
+ended_at: 2026-11-16T09:13:20-03:00 # duración observada 3 min aprox, no inferencia de perfil
+elapsed_seconds: null # no medido con reloj monotónico; inicio/fin por timestamps ISO
+# active → lite-done, o active → brief-ready → discovery-active → done
+# discovery-active exige Product Brief validado por humano, nunca Lite sin validar.
+status: lite-done
+scope:
+  indirect_substitutes: false # universo competitivo; INSPIRACIÓN adyacente se rotula aparte
+  global_research: true
+  target_market_research: true # argentina_research solo existe en metadata histórica
+  technical_observation: true # UI 10x 3D liviana/rápida como observación, sin arquitectura ni código
+# Fase 2 hereda market del Product Brief validado; cambios requieren revalidación humana.
+# Corridas históricas: conservar archivos/metadata y registrar rutas exactas en notes al retomar.
+# Fase 2 (completar al avanzar):
+# product_brief: output/<slug>/brief/09_PRODUCT_BRIEF.md
+# claim_ledger_final: output/<slug>/brief/CLAIM_LEDGER_FINAL.md
+# product_brief_human_validation: <quién/cuándo/alcance, sin datos innecesarios>
+# discovery_status: pending
+notes: "Destino research/research-output/arquitectura-premium/ por instrucción usuaria 2026-11-16 ('dejemos los resultados en research', 'Seguimos en research') + precedente research/research-output/lavadero-premium/. Desvío de output/<slug>/ del skill documentado aquí por honestidad. Demo común apps/wm-arquitectura (ESTUDIO TRAZO) se conserva; premium es demo nueva separada. No hay secretos ni datos personales en artefactos."
+lite_measured: # Observaciones, no calibración ni baseline del piloto histórico.
+  varied_queries: 8 # consultas distintas realmente ejecutadas; no repeticiones
+  source_reads: 6 # fuentes efectivamente inspeccionadas, no fetch calls
+  fetches: 7 # 6 ok + 1 timeout InfoLeg, llamadas observadas, no prueba de lectura
+  searches: 8 # total consultas ejecutadas, incluidas repeticiones (0 repeticiones)
+  wall_time_min: null # solo duración observada; inicio 09:10:19 fin 09:13:20 (~3 min) sin reloj monotónico
+  tokens_in: null # solo si el runtime los entrega
+  tokens_out: null
+  cost: null # solo si el runtime lo entrega
+  currency: null
+  telemetry_evidence: no medido por runtime
+  artifacts:
+    - research/research-output/arquitectura-premium/run.yaml
+    - research/research-output/arquitectura-premium/lite/LITE_DOMAIN.md
+    - research/research-output/arquitectura-premium/lite/LITE_BENCHMARK.md
+    - research/research-output/arquitectura-premium/lite/LITE_TARGET_MARKET.md
+    - research/research-output/arquitectura-premium/lite/LITE_LEDGER.md
+    - research/research-output/arquitectura-premium/lite/LITE_BRIEF.md
+  stop_reason: sufficient_coverage # enfoques y preguntas cubiertos, nuevas búsquedas dejaban de cambiar decisión
+  remaining_uncertainty:
+    - Cotizaciones reales 2-3 estudios AR premium (número USD/m² y entregables)
+    - Aplicabilidad exacta botón arrepentimiento/baja a cotizador de servicios (falta lectura norma)
+    - Comisiones/acreditación Mercado Pago checkout/link para seña
+    - Performance real hero 3D <2s y CWV en prototipo (M1)
+  decision_enabled: Explorar con prototipo wm-arquitectura-premium separada (E1 base + un hero 3D + E3); demo común intacta; si se vuelve apuesta comprometida, proponer Fase 1
+  escalate_to_phase1: null # no se recomienda ahora; solo si decisión exige contraste adversarial o validación de cobro/demanda

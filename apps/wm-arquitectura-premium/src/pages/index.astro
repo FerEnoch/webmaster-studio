@@ -1,0 +1,309 @@
+---
+/**
+ * HOME — edicion PREMIUM del rubro arquitectura.
+ *
+ * La diferencia con la demo comun esta en el orden: primero el modelo 3D
+ * navegable (la prueba de que el estudio se recorre), despues el proceso
+ * con los honorarios a la vista, las obras con su antes y su despues, y al
+ * final el cotizador.
+ */
+import Base from "../layouts/Base.astro";
+import Maqueta3D from "../components/Maqueta3D.astro";
+import AntesDespues from "../components/AntesDespues.astro";
+import { arquitecturaPremium as app, ambientes, obras, etapas } from "../content/arquitectura-premium";
+import { waLink } from "@lib/whatsapp";
+import { appUrl } from "@lib/urls";
+
+const secciones = Object.fromEntries(app.sections.map((s) => [s.id, s]));
+const servicios = secciones.servicios;
+const proceso = secciones.proceso;
+const faq = secciones.faq;
+
+const whatsappHref = waLink(
+  app.contact.whatsapp,
+  "Hola, quiero recorrer el modelo 3D de mi proyecto.",
+);
+
+/** Precio de referencia del ambiente, en USD (mercado privado CABA/GBA 2026). */
+const precioAmbiente = (usdM2: number, m2: number) =>
+  new Intl.NumberFormat("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(
+    usdM2 * m2,
+  );
+
+const totalM2 = ambientes.reduce((suma, ambiente) => suma + ambiente.m2, 0);
+---
+
+<Base content={app} title={`${app.brand} · ${app.rubro}`}>
+  <!-- ─── Portada: el modelo, no el video ───────────────────────────── -->
+  <section class="relative overflow-hidden border-b border-[var(--vt-rule)]">
+    <div class="wm-container grid gap-10 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:py-20">
+      <div>
+        <p class="wm-kicker">{app.hero.kicker}</p>
+        <h1 class="vt-head__title mt-6 !max-w-none">
+          Recorré <span class="vt-script">la obra</span> antes de firmarla
+        </h1>
+        <p class="vt-head__intro mt-6">
+          Un modelo navegable de tu proyecto con sus medidas reales, las obras del estudio con su
+          antes y su después, y un cotizador que te da un número antes de la primera visita.
+        </p>
+
+        <div class="mt-9 flex flex-wrap items-center gap-4">
+          <a href={appUrl("/cotizar")} class="wm-btn">Cotizar mi proyecto</a>
+          <a href={appUrl("/obras")} class="wm-btn wm-btn--ghost">Ver las obras</a>
+        </div>
+
+        <p class="mt-8 flex items-center gap-2 text-sm text-[var(--vt-dim)]">
+          <span class="inline-flex h-2 w-2 rounded-full bg-[var(--wm-accent)]" aria-hidden="true"></span>
+          {app.hero.live?.label}: {app.hero.live?.count} {app.hero.live?.unit}
+        </p>
+      </div>
+
+      <div>
+        <Maqueta3D />
+        <p class="vt-caption">
+          Modelo de demostración: las medidas y los materiales son ficticios. Movés el cursor
+          sobre la maqueta y tocás un ambiente para ver su referencia.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Resumen del plan: el precio, a la vista ───────────────────── -->
+  <section class="wm-container border-b border-[var(--vt-rule)] py-12">
+    <div class="vt-numbers">
+      {
+        ambientes.map((ambiente) => (
+          <div class="vt-number" data-vt-plan={ambiente.id}>
+            <p class="vt-number__value">{precioAmbiente(ambiente.usdM2, ambiente.m2)}</p>
+            <p class="vt-number__label">
+              {ambiente.nombre} · {ambiente.m2} m²
+            </p>
+            <p class="mt-3 text-xs text-[var(--vt-dim)]" data-vt-detalle={ambiente.id} tabindex="-1">
+              {ambiente.detalle}
+            </p>
+            <ul class="vt-materials">
+              {ambiente.materiales.map((material) => (
+                <li>{material}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+    <p class="vt-caption">
+      Referencias de precio por m² para un proyecto de {totalM2} m² (mercado privado CABA/GBA
+      2026). Son valores de referencia, no una tarifa: el honorario definitivo se cierra por
+      escrito con el alcance definido.
+    </p>
+  </section>
+
+  <!-- ─── Servicios ─────────────────────────────────────────────────── -->
+  <section class="vt-section">
+    <div class="wm-container">
+      <div class="vt-section__head">
+        <div>
+          <p class="vt-index">01 / Servicios</p>
+          <h2 class="vt-section__title mt-5">Cuatro encargos, un solo responsable</h2>
+        </div>
+        <p class="vt-section__body">{servicios.body}</p>
+      </div>
+
+      <div class="vt-grid sm:grid-cols-2">
+        {
+          servicios.items?.map((servicio, i) => (
+            <article class="vt-cell">
+              <p class="vt-card__index">{String(i + 1).padStart(2, "0")}</p>
+              <h3 class="vt-cell-title">{servicio.title}</h3>
+              {servicio.body ? <p class="vt-cell-body">{servicio.body}</p> : null}
+              {servicio.points?.length ? (
+                <ul class="vt-points">
+                  {servicio.points.map((punto) => (
+                    <li>{punto}</li>
+                  ))}
+                </ul>
+              ) : null}
+              <div class="vt-meta">
+                {servicio.meta?.map((dato) => (
+                  <div>
+                    <dt>{dato.label}</dt>
+                    <dd>{dato.value}</dd>
+                  </div>
+                ))}
+                {servicio.price ? (
+                  <div>
+                    <dt>Honorario</dt>
+                    <dd>{servicio.price.amount}</dd>
+                  </div>
+                ) : null}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Proceso con los porcentajes de honorario ───────────────────── -->
+  <section class="vt-section">
+    <div class="wm-container">
+      <div class="vt-section__head">
+        <div>
+          <p class="vt-index">02 / El proceso</p>
+          <h2 class="vt-section__title mt-5">Cuatro etapas, con el honorario a la vista</h2>
+        </div>
+        <p class="vt-section__body">{proceso.body}</p>
+      </div>
+
+      <div class="vt-steps">
+        {
+          etapas.map((etapa, i) => (
+            <article class="vt-step">
+              <p class="vt-step__index">{String(i + 1).padStart(2, "0")}</p>
+              <div>
+                <h3 class="vt-step__title">{etapa.title}</h3>
+                <p class="vt-stage-body">{etapa.body}</p>
+                <p class="vt-stage-share">
+                  <strong>{etapa.duracion}</strong>
+                  <span class="text-xs uppercase tracking-[0.14em] text-[var(--vt-dim)]">
+                    {etapa.entrega}
+                  </span>
+                </p>
+              </div>
+              <ul class="vt-step__points">
+                {etapa.puntos.map((punto) => (
+                  <li>{punto}</li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Obras: el antes y el después ──────────────────────────────── -->
+  <section class="vt-section">
+    <div class="wm-container">
+      <div class="vt-section__head">
+        <div>
+          <p class="vt-index">03 / Obras</p>
+          <h2 class="vt-section__title mt-5">Cada obra con su antes y su después</h2>
+        </div>
+        <p class="vt-section__body">{secciones.obras.body}</p>
+      </div>
+
+      <div class="vt-obras">
+        {
+          obras.map((obra) => (
+            <article class="vt-obras__row">
+              <div>
+                <p class="vt-card__index">
+                  {obra.year} · {obra.zona}
+                </p>
+                <h3 class="vt-obras__title mt-3">{obra.title}</h3>
+                <div class="vt-obras__tags">
+                  <span class="vt-obras__tag">{obra.tipo}</span>
+                  <span class="vt-obras__tag">{obra.superficie}</span>
+                  <span class="vt-obras__tag">{obra.estado}</span>
+                </div>
+              </div>
+              <div>
+                <p class="vt-obras__body">{obra.resumen}</p>
+                <ul class="vt-points mt-4">
+                  {obra.entregables.map((entregable) => (
+                    <li>{entregable}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                {obra.antes && obra.despues ? (
+                  <AntesDespues antes={obra.antes} despues={obra.despues} />
+                ) : obra.despues ? (
+                  <figure>
+                    <img
+                      src={obra.despues.src}
+                      alt={obra.despues.alt}
+                      loading="lazy"
+                      decoding="async"
+                      class="aspect-[16/10] w-full object-cover"
+                    />
+                  </figure>
+                ) : null}
+                {obra.nota ? <p class="vt-caption">{obra.nota}</p> : null}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <a href={appUrl("/obras")} class="wm-btn mt-10">Ver el archivo completo</a>
+    </div>
+  </section>
+
+  <!-- ─── Equipo ─────────────────────────────────────────────────────── -->
+  <section class="vt-section">
+    <div class="wm-container">
+      <div class="vt-section__head">
+        <div>
+          <p class="vt-index">04 / El estudio</p>
+          <h2 class="vt-section__title mt-5">Cuatro personas, un mismo teléfono</h2>
+        </div>
+        <p class="vt-section__body">{secciones.equipo.body}</p>
+      </div>
+
+      <div class="vt-grid sm:grid-cols-2 lg:grid-cols-4">
+        {
+          secciones.equipo.items?.map((persona) => (
+            <article class="vt-cell">
+              <p class="wm-kicker">{persona.kicker}</p>
+              <h3 class="vt-cell-title">{persona.title}</h3>
+              <p class="vt-cell-body">{persona.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Dudas ──────────────────────────────────────────────────────── -->
+  <section class="vt-section">
+    <div class="wm-container">
+      <div class="vt-section__head">
+        <div>
+          <p class="vt-index">05 / Dudas</p>
+          <h2 class="vt-section__title mt-5">Lo que preguntan antes de firmar</h2>
+        </div>
+        <p class="vt-section__body">{faq.body}</p>
+      </div>
+
+      <div class="grid gap-x-10 gap-y-0 md:grid-cols-2">
+        {
+          faq.items?.map((pregunta) => (
+            <article class="border-t border-[var(--vt-line)] py-6">
+              <h3 class="vt-step__title !text-xl">{pregunta.title}</h3>
+              <p class="vt-obras__body mt-3">{pregunta.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Cierre ─────────────────────────────────────────────────────── -->
+  <section class="wm-container py-16">
+    <div class="vt-cta">
+      <div>
+        <p class="wm-kicker">Siguiente paso</p>
+        <h2 class="vt-cta__title mt-5">Traé tus medidas. Te devolvemos un número.</h2>
+        <p class="vt-obras__body mt-4">
+          En el cotizador elegís el tipo de trabajo y la escala: te queda un número de consulta
+          y un pase para la visita al sitio. Si querés, también lo seguimos por WhatsApp.
+        </p>
+      </div>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <a href={appUrl("/cotizar")} class="wm-btn">Ir al cotizador</a>
+        <a href={whatsappHref} class="vt-wa">Escribir por WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</Base>
