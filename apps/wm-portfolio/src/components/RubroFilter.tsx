@@ -1,16 +1,18 @@
 /**
- * FILTRO POR RUBRO — la pieza central del portfolio madre.
+ * FILTRO POR INDUSTRIA — catálogo de soluciones del estudio.
  *
- * Las cards las renderiza el lado de Astro con `RubroCard.astro` (una sola
+ * Las cards las renderiza el lado de Astro con `SolutionCard.astro` (una sola
  * fuente de verdad para el markup de la card). Esta isla solo maneja el
  * estado del filtro y le dice al DOM que cards mostrar:
  *
- *   - marca/descarta `.is-out` en los `[data-wm-rubro-card]`
+ *   - toggles `.is-out` on `[data-wm-rubro-card]`: a card matches by its
+ *     `data-wm-rubro-card` or its `data-wm-rubro-grupo` (so the architecture
+ *     premium edition also shows under the "Arquitectura" chip)
  *   - sincroniza el filtro con la URL (?rubro=concesionario) para que el link sea
  *     compartible
  *   - anuncia el resultado en una region `aria-live`
  *
- * Es una isla React (`client:load`): sin JS se ven las 6 demos, que es
+ * Es una isla React (`client:load`): sin JS se ven las 8 soluciones, que es
  * justamente el fallback correcto.
  */
 
@@ -19,13 +21,13 @@ import { useCallback, useEffect, useState } from "react";
 export interface RubroChip {
   id: string;
   nombre: string;
-  /** Color de acento del rubro (el de su propia demo). */
+  /** Color de acento de la solución. */
   accent: string;
 }
 
 export interface RubroFilterProps {
   rubros: RubroChip[];
-  /** Cantidad total de demos. */
+  /** Cantidad total de soluciones. */
   total: number;
 }
 
@@ -41,8 +43,13 @@ export default function RubroFilter({ rubros, total }: RubroFilterProps) {
   const apply = useCallback(
     (id: string) => {
       const cards = document.querySelectorAll<HTMLElement>("[data-wm-rubro-card]");
+      let visible = 0;
       cards.forEach((card) => {
-        const match = id === ALL || card.dataset.wmRubroCard === id;
+        const match =
+          id === ALL ||
+          card.dataset.wmRubroCard === id ||
+          card.dataset.wmRubroGrupo === id;
+        if (match) visible += 1;
         card.classList.toggle("is-out", !match);
         card.setAttribute("aria-hidden", match ? "false" : "true");
       });
@@ -52,8 +59,8 @@ export default function RubroFilter({ rubros, total }: RubroFilterProps) {
         const nombre = rubros.find((r) => r.id === id)?.nombre;
         live.textContent =
           id === ALL
-            ? `Mostrando las ${total} demos.`
-            : `Mostrando 1 demo: ${nombre ?? id}.`;
+            ? `Mostrando las ${visible} soluciones por industria.`
+            : `Mostrando ${visible} ${visible === 1 ? "solución" : "soluciones"}: ${nombre ?? id}.`;
       }
     },
     [rubros, total],
@@ -92,7 +99,7 @@ export default function RubroFilter({ rubros, total }: RubroFilterProps) {
     <div className="wm-filter-inner">
       <div
         role="group"
-        aria-label="Filtrar las demos por rubro"
+        aria-label="Filtrar soluciones por industria"
         className="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0"
       >
         <button
