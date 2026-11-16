@@ -1,0 +1,195 @@
+---
+/**
+ * Layout base del kit: SEO, JSON-LD, fuentes, cortina, nav, footer.
+ *
+ * Cada app lo envuelve en `src/layouts/Base.astro` (wrapper thin) y le
+ * pasa el `RubroContent` de su rubro.
+ */
+import { ClientRouter } from "astro:transitions";
+import Footer from "./Footer.astro";
+import Nav from "./Nav.astro";
+import { appUrl } from "@lib/urls";
+import { waLink } from "@lib/whatsapp";
+import type { Contact, Legal, NavItem, Theme } from "@lib/types";
+
+export interface Props {
+  title: string;
+  description: string;
+  brand: string;
+  theme: Theme;
+  nav: NavItem[];
+  legal: Legal;
+  contact: Contact;
+  /** URL canonica absoluta. */
+  canonical?: string;
+  ogImage?: string;
+  ogType?: string;
+  /** Campos extra del JSON-LD. */
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description,
+  brand,
+  theme,
+  nav,
+  legal,
+  contact,
+  canonical,
+  ogImage,
+  ogType = "website",
+  jsonLd,
+} = Astro.props;
+
+const origin = Astro.site ? new URL(Astro.site).origin : Astro.url.origin;
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, origin).href;
+const ogImg = ogImage ?? new URL(appUrl("/og.png"), origin).href;
+
+const fam = (name: string) => name.trim().replace(/\s+/g, "+");
+const fontsHref =
+  theme.fonts.href ??
+  `https://fonts.googleapis.com/css2?family=${fam(theme.fonts.display)}:wght@400;500;700;800&family=${fam(
+    theme.fonts.body,
+  )}:wght@400;500;600&display=swap`;
+
+const themeVars = [
+  `--wm-bg:${theme.palette.bg}`,
+  `--wm-fg:${theme.palette.fg}`,
+  `--wm-accent:${theme.palette.accent}`,
+  `--wm-font-display:"${theme.fonts.display}"`,
+  `--wm-font-body:"${theme.fonts.body}"`,
+  theme.radius ? `--wm-radius:${theme.radius}` : "",
+]
+  .filter(Boolean)
+  .join(";");
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: brand,
+  description,
+  url: canonicalUrl,
+  image: ogImg,
+  telephone: contact.phone,
+  email: contact.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: contact.address,
+    addressCountry: "AR",
+  },
+  openingHours: contact.hours,
+  priceRange: "$$",
+  ...jsonLd,
+};
+
+const whatsappHref = waLink(contact.whatsapp, `Hola, escribo desde la web de ${brand}.`);
+---
+
+<!doctype html>
+<html lang="es-AR" style={themeVars}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="theme-color" content={theme.palette.bg} />
+    <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={brand} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImg} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImg} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={fontsHref} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+    <ClientRouter />
+  </head>
+
+  <body>
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[300] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:text-bg"
+    >
+      Ir al contenido
+    </a>
+
+    <Nav nav={nav} brand={brand} contact={contact} />
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <Footer nav={nav} brand={brand} legal={legal} contact={contact} />
+
+    <!-- WhatsApp flotante: la conversion de un toque en mobile. -->
+    <a
+      href={whatsappHref}
+      aria-label="Escribir por WhatsApp"
+      class="wm-float-wa fixed right-4 bottom-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25d366] text-white shadow-2xl transition-transform hover:scale-105 md:right-8 md:bottom-8"
+    >
+      <svg viewBox="0 0 24 24" class="h-7 w-7" fill="currentColor" aria-hidden="true">
+        <path
+          d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.1.4-.2.7-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.2Z"
+        ></path>
+      </svg>
+    </a>
+
+    <!--
+      Cortina de transicion. `transition:persist` mantiene el mismo nodo entre
+      navegaciones, asi la cortina que entra en `astro:before-preparation` es la
+      misma que se levanta en `astro:after-swap`.
+    -->
+    <div
+      transition:persist="wm-curtain"
+      data-wm-curtain
+      class="wm-curtain"
+      aria-hidden="true"
+    >
+      <span class="wm-display text-[clamp(3rem,10vw,9rem)]">{brand}</span>
+      <span class="wm-curtain__bar"></span>
+    </div>
+
+    <script>
+      // Cortina: entra antes de preparar la nueva pagina, sale despues del swap.
+      // Red de seguridad: si algo se interrumpe, la cortina nunca tapa la app.
+      const curtain = () => document.querySelector<HTMLElement>("[data-wm-curtain]");
+
+      const setState = (state: string) => {
+        const el = curtain();
+        if (el) el.dataset.state = state;
+      };
+
+      // El timer vive en el nodo persistido: este script se re-ejecuta en cada
+      // navegacion y una variable de closure perderia el timer anterior, que
+      // entonces caeria a "idle" en medio de la navegacion siguiente.
+      const armIdle = (ms: number) => {
+        const el = curtain();
+        window.clearTimeout(Number(el?.dataset.safety || 0));
+        const timer = window.setTimeout(() => setState("idle"), ms);
+        if (el) el.dataset.safety = String(timer);
+      };
+
+      document.addEventListener("astro:before-preparation", () => {
+        setState("cover");
+        armIdle(2600);
+      });
+
+      document.addEventListener("astro:after-swap", () => {
+        setState("reveal");
+        armIdle(700);
+      });
+    </script>
+  </body>
+</html>

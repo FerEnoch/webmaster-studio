@@ -1,0 +1,132 @@
+---
+/**
+ * MAQUETA 3D — el modelo navegable del proyecto.
+ *
+ * Es la pieza que diferencia esta edicion premium: no es una foto ni un
+ * render, es un volumen que se recorre ambiente por ambiente.
+ *
+ * Sin dependencias: el 3D es CSS puro (transform-style: preserve-3d) y el
+ * estado vive en un script chico de la pagina. No hay librerias, ni canvas,
+ * ni bundle extra.
+ */
+import { ambientes } from "../content/arquitectura-premium";
+---
+
+<div class="vt-model" data-vt-model>
+  <div class="vt-model__stage" data-vt-stage>
+    <div class="vt-model__slab"></div>
+
+    {
+      ambientes.map((ambiente, i) => (
+        <button
+          type="button"
+          class="vt-model__room"
+          data-vt-room={ambiente.id}
+          data-active={i === 0 ? "true" : "false"}
+          aria-pressed={i === 0 ? "true" : "false"}
+          aria-label={`${ambiente.nombre}, ${ambiente.m2} m²`}
+          style={`left:${ambiente.caja.x}%; top:${ambiente.caja.y}%; width:${ambiente.caja.w}%; height:${ambiente.caja.h}%; --vt-alto:${ambiente.alto}px;`}
+        />
+      ))
+    }
+
+    {
+      /* Hotspots: viven DENTRO de la escena 3D y se contra-rotan para leerse
+         de frente, asi quedan siempre pegados a su ambiente. */
+      ambientes.map((ambiente, i) => (
+        <button
+          type="button"
+          class="vt-hotspot"
+          data-vt-hotspot={ambiente.id}
+          aria-pressed={i === 0 ? "true" : "false"}
+          style={`left:${ambiente.caja.x + ambiente.caja.w / 2}%; top:${ambiente.caja.y + ambiente.caja.h / 2}%;`}
+        >
+          <span aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+          <span class="vt-hotspot__name">{ambiente.nombre}</span>
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  /**
+   * Maqueta 3D: el estado vive en el DOM.
+   *
+   * - Un solo listener de puntero sobre la maqueta (rAF + transform).
+   * - Los hotspots activan su ambiente y actualizan el resumen.
+   * - Sin dependencias: nada de framework ni de librería 3D.
+   */
+  const inicializar = () => {
+    const modelo = document.querySelector<HTMLElement>("[data-vt-model]");
+    if (!modelo || modelo.dataset.vtListo === "true") return;
+    modelo.dataset.vtListo = "true";
+
+    const stage = modelo.querySelector<HTMLElement>("[data-vt-stage]");
+    const hotspots = Array.from(modelo.querySelectorAll<HTMLElement>("[data-vt-hotspot]"));
+    const rooms = Array.from(modelo.querySelectorAll<HTMLElement>("[data-vt-room]"));
+
+    /* Inclinación suave según el puntero: da volumen sin girar de más. */
+    let frame = 0;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const escena = (rx: number, rz: number) =>
+      `scale(0.74) rotateX(${rx}deg) rotateZ(${rz}deg)`;
+
+    const inclinar = (evento: PointerEvent) => {
+      if (reduced.matches || !stage) return;
+      const caja = modelo.getBoundingClientRect();
+      const x = (evento.clientX - caja.left) / caja.width - 0.5;
+      const y = (evento.clientY - caja.top) / caja.height - 0.5;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        stage.style.transform = escena(58 - y * 6, -32 + x * 6);
+      });
+    };
+
+    const enderezar = () => {
+      if (!stage) return;
+      cancelAnimationFrame(frame);
+      stage.style.transform = escena(58, -32);
+    };
+
+    modelo.addEventListener("pointermove", inclinar);
+    modelo.addEventListener("pointerleave", enderezar);
+
+    /* Activación de ambiente: cambia la room, el hotspot y el resumen. */
+    const activar = (id: string | undefined) => {
+      if (!id) return;
+
+        hotspots.forEach((otro) => {
+          otro.setAttribute("aria-pressed", otro.dataset.vtHotspot === id ? "true" : "false");
+        });
+
+        rooms.forEach((room) => {
+          const activo = room.dataset.vtRoom === id;
+          room.dataset.active = activo ? "true" : "false";
+          room.setAttribute("aria-pressed", activo ? "true" : "false");
+        });
+
+        /* El precio del ambiente activo se resalta: la maqueta y el numero
+           son dos vistas de la misma seleccion. */
+        document.querySelectorAll<HTMLElement>("[data-vt-plan]").forEach((plan) => {
+          plan.dataset.active = plan.dataset.vtPlan === id ? "true" : "false";
+        });
+
+      const detalle = document.querySelector<HTMLElement>(`[data-vt-detalle="${id}"]`);
+      if (detalle) detalle.focus({ preventScroll: true });
+    };
+
+    hotspots.forEach((hotspot) => {
+      hotspot.addEventListener("click", () => activar(hotspot.dataset.vtHotspot));
+    });
+
+    /* El plano del ambiente tambien activa: es el target grande del modelo. */
+    rooms.forEach((room) => {
+      room.addEventListener("click", () => activar(room.dataset.vtRoom));
+    });
+  };
+
+  document.addEventListener("astro:page-load", inicializar);
+  inicializar();
+</script>

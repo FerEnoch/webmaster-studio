@@ -1,0 +1,175 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import MobileCta from "../components/MobileCta.astro";
+import PageHead from "../components/PageHead.astro";
+import BarItem from "../components/BarItem.astro";
+import LiveNow from "../components/ui/LiveNow.astro";
+import { lavadero, carta, fotos } from "../content/lavadero-premium";
+
+const grupos = [
+  { nombre: "Sin alcohol", categorias: ["Sin alcohol"], nota: "Cero graduación. Todo el ritual." },
+  { nombre: "Café", categorias: ["Café de especialidad", "Para esperar"], nota: "Extracciones cortas, sobremesas largas. Algo para acompañar." },
+  { nombre: "Con alcohol", categorias: ["Con alcohol · +18"], nota: "De 17 a 21 h. Solo si no manejás." },
+].map((grupo) => ({
+  ...grupo,
+  items: carta.filter((item) => grupo.categorias.includes(item.kicker ?? "")),
+}));
+
+const momentos = [
+  { box: "Espuma", detalle: "La carrocería se cubre de espuma activa.", barra: "Espresso", ritual: "La primera extracción. El café del turno, de cortesía." },
+  { box: "Enjuague", detalle: "El agua se lleva lo que sobra y revela la pintura.", barra: "Tónica 0.0", ritual: "Pomelo, romero y hielo. Fresca, sin alcohol." },
+  { box: "Secado", detalle: "Aire filtrado y atención a cada terminación.", barra: "Brindis", ritual: "Un spritz sin alcohol. Si elegís vermut, volvés en taxi." },
+  { box: "Entrega", detalle: "Te avisamos por WhatsApp cuando el auto está listo.", barra: "Sin apuro", ritual: "Terminá tu mesa o dejá el auto y coordinamos el retiro." },
+];
+
+const liveBarra = {
+  label: "Barra abierta",
+  count: 2,
+  min: 1,
+  max: 3,
+  unit: "lugares en la barra",
+  interval: 3800,
+};
+---
+
+<Base content={lavadero} title={`Bar · ${lavadero.brand}`}>
+  <div class="gg-bar-page">
+  <PageHead
+    kicker="La barra · GLOSS & GLASS"
+    title="Una buena carta. No una sala de espera."
+    subtitle="Café de especialidad, tónica de la casa 0.0 y algo para brindar. Vení por la barra o hacé del tratamiento de tu auto una pausa para vos."
+  />
+
+  <section class="bar-glow border-y border-line" aria-labelledby="glow-title">
+    <div class="wm-container py-16 sm:py-20">
+      <div class="gg-bar-feature">
+        <div>
+          <p class="wm-kicker">Condensation & glow</p>
+          <h2 id="glow-title" class="wm-display mt-5 text-[clamp(2rem,5vw,3.4rem)]">
+            Hielo en el vaso.<br />Luz cálida en la mesa.
+          </h2>
+          <p class="mt-5 max-w-lg text-muted">
+            Afuera, el ritmo de Palermo. Acá, el vapor del café, la condensación
+            sobre el vidrio y una medialuna para cortar el día. El box trabaja;
+            tu tiempo vuelve a ser tuyo.
+          </p>
+          <p class="mt-5 max-w-lg text-muted">
+            Lo que no tiene alcohol no ocupa el margen de la carta: tiene su
+            propia receta, su copa y el mismo cuidado. Manejar también es un plan.
+          </p>
+          <a href={appUrl("/bar#carta")} class="gg-btn mt-8">Explorar la carta</a>
+          <p class="mt-6 text-sm text-accent"><LiveNow signal={liveBarra} /></p>
+        </div>
+        <figure>
+          <div class="gg-photo wm-grade wm-grain overflow-hidden">
+            <img
+              src={fotos.barra}
+              alt="Luz cálida sobre las mesas de la barra de GLOSS & GLASS (imagen de demostración)."
+              loading="lazy"
+              decoding="async"
+              class="aspect-[4/3] w-full object-cover"
+            />
+          </div>
+          <figcaption class="mt-3 text-xs text-muted">La barra tiene su propio ritmo. Vos elegís cuánto quedarte.</figcaption>
+        </figure>
+      </div>
+      <div class="gg-bar-details">
+        <figure>
+          <div class="gg-photo wm-grade wm-grain overflow-hidden">
+            <img
+              src={fotos.brindis}
+              alt="Copas y cítricos en la barra de GLOSS & GLASS (imagen de demostración)."
+              loading="lazy"
+              decoding="async"
+              class="aspect-[3/2] w-full object-cover"
+            />
+          </div>
+          <figcaption class="mt-3 text-sm text-muted">El ritual del brindis, también en versión 0.0.</figcaption>
+        </figure>
+        <figure>
+          <div class="gg-photo wm-grade wm-grain overflow-hidden">
+            <img
+              src={fotos.medialunas}
+              alt="Medialunas para acompañar el café en GLOSS & GLASS (imagen de demostración)."
+              loading="lazy"
+              decoding="async"
+              class="aspect-[3/2] w-full object-cover"
+            />
+          </div>
+          <figcaption class="mt-3 text-sm text-muted">Medialunas de manteca. Una pausa que no necesita ocasión.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="carta" class="wm-container scroll-mt-28 py-16 sm:py-20" aria-labelledby="carta-title">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">La carta completa</p>
+      <h2 id="carta-title" class="wm-display mt-5 text-[clamp(2rem,5vw,3.4rem)]">Elegí por gusto, no por graduación.</h2>
+      <p class="mt-5 text-muted">El café de especialidad del turno es de cortesía. El resto de la carta se paga en la barra; precios finales.</p>
+    </header>
+    <div class="gg-menu-grid mt-12 grid gap-12">
+      {
+        grupos.map((grupo) => (
+          <article class="gg-menu-group">
+            <h3 class="wm-display text-3xl">{grupo.nombre}</h3>
+            <p class="mt-3 text-sm text-muted">{grupo.nota}</p>
+            <ul class="mt-5">
+              {grupo.items.map((item) => <BarItem item={item} />)}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+    <p class="mt-8 max-w-2xl text-sm text-muted">Barra de martes a domingo, de 10 a 22 h. Domingos hasta las 20 h.</p>
+  </section>
+
+  <section class="wash-sip border-y border-line" aria-labelledby="wash-sip-title">
+    <div class="wm-container py-16 sm:py-20">
+      <header class="max-w-2xl">
+        <p class="wm-kicker">Wash&Sip</p>
+        <h2 id="wash-sip-title" class="wm-display mt-5 text-[clamp(2rem,5vw,3.4rem)]">Dos rituales. Una misma pausa.</h2>
+        <p class="mt-5 text-muted">Del primer manto de espuma al último sorbo. Así se encuentran el box y la barra, sin correr el reloj.</p>
+      </header>
+      <div class="mt-10 grid grid-cols-2 border-b border-line">
+        <h3 class="wm-kicker pb-5 pr-4">En el box</h3>
+        <h3 class="wm-kicker border-l border-line pb-5 pl-4 sm:pl-8">En la barra</h3>
+      </div>
+      <ol>
+        {
+          momentos.map((momento, index) => (
+            <li class="grid grid-cols-2 border-b border-line">
+              <div class="py-6 pr-4 sm:pr-8">
+                <span class="text-xs tracking-[0.14em] text-accent">0{index + 1}</span>
+                <h4 class="wm-display mt-2 text-2xl sm:text-3xl">{momento.box}</h4>
+                <p class="mt-3 max-w-md text-sm text-muted">{momento.detalle}</p>
+              </div>
+              <div class="border-l border-line py-6 pl-4 sm:pl-8">
+                <span class="text-xs tracking-[0.14em] text-accent" aria-hidden="true">↔</span>
+                <h4 class="wm-display mt-2 text-2xl sm:text-3xl">{momento.barra}</h4>
+                <p class="mt-3 max-w-md text-sm text-muted">{momento.ritual}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="mt-10 flex flex-wrap items-center gap-6">
+        <a href={appUrl("/reservar")} class="gg-btn">Reservar lavado + mesa</a>
+        <p class="text-sm text-muted">reservá lavado + mesa en la misma seña</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wm-container py-16 sm:py-20" aria-labelledby="cuidado-title">
+    <div class="gg-responsible max-w-2xl">
+      <p class="wm-kicker">+18 · Consumo responsable</p>
+      <h2 id="cuidado-title" class="wm-display mt-4 text-2xl">El regreso también es parte del plan.</h2>
+      <p class="mt-4 text-muted">Si tomás, no manejás: te pedimos el taxi + opción dejar el auto.</p>
+      <p class="mt-3 text-sm text-muted">Coordinamos el retiro con vos. Si volvés al volante, la tónica y el spritz 0.0 tienen su lugar en la carta.</p>
+      <p class="mt-5 text-xs text-muted">GLOSS & GLASS es una marca ficticia. Imágenes y propuesta de demostración para portfolio.</p>
+    </div>
+  </section>
+  </div>
+  <MobileCta contact={lavadero.contact} brand={lavadero.brand} />
+</Base>

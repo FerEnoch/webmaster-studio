@@ -128,3 +128,19 @@
 html:has([data-wm-menu-panel][data-open="true"]) .wm-mobile-cta {
   display: none !important;
 }
+
+/* ─── 4. Portfolio hero ──────────────────────────────────────────
+   The kit PageHero stays byte for byte. The headline top spacing (previously
+   pt-28 sm:pt-32 on the component) lives here, only for the mother portfolio,
+   so the title clears the fixed header. The hero text sits in .wm-container,
+   a direct child of the absolute block inside [data-wm-hero].         */
+
+[data-wm-hero] .absolute.inset-0 > .wm-container {
+  padding-top: 7rem;
+}
+
+@media (min-width: 640px) {
+  [data-wm-hero] .absolute.inset-0 > .wm-container {
+    padding-top: 8rem;
+  }
+}

@@ -1,0 +1,587 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import MobileCta from "../components/MobileCta.astro";
+import FondoScroll from "../components/FondoScroll";
+import LiveNow from "../components/ui/LiveNow.astro";
+import BarPinned from "../components/BarPinned.astro";
+import LavadoCard from "../components/LavadoCard.astro";
+import ReservaSteps from "../components/ReservaSteps.astro";
+import {
+  lavadero,
+  tamanos,
+  servicios,
+  addons,
+  paquetes,
+  carta,
+  fotos,
+  PRECIOS,
+  PRECIOS_ADDONS,
+  SENIA_PORCENTAJE,
+} from "../content/lavadero-premium";
+import { video, poster } from "@lib/media";
+
+const [lavados, serviciosSection, paquetesSection, , faq] = lavadero.sections;
+
+/** Señal en vivo del salón (creíble: mesas, no métricas inventadas). */
+const liveBarra = {
+  label: "Abierto ahora",
+  count: 4,
+  min: 2,
+  max: 6,
+  unit: "mesas libres",
+  interval: 4200,
+};
+---
+
+<Base content={lavadero}>
+  <FondoScroll client:visible />
+  <!-- 0) Showroom light: el cursor es una fuente de luz. -->
+  <section
+    data-hero-light
+    data-wm-hero
+    class="gg-hero relative flex items-end overflow-hidden bg-[#0a0c10]"
+  >
+    <div
+      aria-hidden="true"
+      class="gg-hero-shade pointer-events-none absolute inset-0"
+    >
+    </div>
+    <div aria-hidden="true" class="gg-hero-glow pointer-events-none absolute inset-0"></div>
+
+    <div class="gg-hero-content wm-container relative w-full">
+      <p class="gg-kicker">Gloss &amp; Glass · Auto care &amp; bar</p>
+      <div class="gg-hero-layout">
+        <h1 class="gg-display">
+          <span>El auto</span> <em>impecable.</em>
+          <span class="gg-hero-last">Vos, en la barra.</span>
+        </h1>
+        <div class="gg-hero-copy">
+          <p>
+            Reservás en 30 segundos, dejás el auto en el box y te sentás en la
+            barra hasta que esté listo. Luz de salón sobre la pintura, café de
+            especialidad en la mano.
+          </p>
+          <div class="gg-hero-actions">
+            <a href={appUrl("/reservar")} class="gg-btn">Reservar mi lavado</a>
+            <a href={appUrl("/servicios")} class="gg-btn gg-btn--ghost">Armar mi tratamiento</a>
+          </div>
+          <p class="mt-6 text-sm text-white/70"><LiveNow signal={liveBarra} /></p>
+        </div>
+      </div>
+      <div class="gg-hero-footer">
+        <span>Detalle sobre la pintura. Tiempo para vos.</span>
+        <a href={appUrl("/#tour")}>Descubrí el recorrido ↓</a>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        const hero = document.querySelector("[data-hero-light]");
+        if (!hero || !window.matchMedia) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        const glow = hero.querySelector(".gg-hero-glow");
+        if (!glow) return;
+        let raf = 0;
+        let x = 50;
+        let y = 40;
+        const paint = () => {
+          raf = 0;
+          glow.setAttribute("style", `--mx:${x}%; --my:${y}%; opacity: 1;`);
+        };
+        hero.addEventListener("pointermove", (event) => {
+          const point = event as PointerEvent;
+          const rect = hero.getBoundingClientRect();
+          x = ((point.clientX - rect.left) / rect.width) * 100;
+          y = ((point.clientY - rect.top) / rect.height) * 100;
+          if (!raf) raf = window.requestAnimationFrame(paint);
+        });
+      })();
+    </script>
+  </section>
+
+  <!-- La promesa: la objeción, respondida de entrada. -->
+  <section class="gg-promise wm-container">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">La promesa</p>
+        <h2 class="gg-display mt-5">{lavadero.objeccion}</h2>
+        <p class="mt-6 max-w-xl text-muted">
+          En GLOSS &amp; GLASS el tratamiento lo hace gente que trabaja con
+          autos todos los días: guante de microfibra, producto diluido como
+          corresponde y secado sin contacto. Después del box, el interior se
+          entrega impecable, no rociado. Y la espera se pasa en la barra, no
+          en una silla de plástico.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href={appUrl("/reservar")} class="gg-btn">Reservar mi lavado</a>
+          <a href={appUrl("/servicios")} class="gg-btn gg-btn--ghost">Ver los servicios</a>
+        </div>
+      </div>
+
+      <div class="gg-photo wm-grade wm-grain wm-vignette overflow-hidden">
+        <img
+          src={fotos.tunel}
+          alt="Auto dentro del túnel de lavado iluminado de GLOSS & GLASS (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Cómo funciona: la idea del rubro en tres pasos. -->
+  <section class="gg-process wm-container">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">Cómo funciona</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.4rem)]">
+        Reservás, dejás el auto, te sentás
+      </h2>
+    </header>
+
+    <ol class="mt-12 grid gap-5 md:grid-cols-3">
+      {
+        [
+          {
+            n: "01",
+            t: "Reservás online",
+            b: "Tamaño de auto, nivel de tratamiento, extras y horario. Pagás el 20% de seña y quedás con un pase.",
+          },
+          {
+            n: "02",
+            t: "El auto entra al box",
+            b: "Lo dejamos nosotros. Vos entregás la llave y te sentás en la barra: café de especialidad incluido.",
+          },
+          {
+            n: "03",
+            t: "Te avisamos y retirás",
+            b: "Te escribimos por WhatsApp cuando sale del box. El pase dice la hora exacta de entrega.",
+          },
+        ].map((p) => (
+          <li class="gg-step">
+            <span class="gg-step-number" aria-hidden="true">{p.n}</span>
+            <h3 class="wm-display mt-3 text-2xl leading-tight">{p.t}</h3>
+            <p class="mt-3 text-sm text-muted">{p.b}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- La espera en la barra (la idea del rubro). -->
+  <BarPinned
+    carta={carta}
+    live={liveBarra}
+    foto={fotos.barra}
+    fotoAlt="Interior de la barra de GLOSS & GLASS (imagen de demostración)."
+  />
+
+  <!-- El tour: entrá, transformá, descontracturá. Scroll nativo, sin secuestro. -->
+  <section class="wm-container py-16 sm:py-20" id="tour" aria-label="Recorrido del local">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">El recorrido</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.4rem)]">
+        Entrás, se transforma, descontracturás
+      </h2>
+      <p class="mt-5 text-muted">
+        Tres momentos, un solo lugar. Bajá a tu ritmo: cada escena queda fija
+        hasta que pasás a la siguiente. Sin controles que aprender.
+      </p>
+    </header>
+
+    <div class="gg-tour mt-12 grid gap-5 lg:grid-cols-3">
+      {
+        [
+          {
+            img: fotos.tunel,
+            alt: "Entrada al box de lavado de GLOSS & GLASS (imagen de demostración).",
+            stop: "Llegás",
+            title: "El box a la vista",
+            body: "Dejás la llave y ves dónde queda tu auto. Nada de portones cerrados ni misterio.",
+          },
+          {
+            img: fotos.tecnico,
+            alt: "Técnico de GLOSS & GLASS trabajando en un auto (imagen de demostración).",
+            stop: "Se transforma",
+            title: "Manos sobre el auto",
+            body: "Espuma, microfibra, vapor y cera. El pase te dice a qué hora exacta está listo.",
+          },
+          {
+            img: fotos.brindis,
+            alt: "Brindis en la barra de GLOSS & GLASS (imagen de demostración).",
+            stop: "Descontracturás",
+            title: "La barra hace lo suyo",
+            body: "Café de especialidad o algo sin alcohol mientras esperás. El auto sale, vos ya saliste.",
+          },
+        ].map((s, i) => (
+          <article class="gg-tour-card overflow-hidden">
+            <span class="gg-tour-number" aria-hidden="true">0{i + 1}</span>
+            <div class="wm-grade wm-grain overflow-hidden">
+              <img
+                src={s.img}
+                alt={s.alt}
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-cover"
+              />
+            </div>
+            <div class="p-6 sm:p-7">
+              <p class="wm-kicker">{s.stop}</p>
+              <h3 class="wm-display mt-3 text-2xl leading-tight">{s.title}</h3>
+              <p class="mt-3 text-sm text-muted">{s.body}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+    <p class="mt-6 text-sm text-muted">
+      ¿Venís solo por la barra?{" "}
+      <a
+        href={appUrl("/bar")}
+        class="font-semibold text-accent underline underline-offset-4"
+      >
+        Mirá la carta y reservá mesa
+      </a>
+      .
+    </p>
+  </section>
+
+  <!-- Lavados por tamaño de auto. -->
+  <section class="wm-container py-16 sm:py-20" id="lavados">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{lavados.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{lavados.title}</h2>
+      <p class="mt-5 text-muted">{lavados.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {tamanos.map((item, i) => <LavadoCard item={item} index={i} />)}
+    </div>
+
+    <p class="mt-8 text-sm text-muted">
+      <a href={appUrl("/servicios")} class="font-semibold text-accent underline underline-offset-4">
+        Ver los tres niveles de tratamiento y los extras
+      </a>
+    </p>
+  </section>
+
+  <!-- Los tres niveles, revelados por la luz. -->
+  <section class="gg-showroom py-16 sm:py-20" aria-label="Niveles de tratamiento">
+    <div class="wm-container">
+      <div class="rounded-wm-lg border border-line bg-black/40 p-8 sm:p-10">
+        <p class="wm-kicker">{serviciosSection.kicker}</p>
+        <h2 class="wm-display mt-4 text-[clamp(1.6rem,4vw,2.4rem)]">{serviciosSection.title}</h2>
+        <p class="mt-4 max-w-2xl text-sm text-muted">
+          Pasá el cursor —o tocá— cada nivel: la luz lo revela. El detalle
+          completo, sin apuro, está en la página de servicios.
+        </p>
+
+        <ul class="mt-8 divide-y divide-line border-y border-line">
+          {
+            servicios.map((s) => (
+              <li>
+                <a href={appUrl("/servicios")} class="gg-reveal group flex flex-wrap items-baseline justify-between gap-4 py-5">
+                  <span>
+                    <span class="wm-display block text-xl transition-colors group-hover:text-white group-focus-visible:text-white">
+                      {s.title}
+                    </span>
+                    <span class="mt-1 block max-w-xl text-sm text-muted">{s.body}</span>
+                  </span>
+                  <span class="text-right">
+                    <span class="block text-sm text-muted">
+                      {s.meta?.find((m) => m.label === "Duración")?.value}
+                    </span>
+                    <span class="font-semibold text-accent">desde {s.price?.amount}</span>
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Antes / después: arrastrá para revelar. -->
+  <section class="wm-container py-16 sm:py-20" aria-label="Antes y después">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+      <div
+        data-wipe
+        class="gg-wipe-frame wm-grade wm-grain relative aspect-[4/3] overflow-hidden select-none"
+      >
+        <img
+          src={fotos.box}
+          alt="Auto después del tratamiento en GLOSS & GLASS (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="absolute inset-0 h-full w-full object-cover"
+          draggable="false"
+        />
+        <img
+          src={fotos.garage}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          class="gg-wipe-before absolute inset-0 h-full w-full object-cover"
+          draggable="false"
+        />
+        <span class="gg-wipe-handle" aria-hidden="true"></span>
+        <span class="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-white">
+          Antes / después
+        </span>
+      </div>
+      <div>
+        <p class="wm-kicker">La prueba</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)] leading-tight">
+          No te lo contamos: lo revelás vos
+        </h2>
+        <p class="mt-5 max-w-xl text-muted">
+          Mové el control como una escobilla: el antes opaco se corre y
+          aparece el después. Con el dedo, el mouse o las flechas del teclado.
+        </p>
+        <label class="mt-6 block max-w-md text-sm text-muted">
+          Revelar el después
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value="50"
+            data-wipe-range
+            class="mt-2 w-full accent-[#D08A3E]"
+          />
+        </label>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        const root = document.querySelector("[data-wipe]");
+        const range = document.querySelector("[data-wipe-range]");
+        if (!root || !(range instanceof HTMLInputElement)) return;
+        const apply = () => root.setAttribute("style", `--wipe:${range.value}%;`);
+        range.addEventListener("input", apply);
+        apply();
+      })();
+    </script>
+  </section>
+
+  <!-- Paquetes: Club Gloss. -->
+  <section class="wm-container py-16 sm:py-20" id="paquetes">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{paquetesSection.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{paquetesSection.title}</h2>
+      <p class="mt-5 text-muted">{paquetesSection.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {paquetes.map((item, i) => <LavadoCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <!-- Banda de video: el auto y la calle. -->
+  <section class="gg-film relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(4189)}
+        poster={poster(4189)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Auto clásico circulando por la costa (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 70%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-32">
+      <p class="wm-kicker">El detalle</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        El auto entra, el café sale
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        Un tratamiento no es una fila de autos: es una hora que no querés
+        perder. Por eso la barra abre cuando abre el box, y el café de
+        especialidad viene con el turno, siempre.
+      </p>
+      <a href={appUrl("/reservar")} class="gg-btn mt-8">Reservar mi tratamiento</a>
+    </div>
+  </section>
+
+  <!-- Conversión principal: 4 pasos hasta el ticket. -->
+  <ReservaSteps
+    conversion={lavadero.conversion}
+    brand={lavadero.brand}
+    rubroId={lavadero.id}
+    servicios={servicios}
+    addons={addons}
+    precios={PRECIOS}
+    preciosAddons={PRECIOS_ADDONS}
+    sena={SENIA_PORCENTAJE}
+  />
+
+  <!-- FAQ -->
+  <section class="wm-container py-16 sm:py-20" id="faq">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{faq.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{faq.title}</h2>
+    </header>
+
+    <div class="mt-12 divide-y divide-line border-y border-line">
+      {
+        faq.items?.map((item) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6">
+              <span class="wm-display text-xl leading-snug">{item.title}</span>
+              <span
+                aria-hidden="true"
+                class="text-2xl text-accent transition-transform group-open:rotate-45"
+              >
+                +
+              </span>
+            </summary>
+            <p class="mt-4 max-w-3xl text-muted">{item.body}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Sede y horarios. -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.tecnico}
+          alt="Técnico de GLOSS & GLASS trabajando en un auto (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+      <div>
+        <p class="wm-kicker">Dónde estamos</p>
+        <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.2rem)]">
+          Palermo, con el box a la vista
+        </h2>
+        <p class="mt-5 text-muted">
+          {lavadero.contact.address}. El lavadero abre de lunes a sábado y la
+          barra de martes a domingo: hay un box siempre funcionando y una
+          persona siempre en la barra.
+        </p>
+        <dl class="mt-6 grid gap-3 text-sm">
+          <div class="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Horarios</dt>
+            <dd class="text-right font-medium">{lavadero.contact.hours}</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Teléfono</dt>
+            <dd class="text-right font-medium">{lavadero.contact.phone}</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+            <dt class="text-xs uppercase tracking-[0.14em] text-muted">Email</dt>
+            <dd class="text-right font-medium">{lavadero.contact.email}</dd>
+          </div>
+        </dl>
+        <a href={appUrl("/contacto")} class="gg-btn mt-8">Ver contacto y horarios</a>
+      </div>
+    </div>
+  </section>
+  <MobileCta contact={lavadero.contact} brand={lavadero.brand} />
+</Base>
+
+<style>
+  /* Keep every section (including child Astro components) above the fixed
+     decoration without wrapping the content or changing Base's structure. */
+  :global(main:has([data-gg-background]) > section),
+  :global(body:has([data-gg-background]) > footer) {
+    position: relative;
+    z-index: 1;
+  }
+  .gg-hero {
+    background-color: transparent;
+  }
+  .gg-hero-shade {
+    background:
+      linear-gradient(90deg, #08090cdb 0%, #08090c60 60%, #08090c38),
+      linear-gradient(0deg, #101114 0%, #10111418 55%, #10111466);
+  }
+  .gg-hero-glow {
+    --mx: 50%;
+    --my: 40%;
+    opacity: 0.55;
+    background: radial-gradient(
+      34rem 34rem at var(--mx) var(--my),
+      rgba(208, 138, 62, 0.38),
+      rgba(208, 138, 62, 0.12) 42%,
+      transparent 68%
+    );
+    transition: opacity 0.6s ease;
+  }
+  @media (hover: none) {
+    .gg-hero-glow {
+      opacity: 0.55;
+      animation: gg-drift 9s ease-in-out infinite alternate;
+    }
+  }
+  @keyframes gg-drift {
+    from { --mx: 30%; --my: 35%; }
+    to { --mx: 70%; --my: 55%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gg-hero-glow { animation: none; }
+  }
+  .gg-showroom {
+    background: radial-gradient(ellipse at 15% 50%, #d08a3e20, transparent 70%), linear-gradient(to bottom, transparent, #08090c 18%, #08090c 82%, transparent);
+  }
+  .gg-reveal {
+    border-radius: 0;
+    margin: 0 -0.75rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .gg-reveal:hover,
+  .gg-reveal:focus-visible {
+    background: linear-gradient(
+      to right,
+      rgba(208, 138, 62, 0.14),
+      rgba(208, 138, 62, 0.03) 60%,
+      transparent
+    );
+    outline-offset: 4px;
+  }
+  .gg-wipe-before {
+    clip-path: inset(0 calc(100% - var(--wipe, 50%)) 0 0);
+  }
+  .gg-wipe-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--wipe, 50%);
+    width: 2px;
+    background: #d08a3e;
+    box-shadow: 0 0 1.5rem #d08a3e80;
+  }
+  .gg-wipe-handle::after {
+    content: "◆";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    background: rgba(10, 12, 16, 0.8);
+    border: 1px solid #d08a3e;
+    color: #fff;
+    font-size: 0.8rem;
+  }
+</style>

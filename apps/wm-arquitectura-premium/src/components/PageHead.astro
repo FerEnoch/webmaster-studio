@@ -1,0 +1,21 @@
+---
+/**
+ * Cabecera de paginas internas: kicker + titular + bajada.
+ * Identidad propia de la edicion premium (no usa el PageHero del kit).
+ */
+export interface Props {
+  kicker: string;
+  title: string;
+  subtitle?: string;
+}
+
+const { kicker, title, subtitle } = Astro.props;
+---
+
+<header class="vt-head">
+  <div class="wm-container">
+    <p class="wm-kicker">{kicker}</p>
+    <h1 class="vt-head__title">{title}</h1>
+    {subtitle ? <p class="vt-head__intro">{subtitle}</p> : null}
+  </div>
+</header>

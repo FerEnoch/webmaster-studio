@@ -1,0 +1,21 @@
+---
+/**
+ * Cabecera de paginas internas: kicker + titular + bajada.
+ */
+export interface Props {
+  kicker: string;
+  title: string;
+  subtitle?: string;
+}
+
+const { kicker, title, subtitle } = Astro.props;
+---
+
+<header data-wm-hero class="gg-page-head wm-container">
+  <p class="gg-kicker">{kicker}</p>
+  <div class="gg-page-head-layout">
+    <h1 class="gg-display">{title}</h1>
+    {subtitle ? <p class="gg-page-intro">{subtitle}</p> : null}
+  </div>
+  <span class="gg-page-rule" aria-hidden="true"></span>
+</header>

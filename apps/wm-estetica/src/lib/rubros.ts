@@ -1,5 +1,5 @@
 /**
- * Los 6 rubros del portfolio + el id del portfolio madre.
+ * Los 8 rubros del portfolio + el id del portfolio madre.
  *
  * Fuente de verdad de: slug, nombre, rubro, bajada, objeción que responde
  * la web, URL de la demo, paleta (1 fondo + 1 claro + 1 acento) y el
@@ -63,6 +63,21 @@ export const RUBROS: Rubro[] = [
     },
   },
   {
+    id: "lavadero-premium",
+    slug: "lavadero-premium",
+    nombre: "Lavadero Premium",
+    rubro: "Lavadero de autos con bar",
+    tagline: "La experiencia Gloss & Glass: luz, bar y detalle.",
+    objeccion: "«Quiero el lavado premium, no el básico»",
+    demoUrl: "/demos/lavadero-premium/",
+    port: 3031,
+    palette: { bg: "#101114", fg: "#EDEAE2", accent: "#D08A3E" },
+    whatsapp: {
+      phone: "5491190123456",
+      template: "Hola, quiero reservar la experiencia Gloss & Glass el {dia}.",
+    },
+  },
+  {
     id: "estetica",
     slug: "estetica",
     nombre: "Estética + yoga",
@@ -122,22 +137,37 @@ export const RUBROS: Rubro[] = [
       template: "Hola, quiero cotizar un proyecto de {tipo}.",
     },
   },
+  {
+    id: "arquitectura-premium",
+    slug: "arquitectura-premium",
+    nombre: "Arquitectura Premium",
+    rubro: "Estudio de arquitectura y diseño",
+    tagline: "La obra se recorre: 3D en vivo, tour y cotización al instante.",
+    objeccion: "«Quiero ver la obra terminada antes de firmar»",
+    demoUrl: "/demos/arquitectura-premium/",
+    port: 3032,
+    palette: { bg: "#14110D", fg: "#EFE9DC", accent: "#D9A441" },
+    whatsapp: {
+      phone: "5491190123456",
+      template: "Hola, quiero cotizar un proyecto de {tipo} en la edición premium.",
+    },
+  },
 ];
 
-/** El portfolio madre: no es un rubro, es el índice de las 6 demos. */
+/** El portfolio madre: no es un rubro, es el índice de las 8 demos. */
 export const PORTFOLIO = {
   id: "portfolio",
   slug: "portfolio",
   nombre: "Portfolio",
   rubro: "Portfolio de demos por rubro",
-  tagline: "Siete webs, seis rubros, una sola firma visual.",
+  tagline: "Nueve webs, seis rubros, una sola firma visual.",
   objeccion: "«¿Cada web es un template o está hecha para mi rubro?»",
   demoUrl: "/",
   port: 3027,
   palette: { bg: "#111113", fg: "#EFEFEA", accent: "#D7FF4A" },
 } as const;
 
-/** Todas las apps del monorepo (6 rubros + portfolio madre). */
+/** Todas las apps del monorepo (8 ejemplos + portfolio madre). */
 export const APPS: { id: string; nombre: string; rubro: string; demoUrl: string; port: number }[] = [
   ...RUBROS.map((r) => ({
     id: r.id,

@@ -1,339 +1,304 @@
-/**
- * Contenido de TU NOMBRE — portfolio madre de demos por rubro.
- *
- * MARCA FICTICIA / PLACEHOLDER: `TU NOMBRE` es el nombre del estudio.
- * Reemplazalo por el tuyo (en `brand`) y los textos que lo mencionan.
- *
- * TODO lo que hay acá es DEMO: no hay clientes reales, no hay logos, no hay
- * testimonios y no hay cifras de clientes. La prueba que se muestra es la del
- * PROCESO (entrega, Lighthouse, un solo CTA, un solo ticket), y está marcada
- * como demo en la propia interfaz.
- *
- * Precios: los del plan de negocios (05-plan-negocios.md), con precios finales
- * e impuestos incluidos.
- */
+/** Contenido del sitio de Webmaster Studio. Los ejemplos y datos de contacto son ficticios. */
 
 import { img, poster, video } from "@lib/media";
 import { PORTFOLIO, RUBROS } from "@lib/rubros";
 import type { CatalogItem, RubroContent, Section } from "@lib/types";
 
-export const brand = "TU NOMBRE";
+export const brand = "Webmaster Studio";
 
-/** ── Servicios: qué hago ─────────────────────────────────────────────── */
+/** Copy del catálogo del estudio; conserva las identidades y rutas del registro de rubros. */
+const solutionCopy: Record<string, { tagline: string; objeccion: string }> = {
+  concesionario: {
+    tagline: "Catálogo de vehículos con fichas y consultas comerciales.",
+    objeccion: "Información de cada vehículo y condiciones de compra en un mismo lugar.",
+  },
+  lavadero: {
+    tagline: "Presentación de servicios de lavado y gestión de reservas.",
+    objeccion: "Detalle de los tratamientos y del cuidado del vehículo.",
+  },
+  "lavadero-premium": {
+    tagline: "Solución PREMIUM Gloss & Glass: showroom de luz, bar y detalle.",
+    objeccion: "La experiencia premium del rubro: reserva en 30 segundos, cero letra chica.",
+  },
+  estetica: {
+    tagline: "Servicios de estética, actividades y solicitud de turnos.",
+    objeccion: "Información sobre tratamientos, profesionales y disponibilidad.",
+  },
+  universidad: {
+    tagline: "Oferta académica, becas y consultas de admisión.",
+    objeccion: "Programas de estudio y orientación para futuros estudiantes.",
+  },
+  inmobiliaria: {
+    tagline: "Catálogo de propiedades y coordinación de visitas.",
+    objeccion: "Fichas de propiedades con imágenes y características relevantes.",
+  },
+  arquitectura: {
+    tagline: "Presentación de proyectos y consultas de obra.",
+    objeccion: "Etapas de trabajo, alcance y criterios para solicitar un presupuesto.",
+  },
+  "arquitectura-premium": {
+    tagline: "Solución PREMIUM del rubro arquitectura: recorrido 3D, tour de obra y cotización en vivo.",
+    objeccion: "Ver la obra terminada antes de firmar: recorrido 3D, tour y precio en vivo.",
+  },
+};
+
+export const solutions = RUBROS.map((r) => ({ ...r, ...solutionCopy[r.id] }));
+
 const servicios: Section = {
   id: "servicios",
-  kicker: "Qué hago",
-  title: "Cuatro servicios, cero vueltas de agencia",
-  body: "No vendo plantillas: cada web se escribe para el rubro que la usa. Todo lo que ves en este portfolio es una demo viva que podés abrir ahora mismo.",
+  kicker: "Servicios",
+  title: "Desarrollo de software para tu organización",
+  body: "Diseñamos y desarrollamos sitios web y aplicaciones según las necesidades de cada proyecto. Definimos el alcance, las integraciones y el mantenimiento junto con tu equipo.",
   layout: "grid",
   items: [
     {
-      id: "demo-gratis",
-      title: "Demo gratis en 48 h",
-      body: "Elegís el rubro, me contás del negocio y te mando una home armada con tu contenido. Sin costo y sin compromiso.",
-      points: [
-        "No es una plantilla cambiada: es tu rubro",
-        "Te la mando con un código de demo",
-        "Si no te sirve, no pasa nada",
-      ],
-      meta: [{ label: "Plazo", value: "48 h hábiles" }],
-      badge: "Empezá por acá",
+      id: "consulta",
+      title: "Análisis y cotización",
+      body: "Revisamos los objetivos y requisitos para preparar una propuesta. Podemos preparar una demo rápida para explorar la solución antes de definir el desarrollo.",
+      points: ["Relevamiento de necesidades", "Alcance y prioridades", "Propuesta de trabajo"],
+      meta: [{ label: "Modalidad", value: "Según el proyecto" }],
     },
     {
       id: "sitio",
-      title: "Sitio por rubro",
-      body: "Home, secciones y una conversión real: turno, reserva, presupuesto o inscripción, siempre con ticket.",
-      points: [
-        "Copy del rubro, no texto genérico",
-        "Fotos y video con la misma gradación",
-        "Un CTA sobre el fold",
-      ],
-      meta: [{ label: "Plazo", value: "1 a 2 semanas" }],
+      title: "Sitios web por industria",
+      body: "Sitios con contenido, navegación y consultas adaptados a la actividad de tu organización.",
+      points: ["Diseño y contenido específicos", "Experiencia móvil y de escritorio", "Formularios y canales de contacto"],
+      meta: [{ label: "Plazo estimado", value: "1 a 2 semanas, según alcance" }],
     },
     {
       id: "conversion",
-      title: "Sitio con conversión conectada",
-      body: "Lo mismo, pero con backend de verdad: el formulario llega, el turno se agenda y se cobra, y los avisos salen.",
-      points: [
-        "Backend, base de datos y correos",
-        "Agenda o sistema de turnos real",
-        "Medios de pago si el rubro los necesita",
-      ],
-      meta: [{ label: "Plazo", value: "3 a 5 semanas" }],
+      title: "Aplicaciones e integraciones",
+      body: "Desarrollamos funcionalidades conectadas a los sistemas que necesita tu operación, según el alcance acordado.",
+      points: ["Backend y bases de datos", "Agendas y gestión de reservas", "Integraciones con pagos y notificaciones"],
+      meta: [{ label: "Plazo estimado", value: "3 a 5 semanas, según alcance" }],
     },
     {
       id: "mantenimiento",
-      title: "Mantenimiento",
-      body: "Hosting, backups, cambios menores y un chequeo mensual de rendimiento. Para el que no quiere pensar en la web.",
-      points: [
-        "Backups y monitoreo",
-        "Certificado y deploy sin sorpresas",
-        "Un canal directo de consultas",
-      ],
-      meta: [{ label: "Compromiso", value: "Mensual" }],
+      title: "Mantenimiento y soporte",
+      body: "Acompañamos la operación del sitio con alojamiento, copias de seguridad y revisiones de rendimiento.",
+      points: ["Backups y monitoreo", "Actualizaciones y despliegue", "Canal de consultas"],
+      meta: [{ label: "Modalidad", value: "Mensual" }],
     },
   ],
 };
 
-/** ── Precios ─────────────────────────────────────────────────────────── */
 const precios: Section = {
   id: "precios",
-  kicker: "Precios",
-  title: "Los precios, antes de la llamada",
-  body: "Son los valores de referencia del plan de negocios, con impuestos incluidos. La demo gratis de 48 h no se cobra: es la puerta de entrada.",
+  kicker: "Valores de referencia",
+  title: "Una cotización según el alcance",
+  body: "Estos valores orientan la consulta inicial e incluyen impuestos. La propuesta final detalla funcionalidades, plazos y condiciones de cada proyecto.",
   layout: "grid",
   items: [
     {
       id: "plan-home",
-      title: "Home por rubro",
-      body: "La home que ves en las demos, con tu contenido, tu color y un CTA que funciona.",
-      points: [
-        "1 a 2 semanas",
-        "Hasta 5 secciones",
-        "1 conversión simple (form, WhatsApp o reserva)",
-      ],
+      title: "Página de presentación",
+      body: "Una página adaptada a tu actividad, con contenido propio y un canal de consulta.",
+      points: ["1 a 2 semanas, según alcance", "Hasta 5 secciones", "Formulario, WhatsApp o solicitud de reserva"],
       meta: [{ label: "Incluye", value: "SEO base y despliegue" }],
       price: { amount: "desde USD 300", note: "final, impuestos incluidos" },
-      badge: "El más pedido",
     },
     {
       id: "plan-conversion",
-      title: "Home + conversión real",
-      body: "Con backend: lo que la gente completa en la web llega a tu email o a tu agenda.",
-      points: [
-        "3 a 5 semanas",
-        "Turnos, reservas o carritos",
-        "Avisos automáticos por email y WhatsApp",
-      ],
+      title: "Sitio con integraciones",
+      body: "Un sitio con backend para gestionar consultas, turnos o reservas, según lo acordado.",
+      points: ["3 a 5 semanas, según alcance", "Turnos, reservas o carritos", "Notificaciones según integración"],
       meta: [{ label: "Incluye", value: "Panel o base de datos" }],
       price: { amount: "USD 600 a 1.200", note: "final, impuestos incluidos" },
     },
     {
       id: "plan-pack",
-      title: "Pack fotos, copy y SEO local",
-      body: "Lo que casi siempre falta: fotos Presentables, textos que venden y que te encuentren en Google.",
-      points: [
-        "Sesión de fotos o banco curado",
-        "Copy por sección",
-        "Ficha de Google y SEO local",
-      ],
-      meta: [{ label: "Duración", value: "1 semana" }],
+      title: "Contenido y SEO local",
+      body: "Preparación de imágenes, textos y presencia en buscadores para acompañar el desarrollo.",
+      points: ["Sesión de fotos o selección de imágenes", "Textos por sección", "Ficha de Google y SEO local"],
+      meta: [{ label: "Duración estimada", value: "1 semana" }],
       price: { amount: "+ USD 200", note: "final, impuestos incluidos" },
     },
     {
       id: "plan-mantenimiento",
       title: "Mantenimiento",
-      body: "Todo lo técnico ordenado, con alguien que conteste cuando algo se rompe.",
-      points: [
-        "Hosting y backups",
-        "Cambios menores incluidos",
-        "Chequeo mensual de rendimiento",
-      ],
-      meta: [{ label: "Compromiso", value: "Mensual" }],
+      body: "Soporte técnico y revisiones periódicas para mantener el sitio actualizado.",
+      points: ["Hosting y backups", "Cambios menores incluidos", "Revisión mensual de rendimiento"],
+      meta: [{ label: "Modalidad", value: "Mensual" }],
       price: { amount: "USD 30 a 60 / mes", note: "final, impuestos incluidos" },
     },
   ],
 };
 
-/** ── Proceso 48 h ─────────────────────────────────────────────────────── */
 const proceso: Section = {
   id: "proceso",
-  kicker: "El proceso",
-  title: "De la objeción al ticket en 48 horas",
-  body: "Es el mismo camino que recorriste en las demos, pero con tu negocio. Sin reunión de dos horas: cuatro pasos y un código.",
+  kicker: "Proceso de trabajo",
+  title: "De la consulta a la propuesta de desarrollo",
+  body: "Partimos de las necesidades de tu organización para definir una solución, acordar su alcance y planificar la implementación.",
   layout: "timeline",
   items: [
     {
       id: "p1",
-      title: "Elegís el rubro",
-      body: "Abrís las demos, comparás y decís cuál se parece a lo tuyo. Si no sabés, lo resolvemos por WhatsApp.",
-      points: ["6 demos vivas para comparar", "La objeción de cada una, escrita"],
-      meta: [{ label: "Dura", value: "5 min" }],
+      title: "Consulta inicial",
+      body: "Nos contás sobre tu actividad, tus objetivos y los procesos que necesitás mejorar.",
+      points: ["Actividad y contexto", "Objetivos del proyecto"],
     },
     {
       id: "p2",
-      title: "Me contás del negocio",
-      body: "Nombre, a qué se dedica, dónde estás y qué objeción te frena hoy. Con eso alcanza.",
-      points: ["Nombre y actividad", "Ciudad o zona", "La objeción principal"],
-      meta: [{ label: "Dura", value: "10 min" }],
+      title: "Análisis de requisitos",
+      body: "Revisamos funcionalidades, contenido e integraciones. Si ayuda a evaluar la propuesta, podemos preparar una demo rápida.",
+      points: ["Necesidades y prioridades", "Sistemas a integrar"],
     },
     {
       id: "p3",
-      title: "Armo la home",
-      body: "Copy del rubro, fotos y video consistentes, un CTA y un ticket. Todo con la misma firma visual de las demos.",
-      points: ["Sin placeholders", "Un solo CTA sobre el fold", "Ticket animado al final"],
-      meta: [{ label: "Dura", value: "24 h" }],
+      title: "Cotización y planificación",
+      body: "Preparamos una propuesta con alcance, presupuesto y plazos para revisar antes de iniciar el trabajo.",
+      points: ["Entregables definidos", "Condiciones y etapas acordadas"],
     },
     {
       id: "p4",
-      title: "Te la mando con un código",
-      body: "Te paso el link con tu código de demo y un WhatsApp prearmado para que sigamos sin vueltas.",
-      points: ["Link con código", "WhatsApp prearmado", "El código queda en tu ticket"],
-      meta: [{ label: "Dura", value: "24 h" }],
+      title: "Desarrollo y seguimiento",
+      body: "Implementamos la solución por etapas y revisamos los avances con tu equipo hasta la entrega.",
+      points: ["Revisiones de avance", "Validación y puesta en marcha"],
     },
   ],
 };
 
-/** ── Prueba honesta: del PROCESO, no de clientes ─────────────────────── */
 const prueba: Section = {
   id: "prueba",
-  kicker: "Prueba",
-  title: "Lo único que puedo probar hoy",
-  body: "No tengo clientes a los que pedirle testimonio, así que no te voy a inventar logos ni cifras. Lo de abajo es el estándar con el que trabajo y lo que se puede verificar de mi propio trabajo.",
+  kicker: "Criterios de trabajo",
+  title: "Calidad y claridad en cada etapa",
+  body: "Las soluciones por industria permiten explorar nuestro enfoque de diseño y desarrollo. Son ejemplos con información ficticia, no casos de clientes ni resultados comerciales acreditados.",
   layout: "grid",
   items: [
     {
       id: "lighthouse",
-      title: "Lighthouse 95+ antes de entregar",
-      body: "Es mi línea de base: mido performance, accesibilidad y SEO de cada demo antes de mandarla. Si no llega, no sale.",
-      points: ["Performance, accesibilidad y SEO verificados"],
-      meta: [{ label: "Medido en", value: "Mobile, 375 px" }],
+      title: "Rendimiento y accesibilidad",
+      body: "Incluimos revisiones de rendimiento, accesibilidad y SEO en el proceso de validación.",
+      points: ["Evaluación con herramientas de diagnóstico"],
     },
     {
       id: "un-cta",
-      title: "Un solo CTA sobre el fold",
-      body: "En las 6 demos hay una sola acción principal. No cinco botones compitiendo por el mismo click.",
-      points: ["Acción única arriba", "Secundarias fuera del fold"],
-      meta: [{ label: "Regla", value: "1 CTA" }],
+      title: "Navegación orientada a objetivos",
+      body: "Organizamos el contenido y las acciones principales para facilitar las consultas y el uso del sitio.",
+      points: ["Jerarquía de contenido", "Acciones claras"],
     },
     {
       id: "consola",
-      title: "Cero errores de consola",
-      body: "Pruebo cada ruta en 375×812 y en 1440×900 antes de entregarla, con la consola abierta.",
-      points: ["Mobile y desktop", "Typecheck sin errores"],
-      meta: [{ label: "Checklist", value: "Antes de entregar" }],
+      title: "Validación técnica",
+      body: "Revisamos las vistas móviles y de escritorio y realizamos comprobaciones técnicas antes de la entrega.",
+      points: ["Revisión de rutas", "Comprobación de tipos"],
     },
     {
       id: "entrega",
-      title: "Entrega en 48 horas",
-      body: "Es el plazo del proceso de demo, y es verificable: la fecha la ponés vos en el formulario.",
-      points: ["Home armada con tu contenido", "Código de demo en el ticket"],
-      meta: [{ label: "Plazo", value: "48 h hábiles" }],
+      title: "Alcance documentado",
+      body: "La propuesta establece qué se desarrolla y qué integraciones se incluyen, con plazos acordados para cada etapa.",
+      points: ["Entregables y condiciones", "Seguimiento del proyecto"],
     },
   ],
 };
 
-/** ── Preguntas frecuentes ─────────────────────────────────────────────── */
 const faq: Section = {
   id: "faq",
-  kicker: "Dudas",
-  title: "Lo que todos preguntan antes de escribir",
+  kicker: "Preguntas frecuentes",
+  title: "Información para iniciar un proyecto",
   layout: "list",
   items: [
     {
       id: "f1",
-      title: "¿Esto es un portfolio o son webs de verdad?",
-      body: "Es un portfolio de demos: las 6 webs que ves funcionan y se pueden recorrer, pero son demos con marcas, precios y datos inventados. Sirven para que veas cómo trabajo, no para que un cliente final las use.",
+      title: "¿Qué es Webmaster Studio?",
+      body: "Somos un estudio de desarrollo de software. Diseñamos sitios web, aplicaciones e integraciones para organizaciones de distintas industrias.",
     },
     {
       id: "f2",
-      title: "¿La demo gratis es gratis de verdad?",
-      body: "Sí. Armo una home con tu rubro, tu nombre y tu contenido, y te la mando con un código. Sin costo, sin contrato y sin compromiso de hiring.",
+      title: "¿Qué representan las soluciones por industria?",
+      body: "Son ocho ejemplos navegables con marcas, precios y datos ficticios. Sus formularios simulan interacciones y no envían información a un servidor. No son servicios operativos ni proyectos de clientes.",
     },
     {
       id: "f3",
-      title: "¿En 48 horas sale mi web completa?",
-      body: "No: en 48 horas sale la home, que es lo que ves en las demos (lo que tenés arriba del todo, más una conversión). El sitio completo, con todas las secciones y el backend conectado, se cotiza aparte.",
+      title: "¿Cómo se solicita una cotización?",
+      body: "La consulta inicial permite revisar objetivos, funcionalidades y necesidades de integración. Con esa información definimos una propuesta. El formulario de este sitio es una simulación: no envía solicitudes ni genera una cotización real.",
     },
     {
       id: "f4",
-      title: "¿Trabajás con contrato y factura?",
-      body: "Sí: factura A, B o C según corresponda, y los precios que ves publicados son finales, con impuestos incluidos.",
+      title: "¿Se puede evaluar una idea antes de desarrollarla?",
+      body: "Podemos preparar una demo rápida para revisar una idea o una funcionalidad. Su alcance y disponibilidad se acuerdan durante la consulta, sin prometer una entrega en un plazo fijo.",
     },
     {
       id: "f5",
-      title: "¿Qué pasa con mis fotos y mi marca?",
-      body: "Si ya tenés fotos, usámelas. Si no, uso bancos de stock curados por rubro y te entrego los archivos para que los reemplaces cuando quieras.",
+      title: "¿Cómo se definen los plazos y el presupuesto?",
+      body: "Dependen del alcance, el contenido disponible y las integraciones necesarias. Los valores publicados son orientativos; la cotización detalla las condiciones antes de comenzar.",
     },
     {
       id: "f6",
-      title: "¿Y si la demo no me gusta?",
-      body: "No pasa nada: no pagaste nada y no hay compromiso. Si después querés avanzar, el primer pago se descuenta del precio del proyecto.",
+      title: "¿Podemos usar nuestras imágenes y nuestra marca?",
+      body: "Sí. Trabajamos con la identidad y los materiales de tu organización. Si necesitás contenido adicional, lo incluimos en la propuesta según lo acordado.",
     },
   ],
 };
 
-/** ── Opciones del paso 1 del formulario: los 6 rubros ─────────────────── */
-const rubroOptions: CatalogItem[] = RUBROS.map((r) => ({
+const rubroOptions: CatalogItem[] = solutions.map((r) => ({
   id: r.id,
   kicker: r.nombre,
   title: r.rubro,
   body: r.tagline,
-  points: [r.objeccion],
-  badge: "48 h",
 }));
 
-/** ── Contenido completo ───────────────────────────────────────────────── */
 export const portfolio: RubroContent = {
   id: PORTFOLIO.id,
   brand,
-  rubro: PORTFOLIO.rubro,
-  tagline: "Webs por rubro que responden la objeción real y cierran en un ticket.",
-  objeccion: PORTFOLIO.objeccion,
+  rubro: "Estudio de Desarrollo de Software",
+  tagline: "Webmaster Studio: desarrollo de software, sitios web e integraciones para organizaciones.",
+  objeccion: "Software adaptado a las necesidades de tu organización",
   theme: {
     name: "portfolio",
     palette: { ...PORTFOLIO.palette },
     fonts: {
       display: "Archivo Black",
       body: "Hanken Grotesk",
-      // URL completa: `Archivo Black` tiene un solo peso y el layout arma
-      // siempre `wght@400;500;700;800`, que Google no resuelve para esa familia.
+      // Archivo Black solo ofrece peso 400; se conserva su URL específica.
       href: "https://fonts.googleapis.com/css2?family=Archivo+Black&family=Hanken+Grotesk:wght@400;500;600;700&display=swap",
     },
     radius: "0.6rem",
   },
   nav: [
     { label: "Inicio", href: "/" },
-    { label: "Demos", href: "/demos" },
+    { label: "Soluciones por industria", href: "/demos" },
     { label: "Servicios", href: "/servicios" },
     { label: "Contacto", href: "/contacto" },
     { label: "Legal", href: "/legal" },
   ],
   hero: {
-    kicker: "Portfolio · demos vivas por rubro",
-    title: ["Seis rubros,", "seis webs", "que ya funcionan"],
-    subtitle:
-      "Cada demo responde la objeción real de un rubro: la letra chica, la pintura rayada. Abrilas, probalas y pedí la tuya: te la armo en 48 horas.",
-    cta: { label: "Pedir mi demo gratis", href: "#demo" },
-    secondaryCta: { label: "Ver las 6 demos", href: "/demos" },
+    kicker: "Webmaster Studio",
+    title: ["Estudio de", "Desarrollo", "de Software"],
+    subtitle: "Diseñamos y desarrollamos sitios web, aplicaciones e integraciones. Acompañamos a tu organización desde la definición del proyecto hasta su implementación y mantenimiento.",
+    cta: { label: "Solicitar cotización", href: "#demo" },
+    secondaryCta: { label: "Soluciones por industria", href: "/demos" },
     video: {
       src: video(3256),
       poster: poster(3256),
-      alt: "Plano de una obra en curso que se usa de fondo en el portfolio (imagen de demostración).",
+      alt: "Plano de una obra en curso utilizado como imagen ilustrativa del estudio.",
       isVideo: true,
     },
-    live: { label: "Rubros con demo", count: 6, min: 6, max: 6, unit: "rubros", interval: 3400 },
+    live: { label: "Soluciones por industria", count: 8, min: 8, max: 8, unit: "soluciones", interval: 3400 },
   },
   sections: [servicios, precios, proceso, prueba, faq],
   conversion: {
     id: "demo",
-    kicker: "Demo gratis",
-    title: "Pedí tu demo y te la armo en 48 horas",
-    body: "Cuatro pasos: el rubro, tu negocio, tu contacto y listo. Te devuelvo un ticket con el código de la demo para que la abras cuando quieras.",
-    steps: ["Tu rubro", "Tu negocio", "Contacto", "Confirmación"],
+    kicker: "Contacto y cotización",
+    title: "Conversemos sobre tu proyecto",
+    body: "Contanos qué necesitás para definir el alcance y preparar una cotización. Podemos preparar una demo rápida para explorar la propuesta. Este formulario es una simulación y no envía solicitudes.",
+    steps: ["Tu proyecto", "Contacto", "Resumen"],
     options: rubroOptions,
-    // Ventanas de entrega: el plazo que elige el cliente para la demo.
-    slots: [
-      { id: "v1", day: "Mañana", time: "18:00 h", places: 3 },
-      { id: "v2", day: "En 48 h", time: "12:00 h", places: 5 },
-      { id: "v3", day: "La semana", time: "10:00 h", places: 8 },
-    ],
-    demoNotice: "Demo: no se envían datos.",
+    slots: [],
+    demoNotice: "Demo: no se envían datos ni se registra una solicitud. Los datos de contacto publicados son ficticios.",
   },
   legal: {
-    company: "TU NOMBRE Servicios Web (ficticia)",
+    company: "Webmaster Studio (datos legales ficticios)",
     cuit: "30-70987654-3",
-    address: "Av. Corrientes 1234, CABA · atención con cita",
-    email: "hola@tunombre.demo",
+    address: "Av. Corrientes 1234, CABA · domicilio ficticio",
+    email: "hola@webmasterstudio.demo",
     phone: "+54 11 0000-0000",
     pricesIncludeTaxes: true,
-    taxNote:
-      "Todos los precios publicados son precios finales e incluyen impuestos. Los valores en dólares se cobran al tipo de cambio del momento de la factura.",
+    taxNote: "Los valores de referencia incluyen impuestos. El presupuesto y las condiciones de pago se definen en la cotización de cada proyecto.",
     withdrawal: {
       enabled: true,
       label: "Botón de baja · Cancelar un servicio online",
-      note:
-        "Si contrataste un servicio online, podés cancelarlo sin costo desde acá. Completá los datos del servicio y se anula en el momento.",
+      note: "Este formulario simula una solicitud de baja. No envía datos, no cancela servicios ni registra una solicitud real.",
       resolution: "Resolución 316/2018 y 271/2020 — Botón de arrepentimiento para compras online.",
     },
     consumerDefense: {
@@ -346,24 +311,24 @@ export const portfolio: RubroContent = {
       { label: "Información sobre precios", href: "/legal#precios" },
     ],
     privacy: [
-      "Los datos que dejás en esta web se usan solo para preparar tu demo y avisarte por WhatsApp o email.",
-      "No se comparten con terceros ni se usan con fines comerciales.",
-      "Pedí la baja de tus datos desde el botón de baja del pie de página: se elimina todo en un plazo máximo de 10 días.",
-      "Esta web es una demostración de portfolio: los formularios no envían información a ningún servidor.",
+      "Los formularios de este sitio son simulaciones: no envían información a un servidor ni guardan solicitudes.",
+      "Los datos ingresados se muestran únicamente en la interfaz durante la interacción. No ingreses información sensible.",
+      "Los enlaces a WhatsApp abren un servicio externo con un mensaje preparado. El mensaje solo se envía si decidís hacerlo desde ese servicio.",
+      "Los datos de contacto publicados son ficticios y no constituyen un canal operativo de atención.",
     ],
     terms: [
-      "La demo gratuita se entrega dentro de las 48 horas hábiles siguientes a recibir los datos del negocio.",
-      "La demo es una muestra de diseño con contenido de ejemplo: no incluye el backend ni los servicios conectados.",
-      "El precio de los planes publicados es final e incluye impuestos; los trabajos que no entren en un plan se cotizan aparte.",
-      "Si el proyecto se cancela después de arrancar, se entrega todo lo hecho hasta ese momento.",
+      "Este sitio presenta los servicios de Webmaster Studio y soluciones ilustrativas por industria. Las marcas y los datos de los ejemplos son ficticios.",
+      "La consulta y cotización se representan mediante una simulación local, sin backend ni envío de solicitudes.",
+      "Se puede preparar una demo rápida para evaluar una propuesta; su alcance y disponibilidad se acuerdan durante la consulta, sin un plazo fijo de entrega.",
+      "Los valores publicados son de referencia. El alcance, presupuesto, plazos e integraciones se acuerdan en una propuesta específica antes de iniciar un proyecto.",
     ],
   },
   contact: {
     whatsapp: "5491100000000",
     phone: "+54 11 0000-0000",
-    email: "hola@tunombre.demo",
-    address: "Av. Corrientes 1234, CABA · atención con cita",
-    hours: "Lunes a viernes de 9 a 19 h · respuesta en el día",
+    email: "hola@webmasterstudio.demo",
+    address: "Av. Corrientes 1234, CABA · domicilio ficticio",
+    hours: "Lunes a viernes de 9 a 19 h · horario ilustrativo",
     mapsUrl: "https://maps.google.com/?q=Av+Corrientes+1234+CABA",
   },
   jsonLd: {
@@ -372,20 +337,16 @@ export const portfolio: RubroContent = {
   },
 };
 
-/**
- * Foto de portada de cada demo (6 rubros).
- *
- * IDs del pool verificado de `media.ts`. Cada URL fue verificada con
- * `curl -sI -m 15` (HTTP 200).
- */
+/** Imágenes ilustrativas de las ocho soluciones por industria. */
 export const demoImages: Record<string, string> = {
   concesionario: img("1503376780353-7e6692767b70", 1200),
   lavadero: img("1637430308606-86576d8fef3c", 1200),
+  "lavadero-premium": img("1637430308606-86576d8fef3c", 1200),
   estetica: img("1596178065887-1198b6148b2b", 1200),
   universidad: img("1562774053-701939374585", 1200),
   inmobiliaria: img("1512917774080-9991f1c4c750", 1200),
   arquitectura: img("1487958449943-2429e8be8625", 1200),
+  "arquitectura-premium": img("1600585154340-be6161a56a0c", 1200),
 };
 
-/** Foto del estudio (sección del proceso). */
 export const fotoEstudio = img("1497366754035-f200968a6e72", 1200);

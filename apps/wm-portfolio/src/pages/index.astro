@@ -19,23 +19,23 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
 <Base content={portfolio}>
   <PageHero hero={portfolio.hero} brand={portfolio.brand} />
 
-  <!-- 1) La objecion, respondida de entrada. -->
+  <!-- 1) Propuesta del estudio. -->
   <section class="wm-container py-16 sm:py-20">
     <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
       <div>
-        <p class="wm-kicker">El problema</p>
+        <p class="wm-kicker">Nuestro enfoque</p>
         <p class="wm-display mt-5 text-[clamp(1.8rem,4.4vw,3rem)] leading-tight">
           {portfolio.objeccion}
         </p>
         <p class="mt-6 max-w-xl text-muted">
-          La respuesta corta: no son templates. Cada demo de este portfolio
-          responde una objeción concreta de su rubro —la letra chica,
-          la pintura rayada— con una conversión que termina en un
-          ticket. Abrilas, probalas y decime si te cierra.
+          En Webmaster Studio definimos cada proyecto a partir de su contexto:
+          quiénes lo van a usar, qué información necesitan y qué procesos debe
+          resolver. Combinamos diseño y desarrollo para construir una solución
+          adecuada a tu actividad.
         </p>
         <div class="mt-8 flex flex-wrap gap-4">
-          <a href="/demos" class="wm-btn">Ver las 6 demos</a>
-          <a href="#demo" class="wm-btn wm-btn--ghost">Pedir la mia gratis</a>
+          <a href="/demos" class="wm-btn">Soluciones por industria</a>
+          <a href="#demo" class="wm-btn wm-btn--ghost">Solicitar cotización</a>
         </div>
       </div>
 
@@ -66,37 +66,37 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
     >
     </div>
     <div class="wm-container relative py-24 sm:py-32">
-      <p class="wm-kicker">48 horas</p>
+      <p class="wm-kicker">Consulta inicial</p>
       <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
-        De la objeción al ticket, sin reunión
+        Definamos el alcance de tu proyecto
       </h2>
       <p class="mt-5 max-w-lg text-muted">
-        Me contás el negocio, te armo una home con tu contenido y te la mando
-        con un código. Si te sirve, seguimos; si no, no perdiste nada.
+        Revisamos tus objetivos para preparar una propuesta de desarrollo.
+        Podemos preparar una demo rápida para evaluar una idea antes de avanzar.
       </p>
-      <a href="#demo" class="wm-btn mt-8">Pedir mi demo gratis</a>
+      <a href="#demo" class="wm-btn mt-8">Solicitar cotización</a>
     </div>
   </section>
 
-  <!-- 3) Seccion "pinned": el proceso de 48 h. -->
+  <!-- 3) Proceso de trabajo. -->
   <PinnedStory
     items={proceso.items ?? []}
     kicker={proceso.kicker}
-    title="De la objeción al ticket en 48 horas"
+    title={proceso.title}
     body={proceso.body}
   />
 
-  <!-- 4) El indice de las 6 demos. -->
+  <!-- 4) Índice de soluciones por industria. -->
   <section class="wm-container py-16 sm:py-20" id="demos">
     <header class="max-w-2xl">
-      <p class="wm-kicker">Las 6 demos</p>
+      <p class="wm-kicker">Desarrollo aplicado</p>
       <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
-        Seis rubros, seis webs que ya funcionan
+        Soluciones por industria
       </h2>
       <p class="mt-5 text-muted">
-        Cada una tiene su propia identidad visual —por eso cada card lleva el
-        color de su rubro— pero todas comparten la misma firma: cortina entre
-        rutas, hero de video que se encoge, grano, un ticket y un solo CTA.
+        Siete ejemplos navegables muestran cómo adaptar contenido, diseño y
+        funcionalidades a distintas actividades. Son soluciones ilustrativas
+        con información ficticia y formularios simulados.
       </p>
     </header>
 
@@ -106,18 +106,18 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
 
     <p class="mt-8 text-sm text-muted">
       <a href="/demos" class="font-semibold text-accent underline underline-offset-4">
-        Filtrar las demos por rubro
+        Filtrar soluciones por industria
       </a>
     </p>
   </section>
 
-  <!-- 5) Banda de video: una demo entre las siete. -->
+  <!-- 5) Funcionalidades por industria. -->
   <section class="relative overflow-hidden border-y border-line">
     <div class="wm-grade wm-grain wm-vignette absolute inset-0">
       <LazyVideo
         src={video(4189)}
         poster={poster(4189)}
-        alt="Auto en concesionario dentro de una de las demos (imagen de demostración)."
+        alt="Auto en concesionario como ejemplo de una solución por industria (imagen ilustrativa)."
       />
     </div>
     <div
@@ -126,16 +126,16 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
     >
     </div>
     <div class="wm-container relative py-24 sm:py-32">
-      <p class="wm-kicker">Demos vivas</p>
+      <p class="wm-kicker">Funcionalidades</p>
       <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
-        No son capturas: son webs que se recorren
+        Recorridos adaptados a cada actividad
       </h2>
       <p class="mt-5 max-w-lg text-muted">
-        En cada demo podés pedir un turno, reservar un lavado, cotizar una obra
-        o sacar un pase. La conversión es real dentro de la demo: es lo que
-        después va en tu web.
+        Los ejemplos incluyen solicitudes de turnos, reservas y consultas de
+        presupuesto. Estas interacciones son simuladas: las integraciones
+        operativas se definen y desarrollan según cada proyecto.
       </p>
-      <a href="/demos" class="wm-btn mt-8">Abrir el portfolio filtrable</a>
+      <a href="/demos" class="wm-btn mt-8">Explorar soluciones</a>
     </div>
   </section>
 
@@ -154,7 +154,7 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
     <div class="mt-12 rounded-wm-lg border border-line p-8 sm:p-10">
       <p class="wm-kicker">Precios</p>
       <h3 class="wm-display mt-4 text-[clamp(1.6rem,4vw,2.6rem)]">
-        Los precios, antes de la llamada
+        Valores de referencia para tu proyecto
       </h3>
       <dl class="mt-8 divide-y divide-line border-y border-line">
         {
@@ -184,9 +184,8 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
     </div>
 
     <p class="mt-8 text-sm text-muted">
-      Demo de portfolio: no hay clientes reales, no hay logos y no hay
-      testimonios. Lo de arriba es el estándar con el que trabajo y lo que se
-      puede verificar de mi propio trabajo.
+      Los ejemplos no representan proyectos de clientes ni resultados comerciales.
+      Presentan nuestro enfoque y los criterios de trabajo del estudio.
     </p>
   </section>
 
@@ -205,19 +204,19 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
     >
     </div>
     <div class="wm-container relative py-24 sm:py-32">
-      <p class="wm-kicker">Sin clientes</p>
+      <p class="wm-kicker">Alcance y seguimiento</p>
       <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
-        No hay logos de clientes en esta pagina
+        Una propuesta con objetivos y entregables definidos
       </h2>
       <p class="mt-5 max-w-lg text-muted">
-        Escribo "portfolio" y hablo de proceso, no de resultados ajenos. Cuando
-        tenga clientes reales, van a estar acá, con nombre y permiso.
+        Acordamos las funcionalidades, las etapas y las condiciones antes de
+        comenzar. Durante el desarrollo compartimos avances para validar la solución.
       </p>
-      <a href="#demo" class="wm-btn mt-8">Pedir mi demo gratis</a>
+      <a href="#demo" class="wm-btn mt-8">Solicitar cotización</a>
     </div>
   </section>
 
-  <!-- 9) Conversion principal: 4 pasos hasta el ticket. -->
+  <!-- 9) Contacto y cotización: simulación sin envío. -->
   <section id="demo" class="wm-container relative py-20 sm:py-28">
     <div class="max-w-2xl">
       <p class="wm-kicker">{portfolio.conversion.kicker}</p>
@@ -227,7 +226,7 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
       <p class="mt-5 text-muted">{portfolio.conversion.body}</p>
     </div>
 
-    <ol class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <ol class="mt-10 grid gap-4 sm:grid-cols-3">
       {
         portfolio.conversion.steps.map((step, i) => (
           <li class="rounded-wm border border-line p-5">
@@ -236,10 +235,9 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
             </span>
             <p class="mt-2 font-semibold">{step}</p>
             <p class="mt-1 text-sm text-muted">
-              {i === 0 && "Elegis el rubro de tu negocio."}
-              {i === 1 && "Me decís cómo es tu negocio."}
-              {i === 2 && "Dejás un teléfono o un email."}
-              {i === 3 && "Recibís el ticket con el código de la demo."}
+              {i === 0 && "Describí tu organización y lo que necesitás desarrollar."}
+              {i === 1 && "Indicá un teléfono o un email de ejemplo."}
+              {i === 2 && "Revisá la consulta simulada: no se envían datos."}
             </p>
           </li>
         ))
@@ -253,12 +251,9 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
         title={portfolio.conversion.title}
         kicker={portfolio.conversion.kicker}
         body={portfolio.conversion.body}
-        steps={portfolio.conversion.steps}
         options={portfolio.conversion.options}
-        slots={portfolio.conversion.slots}
         demoNotice={portfolio.conversion.demoNotice}
         studioWhatsapp={portfolio.contact.whatsapp}
-        priceNote="USD 0 · demo gratis"
       />
     </div>
   </section>
@@ -293,16 +288,16 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
   <!-- 11) Cierre. -->
   <section class="wm-container pb-20 sm:pb-28">
     <div class="rounded-wm-lg border border-line p-8 sm:p-12">
-      <p class="wm-kicker">El paso que falta</p>
+      <p class="wm-kicker">Contacto</p>
       <h2 class="wm-display mt-4 text-[clamp(1.8rem,4.5vw,2.8rem)]">
-        Mandame tu rubro y te armo la demo
+        Conversemos sobre las necesidades de tu organización
       </h2>
       <p class="mt-4 max-w-xl text-muted">
-        Si preferis hablar, escribinos por WhatsApp: te respondo en el día con
-        las preguntas justas para arrancar.
+        La consulta inicial permite definir el alcance y preparar una cotización.
+        También podemos evaluar una demo rápida para revisar la propuesta.
       </p>
       <div class="mt-8 flex flex-wrap gap-4">
-        <a href="#demo" class="wm-btn">Pedir mi demo gratis</a>
+        <a href="#demo" class="wm-btn">Solicitar cotización</a>
         <a href="/contacto" class="wm-btn wm-btn--ghost">Ver contacto</a>
       </div>
     </div>
