@@ -1,0 +1,24 @@
+---
+/**
+ * CTA fijo en mobile: la conversion principal siempre a un toque.
+ *
+ * Solo en pantallas chicas (< 768 px). En desktop el CTA vive en el hero y
+ * en la seccion de cotizacion: no hace falta duplicarlo.
+ *
+ * El boton de WhatsApp flotante del kit sube por encima de esta barra
+ * (ver `src/styles/global.css`).
+ */
+import { appUrl } from "@lib/urls";
+---
+
+<div
+  class="wm-cta-movil fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg/95 px-4 py-3 backdrop-blur-xl md:hidden"
+>
+  <div class="flex items-center gap-3">
+    <p class="min-w-0 flex-1 text-xs leading-snug text-muted">
+      <span class="block font-semibold text-fg">¿Tenés un proyecto?</span>
+      Cotización en 4 pasos.
+    </p>
+    <a href={appUrl("/#cotizacion")} class="wm-btn shrink-0 px-5 py-3 text-xs">Cotizar</a>
+  </div>
+</div>

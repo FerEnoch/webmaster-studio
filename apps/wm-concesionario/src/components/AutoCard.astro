@@ -1,0 +1,88 @@
+---
+/**
+ * Tarjeta de una unidad del stock.
+ *
+ * Muestra la foto con el grade de la firma, el precio final con IVA, la cuota
+ * estimada y los datos que hacen filtrar (marca, modelo, anio, km).
+ */
+import { appUrl } from "@lib/urls";
+import { img } from "@lib/media";
+import { ars, km, type Auto } from "../content/concesionario";
+
+export interface Props {
+  auto: Auto;
+  /** Oculta el link a la ficha (usado en la reserva, donde no aplica). */
+  plain?: boolean;
+  /** Destino de la ficha. Por defecto, la ruta de usados. */
+  href?: string;
+}
+
+const { auto, plain = false, href = `/usados/${auto.id}` } = Astro.props;
+---
+
+<article class="wm-card group flex h-full flex-col overflow-hidden p-0!">
+  <div class="wm-grade wm-grain wm-vignette relative overflow-hidden">
+    <img
+      src={img(auto.foto, 900, 600)}
+      alt={auto.fotoAlt}
+      loading="lazy"
+      decoding="async"
+      class="aspect-[3/2] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+    />
+    <span class="absolute top-3 left-3">
+      <span class="wm-chip">{auto.estado}</span>
+    </span>
+    {
+      auto.badge && (
+        <span class="absolute top-3 right-3 rounded-full bg-bg/80 px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-accent backdrop-blur">
+          {auto.badge}
+        </span>
+      )
+    }
+  </div>
+
+  <div class="flex flex-1 flex-col p-5">
+    <p class="text-xs uppercase tracking-[0.2em] text-muted">
+      {auto.marca} · {auto.version}
+    </p>
+    <h3 class="wm-display mt-2 text-2xl leading-tight">
+      {auto.modelo} <span class="text-accent">{auto.anio}</span>
+    </h3>
+
+    <dl class="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-xs uppercase tracking-[0.14em] text-muted">
+      <div class="flex gap-1">
+        <dt>Km:</dt>
+        <dd class="font-semibold text-fg">{auto.estado === "Nuevo" ? "0" : km(auto.km).replace(" km", "")}</dd>
+      </div>
+      <div class="flex gap-1">
+        <dt>{auto.combustible}</dt>
+        <dd class="font-semibold text-fg">{auto.caja}</dd>
+      </div>
+      <div class="flex gap-1">
+        <dt>{auto.sucursal}</dt>
+      </div>
+    </dl>
+
+    <div class="mt-auto border-t border-line pt-5">
+      <div class="flex items-baseline justify-between gap-3">
+        <span class="wm-display text-3xl leading-none text-accent">{ars(auto.precio)}</span>
+        <span class="text-xs text-muted">final, IVA incluido</span>
+      </div>
+      <p class="mt-2 text-sm text-muted">
+        Cuota estimada <span class="font-semibold text-fg">{ars(auto.cuota)}/mes</span>
+      </p>
+
+      {
+        !plain && (
+          <a
+            href={appUrl(href)}
+            class="mt-5 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.12em] text-accent underline underline-offset-4 transition-colors hover:text-fg"
+          >
+            Ver la ficha
+            <span aria-hidden="true">→</span>
+          </a>
+        )
+      }
+    </div>
+  </div>
+</article>

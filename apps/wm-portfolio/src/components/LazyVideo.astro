@@ -1,0 +1,63 @@
+---
+/**
+ * Video que solo se reproduce cuando esta en pantalla.
+ *
+ * Mismo criterio que el repo base (`AutoVideo` con IntersectionObserver):
+ * el `src` se asigna recien cuando el video entra al viewport, y se pausa
+ * cuando sale. El poster queda siempre, asi que nunca hay un cuadro negro.
+ */
+export interface Props {
+  src: string;
+  poster: string;
+  alt: string;
+  class?: string;
+}
+
+const { src, poster, alt, class: className = "h-full w-full object-cover" } = Astro.props;
+---
+
+<video
+  class={className}
+  data-wm-lazy-video
+  data-src={src}
+  poster={poster}
+  muted
+  loop
+  playsinline
+  preload="none"
+  aria-label={alt}
+></video>
+
+<script>
+  // Un solo IntersectionObserver para todos los videos de la pagina.
+  const start = () => {
+    document.querySelectorAll<HTMLVideoElement>("[data-wm-lazy-video]").forEach((video) => {
+      if (video.dataset.wmBound === "true") return;
+      video.dataset.wmBound = "true";
+
+      const src = video.dataset.src;
+      if (!src) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              if (!video.getAttribute("src")) video.setAttribute("src", src);
+              video.play().catch(() => {
+                /* autoplay bloqueado: queda el poster */
+              });
+            } else {
+              video.pause();
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+
+      observer.observe(video);
+    });
+  };
+
+  start();
+  document.addEventListener("astro:page-load", start);
+</script>

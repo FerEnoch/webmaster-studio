@@ -1,0 +1,28 @@
+---
+import Base from "../../layouts/Base.astro";
+import AutoSheet from "../../components/AutoSheet.astro";
+import { ars, concesionario, km, usados, type Auto } from "../../content/concesionario";
+
+export function getStaticPaths() {
+  return usados.map((auto) => ({
+    params: { id: auto.id },
+    props: { auto },
+  }));
+}
+
+interface Props {
+  auto: Auto;
+}
+
+const { auto } = Astro.props;
+
+const otros = usados.filter((a) => a.id !== auto.id).slice(0, 3);
+---
+
+<Base
+  content={concesionario}
+  title={`${auto.marca} ${auto.modelo} ${auto.anio} · Usados · ${concesionario.brand}`}
+  description={`${auto.marca} ${auto.modelo} ${auto.version} ${auto.anio}: ${km(auto.km)}, ${auto.combustible}, ${auto.caja}. Precio final ${ars(auto.precio)} con IVA incluido. Agendá tu test drive.`}
+>
+  <AutoSheet auto={auto} otros={otros} kind="usados" />
+</Base>

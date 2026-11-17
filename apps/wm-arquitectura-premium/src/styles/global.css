@@ -1,0 +1,1067 @@
+/* Entrada de estilos de ESTUDIO VETA (edicion premium del rubro arquitectura).
+   1) Tailwind v4 (genera las utilidades)
+   2) Tokens + clases .wm-* del kit (copia local, sin cambios)
+   3) Estilos propios de esta app: la identidad premium vive acá.
+
+   ── Regla de esta app ───────────────────────────────────────────────
+   La edicion premium tiene LIBERTAD VISUAL: sus secciones, tarjetas,
+   botones y ritmo son propios (.vt-*). Lo que sigue re-pela las clases
+   compartidas del kit (.wm-*) para que el cromo —nav, footer, ticket—
+   pertenezca a esta paleta y tipografia.
+
+   Todo lo de abajo va SIN capa (@layer): en CSS, las reglas sin capa
+   ganan a las de @layer components, asi que sobreescriben al kit
+   sin tocar sus archivos.
+*/
+
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* ─── Variables propias ─────────────────────────────────────────────── */
+:root {
+  --vt-ink: #14110d;
+  --vt-bone: #efe9dc;
+  --vt-brass: #d9a441;
+
+  /* Derivadas: se usan con var(--vt-*) en las clases de la app. */
+  --vt-line: color-mix(in oklab, var(--vt-bone) 16%, transparent);
+  --vt-rule: color-mix(in oklab, var(--vt-bone) 16%, transparent);
+  --vt-rule-strong: color-mix(in oklab, var(--vt-bone) 30%, transparent);
+  --vt-dim: color-mix(in oklab, var(--vt-bone) 62%, var(--vt-ink));
+  --vt-accent-soft: color-mix(in oklab, var(--vt-brass) 12%, transparent);
+  --vt-brass-soft: color-mix(in oklab, var(--vt-brass) 18%, transparent);
+  --vt-rule: color-mix(in oklab, var(--vt-bone) 16%, transparent);
+  --vt-rule-strong: color-mix(in oklab, var(--vt-bone) 30%, transparent);
+
+  --vt-serif: var(--wm-font-display), "Iowan Old Style", Georgia, serif;
+  --vt-sans: var(--wm-font-body), ui-sans-serif, system-ui, sans-serif;
+  --vt-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ─── Base ──────────────────────────────────────────────────────────── */
+body {
+  background-color: var(--wm-bg);
+  color: var(--wm-fg);
+  font-family: var(--vt-sans);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Cromo del kit, re-pelado ──────────────────────────────────────── */
+
+/* Titular: serif editorial, caja Sentence case, ritmo abierto. */
+.wm-display {
+  font-family: var(--vt-serif);
+  font-weight: 400;
+  font-synthesis: none;
+  font-optical-sizing: auto;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  line-height: 1.02;
+}
+
+.wm-kicker {
+  font-family: var(--vt-sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: color-mix(in oklab, var(--vt-bone) 58%, var(--vt-ink));
+}
+
+.wm-kicker::before {
+  width: 2.25rem;
+  background-color: var(--vt-brass);
+}
+
+/* Botones: rectos, hairline y brass. Sin radios, sin sombras. */
+.wm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 0.85rem 1.6rem;
+  border: 1px solid var(--vt-brass);
+  border-radius: 0;
+  background: var(--vt-brass);
+  color: var(--vt-ink);
+  font-family: var(--vt-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition:
+    background-color 0.25s var(--vt-ease),
+    color 0.25s var(--vt-ease),
+    border-color 0.25s var(--vt-ease);
+}
+
+.wm-btn:hover {
+  background: transparent;
+  color: var(--vt-brass);
+  border-color: var(--vt-brass);
+}
+
+.wm-btn--ghost {
+  background: transparent;
+  color: var(--vt-bone);
+  border-color: var(--vt-rule-strong);
+}
+
+.wm-btn--ghost:hover {
+  color: var(--vt-brass);
+  border-color: var(--vt-brass);
+  background: transparent;
+}
+
+/* Superficies: hairline, sin radio, sin relleno pesado. */
+.wm-card,
+.wm-surface {
+  border: 1px solid var(--vt-rule);
+  border-radius: 0;
+  background: color-mix(in oklab, var(--vt-bone) 3%, transparent);
+}
+
+.wm-container {
+  max-width: 78rem;
+}
+
+/* Nav y footer: hairline en vez de border suave. */
+.wm-header {
+  background: color-mix(in oklab, var(--vt-ink) 82%, transparent);
+  border-bottom: 1px solid var(--vt-rule);
+  backdrop-filter: blur(16px);
+}
+
+/* ─── Tipografía editorial ──────────────────────────────────────────── */
+
+/* Cursiva de display: la palabra que define el proyecto. */
+.vt-script {
+  font-family: var(--vt-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--vt-brass);
+}
+
+/* Regla de acento: filete corto que ancla un bloque. */
+.vt-rule {
+  display: block;
+  width: 3.5rem;
+  height: 1px;
+  margin-top: 1.4rem;
+  background-color: var(--vt-brass);
+}
+
+/* Numero de seccion: el ritmo de la maqueta. */
+.vt-index {
+  display: inline-block;
+  font-family: var(--vt-sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--vt-brass);
+}
+
+/* ─── Cabecera de pagina interna ───────────────────────────────────── */
+.vt-head {
+  padding-block: 4rem 3rem;
+  border-bottom: 1px solid var(--vt-line);
+}
+
+.vt-head__title {
+  margin-top: 1.25rem;
+  font-family: var(--vt-serif);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  line-height: 1.02;
+  max-width: 20ch;
+}
+
+.vt-head__intro {
+  margin-top: 1.25rem;
+  max-width: 58ch;
+  color: var(--vt-dim);
+}
+
+/* ─── Cabecera de pagina interna ────────────────────────────────────── */
+.vt-head {
+  padding-block: 3.5rem 2.5rem;
+  border-bottom: 1px solid var(--vt-line);
+}
+
+.vt-head__title {
+  margin-top: 1.25rem;
+  font-family: var(--vt-serif);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  max-width: 20ch;
+}
+
+.vt-head__intro {
+  margin-top: 1.25rem;
+  max-width: 58ch;
+  color: var(--vt-dim);
+  line-height: 1.7;
+}
+
+/* ─── Estructura de seccion ─────────────────────────────────────────── */
+.vt-section {
+  border-top: 1px solid var(--vt-line);
+  padding-block: 4.5rem;
+}
+
+@media (min-width: 900px) {
+  .vt-section {
+    padding-block: 6.5rem;
+  }
+}
+
+.vt-section__head {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 900px) {
+  .vt-section__head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: end;
+    gap: 3rem;
+  }
+}
+
+.vt-section__title {
+  margin-top: 1.25rem;
+  font-family: var(--vt-serif);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  max-width: 18ch;
+}
+
+.vt-section__body {
+  color: var(--vt-dim);
+  line-height: 1.7;
+  max-width: 56ch;
+}
+
+/* Grid asimetrico: dos columnas con pesos distintos. */
+.vt-split {
+  display: grid;
+  gap: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .vt-split {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 4rem;
+  }
+}
+
+/* ─── Grilla de tarjetas ─────────────────────────────────────────────── */
+.vt-grid {
+  display: grid;
+  gap: 1px;
+  background-color: var(--vt-line);
+  border: 1px solid var(--vt-line);
+}
+
+@media (min-width: 640px) {
+  .vt-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .vt-grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.vt-cell {
+  background-color: var(--wm-bg);
+  padding: 1.75rem;
+}
+
+.vt-cell-title {
+  margin-top: 0.9rem;
+  font-family: var(--vt-serif);
+  font-weight: 400;
+  font-size: 1.55rem;
+  line-height: 1.12;
+}
+
+.vt-cell-body {
+  margin-top: 0.9rem;
+  color: var(--vt-dim);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* ─── Tarjetas con numero de orden ──────────────────────────────────── */
+.vt-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.75rem;
+  border: 1px solid var(--vt-line);
+  background: color-mix(in oklab, var(--vt-bone) 2.5%, transparent);
+  transition:
+    border-color 0.3s var(--vt-ease),
+    background-color 0.3s var(--vt-ease),
+    transform 0.3s var(--vt-ease);
+}
+
+.vt-card:hover {
+  border-color: var(--vt-brass);
+  background: color-mix(in oklab, var(--vt-brass) 5%, transparent);
+  transform: translateY(-2px);
+}
+
+.vt-card__index {
+  font-family: var(--vt-serif);
+  font-size: 0.9rem;
+  color: var(--vt-brass);
+  letter-spacing: 0.08em;
+}
+
+.vt-card__title {
+  font-family: var(--vt-serif);
+  font-size: 1.6rem;
+  line-height: 1.12;
+}
+
+.vt-card__body {
+  font-size: 0.95rem;
+  color: var(--vt-dim);
+}
+
+.vt-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--vt-line);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vt-dim);
+}
+
+.vt-card__meta strong {
+  color: var(--vt-bone);
+  font-weight: 500;
+}
+
+/* ─── Filas de dato: precio, plazo, entrega ─────────────────────────── */
+.vt-meta {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vt-meta div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--vt-line);
+}
+
+.vt-meta dt {
+  color: var(--vt-dim);
+}
+
+.vt-meta dd {
+  text-align: right;
+}
+
+/* ─── Lista de puntos ────────────────────────────────────────────────── */
+.vt-points {
+  margin-top: 1.1rem;
+  display: grid;
+  gap: 0.5rem;
+  color: var(--vt-dim);
+  font-size: 0.875rem;
+}
+
+.vt-points li {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.vt-points li::before {
+  content: "—";
+  color: var(--vt-brass);
+}
+
+/* ─── Maqueta 3D ─────────────────────────────────────────────────────── */
+.vt-model {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  perspective: 1100px;
+  perspective-origin: 50% 42%;
+  overflow: hidden;
+}
+
+.vt-model__stage {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: scale(0.74) rotateX(58deg) rotateZ(-32deg);
+  transition: transform 0.6s var(--vt-ease);
+}
+
+/* Losa base: el piso del inmueble. */
+.vt-model__slab {
+  position: absolute;
+  left: 4%;
+  top: 6%;
+  width: 74%;
+  height: 86%;
+  border: 1px solid var(--vt-rule-strong);
+  background-color: color-mix(in oklab, var(--vt-bone) 7%, transparent);
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--vt-bone) 8%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--vt-bone) 8%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 12.5% 16.666%;
+}
+
+/* Cada ambiente: un plano que se levanta del piso. */
+.vt-model__room {
+  position: absolute;
+  border: 1px solid var(--vt-rule);
+  background-color: color-mix(in oklab, var(--vt-bone) 7%, transparent);
+  transform: translateZ(calc(var(--vt-alto, 0px) * 0.12));
+  transition:
+    background-color 0.35s var(--vt-ease),
+    border-color 0.35s var(--vt-ease),
+    transform 0.35s var(--vt-ease);
+}
+
+.vt-model__room[data-active="true"] {
+  background-color: color-mix(in oklab, var(--vt-brass) 26%, transparent);
+  border-color: var(--vt-brass);
+  transform: translateZ(calc(var(--vt-alto, 0px) * 0.12 + 4px));
+}
+
+/* Hotspot: boton real, accesible, plano sobre el ambiente. */
+.vt-hotspot {
+  position: absolute;
+  z-index: 3;
+  /* El translateZ levanta el pin POR DELANTE del plano del ambiente: sin el,
+     el hit-test 3D lo tapa el room y el click nunca llega. La contra-rotacion
+     cancela la inclinacion de la escena para que la etiqueta se lea de frente. */
+  transform: translate(-50%, -50%) translateZ(40px) rotateZ(32deg) rotateX(-58deg);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--vt-brass);
+  border-radius: 0;
+  background: color-mix(in oklab, var(--vt-ink) 90%, transparent);
+  color: var(--vt-bone);
+  font-family: var(--vt-sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.3s var(--vt-ease),
+    color 0.3s var(--vt-ease);
+}
+
+.vt-hotspot:hover,
+.vt-hotspot[aria-pressed="true"] {
+  background: var(--vt-brass);
+  color: var(--vt-ink);
+  transform: translate(-50%, -50%) translateZ(40px) rotateZ(32deg) rotateX(-58deg) scale(1.05);
+}
+
+.vt-hotspot__name {
+  font-size: 0.62rem;
+  opacity: 0.75;
+}
+
+/* ─── Antes / despues ────────────────────────────────────────────────── */
+.vt-compare {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--vt-line);
+  aspect-ratio: 16 / 10;
+}
+
+.vt-compare img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vt-compare__after {
+  clip-path: inset(0 0 0 var(--vt-compare, 50%));
+}
+
+.vt-compare__divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--vt-compare, 50%);
+  width: 1px;
+  background: var(--vt-brass);
+}
+
+.vt-compare__handle {
+  position: absolute;
+  top: 50%;
+  left: var(--vt-compare, 50%);
+  transform: translate(-50%, -50%);
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--vt-brass);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--vt-ink) 86%, transparent);
+  color: var(--vt-brass);
+  font-size: 0.7rem;
+  pointer-events: none;
+}
+
+.vt-compare__range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+}
+
+.vt-compare__labels {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--vt-bone);
+  background: linear-gradient(to top, rgb(0 0 0 / 0.55), transparent);
+  pointer-events: none;
+}
+
+/* ─── Numeros: las cifras de la maqueta ─────────────────────────────── */
+.vt-numbers {
+  display: grid;
+  gap: 1px;
+  background-color: var(--vt-line);
+  border-block: 1px solid var(--vt-line);
+}
+
+@media (min-width: 640px) {
+  .vt-numbers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .vt-numbers {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.vt-number {
+  background-color: var(--wm-bg);
+  padding: 1.5rem 1.25rem;
+  transition: background-color 0.35s var(--vt-ease);
+}
+
+.vt-number[data-active="true"] {
+  background-color: color-mix(in oklab, var(--vt-brass) 8%, var(--wm-bg));
+}
+
+.vt-number__value {
+  font-family: var(--vt-serif);
+  font-weight: 400;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1;
+  color: var(--vt-brass);
+}
+
+.vt-number__label {
+  margin-top: 0.6rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--vt-dim);
+}
+
+/* ─── Etapas del proceso ─────────────────────────────────────────────── */
+.vt-steps {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--vt-line);
+}
+
+.vt-step {
+  display: grid;
+  gap: 1rem;
+  padding-block: 2rem;
+  border-bottom: 1px solid var(--vt-line);
+}
+
+@media (min-width: 900px) {
+  .vt-step {
+    grid-template-columns: 4rem minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+}
+
+.vt-step__index {
+  font-family: var(--vt-serif);
+  font-size: 1.4rem;
+  color: var(--vt-brass);
+}
+
+.vt-step__num {
+  font-variant-numeric: tabular-nums;
+}
+
+.vt-step__title {
+  font-family: var(--vt-serif);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.1;
+}
+
+.vt-step__body,
+.vt-stage-body {
+  margin-top: 0.9rem;
+  color: var(--vt-dim);
+  line-height: 1.7;
+}
+
+.vt-step__points {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--vt-dim);
+}
+
+.vt-step__points li {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.vt-step__points li::before {
+  content: "—";
+  color: var(--vt-brass);
+}
+
+.vt-stage-share {
+  margin-top: 1.25rem;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--vt-brass-soft);
+  padding-bottom: 0.4rem;
+}
+
+.vt-stage-share strong {
+  font-family: var(--vt-serif);
+  font-weight: 400;
+  font-size: 1.4rem;
+  color: var(--vt-brass);
+}
+
+/* ─── Lista de obras ─────────────────────────────────────────────────── */
+.vt-obras {
+  border-top: 1px solid var(--vt-line);
+}
+
+.vt-obras__row {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: 1.75rem;
+  border-bottom: 1px solid var(--vt-line);
+  transition: background-color 0.4s var(--vt-ease);
+}
+
+@media (min-width: 900px) {
+  .vt-obras__row {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 2.5rem;
+  }
+}
+
+.vt-obras__row:hover {
+  background-color: color-mix(in oklab, var(--vt-brass) 5%, transparent);
+}
+
+.vt-obras__title {
+  margin-top: 0.5rem;
+  font-family: var(--vt-serif);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+  line-height: 1.05;
+}
+
+.vt-obras__body {
+  color: var(--vt-dim);
+  line-height: 1.7;
+}
+
+.vt-obras__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+}
+
+.vt-obras__tag {
+  border: 1px solid var(--vt-line);
+  padding: 0.15rem 0.5rem;
+  color: var(--vt-dim);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ─── Panel lateral: precio vivo ─────────────────────────────────────── */
+.vt-maq__panel {
+  border-left: 1px solid var(--vt-brass);
+  padding-left: 1.5rem;
+}
+
+.vt-maq__amount,
+.vt-price {
+  font-family: var(--vt-serif);
+  font-weight: 400;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1;
+  color: var(--vt-brass);
+}
+
+/* ─── Materiales del ambiente ────────────────────────────────────────── */
+.vt-materials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  list-style: none;
+  padding: 0;
+}
+
+.vt-materials li {
+  border: 1px solid var(--vt-line);
+  padding: 0.2rem 0.55rem;
+  color: var(--vt-dim);
+  font-size: 0.72rem;
+}
+
+/* ─── Cotizador: la conversion ───────────────────────────────────────── */
+.vt-quote {
+  display: grid;
+  gap: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .vt-quote {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 3.5rem;
+    align-items: start;
+  }
+}
+
+.vt-quote__steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block: 1.5rem 2.5rem;
+}
+
+.vt-quote__step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--vt-line);
+  padding: 0.35rem 0.7rem;
+  color: var(--vt-dim);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.vt-quote__step[data-state="current"] {
+  border-color: var(--vt-brass);
+  color: var(--vt-brass);
+}
+
+.vt-quote__step[data-state="done"] {
+  border-color: var(--vt-brass-soft);
+  color: var(--vt-bone);
+}
+
+.vt-quote__option {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--vt-line);
+  padding: 1.1rem 1.25rem;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.25s var(--vt-ease),
+    background-color 0.25s var(--vt-ease);
+}
+
+.vt-quote__option:hover {
+  border-color: color-mix(in oklab, var(--vt-bone) 30%, transparent);
+}
+
+.vt-quote__option[aria-pressed="true"],
+.vt-quote__option[data-selected="true"] {
+  border-color: var(--vt-brass);
+  background: color-mix(in oklab, var(--vt-brass) 8%, transparent);
+}
+
+.vt-quote__option-title {
+  display: block;
+  font-family: var(--vt-serif);
+  font-weight: 400;
+  font-size: 1.3rem;
+  line-height: 1.15;
+}
+
+.vt-quote__option-body {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--vt-dim);
+}
+
+.vt-quote__option-price {
+  display: block;
+  margin-top: 0.6rem;
+  color: var(--vt-brass);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vt-quote__field {
+  display: block;
+  font-size: 0.85rem;
+}
+
+.vt-quote__field span {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vt-dim);
+}
+
+.vt-quote__field input,
+.vt-quote__field textarea {
+  width: 100%;
+  border: 1px solid var(--vt-line);
+  border-radius: 0;
+  background: color-mix(in oklab, var(--vt-bone) 3%, transparent);
+  color: var(--vt-bone);
+  padding: 0.8rem 1rem;
+  font-family: var(--vt-sans);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.vt-quote__field input:focus,
+.vt-quote__field textarea:focus {
+  border-color: var(--vt-brass);
+}
+
+.vt-quote__summary {
+  border: 1px solid var(--vt-line);
+  padding: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .vt-quote__summary {
+    position: sticky;
+    top: 6rem;
+  }
+}
+
+.vt-quote__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--vt-line);
+  font-size: 0.85rem;
+}
+
+.vt-quote__row dt {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vt-dim);
+}
+
+.vt-quote__row dd {
+  text-align: right;
+}
+
+.vt-quote__total {
+  font-family: var(--vt-serif);
+  font-size: 1.8rem;
+  color: var(--vt-brass);
+}
+
+.vt-quote__note {
+  margin-top: 1rem;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  color: var(--vt-dim);
+}
+
+/* ─── Ticket del kit, re-pelado ─────────────────────────────────────── */
+.vt-ticket .wm-card {
+  border: 1px solid var(--vt-brass-soft);
+  background: color-mix(in oklab, var(--vt-brass) 7%, transparent);
+}
+
+/* ─── Filtro del archivo de obras ────────────────────────────────────── */
+.vt-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.vt-filter button {
+  border: 1px solid var(--vt-line);
+  background: transparent;
+  color: var(--vt-dim);
+  padding: 0.45rem 0.95rem;
+  font-family: var(--vt-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color 0.25s var(--vt-ease),
+    color 0.25s var(--vt-ease);
+}
+
+.vt-filter button:hover {
+  border-color: color-mix(in oklab, var(--vt-bone) 30%, transparent);
+  color: var(--vt-bone);
+}
+
+.vt-filter button[aria-pressed="true"] {
+  border-color: var(--vt-brass);
+  color: var(--vt-brass);
+}
+
+/* ─── Cierre ─────────────────────────────────────────────────────────── */
+.vt-cta {
+  border: 1px solid var(--vt-line);
+  border-top: 2px solid var(--vt-brass);
+  padding: 2.5rem;
+  display: grid;
+  gap: 1.75rem;
+}
+
+@media (min-width: 900px) {
+  .vt-cta {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 3rem;
+  }
+}
+
+.vt-cta__title {
+  margin-top: 1.25rem;
+  font-family: var(--vt-serif);
+  font-weight: 400;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1.08;
+}
+
+/* ─── Enlaces y notas ────────────────────────────────────────────────── */
+.vt-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid var(--vt-line);
+  padding: 0.7rem 1.1rem;
+  color: var(--vt-bone);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition:
+    border-color 0.3s var(--vt-ease),
+    color 0.3s var(--vt-ease);
+}
+
+.vt-wa:hover {
+  border-color: var(--vt-brass);
+  color: var(--vt-brass);
+}
+
+.vt-note {
+  color: var(--vt-dim);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.vt-caption {
+  margin-top: 0.6rem;
+  color: var(--vt-dim);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+/* ─── Preferencias de movimiento ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .vt-model__stage,
+  .vt-model__room,
+  .vt-hotspot,
+  .vt-card,
+  .vt-obras__row,
+  .wm-btn {
+    transition: none;
+  }
+
+  .vt-card:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,55 @@
+---
+/**
+ * Wrapper thin sobre el BaseLayout del kit.
+ * Toda pagina de la app usa este layout y le pasa el contenido del rubro.
+ */
+import BaseLayout from "../components/ui/BaseLayout.astro";
+import type { RubroContent } from "@lib/types";
+import "../styles/global.css";
+
+export interface Props {
+  content: RubroContent;
+  title?: string;
+  description?: string;
+  ogType?: string;
+}
+
+const { content, title, description, ogType } = Astro.props;
+---
+
+<BaseLayout
+  title={title ?? `${content.brand} · ${content.rubro}`}
+  description={description ?? content.tagline}
+  brand={content.brand}
+  theme={content.theme}
+  nav={content.nav}
+  legal={content.legal}
+  contact={content.contact}
+  ogType={ogType}
+  jsonLd={content.jsonLd}
+>
+  <slot />
+</BaseLayout>
+
+<script>
+  /**
+   * TRAMPA: el <ClientRouter /> del kit intercepta los `submit` de los
+   * formularios y dispara una navegacion (view transition) ANTES de que
+   * corran los handlers de la pagina: el formulario de contacto y el boton
+   * de baja se recargan en vez de mostrar la confirmacion.
+   *
+   * Un listener en fase de CAPTURA corre antes que el de Astro (que esta en
+   * la fase de burbuja sobre `document`), asi que el preventDefault llega a
+   * tiempo y los formularios demo no navegan.
+   */
+  document.addEventListener(
+    "submit",
+    (event) => {
+      const form = event.target as HTMLFormElement | null;
+      if (!form) return;
+      if (!form.matches("[data-wm-demo-form], [data-wm-baja-form]")) return;
+      event.preventDefault();
+    },
+    { capture: true },
+  );
+</script>

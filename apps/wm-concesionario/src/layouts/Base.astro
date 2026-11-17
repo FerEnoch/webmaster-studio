@@ -1,0 +1,47 @@
+---
+/**
+ * Wrapper thin sobre el BaseLayout del kit.
+ * Toda pagina de la app usa este layout y le pasa el contenido del rubro.
+ *
+ * Agrega la barra de CTA fija de mobile (la conversion de un toque) y deja
+ * el boton flotante de WhatsApp por encima de ella.
+ */
+import { appPath, appUrl } from "@lib/urls";
+import BaseLayout from "../components/ui/BaseLayout.astro";
+import type { RubroContent } from "@lib/types";
+import "../styles/global.css";
+
+export interface Props {
+  content: RubroContent;
+  title?: string;
+  description?: string;
+  ogType?: string;
+}
+
+const { content, title, description, ogType } = Astro.props;
+
+// En la portada el CTA apunta al ancla; en el resto, a la portada.
+const esPortada = appPath(Astro.url.pathname) === "/";
+const ctaHref = esPortada ? "#testdrive" : "/#testdrive";
+---
+
+<BaseLayout
+  title={title ?? `${content.brand} · ${content.rubro}`}
+  description={description ?? content.tagline}
+  brand={content.brand}
+  theme={content.theme}
+  nav={content.nav}
+  legal={content.legal}
+  contact={content.contact}
+  ogType={ogType}
+  jsonLd={content.jsonLd}
+>
+  <slot />
+
+  <!-- CTA fijo de mobile: la conversion de un toque. -->
+  <div class="wm-cta-bar fixed inset-x-0 bottom-0 z-40 sm:hidden">
+    <div class="wm-container flex items-center gap-3 py-3">
+      <a href={appUrl(ctaHref)} class="wm-btn w-full">Agendar test drive</a>
+    </div>
+  </div>
+</BaseLayout>

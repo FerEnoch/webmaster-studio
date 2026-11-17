@@ -1,0 +1,22 @@
+---
+/**
+ * Item de la carta del bar: nombre, descripcion y precio.
+ */
+import type { CatalogItem } from "@lib/types";
+
+export interface Props {
+  item: CatalogItem;
+}
+
+const { item } = Astro.props;
+---
+
+<li class="wm-carta flex items-baseline justify-between gap-6 border-b border-line py-4">
+  <div class="min-w-0">
+    <p class="wm-display text-lg leading-tight">{item.title}</p>
+    {item.body ? <p class="mt-1 text-sm text-muted">{item.body}</p> : null}
+  </div>
+  {item.price ? (
+    <span class="wm-display shrink-0 text-lg text-accent">{item.price.amount}</span>
+  ) : null}
+</li>

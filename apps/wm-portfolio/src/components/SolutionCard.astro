@@ -1,0 +1,30 @@
+---
+/** Tarjeta del catálogo del estudio, independiente del componente del kit. */
+import type { Rubro } from "@lib/rubros";
+
+export interface Props {
+  rubro: Rubro;
+  image: string;
+}
+
+const { rubro, image } = Astro.props;
+---
+
+<article class="wm-card group relative overflow-hidden">
+  <div class="wm-grade wm-grain wm-vignette mb-6 overflow-hidden rounded-wm">
+    <img
+      src={image}
+      alt={`${rubro.rubro}: imagen ilustrativa`}
+      loading="lazy"
+      decoding="async"
+      class="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+    />
+  </div>
+  <p class="wm-kicker">{rubro.nombre}</p>
+  <h3 class="wm-display mt-4 text-3xl leading-tight">{rubro.rubro}</h3>
+  <p class="mt-3 text-muted">{rubro.tagline}</p>
+  <p class="mt-5 border-l-2 border-accent pl-4 text-sm text-muted">{rubro.objeccion}</p>
+  <a href={rubro.demoUrl} data-astro-reload class="wm-btn mt-7 w-full sm:w-auto">
+    Explorar solución
+  </a>
+</article>

@@ -1,0 +1,37 @@
+---
+/**
+ * Índice de soluciones por industria con las rutas originales de cada aplicación.
+ */
+import { solutions } from "../content/portfolio";
+---
+
+<ul class="divide-y divide-line border-y border-line">
+  {
+    solutions.map((r) => (
+      <li>
+        <a
+          href={r.demoUrl}
+          data-astro-reload
+          class="group grid items-baseline gap-2 py-6 sm:grid-cols-[minmax(0,16rem)_1fr_auto] sm:gap-8"
+        >
+          <span class="flex items-center gap-4">
+            <span
+              aria-hidden="true"
+              class="h-3 w-3 shrink-0 rounded-full"
+              style={`background-color:${r.palette.accent}`}
+            />
+            <span class="wm-display text-xl">{r.nombre}</span>
+          </span>
+
+          <span class="text-sm text-muted">
+            <span>{r.tagline}</span>
+          </span>
+
+          <span class="text-sm text-accent opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
+            Explorar solución →
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

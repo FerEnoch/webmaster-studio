@@ -1,0 +1,167 @@
+---
+/**
+ * CONTACTO — datos, mensaje y el cierre hacia el cotizador.
+ */
+import { appUrl } from "@lib/urls";
+import { waLink } from "@lib/whatsapp";
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import LiveNow from "../components/ui/LiveNow.astro";
+import { arquitecturaPremium } from "../content/arquitectura-premium";
+
+const { brand, contact } = arquitecturaPremium;
+
+const whatsappHref = waLink(
+  contact.whatsapp,
+  "Hola, quiero hablar con ESTUDIO VETA sobre un proyecto.",
+);
+---
+
+<Base content={arquitecturaPremium} title={`Contacto · ${brand}`}>
+  <PageHead
+    kicker="Contacto"
+    title="Un WhatsApp y una mesa con planos"
+    subtitle="Contanos qué querés hacer y en qué zona. Si es simple, te respondemos el mismo día; si es una obra, coordinamos una visita al sitio."
+  />
+
+  <section class="border-b border-[var(--vt-rule)] bg-[var(--vt-accent-soft)]">
+    <div class="wm-container flex flex-col gap-3 py-5 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:gap-10">
+      <span class="text-[var(--wm-accent)]">
+        <LiveNow
+          signal={{ label: "Consultas hoy", count: 4, min: 2, max: 7, unit: "consultas", interval: 5200 }}
+        />
+      </span>
+      <span class="text-[var(--vt-dim)]">Estudio abierto ahora · {contact.hours}</span>
+      <span class="text-xs text-[var(--vt-dim)]">
+        Demo de portfolio: estas señales son ficticias.
+      </span>
+    </div>
+  </section>
+
+  <section class="vt-section">
+    <div class="wm-container">
+      <div class="vt-split">
+        <div>
+          <p class="wm-kicker">Mensaje</p>
+          <h2 class="vt-section__title mt-5">Contanos qué tenés en mente</h2>
+          <p class="vt-obras__body mt-5">
+            Si ya tenés un terreno, una casa para ampliar o un local, escribinos. Con la
+            superficie a mano te damos un orden de magnitud el mismo día. Si no la tenés, la
+            calculamos en la visita.
+          </p>
+
+          <form class="mt-10 grid gap-6" data-wm-demo-form>
+            <label class="vt-quote__field">
+              <span>Nombre</span>
+              <input name="name" required placeholder="Ana Gómez" autocomplete="name" />
+            </label>
+            <label class="vt-quote__field">
+              <span>Teléfono o email</span>
+              <input name="contact" required placeholder="11 1234 5678" />
+            </label>
+            <label class="vt-quote__field">
+              <span>¿Qué necesitás?</span>
+              <textarea
+                name="message"
+                rows="5"
+                placeholder="Proyecto, dirección de obra, interiorismo, permisos..."
+              ></textarea>
+            </label>
+            <button type="submit" class="wm-btn w-full sm:w-auto">Enviar mensaje</button>
+            <p class="vt-note">Demo: no se envían datos.</p>
+          </form>
+
+          <p
+            class="mt-6 hidden border border-[var(--wm-accent)] p-4 text-sm"
+            data-wm-demo-done
+          >
+            Mensaje tomado. En esta demo no se envía nada: así se vería la confirmación.
+          </p>
+        </div>
+
+        <aside>
+          <p class="wm-kicker">Datos</p>
+          <dl class="mt-8 grid gap-6">
+            <div>
+              <dt class="text-xs uppercase tracking-[0.16em] text-[var(--vt-dim)]">Teléfono</dt>
+              <dd class="mt-1 text-lg">{contact.phone}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-[0.16em] text-[var(--vt-dim)]">Email</dt>
+              <dd class="mt-1 text-lg">
+                <a href={`mailto:${contact.email}`} class="hover:text-[var(--wm-accent)]">
+                  {contact.email}
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-[0.16em] text-[var(--vt-dim)]">Horarios</dt>
+              <dd class="mt-1 text-lg">{contact.hours}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-[0.16em] text-[var(--vt-dim)]">Estudio</dt>
+              <dd class="mt-1 text-lg">{contact.address}</dd>
+            </div>
+          </dl>
+
+          <div class="mt-10 flex flex-wrap gap-3">
+            <a href={whatsappHref} class="wm-btn">Escribir por WhatsApp</a>
+            {
+              contact.mapsUrl && (
+                <a
+                  href={contact.mapsUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  class="vt-wa"
+                >
+                  Ver en el mapa
+                </a>
+              )
+            }
+          </div>
+
+          <p class="vt-note mt-6">
+            Demo de portfolio: el teléfono, la dirección y el horario son ficticios.
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="wm-container pb-20">
+    <div class="vt-cta">
+      <div>
+        <p class="wm-kicker">Cotización</p>
+        <p class="vt-cta__title mt-5">O preferís hacerlo por pasos</p>
+        <p class="mt-4 text-[var(--vt-dim)]">
+          Elegís el tipo de encargo, la escala y dejás tus datos: en cuatro pasos te queda un
+          número de consulta y un pase para la visita.
+        </p>
+      </div>
+      <a href={appUrl("/cotizar")} class="wm-btn">Ir al cotizador</a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  /**
+   * Formulario de contacto (demo): no manda datos, muestra la confirmacion.
+   * Va en fase de CAPTURA: el ClientRouter del kit intercepta el `submit`
+   * en fase de burbuja y recargaria la pagina antes del handler.
+   */
+  document.addEventListener(
+    "submit",
+    (event) => {
+      const form = event.target as HTMLFormElement | null;
+      if (!form || !form.matches("[data-wm-demo-form]")) return;
+      event.preventDefault();
+      form.style.display = "none";
+      const done = document.querySelector<HTMLElement>("[data-wm-demo-done]");
+      if (done) {
+        done.classList.remove("hidden");
+        done.removeAttribute("hidden");
+      }
+    },
+    true,
+  );
+</script>

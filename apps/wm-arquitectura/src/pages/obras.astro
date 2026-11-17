@@ -1,0 +1,67 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import ObraCard from "../components/ObraCard.astro";
+import { arquitectura, obras } from "../content/arquitectura";
+import { poster, video } from "@lib/media";
+---
+
+<Base content={arquitectura} title={`Obras · ${arquitectura.brand}`}>
+  <PageHead
+    kicker="Obras"
+    title="Cuatro obras con su ficha completa"
+    subtitle="Año, superficie, estado, zona y equipo. Antes y después de cada una. Esto es lo que se compra cuando contratas un estudio: criterio aplicado a un proyecto real."
+  />
+
+  <!-- Banda de video: una obra de patrimonio -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(3036)}
+        poster={poster(3036)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Fachada de un edificio de piedra recuperado por ESTUDIO TRAZO (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to top, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 65%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-32">
+      <p class="wm-kicker">Obra terminada</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        Recuperar un edificio es un proyecto, no un encargo menor
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        La Galería Curva obligó a cubrir un patio, reforzar la losa y resolver la
+        iluminación de tres salas de exposición sin tocar la estructura original.
+        Ese tipo de decisiones es lo que se documenta en cada ficha.
+      </p>
+    </div>
+  </section>
+
+  <section class="wm-container py-16 sm:py-24">
+    {obras.map((obra, i) => <ObraCard obra={obra} index={i} />)}
+  </section>
+
+  <section class="wm-container pb-24">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+      <p class="wm-kicker">¿Tenés un proyecto?</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Cotizá tu proyecto en cuatro pasos
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        Tipo de trabajo, escala, tus datos. Al final te queda un número de consulta
+        para el estudio. Sin registro y sin esperas.
+      </p>
+      <a href={appUrl("/#cotizacion")} class="wm-btn mt-8">Ir a cotizar</a>
+    </div>
+  </section>
+</Base>

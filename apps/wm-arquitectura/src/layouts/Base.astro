@@ -1,0 +1,36 @@
+---
+/**
+ * Wrapper thin sobre el BaseLayout del kit.
+ * Toda pagina de la app usa este layout y le pasa el contenido del rubro.
+ */
+import BaseLayout from "../components/ui/BaseLayout.astro";
+import CtaMovil from "../components/CtaMovil.astro";
+import type { RubroContent } from "@lib/types";
+import "../styles/global.css";
+
+export interface Props {
+  content: RubroContent;
+  title?: string;
+  description?: string;
+  ogType?: string;
+}
+
+const { content, title, description, ogType } = Astro.props;
+---
+
+<BaseLayout
+  title={title ?? `${content.brand} · ${content.rubro}`}
+  description={description ?? content.tagline}
+  brand={content.brand}
+  theme={content.theme}
+  nav={content.nav}
+  legal={content.legal}
+  contact={content.contact}
+  ogType={ogType}
+  jsonLd={content.jsonLd}
+>
+  <slot />
+
+  <!-- CTA fijo: solo mobile. El WhatsApp flotante del kit sube por encima. -->
+  <CtaMovil />
+</BaseLayout>

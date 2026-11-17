@@ -1,0 +1,140 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import { portfolio } from "../content/portfolio";
+import { waLink } from "@lib/whatsapp";
+
+const whatsappHref = waLink(
+  portfolio.contact.whatsapp,
+  "Hola, quisiera consultar por un proyecto y solicitar una cotización a Webmaster Studio. También me interesa evaluar una demo rápida.",
+);
+---
+
+<Base content={portfolio} title={`Contacto · ${portfolio.brand}`}>
+  <PageHead
+    kicker="Contacto"
+    title="Contacto y cotización"
+    subtitle="Contanos sobre tu proyecto para definir una propuesta. Podemos preparar una demo rápida para evaluar el enfoque. Este formulario es una simulación: no envía solicitudes."
+  />
+
+  <section class="wm-container pb-16">
+    <div class="grid gap-10 lg:grid-cols-2">
+      <div class="rounded-wm-lg border border-line p-8">
+        <p class="wm-kicker">Datos de contacto ilustrativos</p>
+        <dl class="mt-6 space-y-4 text-muted">
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Teléfono</dt>
+            <dd class="mt-1 text-lg text-fg">{portfolio.contact.phone}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Email</dt>
+            <dd class="mt-1 text-lg text-fg">
+              <a href={`mailto:${portfolio.contact.email}`} class="hover:text-accent">
+                {portfolio.contact.email}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Horarios</dt>
+            <dd class="mt-1 text-lg text-fg">{portfolio.contact.hours}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Zona</dt>
+            <dd class="mt-1 text-lg text-fg">{portfolio.contact.address}</dd>
+          </div>
+        </dl>
+
+        <p class="mt-6 text-sm text-muted">
+          Los datos publicados son ficticios. El enlace abre WhatsApp con un mensaje
+          preparado; no lo envía automáticamente ni constituye un canal operativo.
+        </p>
+        <a href={whatsappHref} class="wm-btn mt-8">Consultar por WhatsApp</a>
+      </div>
+
+      <div>
+        <p class="wm-kicker">Mensaje</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Describí el proyecto que necesitás desarrollar
+        </h2>
+        <p class="mt-5 text-muted">
+          Podés indicar tu actividad, los objetivos y las funcionalidades que
+          necesitás. Usá datos de ejemplo: esta pantalla solo simula una consulta.
+        </p>
+
+        <form class="mt-8 grid gap-4" data-wm-demo-form>
+          <label class="block text-sm">
+            <span class="text-muted">Nombre</span>
+            <input
+              required
+              placeholder="Ana Gómez"
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            />
+          </label>
+          <label class="block text-sm">
+            <span class="text-muted">Teléfono o email</span>
+            <input
+              required
+              placeholder="11 1234 5678"
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            />
+          </label>
+          <label class="block text-sm">
+            <span class="text-muted">¿Qué necesitás desarrollar?</span>
+            <textarea
+              rows="4"
+              placeholder="Un sitio para presentar servicios y gestionar consultas..."
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            ></textarea>
+          </label>
+          <button type="submit" class="wm-btn w-full">Simular consulta de cotización</button>
+          <p class="text-xs text-muted">Demo: no se envían datos ni se registra una solicitud.</p>
+        </form>
+
+        <p
+          class="mt-4 rounded-wm border border-accent p-4 text-sm"
+          data-wm-demo-done
+          hidden
+        >
+          Consulta simulada. No se envió ningún mensaje ni se generó una cotización.
+          Esta pantalla muestra únicamente una confirmación de ejemplo.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wm-container pb-24">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+      <p class="wm-kicker">Evaluación inicial</p>
+      <h2 class="wm-display mt-4 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Revisemos el alcance de tu proyecto
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        El formulario de la portada permite explorar la consulta de cotización.
+        Podemos preparar una demo rápida según las necesidades del proyecto;
+        su alcance y disponibilidad se acuerdan durante la consulta.
+      </p>
+      <a href="/#demo" class="wm-btn mt-8">Solicitar cotización</a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Formulario de contacto (demo): no manda datos, muestra la confirmación.
+  // Ojo: el form tiene `grid`, y la utilidad de Tailwind le gana al atributo
+  // `hidden` → se oculta con `style.display`.
+  document.addEventListener(
+    "submit",
+    (event) => {
+    const form = event.target as HTMLFormElement | null;
+    if (!form || !form.matches("[data-wm-demo-form]")) return;
+    event.preventDefault();
+    form.style.display = "none";
+    const done = document.querySelector<HTMLElement>("[data-wm-demo-done]");
+    if (done) {
+      done.classList.remove("hidden");
+      done.removeAttribute("hidden");
+    }
+    },
+    true,
+  );
+</script>

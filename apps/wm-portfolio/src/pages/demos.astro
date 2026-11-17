@@ -1,0 +1,62 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import SolutionCard from "../components/SolutionCard.astro";
+import RubroFilter from "../components/RubroFilter.tsx";
+import { portfolio, demoImages, solutions } from "../content/portfolio";
+import { getRubroGroups } from "@lib/rubros";
+
+const chips = getRubroGroups(solutions).map(({ id, nombre, accent }) => ({ id, nombre, accent }));
+---
+
+<Base content={portfolio} title={`Soluciones por industria · ${portfolio.brand}`}>
+  <PageHead
+    kicker="Desarrollo aplicado"
+    title="Soluciones por industria"
+    subtitle="Explorá ocho ejemplos de sitios y aplicaciones adaptados a distintas actividades. Filtrá por industria para conocer sus funcionalidades y recorridos."
+  />
+
+  <div class="wm-demos-block">
+    <div class="wm-filter-bar">
+      <div class="wm-container">
+        <RubroFilter client:load rubros={chips} total={solutions.length} />
+      </div>
+    </div>
+
+    <section class="wm-container pb-20 sm:pb-28">
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          solutions.map((r, i) => (
+            <div
+              data-wm-rubro-card={r.id}
+              data-wm-rubro-grupo={r.rubroId}
+              class="wm-rubro-item"
+              style={`--wm-stagger:${i}; --wm-accent:${r.palette.accent}`}
+            >
+              <SolutionCard rubro={r} image={demoImages[r.id] ?? demoImages[r.rubroId]} />
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="mt-10 text-sm text-muted">
+        Ejemplos ilustrativos: las marcas, los precios y los teléfonos son ficticios.
+        Los formularios simulan interacciones y no envían datos a un servidor.
+      </p>
+    </section>
+  </div>
+
+  <section class="wm-container pb-24">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+      <p class="wm-kicker">Tu proyecto</p>
+      <h2 class="wm-display mt-4 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Una solución para tu organización
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        Contanos qué necesitás para definir una cotización. Podemos preparar
+        una demo rápida que ayude a evaluar el enfoque y las funcionalidades.
+      </p>
+      <a href="/#demo" class="wm-btn mt-8">Solicitar cotización</a>
+    </div>
+  </section>
+</Base>

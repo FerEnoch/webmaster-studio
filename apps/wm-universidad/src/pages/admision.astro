@@ -1,0 +1,353 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import AdmisionSteps from "../components/AdmisionSteps.astro";
+import CarreraCard from "../components/CarreraCard.astro";
+import { universidad, carreras, fotos } from "../content/universidades";
+
+const seccionAdmision = universidad.sections.find((s) => s.id === "admision")!;
+const seccionBecas = universidad.sections.find((s) => s.id === "becas")!;
+const seccionFaq = universidad.sections.find((s) => s.id === "faq")!;
+---
+
+<Base content={universidad} title={`Admisión · ${universidad.brand}`}>
+  <PageHead
+    kicker="Admisión 2027"
+    title="Sin examen de ingreso: documentos y una charla"
+    subtitle="Verificamos lo que presentás, hablamos con vos y te decimos el resultado. La inscripción se completa online y podés bajarla en el momento."
+  />
+
+  <!-- Proceso -->
+  <section class="wm-container pb-16 sm:pb-20">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">Cómo es</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">De la consulta al pase, en cuatro pasos</h2>
+    </header>
+
+    <ol class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        [
+          {
+            n: "01",
+            t: "Elegís la carrera",
+            b: "Con el buscador, el arancel a la vista y la salida laboral escrita.",
+          },
+          {
+            n: "02",
+            t: "Elegís la modalidad",
+            b: "Presencial en campus o online con prácticas presenciales en bloques.",
+          },
+          {
+            n: "03",
+            t: "Agendás la visita",
+            b: "90 minutos en el campus o 45 de videollamada. Sin compromiso.",
+          },
+          {
+            n: "04",
+            t: "Completás la inscripción",
+            b: "Documentación, verificación, entrevista de 30 min y alta.",
+          },
+        ].map((p) => (
+          <li class="rounded-wm border border-line p-5">
+            <span class="wm-display text-3xl text-accent">{p.n}</span>
+            <p class="mt-2 font-semibold">{p.t}</p>
+            <p class="mt-1 text-sm text-muted">{p.b}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Las seis carreras y a que Postular -->
+  <section class="wm-container pb-16 sm:pb-20" id="carreras">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">A qué me postulo</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
+        Las seis, con lo que pide cada una
+      </h2>
+      <p class="mt-5 text-muted">
+        Los requisitos de admisión son los mismos para todas. Lo que cambia es
+        el plan, el arancel y el modalidad. Si hay dos que te interestan, el
+        buscador te las compara lado a lado.
+      </p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {carreras.map((c, i) => <CarreraCard item={c} index={i} />)}
+    </div>
+
+    <p class="mt-8 text-sm text-muted">
+      <a href={appUrl("/carreras#buscador")} class="font-semibold text-accent underline underline-offset-4">
+        Comparar las seis lado a lado
+      </a>
+    </p>
+  </section>
+
+  <!-- Modalidad -->
+  <section class="wm-container pb-16 sm:pb-20" id="modalidad">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">Modalidad</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
+        Presencial u online: el mismo título
+      </h2>
+      <p class="mt-5 text-muted">
+        La modalidad no cambia el plan de estudios ni el título. Cambia dónde
+        cursás las prácticas y cómo se dan las clases. Se elige al inscribirte
+        y se puede cambiar antes del segundo cuatrimestre.
+      </p>
+    </header>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-2">
+      <article class="wm-card">
+        <h3 class="wm-display text-xl">Presencial</h3>
+        <ul class="mt-4 space-y-1.5 text-sm text-muted">
+          <li class="flex gap-2"><span aria-hidden="true" class="text-accent">→</span><span>De martes a viernes en campus, 8 horas semanales en aula.</span></li>
+          <li class="flex gap-2"><span aria-hidden="true" class="text-accent">→</span><span>Un día de prácticas presenciales por cuatrimestre.</span></li>
+          <li class="flex gap-2"><span aria-hidden="true" class="text-accent">→</span><span>Residencia en el campus para estudiantes de otra localidad.</span></li>
+        </ul>
+      </article>
+
+      <article class="wm-card">
+        <h3 class="wm-display text-xl">Online</h3>
+        <ul class="mt-4 space-y-1.5 text-sm text-muted">
+          <li class="flex gap-2"><span aria-hidden="true" class="text-accent">→</span><span>Campus Virtual: 6 horas de videollamada en vivo por semana.</span></li>
+          <li class="flex gap-2"><span aria-hidden="true" class="text-accent">→</span><span>Materiales grabados y parciales a distancia.</span></li>
+          <li class="flex gap-2"><span aria-hidden="true" class="text-accent">→</span><span>Prácticas presenciales obligatorias, en bloques de una semana.</span></li>
+        </ul>
+        <div class="wm-grade wm-grain wm-vignette mt-6 overflow-hidden rounded-wm">
+          <img
+            src={fotos.online}
+            alt="Estudiantes de la UNIVERSIDAD ALTA en una clase del campus virtual con notebooks (imagen de demostración)."
+            loading="lazy"
+            decoding="async"
+            class="aspect-[16/10] w-full object-cover"
+          />
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Verificacion -->
+  <section class="wm-container pb-16 sm:pb-20" id="verificacion">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-end">
+      <header>
+        <p class="wm-kicker">{seccionAdmision.kicker}</p>
+        <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{seccionAdmision.title}</h2>
+        <p class="mt-5 text-muted">{seccionAdmision.body}</p>
+      </header>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.estudio}
+          alt="Estudiantes de la UNIVERSIDAD ALTA estudiando en la biblioteca del campus (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[16/10] w-full object-cover"
+        />
+      </div>
+    </div>
+
+    <ol class="mt-12 grid gap-5 sm:grid-cols-2">
+      {
+        seccionAdmision.items?.map((item, i) => (
+          <li class="wm-card flex h-full flex-col">
+            <span class="wm-display text-3xl text-accent">{String(i + 1).padStart(2, "0")}</span>
+            <h3 class="wm-display mt-3 text-xl leading-tight">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
+            {item.points?.length ? (
+              <ul class="mt-4 space-y-1.5 text-sm text-muted">
+                {item.points.map((p) => (
+                  <li class="flex gap-2">
+                    <span aria-hidden="true" class="text-accent">→</span>
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Becas -->
+  <section class="wm-container pb-16 sm:pb-20" id="becas">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{seccionBecas.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{seccionBecas.title}</h2>
+      <p class="mt-5 text-muted">{seccionBecas.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2">
+      {
+        seccionBecas.items?.map((item) => (
+          <article class="wm-card flex h-full flex-col">
+            <div class="flex items-start justify-between gap-3">
+              <h3 class="wm-display text-xl leading-tight">{item.title}</h3>
+              {item.badge ? <span class="wm-chip shrink-0">{item.badge}</span> : null}
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
+            {item.meta?.length ? (
+              <p class="mt-5 text-xs uppercase tracking-[0.14em] text-muted">
+                {item.meta.map((m) => `${m.label}: ${m.value}`).join(" · ")}
+              </p>
+            ) : null}
+            {item.price ? (
+              <p class="wm-display mt-auto pt-5 text-2xl text-accent">
+                {item.price.amount}{" "}
+                <span class="text-sm font-normal text-muted">{item.price.note}</span>
+              </p>
+            ) : null}
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="mt-8 text-sm text-muted">
+      Las becas se solicitan en el mismo formulario de inscripción: no hay un
+      trámite aparte. Demo de portfolio: las becas y los porcentajes son
+      ficticios.
+    </p>
+  </section>
+
+  <!-- Conversion principal -->
+  <AdmisionSteps
+    conversion={universidad.conversion}
+    brand={universidad.brand}
+    inscriptionHref="#inscripcion"
+  />
+
+  <!-- Formulario de inscripcion (demo) -->
+  <section class="wm-container pb-16 sm:pb-24" id="inscripcion">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.2fr]">
+      <div>
+        <p class="wm-kicker">Inscripción</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Completá el formulario y te contactamos
+        </h2>
+        <p class="mt-5 text-muted">
+          Es el paso que sigue al pase de visita. En esta demo no se envía nada:
+          el formulario muestra la confirmación en el lugar y listo.
+        </p>
+        <p class="mt-6 text-sm text-muted">
+          ¿Preferís hablar? Escribinos por WhatsApp con el nombre de la carrera
+          que te interesa y te respondemos en el día.
+        </p>
+      </div>
+
+      <form class="wm-card grid gap-4" data-wm-demo-form>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="block text-sm">
+            <span class="text-muted">Nombre y apellido</span>
+            <input
+              required
+              placeholder="Ana Gomez"
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            />
+          </label>
+          <label class="block text-sm">
+            <span class="text-muted">Teléfono</span>
+            <input
+              required
+              type="tel"
+              placeholder="11 1234 5678"
+              class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+            />
+          </label>
+        </div>
+
+        <label class="block text-sm">
+          <span class="text-muted">Email</span>
+          <input
+            required
+            type="email"
+            placeholder="ana@email.com"
+            class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+          />
+        </label>
+
+        <label class="block text-sm">
+          <span class="text-muted">Carrera que querés cursar</span>
+          <select class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none focus:border-accent">
+            {carreras.map((c) => <option value={c.id}>{c.title}</option>)}
+          </select>
+        </label>
+
+        <label class="block text-sm">
+          <span class="text-muted">Modalidad</span>
+          <select class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none focus:border-accent">
+            <option>Presencial</option>
+            <option>Online</option>
+            <option>No sé todavía</option>
+          </select>
+        </label>
+
+        <label class="block text-sm">
+          <span class="text-muted">¿Necesitás beca? Contanos brevemente</span>
+          <textarea
+            rows="3"
+            placeholder="Opcional"
+            class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"></textarea>
+        </label>
+
+        <button type="submit" class="wm-btn w-full">Enviar inscripción</button>
+        <p class="text-xs text-muted">Demo: no se envían datos.</p>
+      </form>
+
+      <p
+        class="hidden rounded-wm border border-accent p-4 text-sm lg:col-span-2"
+        data-wm-demo-done
+      >
+        Inscripción tomada. En esta demo no se envía nada: así se vería la
+        confirmación y el email con los pasos siguientes.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ corta -->
+  <section class="wm-container pb-24 sm:pb-32">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{seccionFaq.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{seccionFaq.title}</h2>
+    </header>
+
+    <div class="mt-12 divide-y divide-line border-y border-line">
+      {
+        seccionFaq.items?.map((item) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6">
+              <span class="wm-display text-xl leading-snug">{item.title}</span>
+              <span
+                aria-hidden="true"
+                class="text-2xl text-accent transition-transform group-open:rotate-45"
+              >
+                +
+              </span>
+            </summary>
+            <p class="mt-4 max-w-3xl text-muted">{item.body}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Formulario de inscripcion (demo): no manda datos, muestra la confirmacion.
+  document.addEventListener(
+    "submit",
+    (event) => {
+    const form = event.target as HTMLFormElement | null;
+    if (!form || !form.matches("[data-wm-demo-form]")) return;
+    event.preventDefault();
+    form.style.display = "none";
+    const done = document.querySelector<HTMLElement>("[data-wm-demo-done]");
+    if (done) {
+      done.classList.remove("hidden");
+      done.removeAttribute("hidden");
+    }
+    },
+    true,
+  );
+</script>

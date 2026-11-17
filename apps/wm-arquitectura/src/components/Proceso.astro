@@ -1,0 +1,146 @@
+---
+/**
+ * Seccion "pinned": el proceso por etapas.
+ *
+ * La columna izquierda queda pegada (sticky) mientras la derecha va pasando
+ * por las cuatro etapas. Un observer marca la etapa activa y la columna
+ * izquierda la muestra: el proceso se lee como una sola cosa que avanza.
+ */
+import type { Etapa } from "../content/arquitectura";
+
+export interface Props {
+  etapas: Etapa[];
+  kicker?: string;
+  title?: string;
+  body?: string;
+}
+
+const { etapas, kicker = "El proceso", title = "Cuatro etapas, siempre las mismas", body } = Astro.props;
+---
+
+<section id="proceso" class="wm-container relative py-20 sm:py-28">
+  <div class="grid gap-12 lg:grid-cols-[minmax(0,24rem)_1fr] lg:gap-20">
+    <!-- Columna fija: el estado del proceso -->
+    <div class="lg:sticky lg:top-32 lg:h-fit">
+      <p class="wm-kicker">{kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.4rem)]">{title}</h2>
+      {
+        body ? (
+          <p class="mt-5 max-w-sm text-muted">{body}</p>
+        ) : (
+          <p class="mt-5 max-w-sm text-muted">
+            El orden no cambia nunca. Es lo que permite decirte cuándo vas a tener cada cosa y
+            cuánto cuesta hasta ese momento.
+          </p>
+        )
+      }
+
+      <div class="mt-10 border-t border-line pt-6">
+        <p class="text-xs uppercase tracking-[0.18em] text-muted">Etapa</p>
+        <p
+          class="wm-display mt-2 text-6xl leading-none text-accent"
+          data-wm-etapa-numero
+          aria-hidden="true"
+        >
+          01
+        </p>
+        <p class="wm-display mt-3 text-2xl leading-tight" data-wm-etapa-nombre>
+          {etapas[0]?.title}
+        </p>
+        <p class="mt-2 text-sm text-muted" data-wm-etapa-duracion>{etapas[0]?.duracion}</p>
+      </div>
+
+      <ol class="mt-8 flex gap-2" data-wm-etapa-puntos aria-hidden="true">
+        {
+          etapas.map((_, i) => (
+            <li>
+              <span
+                class="block h-0.5 w-10 bg-line transition-colors"
+                data-wm-etapa-barra={i}
+              />
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <!-- Columna que scrollea: las etapas -->
+    <ol class="border-t border-line">
+      {
+        etapas.map((etapa, i) => (
+          <li
+            class="border-b border-line py-10 sm:py-14"
+            data-wm-etapa={i}
+            data-wm-etapa-titulo={etapa.title}
+            data-wm-etapa-tiempo={etapa.duracion}
+          >
+            <div class="flex items-baseline gap-6">
+              <span class="wm-display text-4xl text-muted/60">{String(i + 1).padStart(2, "0")}</span>
+              <h3 class="wm-display text-[clamp(1.6rem,3.4vw,2.4rem)]">{etapa.title}</h3>
+            </div>
+
+            <p class="mt-5 max-w-2xl text-muted">{etapa.body}</p>
+
+            <ul class="mt-6 grid gap-2 text-sm text-muted sm:grid-cols-2">
+              {etapa.puntos.map((p) => (
+                <li class="flex gap-2">
+                  <span aria-hidden="true" class="text-accent">→</span>
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+
+            <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-3 border-t border-line pt-5 text-sm">
+              <div>
+                <dt class="text-xs uppercase tracking-[0.14em] text-muted">Duración</dt>
+                <dd class="mt-1 font-semibold">{etapa.duracion}</dd>
+              </div>
+              <div>
+                <dt class="text-xs uppercase tracking-[0.14em] text-muted">Te llevás</dt>
+                <dd class="mt-1 font-semibold">{etapa.entrega}</dd>
+              </div>
+            </dl>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<script>
+  // La etapa activa se refleja en la columna fija. Solo cambia texto y color:
+  // nada de layout, nada de scroll.
+  const numeros = document.querySelector<HTMLElement>("[data-wm-etapa-numero]");
+  const nombre = document.querySelector<HTMLElement>("[data-wm-etapa-nombre]");
+  const duracion = document.querySelector<HTMLElement>("[data-wm-etapa-duracion]");
+  const barras = Array.from(document.querySelectorAll<HTMLElement>("[data-wm-etapa-barra]"));
+
+  const activar = (index: number) => {
+    if (numeros) numeros.textContent = String(index + 1).padStart(2, "0");
+    barras.forEach((barra, i) => {
+      barra.classList.toggle("bg-accent", i <= index);
+      barra.classList.toggle("bg-line", i > index);
+    });
+  };
+
+  const etapas = document.querySelectorAll<HTMLElement>("[data-wm-etapa]");
+  if (etapas.length && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (!visible) return;
+        const el = visible.target as HTMLElement;
+        const index = Number(el.dataset.wmEtapa ?? 0);
+        activar(index);
+        if (nombre) nombre.textContent = el.dataset.wmEtapaTitulo ?? "";
+        if (duracion) duracion.textContent = el.dataset.wmEtapaTiempo ?? "";
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 },
+    );
+    etapas.forEach((el) => observer.observe(el));
+  }
+
+  document.addEventListener("astro:page-load", () => activar(0));
+</script>

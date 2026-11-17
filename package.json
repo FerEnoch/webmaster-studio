@@ -1,0 +1,48 @@
+{
+  "name": "estudio",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Portfolio freelance: 9 apps Astro (8 demos + portfolio madre) con kit compartido.",
+  "packageManager": "pnpm@12.11.2",
+  "engines": {
+    "node": ">=22.22.0",
+    "pnpm": ">=12"
+  },
+  "scripts": {
+    "dev": "pnpm --filter wm-portfolio run dev",
+    "build": "node scripts/build-site.mjs",
+    "build:apps": "pnpm -r run build",
+    "preview": "node scripts/preview-site.mjs",
+    "check:site": "node scripts/check-site.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:selection": "node --test tests/e2e/selection.test.mjs",
+    "dev:concesionario": "pnpm --filter wm-concesionario run dev",
+    "build:concesionario": "pnpm --filter wm-concesionario run build",
+    "dev:lavadero": "pnpm --filter wm-lavadero run dev",
+    "build:lavadero": "pnpm --filter wm-lavadero run build",
+    "dev:lavadero-premium": "pnpm --filter wm-lavadero-premium run dev",
+    "build:lavadero-premium": "pnpm --filter wm-lavadero-premium run build",
+    "dev:estetica": "pnpm --filter wm-estetica run dev",
+    "build:estetica": "pnpm --filter wm-estetica run build",
+    "dev:universidad": "pnpm --filter wm-universidad run dev",
+    "build:universidad": "pnpm --filter wm-universidad run build",
+    "dev:inmobiliaria": "pnpm --filter wm-inmobiliaria run dev",
+    "build:inmobiliaria": "pnpm --filter wm-inmobiliaria run build",
+    "dev:arquitectura": "pnpm --filter wm-arquitectura run dev",
+    "build:arquitectura": "pnpm --filter wm-arquitectura run build",
+    "dev:arquitectura-premium": "pnpm --filter wm-arquitectura-premium run dev",
+    "build:arquitectura-premium": "pnpm --filter wm-arquitectura-premium run build",
+    "dev:portfolio": "pnpm --filter wm-portfolio run dev",
+    "build:portfolio": "pnpm --filter wm-portfolio run build",
+    "audit": "pnpm audit",
+    "audit:high": "pnpm audit --audit-level high",
+    "outdated": "pnpm outdated",
+    "check-deps": "pnpm audit --audit-level high && pnpm outdated",
+    "install:frozen": "pnpm install --frozen-lockfile"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "wrangler": "4.161.0"
+  }
+}

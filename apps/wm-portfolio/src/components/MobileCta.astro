@@ -1,0 +1,18 @@
+---
+/**
+ * CTA fijo en mobile: la conversion principal siempre a mano.
+ * En desktop no se muestra (el hero ya tiene su CTA y el nav el de WhatsApp).
+ */
+export interface Props {
+  href: string;
+  label: string;
+  note?: string;
+}
+
+const { href, label, note = "Contacto y cotización" } = Astro.props;
+---
+
+<a href={href} class="wm-mobile-cta">
+  <span class="wm-display text-base">{label}</span>
+  <span class="text-[0.65rem] uppercase tracking-[0.16em] opacity-70">{note}</span>
+</a>

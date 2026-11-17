@@ -1,0 +1,128 @@
+---
+/**
+ * LEGAL — precios finales, privacidad, baja y Defensa del Consumidor.
+ *
+ * Misma estructura legal que el resto de las demos (contrato del kit): la
+ * razon social, el CUIT, el aviso de precios con impuestos incluidos, el
+ * boton de baja y el enlace a Defensa del Consumidor.
+ */
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import { arquitecturaPremium } from "../content/arquitectura-premium";
+
+const { legal } = arquitecturaPremium;
+---
+
+<Base content={arquitecturaPremium} title={`Legal · ${arquitecturaPremium.brand}`}>
+  <PageHead
+    kicker="Información legal"
+    title="Precios finales, privacidad y baja sin vueltas"
+    subtitle="Datos de la empresa, honorarios, condiciones del encargo y cómo pedir la baja de tus datos."
+  />
+
+  <section class="vt-section">
+    <div class="wm-container">
+      <div class="vt-split">
+        <aside class="vt-cell h-fit">
+          <p class="wm-kicker">La empresa</p>
+          <dl class="mt-6 grid gap-5">
+            <div>
+              <dt class="text-xs uppercase tracking-[0.16em] text-[var(--vt-dim)]">Razón social</dt>
+              <dd class="mt-1">{legal.company}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-[0.16em] text-[var(--vt-dim)]">CUIT</dt>
+              <dd class="mt-1">{legal.cuit}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-[0.16em] text-[var(--vt-dim)]">Domicilio</dt>
+              <dd class="mt-1">{legal.address}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-[0.16em] text-[var(--vt-dim)]">Teléfono</dt>
+              <dd class="mt-1">{legal.phone}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-[0.16em] text-[var(--vt-dim)]">Email</dt>
+              <dd class="mt-1">{legal.email}</dd>
+            </div>
+          </dl>
+
+          <p class="vt-note mt-6">
+            Demo de portfolio: la razón social, el CUIT y el domicilio son ficticios.
+          </p>
+        </aside>
+
+        <div>
+          <article id="precios" class="border-t border-[var(--vt-line)] py-8 first:border-t-0">
+            <p class="wm-kicker">Precios</p>
+            <h2 class="vt-step__title mt-4">Honorarios con impuestos incluidos</h2>
+            <p class="vt-obras__body mt-4">{legal.taxNote}</p>
+            <p class="vt-obras__body mt-4">
+              Los valores publicados son estimaciones orientativas. El precio final se ajusta
+              según la escala del proyecto, la complejidad del sitio y el alcance pactado, y el
+              costo de la obra se cotiza por escrito antes de firmar el encargo de ejecución.
+            </p>
+          </article>
+
+          <article id="terminos" class="border-t border-[var(--vt-line)] py-8">
+            <p class="wm-kicker">Condiciones</p>
+            <h2 class="vt-step__title mt-4">Términos y condiciones</h2>
+            <ul class="vt-step__points mt-5">
+              {
+                legal.terms?.map((termino) => (
+                  <li>{termino}</li>
+                ))
+              }
+            </ul>
+          </article>
+
+          <article id="privacidad" class="border-t border-[var(--vt-line)] py-8">
+            <p class="wm-kicker">Privacidad</p>
+            <h2 class="vt-step__title mt-4">Política de privacidad</h2>
+            <ul class="vt-step__points mt-5">
+              {
+                legal.privacy?.map((linea) => (
+                  <li>{linea}</li>
+                ))
+              }
+            </ul>
+          </article>
+
+          <article id="baja" class="border-t border-[var(--vt-line)] py-8">
+            <p class="wm-kicker">Arrepentimiento y baja</p>
+            <h2 class="vt-step__title mt-4">Baja de consulta online</h2>
+            <p class="vt-obras__body mt-4">{legal.withdrawal.note}</p>
+            <p class="vt-note mt-3">{legal.withdrawal.resolution}</p>
+            <p class="vt-obras__body mt-5">
+              El botón está en el pie de página de todas las páginas. También podés escribirnos
+              a{" "}
+              <a href={`mailto:${legal.email}`} class="text-[var(--wm-accent)] underline underline-offset-4">
+                {legal.email}
+              </a>{" "}
+              y lo tramitamos por email.
+            </p>
+          </article>
+
+          <article id="defensa" class="border-t border-[var(--vt-line)] py-8">
+            <p class="wm-kicker">Defensa del Consumidor</p>
+            <h2 class="vt-step__title mt-4">Ante un problema</h2>
+            <p class="vt-obras__body mt-4">
+              Si algo no salió como esperabas, escribinos primero: resolvemos en el momento. Si
+              no llegamos a un acuerdo, podés iniciar un reclamo ante{" "}
+              <a
+                href={legal.consumerDefense.url}
+                target="_blank"
+                rel="noreferrer noopener"
+                class="text-[var(--wm-accent)] underline underline-offset-4"
+              >
+                {legal.consumerDefense.label}
+              </a>
+              .
+            </p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

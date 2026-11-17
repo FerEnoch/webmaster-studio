@@ -1,0 +1,192 @@
+---
+/**
+ * SECCIÓN "PINNED" — el recorrido del espacio.
+ *
+ * El plano queda fijo (sticky) mientras el texto de los pasos scrollea:
+ * es la historia del estudio contada con un plano y fotos reales.
+ * Cierra con la promo de la primera clase.
+ */
+import { appUrl } from "@lib/urls";
+
+export interface Props {
+  fotos: {
+    salon: string;
+    tratamiento: string;
+    sala: string;
+  };
+  promo: { titulo: string; precio: string; cuerpo: string; cta: { label: string; href: string } };
+}
+
+const { fotos, promo } = Astro.props;
+
+const pasos = [
+  {
+    n: "1",
+    titulo: "Entrás por Corrientes 4400",
+    cuerpo:
+      "Recepción a la izquierda, living con té a la derecha. No te llama nadie por WhatsApp: te atendemos como si fueras a reservar, no a esperar.",
+    foto: fotos.salon,
+    alt: "Sala de espera de LUMEN con sillón de rattan, plantas y luz cálida (imagen de demostración).",
+  },
+  {
+    n: "2",
+    titulo: "Vestidor, duchas y casillero",
+    cuerpo:
+      "Todo el equipo en el primer piso: dos duchas, toallero y un casillero con candado. Traé un candado propio: los del estudio quedan puestos.",
+    foto: null,
+    alt: "",
+  },
+  {
+    n: "3",
+    titulo: "Abajo, los gabinetes de estética",
+    cuerpo:
+      "Dos gabinetes con ventana natural. El de la facial tiene sillón reclinable y luz regulable; el de masajes, la camilla grande.",
+    foto: fotos.tratamiento,
+    alt: "Tratamiento de estética en curso en uno de los gabinetes de LUMEN (imagen de demostración).",
+  },
+  {
+    n: "4",
+    titulo: "Arriba, la sala de yoga",
+    cuerpo:
+      "Una sola sala, 14 mats, piso de madera y luz natural. Es el mismo lugar donde te hacemos la clase de descanso.",
+    foto: fotos.sala,
+    alt: "Sala de yoga de LUMEN: piso de madera, esterillas y luz natural (imagen de demostración).",
+  },
+];
+---
+
+<section id="recorrido" class="relative border-y border-line py-20 sm:py-28">
+  <div class="wm-container">
+    <div class="max-w-2xl">
+      <p class="wm-kicker">El recorrido</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
+        El estudio, de punta a punta
+      </h2>
+      <p class="mt-5 text-muted">
+        Son dos plantas y una sola escalera: por eso conviene saber dónde está
+        cada cosa antes de reservar.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_1.15fr] lg:gap-16">
+      <!-- ── El plano: se queda pegado mientras el texto scrollea ── -->
+      <div class="lg:sticky lg:top-28 lg:self-start">
+        <figure class="wm-card">
+          <svg
+            viewBox="0 0 400 560"
+            class="w-full"
+            role="img"
+            aria-label="Plano del estudio LUMEN: primer piso con la sala de yoga y el vestidor; planta baja con recepción y los dos gabinetes de estética."
+          >
+            <rect x="16" y="16" width="368" height="528" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+
+            <!-- PLANTA ALTA -->
+            <text x="30" y="36" fill="currentColor" fill-opacity="0.55" font-size="11" letter-spacing="3">PRIMER PISO</text>
+            <rect x="30" y="46" width="340" height="180" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.45"></rect>
+            <text x="44" y="72" fill="currentColor" fill-opacity="0.7" font-size="12" letter-spacing="2">SALA DE YOGA</text>
+
+            <!-- 14 mats -->
+            {
+              Array.from({ length: 14 }).map((_, i) => {
+                const fila = i < 7 ? 0 : 1;
+                const col = i % 7;
+                return (
+                  <rect
+                    x={50 + col * 44}
+                    y={94 + fila * 38}
+                    width="26"
+                    height="14"
+                    rx="7"
+                    fill="currentColor"
+                    fill-opacity={fila === 0 ? "0.28" : "0.16"}
+                  />
+                );
+              })
+            }
+
+            <!-- Vestidor -->
+            <rect x="30" y="240" width="340" height="60" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.45"></rect>
+            <text x="44" y="266" fill="currentColor" fill-opacity="0.7" font-size="12" letter-spacing="2">VESTIDOR + BAÑO</text>
+            <text x="44" y="286" fill="currentColor" fill-opacity="0.5" font-size="10" letter-spacing="1">2 duchas · casilleros</text>
+
+            <line x1="16" y1="320" x2="384" y2="320" stroke="currentColor" stroke-opacity="0.25" stroke-dasharray="6 6"></line>
+
+            <!-- PLANTA BAJA -->
+            <text x="30" y="348" fill="currentColor" fill-opacity="0.55" font-size="11" letter-spacing="3">PLANTA BAJA</text>
+            <rect x="30" y="358" width="190" height="186" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.45"></rect>
+            <text x="44" y="384" fill="currentColor" fill-opacity="0.7" font-size="12" letter-spacing="2">RECEPCIÓN</text>
+            <rect x="44" y="404" width="162" height="52" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.22" stroke-dasharray="4 4"></rect>
+            <text x="54" y="434" fill="currentColor" fill-opacity="0.5" font-size="10" letter-spacing="1">LIVING · TÉ</text>
+
+            <rect x="236" y="358" width="134" height="86" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.45"></rect>
+            <text x="248" y="384" fill="currentColor" fill-opacity="0.7" font-size="11" letter-spacing="1.5">GABINETE 1</text>
+            <text x="248" y="404" fill="currentColor" fill-opacity="0.5" font-size="10" letter-spacing="1">facial</text>
+
+            <rect x="236" y="458" width="134" height="86" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.45"></rect>
+            <text x="248" y="484" fill="currentColor" fill-opacity="0.7" font-size="11" letter-spacing="1.5">GABINETE 2</text>
+            <text x="248" y="504" fill="currentColor" fill-opacity="0.5" font-size="10" letter-spacing="1">masajes</text>
+
+            <!-- Marcadores -->
+            <g font-size="13" font-weight="700" text-anchor="middle">
+              <circle cx="52" cy="516" r="13" fill="var(--wm-accent)"></circle>
+              <text x="52" y="521" fill="var(--wm-bg)">1</text>
+
+              <circle cx="352" cy="270" r="13" fill="var(--wm-accent)"></circle>
+              <text x="352" y="275" fill="var(--wm-bg)">2</text>
+
+              <circle cx="354" cy="401" r="13" fill="var(--wm-accent)"></circle>
+              <text x="354" y="406" fill="var(--wm-bg)">3</text>
+
+              <circle cx="52" cy="100" r="13" fill="var(--wm-accent)"></circle>
+              <text x="52" y="105" fill="var(--wm-bg)">4</text>
+            </g>
+          </svg>
+
+          <figcaption class="mt-4 text-xs text-muted">
+            Plano esquemático de LUMEN (demostración). El recorrido real es el que
+            ves en el video de la sala.
+          </figcaption>
+        </figure>
+
+        <!-- Promo: la primera clase -->
+        <div class="mt-6 rounded-wm-lg border border-accent p-6">
+          <p class="wm-kicker">Promo</p>
+          <p class="wm-display mt-3 text-3xl">{promo.titulo}</p>
+          <p class="wm-display mt-3 text-4xl text-accent">{promo.precio}</p>
+          <p class="mt-3 text-sm text-muted">{promo.cuerpo}</p>
+          <a href={appUrl(promo.cta.href)} class="wm-btn mt-5 w-full">{promo.cta.label}</a>
+        </div>
+      </div>
+
+      <!-- ── Los pasos ── -->
+      <ol class="border-l border-line">
+        {
+          pasos.map((p) => (
+            <li class="relative border-b border-line py-10 pl-8 first:pt-0 sm:pl-12">
+              <span
+                aria-hidden="true"
+                class="absolute top-10 -left-[0.42rem] flex h-3 w-3 rounded-full bg-accent first:top-2"
+              />
+              <div class="flex items-center gap-4">
+                <span class="wm-display text-4xl text-accent">{p.n}</span>
+                <h3 class="wm-display text-2xl leading-tight sm:text-3xl">{p.titulo}</h3>
+              </div>
+              <p class="mt-4 max-w-xl text-muted">{p.cuerpo}</p>
+              {p.foto ? (
+                <div class="wm-grade wm-grain wm-vignette mt-6 overflow-hidden rounded-wm-lg">
+                  <img
+                    src={p.foto}
+                    alt={p.alt}
+                    loading="lazy"
+                    decoding="async"
+                    class="aspect-[16/10] w-full object-cover"
+                  />
+                </div>
+              ) : null}
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>

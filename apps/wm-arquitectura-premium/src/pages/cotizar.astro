@@ -1,0 +1,45 @@
+---
+/**
+ * COTIZAR — la conversion principal en 4 pasos, con pase.
+ *
+ * La estructura (4 pasos, ticket, WhatsApp) es la del kit; el look es de la
+ * edicion premium.
+ */
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import Cotizador from "../components/Cotizador.tsx";
+import {
+  arquitecturaPremium,
+  conversion,
+  alcances,
+  visitas,
+  PRECIOS,
+  SENA,
+} from "../content/arquitectura-premium";
+---
+
+<Base content={arquitecturaPremium} title={`Cotizar · ${arquitecturaPremium.brand}`}>
+  <PageHead
+    kicker={conversion.kicker ?? "Cotización"}
+    title={conversion.title}
+    subtitle={conversion.body}
+  />
+
+  <section class="wm-container py-14">
+    <Cotizador
+      client:visible
+      brand={arquitecturaPremium.brand}
+      title={conversion.title}
+      kicker={conversion.kicker ?? "Cotización"}
+      body={conversion.body}
+      steps={conversion.steps}
+      opciones={conversion.options}
+      alcances={alcances}
+      visitas={visitas}
+      precios={PRECIOS}
+      sena={SENA}
+      demoNotice={conversion.demoNotice}
+      rubroId="arquitectura-premium"
+    />
+  </section>
+</Base>

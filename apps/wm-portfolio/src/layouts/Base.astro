@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../components/ui/BaseLayout.astro";
+import MobileCta from "../components/MobileCta.astro";
+import type { RubroContent } from "@lib/types";
+import "../styles/global.css";
+
+export interface Props {
+  content: RubroContent;
+  title?: string;
+  description?: string;
+  ogType?: string;
+}
+
+const { content, title, description, ogType } = Astro.props;
+
+// En la portada el CTA fijo apunta al bloque de la conversion; en el resto
+// de las paginas, vuelve a la portada.
+const isHome = Astro.url.pathname === "/" || Astro.url.pathname === "";
+---
+
+<BaseLayout
+  title={title ?? `${content.brand} · ${content.rubro}`}
+  description={description ?? content.tagline}
+  brand={content.brand}
+  theme={content.theme}
+  nav={content.nav}
+  legal={content.legal}
+  contact={content.contact}
+  ogType={ogType}
+  jsonLd={content.jsonLd}
+>
+  <slot />
+
+  <MobileCta href={isHome ? "#demo" : "/#demo"} label="Solicitar cotización" />
+</BaseLayout>

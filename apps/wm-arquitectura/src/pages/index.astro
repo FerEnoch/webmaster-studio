@@ -1,0 +1,206 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/ui/PageHero.astro";
+import LiveNow from "../components/ui/LiveNow.astro";
+import Proceso from "../components/Proceso.astro";
+import ObraCard from "../components/ObraCard.astro";
+import ServicioCard from "../components/ServicioCard.astro";
+import CotizarSteps from "../components/CotizarSteps.astro";
+import { arquitectura, conversion, etapas, obras, fotos } from "../content/arquitectura";
+import { poster, video } from "@lib/media";
+
+const [servicios, , , , faq] = arquitectura.sections;
+const destacadas = obras.slice(0, 2);
+---
+
+<Base content={arquitectura}>
+  <PageHero hero={arquitectura.hero} brand={arquitectura.brand} />
+
+  <!-- 1) La objecion, respondida de entrada. -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">La promesa</p>
+        <p class="wm-display mt-5 text-[clamp(1.8rem,4.4vw,3rem)] leading-tight">
+          {arquitectura.objeccion}
+        </p>
+        <p class="mt-6 max-w-xl text-muted">
+          En ESTUDIO TRAZO el presupuesto se cierra por escrito antes de la obra y se
+          actualiza cada quince días con fotos y cronograma. Si algo se desvía, te
+          avisamos el mismo día: con el número y la causa.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="#cotizacion" class="wm-btn">Cotizar mi proyecto</a>
+          <a href={appUrl("/obras")} class="wm-btn wm-btn--ghost">Ver las obras</a>
+        </div>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm">
+        <img
+          src={fotos.estudio}
+          alt="Estudio de arquitectura con un pasillo de vidrio y mesas de trabajo (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 2) Senales en vivo -->
+  <section class="wm-rejilla border-y border-line bg-soft/40">
+    <div class="wm-container flex flex-col gap-4 py-6 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:gap-10">
+      <span class="text-accent">
+        <LiveNow signal={{ label: "Consultas hoy", count: 4, min: 2, max: 7, unit: "consultas", interval: 5200 }} />
+      </span>
+      <span class="text-muted">Estudio abierto ahora · Lunes a viernes de 9 a 19 h</span>
+      <span class="text-muted">Recibimos consultas hasta las 19 h</span>
+      <span class="text-muted">3 obras en curso</span>
+      <span class="text-xs text-muted/80">Demo de portfolio: estas señales son ficticias.</span>
+    </div>
+  </section>
+
+  <!-- 3) Servicios -->
+  <section class="wm-container py-16 sm:py-20" id="servicios">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{servicios.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{servicios.title}</h2>
+      <p class="mt-5 text-muted">{servicios.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2">
+      {servicios.items?.map((item, i) => <ServicioCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <!-- 4) Seccion "pinned": el proceso por etapas -->
+  <Proceso etapas={etapas} />
+
+  <!-- 5) Banda de video: obra terminada -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(3090)}
+        poster={poster(3090)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Interior terminado de una casa diseñada por ESTUDIO TRAZO (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 70%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-32">
+      <p class="wm-kicker">Obra terminada</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        Se vende la obra, no el render
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        Cada proyecto que entregamos vuelve con su ficha: año, superficie, estado,
+        equipo y qué se entregó. Podés visitarla antes de contratar la próxima.
+      </p>
+      <a href={appUrl("/obras")} class="wm-btn mt-8">Ver las cuatro obras</a>
+    </div>
+  </section>
+
+  <!-- 6) Obras destacadas -->
+  <section class="wm-container py-16 sm:py-24">
+    <header class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      <div class="max-w-2xl">
+        <p class="wm-kicker">Obras</p>
+        <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
+          La obra como prueba, con su ficha
+        </h2>
+      </div>
+      <a href={appUrl("/obras")} class="text-sm font-semibold text-accent underline underline-offset-4">
+        Ver todas las obras
+      </a>
+    </header>
+
+    <div class="mt-12">
+      {destacadas.map((obra, i) => <ObraCard obra={obra} index={i} />)}
+    </div>
+  </section>
+
+  <!-- 7) Conversion principal -->
+  <CotizarSteps conversion={conversion} brand={arquitectura.brand} rubroId={arquitectura.id} />
+
+  <!-- 8) Equipo -->
+  <section class="wm-container py-16 sm:py-24">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">El equipo</p>
+        <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.2rem)]">
+          Cuatro personas y un solo teléfono
+        </h2>
+        <p class="mt-5 text-muted">
+          No hay un departamento de cuentas: escribís al estudio y respondemos nosotros.
+          El que te dibuja el croquis es el que va a la obra a mirarlo.
+        </p>
+        <p class="mt-6 text-sm text-muted">
+          Demo de portfolio: el equipo, las obras y los premios son ficticios.
+        </p>
+        <a href={appUrl("/estudio")} class="wm-btn mt-8">Conocer el estudio</a>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm">
+        <img
+          src={fotos.curva}
+          alt="Fachada curva de un edificio resuelto por ESTUDIO TRAZO (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 9) FAQ -->
+  <section class="wm-container py-16 sm:py-20" id="faq">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{faq.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{faq.title}</h2>
+    </header>
+
+    <div class="mt-12 divide-y divide-line border-y border-line">
+      {
+        faq.items?.map((item) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6">
+              <span class="wm-display text-xl leading-snug">{item.title}</span>
+              <span aria-hidden="true" class="text-2xl text-accent transition-transform group-open:rotate-45">
+                +
+              </span>
+            </summary>
+            <p class="mt-4 max-w-3xl text-muted">{item.body}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 10) Cross-link to the premium edition of the same rubro -->
+  <section class="border-y border-line bg-soft/40">
+    <div class="wm-container py-16 sm:py-20">
+      <p class="wm-kicker">También hay una versión premium</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.2rem)]">
+        La misma obra, recorrible en 3D
+      </h2>
+      <p class="mt-5 max-w-xl text-muted">
+        La edición premium del estudio suma recorrido 3D, tour de obra y cotización en vivo a la presentación de proyectos de esta demo.
+      </p>
+      <a
+        href="/demos/arquitectura-premium/"
+        data-astro-reload
+        class="wm-btn mt-8"
+      >Ver la edición premium</a>
+    </div>
+  </section>
+</Base>

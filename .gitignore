@@ -1,0 +1,39 @@
+node_modules
+.next
+out
+dist
+.dist-stage-*
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+.env
+.env.*
+!.env.example
+estudio.zip
+
+.pnpm-store
+
+reporte-local
+
+# Generated build, deployment and browser-test artifacts
+.astro/
+.wrangler/
+.build-cache/
+test-results/
+playwright-report/
+blob-report/
+coverage/
+*.log
+
+# Local tooling and working directories
+.odd/
+.atl/
+.codegraph/
+.worktrees/
+.publish/
+
+# Internal working material (preserved locally; excluded from public snapshots)
+odd/
+research/
+design/
+opencode.json

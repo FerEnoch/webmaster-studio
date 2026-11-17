@@ -1,0 +1,141 @@
+---
+/**
+ * SERVICIOS — los cuatro encargos y el reparto del honorario.
+ *
+ * El reparto por etapa (proyecto 60%, direccion de obra 40%) se muestra con
+ * su fundamento: los colegex profesionales de referencia dividen el
+ * honorario en croquis, anteproyecto, documentacion y direccion. Mostrarlo
+ * es parte de la propuesta: el cliente ve de que esta hecho el numero.
+ */
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import { arquitecturaPremium, etapas, serviciosItems } from "../content/arquitectura-premium";
+
+const { brand } = arquitecturaPremium;
+
+/** Reparto de referencia del honorario por etapa (arancel de colegios). */
+const REPARTO = [
+  { etapa: "Croquis y anteproyecto", porcentaje: 40, detalle: "15% croquis + 25% anteproyecto" },
+  { etapa: "Documentación", porcentaje: 20, detalle: "Planos, pliegos y cómputo" },
+  { etapa: "Dirección de obra", porcentaje: 40, detalle: "Control técnico durante la obra" },
+];
+---
+
+<Base content={arquitecturaPremium} title={`Servicios · ${brand}`}>
+  <PageHead
+    kicker="Servicios"
+    title="Cuatro encargos, un solo responsable"
+    subtitle="Podés contratar uno o todos. El proyecto no cambia de manos a mitad de camino: el que dibuja el proyecto es el que está en la obra."
+  />
+
+  <section class="vt-section">
+    <div class="wm-container">
+      <div class="vt-grid">
+        {
+          serviciosItems.map((servicio) => (
+            <article class="vt-cell">
+              <p class="wm-kicker">{servicio.kicker}</p>
+              <h2 class="vt-cell-title">{servicio.title}</h2>
+              <p class="vt-cell-body">{servicio.body}</p>
+              <ul class="vt-step__points mt-5">
+                {servicio.points?.map((punto) => (
+                  <li>{punto}</li>
+                ))}
+              </ul>
+              {servicio.meta ? (
+                <dl class="vt-meta">
+                  {servicio.meta.map((meta) => (
+                    <div>
+                      <dt>{meta.label}</dt>
+                      <dd>{meta.value}</dd>
+                    </div>
+                  ))}
+                  {servicio.price ? (
+                    <div>
+                      <dt>Honorario</dt>
+                      <dd class="text-[var(--wm-accent)]">{servicio.price.amount}</dd>
+                    </div>
+                  ) : null}
+                </dl>
+              ) : null}
+            </article>
+          ))
+        }
+      </div>
+
+      <p class="vt-note mt-8">
+        Valores de estimación orientativos, con impuestos incluidos. El honorario definitivo se
+        pacta por escrito con el alcance detallado y la escala del proyecto.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── Reparto del honorario ─────────────────────────────────── -->
+  <section class="vt-section">
+    <div class="wm-container">
+      <div class="vt-section__head">
+        <div>
+          <span class="vt-index">Reparto</span>
+          <h2 class="vt-section__title mt-6">De qué está hecho tu honorario</h2>
+        </div>
+        <p class="vt-section__body">
+          El honorario no es un número redondo: son etapas. Cada una se paga contra su
+          entregable, y el reparto sigue la referencia de los colegios profesionales. Por eso
+          podés revisar en qué se gasta cada peso.
+        </p>
+      </div>
+
+      <div class="vt-numbers">
+        {
+          REPARTO.map((item) => (
+            <div class="vt-number">
+              <p class="vt-number__value">{item.porcentaje}%</p>
+              <p class="vt-number__label">{item.etapa}</p>
+              <p class="mt-3 text-sm text-[var(--vt-dim)]">{item.detalle}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="vt-steps mt-16">
+        {
+          etapas.map((etapa, i) => (
+            <article class="vt-step">
+              <p class="vt-step__index">{String(i + 1).padStart(2, "0")}</p>
+              <div>
+                <h3 class="vt-step__title">{etapa.title}</h3>
+                <p class="mt-4 text-[var(--vt-dim)]">{etapa.body}</p>
+              </div>
+              <ul class="vt-step__points">
+                {etapa.puntos.map((punto) => (
+                  <li>{punto}</li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+
+      <p class="vt-note mt-8">
+        El reparto por etapa sigue los aranceles de referencia de los colegios profesionales
+        (proyecto 60%, dirección de obra 40%) y la escala del proyecto. No es un precio cerrado:
+        el número final depende del alcance, la complejidad y el sitio.
+      </p>
+    </div>
+  </section>
+
+  <section class="wm-container pb-20">
+    <div class="vt-cta">
+      <div>
+        <p class="wm-kicker">Cotización</p>
+        <p class="vt-cta__title mt-5">Cuatro pasos y un número</p>
+        <p class="mt-4 text-[var(--vt-dim)]">
+          Elegís el encargo y la escala, dejás tus datos y te queda un pase con la referencia
+          estimada y el día de la visita.
+        </p>
+      </div>
+      <a href={appUrl("/cotizar")} class="wm-btn">Ir al cotizador</a>
+    </div>
+  </section>
+</Base>

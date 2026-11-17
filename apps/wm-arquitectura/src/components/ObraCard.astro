@@ -1,0 +1,127 @@
+---
+/**
+ * Ficha de una obra: lo que se vende es la obra como prueba.
+ *
+ * Muestra el dato duro (año, superficie, estado, zona), quien hizo la obra,
+ * que se entrego y el par antes/después. No es una tarjeta: es una ficha
+ * con lineas de plano.
+ */
+import { appUrl } from "@lib/urls";
+import type { Obra } from "../content/arquitectura";
+
+export interface Props {
+  obra: Obra;
+  index?: number;
+}
+
+const { obra, index = 0 } = Astro.props;
+const n = String(index + 1).padStart(2, "0");
+---
+
+<article class="border-t border-line py-14 first:border-t-0 first:pt-0 sm:py-20">
+  <div class="grid gap-10 lg:grid-cols-[minmax(0,26rem)_1fr] lg:gap-16">
+    <!-- Ficha -->
+    <div>
+      <div class="flex items-baseline justify-between gap-6">
+        <span class="wm-display wm-cota text-5xl text-accent">{n}</span>
+        {obra.estado === "En curso" ? <span class="wm-chip">En obra</span> : null}
+      </div>
+
+      <h3 class="wm-display mt-5 text-[clamp(1.9rem,4.2vw,3rem)]">{obra.title}</h3>
+      <p class="mt-4 max-w-md text-muted">{obra.resumen}</p>
+
+      <dl class="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-line pt-6 text-sm">
+        <div>
+          <dt class="text-xs uppercase tracking-[0.14em] text-muted">Año</dt>
+          <dd class="mt-1 font-semibold">{obra.year}</dd>
+        </div>
+        <div>
+          <dt class="text-xs uppercase tracking-[0.14em] text-muted">Superficie</dt>
+          <dd class="mt-1 font-semibold">{obra.superficie}</dd>
+        </div>
+        <div>
+          <dt class="text-xs uppercase tracking-[0.14em] text-muted">Estado</dt>
+          <dd class="mt-1 font-semibold">{obra.estado}</dd>
+        </div>
+        <div>
+          <dt class="text-xs uppercase tracking-[0.14em] text-muted">Zona</dt>
+          <dd class="mt-1 font-semibold">{obra.zona}</dd>
+        </div>
+      </dl>
+
+      <div class="mt-8 border-t border-line pt-6">
+        <p class="wm-kicker">Equipo</p>
+        <ul class="mt-3 space-y-1.5 text-sm text-muted">
+          {obra.equipo.map((e) => (
+            <li>{e}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="mt-8 border-t border-line pt-6">
+        <p class="wm-kicker">Qué se entregó</p>
+        <ul class="mt-3 space-y-1.5 text-sm text-muted">
+          {obra.entregables.map((e) => (
+            <li class="flex gap-2">
+              <span aria-hidden="true" class="text-accent">→</span>
+              <span>{e}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Antes / despues -->
+    <div>
+      <div class="grid gap-3 sm:grid-cols-2">
+        {
+          obra.antes ? (
+            <figure class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm">
+              <img
+                src={obra.antes.src}
+                alt={obra.antes.alt}
+                loading="lazy"
+                decoding="async"
+                class="aspect-[4/3] w-full object-cover"
+              />
+              <figcaption class="bg-bg px-4 py-3 text-xs uppercase tracking-[0.18em] text-muted">
+                Antes
+              </figcaption>
+            </figure>
+          ) : null
+        }
+
+        {
+          obra.despues ? (
+            <figure class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm">
+              <img
+                src={obra.despues.src}
+                alt={obra.despues.alt}
+                loading="lazy"
+                decoding="async"
+                class="aspect-[4/3] w-full object-cover"
+              />
+              <figcaption class="bg-bg px-4 py-3 text-xs uppercase tracking-[0.18em] text-accent">
+                {obra.estado === "En curso" ? "Estado actual" : "Después"}
+              </figcaption>
+            </figure>
+          ) : null
+        }
+      </div>
+
+      {
+        obra.nota ? (
+          <p class="mt-4 text-xs leading-relaxed text-muted">{obra.nota}</p>
+        ) : null
+      }
+
+      <a
+        href={appUrl("/#cotizacion")}
+        class="mt-8 inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.12em] text-accent transition-colors hover:text-fg"
+      >
+        Cotizar un proyecto así
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</article>

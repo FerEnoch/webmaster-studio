@@ -1,0 +1,170 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import SedeCard from "../components/SedeCard.astro";
+import RecorridoCampus from "../components/RecorridoCampus.astro";
+import { universidad, recorrido, fotos, clips, posters } from "../content/universidades";
+
+const seccionCampus = universidad.sections.find((s) => s.id === "campus")!;
+
+const servicios = [
+  {
+    id: "serv-1",
+    title: "Residencia universitaria",
+    body: "Habitaciones para estudiantes que vienen de otra localidad, con cocina compartida, lavandería y vigilancia las 24 h. Hay 180 plazas y se asignan por orden de llegada, con prioridad para becarios.",
+    puntos: ["180 plazas", "Cocina compartida y lavandería", "A 15 minutos del Campus Norte"],
+  },
+  {
+    id: "serv-2",
+    title: "Biblioteca y centro de documentación",
+    body: "Docecientos metros lineales, hemeroteca digital con acceso desde cualquier campus y salas de estudio con reserva individual o grupal.",
+    puntos: ["Abierta de 8 a 22 h", "Reserva de salas desde la app", "Préstamo domiciliario"],
+  },
+  {
+    id: "serv-3",
+    title: "Comedor y becas alimentarias",
+    body: "Comedor con servicio por turnos, menú del día y opción vegetariana. Las becas de comedor se aplican directo sobre el arancel, sin efectivo que retirar.",
+    puntos: ["Precio por turno con descuento por beca", "Opciones sin gluten", "Café de la facultad"],
+  },
+  {
+    id: "serv-4",
+    title: "Deporte y laboratorio de datos",
+    body: "Gimnasio, canchas y un laboratorio de datos abierto para que los estudiantes de Administración trabajen con datos reales del campus.",
+    puntos: ["Gimnasio y dos canchas", "Laboratorio de datos con 40 equipos", "Taller de prototipado"],
+  },
+];
+---
+
+<Base content={universidad} title={`Campus · ${universidad.brand}`}>
+  <PageHead
+    kicker="Campus"
+    title="Tres sedes y un campus que se recorre"
+    subtitle="La mejor forma de elegir una carrera es pisar el lugar. Acá está exactamente lo que vas a ver cuando vengas a la visita guiada."
+  />
+
+  <!-- Recorrido pinned -->
+  <RecorridoCampus
+    paradas={recorrido}
+    kicker="Visita guiada"
+    title="Tu visita, minuto a minuto"
+    body="Son 90 minutos con un estudiante y una persona de admisiones. Esto es exactamente lo que vas a ver, en orden."
+  />
+
+  <!-- Sedes -->
+  <section class="wm-container pb-16 sm:pb-20">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{seccionCampus.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{seccionCampus.title}</h2>
+      <p class="mt-5 text-muted">{seccionCampus.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-3">
+      {
+        seccionCampus.items?.map((sede) => (
+          <SedeCard item={sede} mapsUrl={universidad.contact.mapsUrl} />
+        ))
+      }
+    </div>
+
+    <div class="wm-grade wm-grain wm-vignette mt-10 overflow-hidden rounded-wm-lg">
+      <img
+        src={fotos.campus}
+        alt="Edificio principal del campus de la UNIVERSIDAD ALTA con el parque adelante (imagen de demostración)."
+        loading="lazy"
+        decoding="async"
+        class="aspect-[21/9] w-full object-cover"
+      />
+    </div>
+  </section>
+
+  <!-- Banda de video: el campus moderno -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={clips.moderno}
+        poster={posters.moderno}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Interior de un edificio moderno del campus de UNIVERSIDAD ALTA (imagen de demostración)."></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 72%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-32">
+      <p class="wm-kicker">Laboratorios</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        La carrera se cursa, no se explica
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        En la visita vas a ver los laboratorios donde te vas a formar, con los
+        equipos que vas a usar: un laboratorio de alimentos, uno de datos y las
+        salas de simulación de ingeniería.
+      </p>
+      <a href={appUrl("/admision#admision")} class="wm-btn mt-8">Agendar mi visita</a>
+    </div>
+  </section>
+
+  <!-- Servicios del campus -->
+  <section class="wm-container py-16 sm:py-24">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">Qué hay</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
+        Todo lo que pasa entre la clase y la cena
+      </h2>
+      <p class="mt-5 text-muted">
+        El campus no es solo el aula: es donde pasan la mitad de las cosas que
+        después te van a contar que te hicieron la carrera.
+      </p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2">
+      {
+        servicios.map((s) => (
+          <article class="wm-card flex h-full flex-col">
+            <h3 class="wm-display text-xl leading-tight">{s.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{s.body}</p>
+            <ul class="mt-4 space-y-1.5 text-sm text-muted">
+              {s.puntos.map((p) => (
+                <li class="flex gap-2">
+                  <span aria-hidden="true" class="text-accent">→</span>
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="wm-grade wm-grain wm-vignette mt-12 overflow-hidden rounded-wm-lg">
+      <img
+        src={fotos.aulaMagna}
+        alt="Aula magna del campus de UNIVERSIDAD ALTA con butacas (imagen de demostración)."
+        loading="lazy"
+        decoding="async"
+        class="aspect-[16/9] w-full object-cover"
+      />
+    </div>
+  </section>
+
+  <section class="wm-container pb-24 sm:pb-32">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+      <p class="wm-kicker">Visita guiada</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Reservá tu turno: jueves 10, 10:00
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        Son 90 minutos, no te comprometen con nada y el código de seguimiento
+        te queda en el pase.
+      </p>
+      <a href={appUrl("/admision#admision")} class="wm-btn mt-8">Agendar mi visita</a>
+    </div>
+  </section>
+</Base>

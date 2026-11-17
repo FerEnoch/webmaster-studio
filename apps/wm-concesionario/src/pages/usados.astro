@@ -1,0 +1,91 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import StockFilters from "../components/StockFilters.tsx";
+import { concesionario, usados } from "../content/concesionario";
+import { poster, video } from "@lib/media";
+---
+
+<Base content={concesionario} title={`Usados · ${concesionario.brand}`}>
+  <PageHead
+    kicker="Stock de usados"
+    title="Usados con la ficha completa"
+    subtitle="Peritaje hecho, service al día, precio final con IVA y cuota a la vista. Filtrá por marca, modelo, precio y kilometraje."
+  />
+
+  <section class="wm-container pb-16 sm:pb-24">
+    <StockFilters client:visible autos={usados} />
+  </section>
+
+  <!-- Banda: el usado tambien se prueba. -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(4191)}
+        poster={poster(4191)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Camioneta clásica azul estacionada en una calle de barrio (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 72%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-20 sm:py-28">
+      <p class="wm-kicker">Test drive</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(1.9rem,4.5vw,3rem)]">
+        Elegí la unidad y probala antes de hacer cuentas
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        Reservás desde la portada, llegás con el pase y salís con la cuota
+        decidida o con la unidad comprada.
+      </p>
+      <a href={appUrl("/#testdrive")} class="wm-btn mt-8">Agendar test drive</a>
+    </div>
+  </section>
+
+  <section class="wm-container py-16 sm:py-24">
+    <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
+      <div>
+        <p class="wm-kicker">Cómo trabajamos</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.2vw,2.8rem)]">
+          Lo que hacemos con cada usado antes de publicarlo
+        </h2>
+        <ul class="mt-6 space-y-3 text-muted">
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-accent">→</span>
+            <span>Peritaje independiente de chasis y motor.</span>
+          </li>
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-accent">→</span>
+            <span>Service completo en nuestro taller, con informe firmado.</span>
+          </li>
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-accent">→</span>
+            <span>Documentación al día y transferencia en el acto.</span>
+          </li>
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="text-accent">→</span>
+            <span>6 meses de garantía de motor y caja (12 con financiación de la casa).</span>
+          </li>
+        </ul>
+      </div>
+
+      <aside class="wm-card">
+        <p class="wm-kicker">En vivo</p>
+        <p class="mt-4 text-sm text-muted">
+          Stock actualizado hace 2 min. Las unidades se reservan por WhatsApp
+          hasta que el turno queda confirmado.
+        </p>
+        <a href={appUrl("/#testdrive")} class="wm-btn mt-6 w-full">Reservar una unidad</a>
+      </aside>
+    </div>
+  </section>
+</Base>

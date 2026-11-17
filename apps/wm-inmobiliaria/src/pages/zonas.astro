@@ -1,0 +1,88 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import ZonaCard from "../components/ZonaCard.astro";
+import { brand, inmobiliaria } from "../content/inmobiliaria";
+
+const zonas = inmobiliaria.sections.find((s) => s.id === "zonas")!;
+
+const metodo = [
+  {
+    n: "01",
+    t: "Comparamos con lo cerrado",
+    d: "Miramos qué se vendió en la zona en los últimos doce meses, no lo que pide el portal. La diferencia entre ambos números es la negociación.",
+  },
+  {
+    n: "02",
+    t: "Sumamos los costos que faltan",
+    d: "Expensas, impuestos, comisión de la escribana y de nosotros. El precio que publicamos ya los tiene dentro.",
+  },
+  {
+    n: "03",
+    t: "Lo publicamos con ese número",
+    d: "El mismo precio para todos. Si el dueño quiere otra cosa, se cambia el número: no hay un precio distinto para quien llama más tarde.",
+  },
+];
+---
+
+<Base content={inmobiliaria} title={`Zonas · ${brand}`}>
+  <PageHead
+    kicker="Zonas"
+    title="Cinco barrios donde sabemos el número"
+    subtitle="No publicamos en toda la ciudad. Publicamos donde conocemos el metro cuadrado real, las expensas que se cobran y el tiempo que tardás en llegar a la oficina."
+  />
+
+  <section class="wm-container pb-16">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {zonas.items?.map((item) => <ZonaCard item={item} />)}
+    </div>
+  </section>
+
+  <section class="border-y border-line">
+    <div class="wm-container py-16 sm:py-20">
+      <div class="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
+        <div>
+          <p class="wm-kicker">Cómo llegamos al precio</p>
+          <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.2rem)]">
+            El precio sale de un método, no de un sueño
+          </h2>
+          <p class="mt-5 text-muted">
+            Un precio puesto a ojo hace que se venda lento y que el comprador pida
+            discount. El nuestro sale de tres pasos que podés leer antes de la visita.
+          </p>
+          <a href={appUrl("/propiedades")} class="wm-btn mt-8">Ver las propiedades</a>
+        </div>
+
+        <ol class="border-l border-line">
+          {
+            metodo.map((m) => (
+              <li class="relative grid gap-3 border-b border-line py-7 pl-8 md:grid-cols-[6rem_1fr] md:gap-8 md:pl-12">
+                <span aria-hidden="true" class="absolute top-7 -left-[0.42rem] flex h-3 w-3 rounded-full bg-accent" />
+                <span class="wm-display text-3xl text-accent">{m.n}</span>
+                <div>
+                  <h3 class="wm-display text-xl leading-tight">{m.t}</h3>
+                  <p class="mt-2 text-muted">{m.d}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="wm-container py-16 sm:py-20">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+      <p class="wm-kicker">¿No está tu barrio?</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Si tu barrio no está en la lista, lo buscamos
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        Decinos el barrio, el tipo de propiedad y el rango de precio: armamos una
+        búsqueda a medida y te avisamos cuando entre algo.
+      </p>
+      <a href={appUrl("/contacto")} class="wm-btn mt-8">Pedir una búsqueda</a>
+    </div>
+  </section>
+</Base>

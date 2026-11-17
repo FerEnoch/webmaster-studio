@@ -1,0 +1,82 @@
+/* Entrada de estilos de una app del kit webmaster.
+   1) Tailwind v4 (genera las utilidades)
+   2) Tokens + utilidades de la firma (copiados del kit)
+   3) Estilos propios de la app
+*/
+
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* ─── Estilos propios de la app ─────────────────────────────────── */
+
+/* Barra de CTA fija (solo mobile): no tapa el contenido del pie. */
+.wm-cta-bar {
+  background-color: color-mix(in oklab, var(--wm-bg) 88%, transparent);
+  border-top: 1px solid color-mix(in oklab, var(--wm-fg) 14%, transparent);
+  backdrop-filter: blur(12px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Con la barra abierta, el boton flotante de WhatsApp sube. */
+@media (max-width: 639px) {
+  .wm-float-wa {
+    bottom: 4.75rem;
+  }
+
+  body {
+    padding-bottom: 4.25rem;
+  }
+}
+
+/* Con el menu mobile abierto, la barra de CTA tambien se oculta. */
+html:has([data-wm-menu-panel][data-open="true"]) .wm-cta-bar {
+  display: none !important;
+}
+
+/*
+ * El boton flotante de WhatsApp es `position: fixed`: en mobile se superpone
+ * al contenido de la esquina inferior derecha. Se le abre un gutter para que
+ * no tape texto (la senal "en vivo" del hero, el valor de los sliders).
+ */
+@media (max-width: 639px) {
+  [data-wm-hero] .wm-container {
+    padding-bottom: 9.5rem;
+  }
+
+  .wm-wa-gutter {
+    padding-right: 3.75rem;
+  }
+}
+
+/*
+ * En mobile el CTA del hero se oculta: la barra fija de abajo ya tiene el
+ * mismo boton. Un CTA sobre el fold, no dos.
+ */
+@media (max-width: 639px) {
+  [data-wm-hero] .wm-btn {
+    display: none;
+  }
+}
+
+/* Sliders de los filtros: el pulgar usa el color de acento. */
+input[type="range"] {
+  accent-color: var(--wm-accent);
+}
+
+/* Ficha del auto: la foto grande con la banda de datos al costado. */
+.wm-ficha {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .wm-ficha {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 3rem;
+  }
+}
+
+/* Numeros tabulares en precios y cuotas. */
+.wm-precio {
+  font-variant-numeric: tabular-nums;
+}

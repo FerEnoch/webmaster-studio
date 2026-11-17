@@ -1,0 +1,211 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/ui/PageHero.astro";
+import PropertyCard from "../components/PropertyCard";
+import InformePinned from "../components/InformePinned.astro";
+import BandaVideo from "../components/BandaVideo.astro";
+import VisitaFlow from "../components/VisitaFlow.astro";
+import EquipoCard from "../components/EquipoCard.astro";
+import { brand, clips, fotos, inmobiliaria, propiedades } from "../content/inmobiliaria";
+
+const [propiedadesSection, imperfecciones, financiacion, faq, equipo] = inmobiliaria.sections;
+
+const destacadas = propiedades.filter((p) => p.destacado).slice(0, 3);
+---
+
+<Base content={inmobiliaria}>
+  <PageHero hero={inmobiliaria.hero} brand={brand} />
+
+  <!-- 1) La objecion, respondida de entrada. -->
+  <section class="wm-container py-16 sm:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">La promesa</p>
+        <p class="wm-display mt-5 text-[clamp(1.8rem,4.4vw,3rem)] leading-tight">
+          {inmobiliaria.objeccion}
+        </p>
+        <p class="mt-6 max-w-xl text-muted">
+          Por eso en cada ficha de CLAVE están las fotos reales, el mapa de
+          imperfecciones y el precio final con impuestos. Si algo de la casa no
+          te gusta, lo leés antes de ir, no cuando ya estás parado en la puerta.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="#visita" class="wm-btn">Agendar una visita</a>
+          <a href={appUrl("/propiedades")} class="wm-btn wm-btn--ghost">Ver las 6 propiedades</a>
+        </div>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.llaves}
+          alt="Llaves sobre una mesa junto a una maqueta de casa (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 2) Propiedades destacadas -->
+  <section class="wm-container py-16 sm:py-20" id="propiedades">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{propiedadesSection.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
+        {propiedadesSection.title}
+      </h2>
+      <p class="mt-5 text-muted">{propiedadesSection.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {destacadas.map((p, i) => <PropertyCard property={p} index={i} />)}
+    </div>
+
+    <p class="mt-8 text-sm text-muted">
+      <a href={appUrl("/propiedades")} class="font-semibold text-accent underline underline-offset-4">
+        Filtrar las seis propiedades por zona, tipo, precio y ambientes
+      </a>
+    </p>
+  </section>
+
+  <!-- 3) Seccion "pinned": como llega una propiedad a esta pagina -->
+  <InformePinned
+    title="Cómo llega una propiedad a esta página"
+    body="Escribimos la ficha antes de tomar el precio. Por eso el orden es siempre el mismo y por eso no publicamos fotos que no correspondan a la unidad."
+    foto={{
+      src: fotos.llaves,
+      alt: "Maqueta de casa con llaves (imagen de demostración).",
+    }}
+  />
+
+  <!-- 4) Banda de video: el barrio importa tanto como la casa -->
+  <BandaVideo
+    src={clips.edificio.src}
+    poster={clips.edificio.poster}
+    alt="Hall de un edificio con ascensor (imagen de demostración)."
+    kicker="Zonas"
+    title="El barrio es parte de la ficha"
+    body="Publicamos en cinco barrios donde conocemos el metro cuadrado real, cuánto cuestan las expensas y cuánto tardás en llegar. En los demás no publicamos: no tenemos el dato."
+    cta={{ label: "Ver los barrios", href: "/zonas" }}
+  />
+
+  <!-- 5) Financiacion -->
+  <section class="wm-container py-16 sm:py-20" id="financiacion">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{financiacion.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{financiacion.title}</h2>
+      <p class="mt-5 text-muted">{financiacion.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        financiacion.items?.map((item) => (
+          <article class="wm-card flex h-full flex-col">
+            <h3 class="wm-display text-2xl leading-tight">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
+            {item.points?.length ? (
+              <ul class="mt-4 space-y-1.5 text-sm text-muted">
+                {item.points.map((p) => (
+                  <li class="flex gap-2">
+                    <span aria-hidden="true" class="text-accent">→</span>
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            <dl class="mt-auto flex flex-wrap gap-4 border-t border-line pt-5 text-xs uppercase tracking-[0.14em] text-muted">
+              {item.meta?.map((m) => (
+                <div>
+                  <dt class="inline">{m.label}:</dt>{" "}
+                  <dd class="inline font-semibold text-fg">{m.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 6) Conversion principal: agendar visita -->
+  <VisitaFlow conversion={inmobiliaria.conversion} brand={brand} options={propiedades} />
+
+  <!-- 7) Imperfecciones (transparencia) -->
+  <section class="wm-container py-16 sm:py-20" id="imperfecciones">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{imperfecciones.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{imperfecciones.title}</h2>
+      <p class="mt-5 text-muted">{imperfecciones.body}</p>
+    </header>
+
+    <div class="mt-12 divide-y divide-line border-y border-line">
+      {
+        imperfecciones.items?.map((item) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6">
+              <span>
+                <span class="wm-kicker">{item.kicker}</span>
+                <span class="wm-display mt-2 block text-xl leading-snug">{item.title}</span>
+              </span>
+              <span aria-hidden="true" class="text-2xl text-accent transition-transform group-open:rotate-45">
+                +
+              </span>
+            </summary>
+            <ul class="mt-4 max-w-3xl space-y-2 text-muted">
+              {(item.points ?? []).map((p) => (
+                <li class="flex gap-3">
+                  <span aria-hidden="true" class="text-accent">→</span>
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 8) FAQ -->
+  <section class="wm-container py-16 sm:py-20" id="faq">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{faq.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{faq.title}</h2>
+    </header>
+
+    <div class="mt-12 divide-y divide-line border-y border-line">
+      {
+        faq.items?.map((item) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6">
+              <span class="wm-display text-xl leading-snug">{item.title}</span>
+              <span aria-hidden="true" class="text-2xl text-accent transition-transform group-open:rotate-45">
+                +
+              </span>
+            </summary>
+            <p class="mt-4 max-w-3xl text-muted">{item.body}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 9) Equipo -->
+  <section class="wm-container py-16 sm:py-20" id="equipo">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{equipo.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{equipo.title}</h2>
+      <p class="mt-5 text-muted">{equipo.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {equipo.items?.map((item) => <EquipoCard item={item} />)}
+    </div>
+
+    <p class="mt-8 text-sm text-muted">
+      <a href={appUrl("/contacto")} class="font-semibold text-accent underline underline-offset-4">
+        Escribinos por WhatsApp o pasá por la oficina
+      </a>
+    </p>
+  </section>
+</Base>

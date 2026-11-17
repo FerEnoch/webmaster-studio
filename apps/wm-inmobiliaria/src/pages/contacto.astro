@@ -1,0 +1,161 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import BandaVideo from "../components/BandaVideo.astro";
+import EquipoCard from "../components/EquipoCard.astro";
+import { brand, clips, fotos, inmobiliaria } from "../content/inmobiliaria";
+import { waLink } from "@lib/whatsapp";
+
+const equipo = inmobiliaria.sections.find((s) => s.id === "equipo")!;
+const whatsappHref = waLink(
+  inmobiliaria.contact.whatsapp,
+  "Hola, escribo desde la web de CLAVE y quiero consultar por una propiedad.",
+);
+---
+
+<Base content={inmobiliaria} title={`Contacto · ${brand}`}>
+  <PageHead
+    kicker="Contacto"
+    title="Una oficina, tres personas, un WhatsApp"
+    subtitle="No hay call center. Escribís y te responde quien va a estar en la visita."
+  />
+
+  <!-- Banda de video: la oficina -->
+  <BandaVideo
+    src={clips.oficina.src}
+    poster={clips.oficina.poster}
+    alt="Mesa de la oficina de CLAVE con sillas y luz de mañana (imagen de demostración)."
+    kicker="La oficina"
+    title="Av. Córdoba 4820, Palermo"
+    body="Estamos a dos cuadras del subte y a media cuadra del café de la esquina. Si preferís, coordinamos la visita en persona y de paso vemos los papeles."
+    cta={{ label: "Escribir por WhatsApp", href: whatsappHref }}
+  />
+
+  <section class="wm-container py-16 sm:py-20">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{equipo.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.4rem)]">{equipo.title}</h2>
+      <p class="mt-5 text-muted">{equipo.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {equipo.items?.map((item) => <EquipoCard item={item} />)}
+    </div>
+  </section>
+
+  <section class="wm-container pb-16 sm:pb-20">
+    <div class="grid gap-10 lg:grid-cols-2 lg:gap-14">
+      <div>
+        <p class="wm-kicker">Datos</p>
+        <dl class="mt-6 space-y-4 text-muted">
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Teléfono</dt>
+            <dd class="mt-1 text-lg text-fg">{inmobiliaria.contact.phone}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Email</dt>
+            <dd class="mt-1 text-lg text-fg">
+              <a href={`mailto:${inmobiliaria.contact.email}`} class="hover:text-accent">
+                {inmobiliaria.contact.email}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Horarios</dt>
+            <dd class="mt-1 text-lg text-fg">{inmobiliaria.contact.hours}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-[0.14em]">Dirección</dt>
+            <dd class="mt-1 text-lg text-fg">{inmobiliaria.contact.address}</dd>
+          </div>
+        </dl>
+
+        <a href={whatsappHref} class="wm-btn mt-8">Escribir por WhatsApp</a>
+      </div>
+
+      <div>
+        <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+          <img
+            src={fotos.oficina}
+            alt="Interior de la oficina de CLAVE (imagen de demostración)."
+            loading="lazy"
+            decoding="async"
+            class="aspect-[16/10] w-full object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wm-container pb-24 sm:pb-28">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-14">
+      <div>
+        <p class="wm-kicker">Mensaje</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Decinos qué estás buscando
+        </h2>
+        <p class="mt-5 text-muted">
+          Zona, tipo, cantidad de ambientes, rango de precio y si necesitás crédito.
+          Con eso te armamos una búsqueda y te avisamos cuando entre algo.
+        </p>
+      </div>
+
+      <form class="grid gap-4" data-wm-demo-form>
+        <label class="block text-sm">
+          <span class="text-muted">Nombre</span>
+          <input
+            required
+            placeholder="Ana Gomez"
+            class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+          />
+        </label>
+        <label class="block text-sm">
+          <span class="text-muted">Teléfono o email</span>
+          <input
+            required
+            placeholder="11 1234 5678"
+            class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+          />
+        </label>
+        <label class="block text-sm">
+          <span class="text-muted">¿Qué estás buscando?</span>
+          <textarea
+            rows="4"
+            placeholder="Zona, tipo de propiedad, presupuesto..."
+            class="mt-1 w-full rounded-wm border border-line bg-bg px-4 py-3 outline-none placeholder:text-muted focus:border-accent"
+          ></textarea>
+        </label>
+        <button type="submit" class="wm-btn w-full">Enviar mensaje</button>
+        <p class="text-xs text-muted">Demo: no se envían datos.</p>
+      </form>
+
+      <p
+        hidden
+        class="mt-4 rounded-wm border border-accent p-4 text-sm"
+        data-wm-demo-done
+      >
+        Mensaje tomado. En esta demo no se envía nada: así se vería la
+        confirmación.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Formulario de contacto (demo): no manda datos, muestra la confirmación.
+  document.addEventListener(
+    "submit",
+    (event) => {
+    const form = event.target as HTMLFormElement | null;
+    if (!form || !form.matches("[data-wm-demo-form]")) return;
+    event.preventDefault();
+    form.style.display = "none";
+    const done = document.querySelector<HTMLElement>("[data-wm-demo-done]");
+    if (done) {
+      done.classList.remove("hidden");
+      done.removeAttribute("hidden");
+    }
+    },
+    true,
+  );
+</script>

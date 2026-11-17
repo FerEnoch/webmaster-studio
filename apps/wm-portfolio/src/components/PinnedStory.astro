@@ -1,0 +1,129 @@
+---
+/**
+ * Seccion "pinned" — la que cuenta algo.
+ *
+ * Un track largo con un panel sticky: mientras se scrollea, los 4 pasos del
+ * proceso se van turnando en el mismo lugar. Es la firma "1 sección pinned"
+ * que comparten las 8 apps del portfolio.
+ *
+ * El movimiento es CSS (opacidad + transform). El unico JS es un listener de
+ * scroll con rAF que escribe `--wm-pinned-progress` y marca el frame activo.
+ */
+import type { CatalogItem } from "@lib/types";
+
+export interface Props {
+  items: CatalogItem[];
+  kicker?: string;
+  title?: string;
+  body?: string;
+}
+
+const {
+  items,
+  kicker = "El proceso",
+  title = "De la objeción al ticket en 48 horas",
+  body = "Es el mismo camino que recorriste en las demos, pero con tu negocio. Sin reunión de dos horas: cuatro pasos y un código.",
+} = Astro.props;
+---
+
+<section data-wm-pinned class="relative">
+  <div class="wm-pinned-track" data-wm-pinned-track style="height: 340svh">
+    <div class="wm-pinned-sticky sticky top-0 flex h-svh items-center overflow-hidden">
+      <div class="wm-container w-full pt-20 pb-10 sm:pt-24 sm:pb-16">
+        <div class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+          <div>
+            <p class="wm-kicker">{kicker}</p>
+            <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{title}</h2>
+            <p class="mt-5 max-w-md text-muted">{body}</p>
+
+            <div class="wm-pinned-progress mt-10" aria-hidden="true">
+              <span></span>
+            </div>
+
+            <p class="mt-3 text-xs uppercase tracking-[0.2em] text-muted">
+              Scrolleá para ver los pasos
+            </p>
+          </div>
+
+          <div class="relative min-h-[20rem] sm:min-h-[22rem]">
+            {
+              items.map((item, i) => (
+                <article
+                  data-wm-frame={i}
+                  class:list={["wm-pinned-frame", i === 0 && "is-active"]}
+                >
+                  <p class="wm-display text-[clamp(3rem,9vw,5.5rem)] leading-none text-accent">
+                    {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <h3 class="wm-display mt-4 text-[clamp(1.6rem,3.6vw,2.4rem)]">
+                    {item.title}
+                  </h3>
+                  <p class="mt-4 max-w-md text-muted">{item.body}</p>
+
+                  {item.points?.length ? (
+                    <ul class="mt-5 space-y-1.5 text-sm text-muted">
+                      {item.points.map((p) => (
+                        <li class="flex gap-2">
+                          <span aria-hidden="true" class="text-accent">
+                            →
+                          </span>
+                          <span>{p}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+
+                  {item.meta?.length ? (
+                    <p class="mt-6 text-xs uppercase tracking-[0.16em] text-muted">
+                      {item.meta.map((m) => `${m.label}: ${m.value}`).join(" · ")}
+                    </p>
+                  ) : null}
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // El panel se queda pegado y va cambiando de frame segun el avance del scroll.
+  // Un solo listener + rAF. El DOM se consulta en cada tick, asi el script
+  // sobrevive a las navegaciones con astro:transitions.
+  let ticking = false;
+
+  const update = () => {
+    ticking = false;
+
+    const section = document.querySelector<HTMLElement>("[data-wm-pinned]");
+    if (!section) return;
+
+    const track = section.querySelector<HTMLElement>("[data-wm-pinned-track]");
+    const frames = Array.from(section.querySelectorAll<HTMLElement>("[data-wm-frame]"));
+    if (!track || frames.length === 0) return;
+
+    const rect = section.getBoundingClientRect();
+    const total = Math.max(1, track.offsetHeight - window.innerHeight);
+    const progress = Math.min(1, Math.max(0, -rect.top / total));
+
+    section.style.setProperty("--wm-pinned-progress", progress.toFixed(4));
+
+    const index = Math.min(frames.length - 1, Math.floor(progress * frames.length));
+    frames.forEach((frame, i) => frame.classList.toggle("is-active", i === index));
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    },
+    { passive: true },
+  );
+
+  document.addEventListener("astro:page-load", update);
+  update();
+</script>

@@ -1,0 +1,310 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/ui/PageHero.astro";
+import LiveNow from "../components/ui/LiveNow.astro";
+import CarreraFinder from "../components/CarreraFinder.tsx";
+import SedeCard from "../components/SedeCard.astro";
+import RecorridoCampus from "../components/RecorridoCampus.astro";
+import AdmisionSteps from "../components/AdmisionSteps.astro";
+import { universidad, carreras, recorrido, fotos, clips, posters } from "../content/universidades";
+import { RUBROS } from "@lib/rubros";
+
+const rubro = RUBROS.find((r) => r.id === "universidad")!;
+const [seccCarreras, seccAdmision, seccionBecas, seccionCampus, seccionNoticias, seccionFaq] =
+  universidad.sections;
+---
+
+<Base content={universidad}>
+  <PageHero hero={universidad.hero} brand={universidad.brand} />
+
+  <!-- 0) Señales en vivo: lo que está pasando ahora en la casa. -->
+  <section class="border-b border-line" aria-label="Estado de la admisión">
+    <div class="wm-container grid gap-4 py-6 sm:grid-cols-3">
+      <p class="flex items-center gap-2 text-sm text-accent">
+        <LiveNow
+          signal={{ label: "Sede abierta ahora", count: 3, min: 2, max: 4, unit: "campus", interval: 3600 }}
+        />
+      </p>
+      <p class="flex items-center gap-2 text-sm">
+        <span class="wm-live-dot text-accent" aria-hidden="true"></span>
+        Inscripción abierta hasta el <strong class="text-fg">30 de noviembre</strong>
+      </p>
+      <p class="flex items-center gap-2 text-sm">
+        <span class="wm-live-dot text-accent" aria-hidden="true"></span>
+        Próxima visita guiada: <strong class="text-fg">jueves 10, 10:00</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- 1) La objecion, respondida de entrada. -->
+  <section class="wm-container py-16 sm:py-24">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">La promesa</p>
+        <p class="wm-display mt-5 text-[clamp(1.8rem,4.4vw,3rem)] leading-tight">
+          {universidad.objeccion}
+        </p>
+        <p class="mt-6 max-w-xl text-muted">
+          En UNIVERSIDAD ALTA cada carrera publica su plan, su arancel y, sobre
+          todo, qué se hace después de terminar. Antes de que vengas a hablar
+          con nadie, tenés los números. Después agendás una visita guiada y
+          conocés a la gente que te va a enseñar.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="#admision" class="wm-btn">Pedir información</a>
+          <a href="#buscador" class="wm-btn wm-btn--ghost">Buscar carrera</a>
+        </div>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.biblioteca}
+          alt="Biblioteca del campus de UNIVERSIDAD ALTA con estanterías de libros (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 2) El buscador: el diferencial del rubro. -->
+  <section class="wm-container pb-16 sm:pb-24" id="buscador">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{seccCarreras.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{seccCarreras.title}</h2>
+      <p class="mt-5 text-muted">{seccCarreras.body}</p>
+    </header>
+
+    <div class="mt-12">
+      <CarreraFinder client:visible carreras={carreras} />
+    </div>
+  </section>
+
+  <!-- 3) Verificacion de admision -->
+  <section class="wm-container py-16 sm:py-20" id="requisitos">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{seccAdmision.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{seccAdmision.title}</h2>
+      <p class="mt-5 text-muted">{seccAdmision.body}</p>
+    </header>
+
+    <ol class="mt-12 grid gap-5 sm:grid-cols-2">
+      {
+        seccAdmision.items?.map((item, i) => (
+          <li class="wm-card flex h-full flex-col">
+            <span class="wm-display text-3xl text-accent">{String(i + 1).padStart(2, "0")}</span>
+            <h3 class="wm-display mt-3 text-xl leading-tight">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
+            {item.points?.length ? (
+              <ul class="mt-4 space-y-1.5 text-sm text-muted">
+                {item.points.map((p) => (
+                  <li class="flex gap-2">
+                    <span aria-hidden="true" class="text-accent">→</span>
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="wm-grade wm-grain wm-vignette mt-10 overflow-hidden rounded-wm-lg">
+      <img
+        src={fotos.aula}
+        alt="Aula de la UNIVERSIDAD ALTA con un docente y estudiantes tomando clase (imagen de demostración)."
+        loading="lazy"
+        decoding="async"
+        class="aspect-[16/9] w-full object-cover"
+      />
+    </div>
+  </section>
+
+  <!-- 4) Seccion "pinned": el recorrido de la visita guiada. -->
+  <RecorridoCampus paradas={recorrido} />
+
+  <!-- 5) Banda de video: el campus de siempre. -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={clips.fachada}
+        poster={posters.fachada}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Fachada histórica del campus de UNIVERSIDAD ALTA (imagen de demostración)."></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 72%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-32">
+      <p class="wm-kicker">El campus</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        Tres sedes, una sola carrera
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        Podés cursar en el Norte, en el Centro o en el Sur. La carrera se mantiene
+        igual, los horarios se cruzan entre sedes y la biblioteca es una sola:
+        el campus es de todos.
+      </p>
+      <a href={appUrl("/campus")} class="wm-btn mt-8">Ver los campus</a>
+    </div>
+  </section>
+
+  <!-- 6) Becas -->
+  <section class="wm-container py-16 sm:py-24" id="becas">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{seccionBecas.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{seccionBecas.title}</h2>
+      <p class="mt-5 text-muted">{seccionBecas.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        seccionBecas.items?.map((item, i) => (
+          <article class="wm-card flex h-full flex-col" style={`--wm-line-index:${i}`}>
+            <div class="flex items-start justify-between gap-3">
+              <h3 class="wm-display text-xl leading-tight">{item.title}</h3>
+              {item.badge ? <span class="wm-chip shrink-0">{item.badge}</span> : null}
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
+            {item.meta?.length ? (
+              <p class="mt-5 text-xs uppercase tracking-[0.14em] text-muted">
+                {item.meta.map((m) => `${m.label}: ${m.value}`).join(" · ")}
+              </p>
+            ) : null}
+            {item.price ? (
+              <p class="wm-display mt-auto pt-5 text-2xl text-accent">{item.price.amount}</p>
+            ) : null}
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 7) Sedes -->
+  <section class="wm-container pb-16 sm:pb-24" id="campus">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{seccionCampus.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{seccionCampus.title}</h2>
+      <p class="mt-5 text-muted">{seccionCampus.body}</p>
+    </header>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-3">
+      {
+        seccionCampus.items?.map((sede) => (
+          <SedeCard item={sede} mapsUrl={universidad.contact.mapsUrl} />
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 8) Conversion principal: termina en TICKET. -->
+  <AdmisionSteps conversion={universidad.conversion} brand={universidad.brand} />
+
+  <!-- 9) Noticias -->
+  <section class="wm-container pb-16 sm:pb-20" id="noticias">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{seccionNoticias.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{seccionNoticias.title}</h2>
+    </header>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-3">
+      {
+        seccionNoticias.items?.map((item) => (
+          <article class="wm-card flex h-full flex-col">
+            <div class="flex items-center justify-between gap-3">
+              {item.badge ? <span class="wm-chip">{item.badge}</span> : null}
+              {item.meta?.length ? (
+                <span class="text-xs uppercase tracking-[0.14em] text-muted">
+                  {item.meta.map((m) => m.value).join(" · ")}
+                </span>
+              ) : null}
+            </div>
+            <h3 class="wm-display mt-4 text-xl leading-tight">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="mt-6 text-sm text-muted">
+      Demo de portfolio: las noticias, las fechas y las empresas son ficticias.
+    </p>
+  </section>
+
+  <!-- 10) FAQ -->
+  <section class="wm-container pb-16 sm:pb-24" id="faq">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{seccionFaq.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{seccionFaq.title}</h2>
+    </header>
+
+    <div class="mt-12 divide-y divide-line border-y border-line">
+      {
+        seccionFaq.items?.map((item) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6">
+              <span class="wm-display text-xl leading-snug">{item.title}</span>
+              <span
+                aria-hidden="true"
+                class="text-2xl text-accent transition-transform group-open:rotate-45"
+              >
+                +
+              </span>
+            </summary>
+            <p class="mt-4 max-w-3xl text-muted">{item.body}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 11) Cierre -->
+  <section class="wm-container pb-24 sm:pb-32">
+    <div class="grid gap-10 rounded-wm-lg border border-line p-8 sm:p-12 lg:grid-cols-[1.15fr_1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">¿Arrancamos?</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+          Agendá la visita y después decidí
+        </h2>
+        <p class="mt-4 max-w-xl text-muted">
+          Reservar el turno no compromete la inscripción ni bloquea vacante. Son
+          90 minutos y te van a servir para decidir con información, no con
+          promesas.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="#admision" class="wm-btn">Agendar mi visita</a>
+          <a
+            href={rubro.whatsapp
+              ? `https://wa.me/${rubro.whatsapp.phone}?text=${encodeURIComponent(
+                  "Hola, quiero información sobre las carreras de UNIVERSIDAD ALTA y las becas.",
+                )}`
+              : appUrl("/contacto")}
+            class="wm-btn wm-btn--ghost"
+            target="_blank"
+            rel="noreferrer noopener">Escribir por WhatsApp</a
+          >
+        </div>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.graduacion}
+          alt="Graduados de la UNIVERSIDAD ALTA launching gorros al atardecer (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+</Base>

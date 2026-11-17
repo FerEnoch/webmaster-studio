@@ -1,0 +1,173 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import { arquitectura, equipo, premios, etapas, fotos } from "../content/arquitectura";
+import { poster, video } from "@lib/media";
+---
+
+<Base content={arquitectura} title={`Estudio · ${arquitectura.brand}`}>
+  <PageHead
+    kicker="El estudio"
+    title="Cuatro personas, un teléfono y una forma de trabajar"
+    subtitle="ESTUDIO TRAZO trabaja en Buenos Aires desde 2014. Proyectos, dirección de obra, interiorismo y permisos, con el mismo equipo de punta a punta."
+  />
+
+  <!-- Banda de video: el estudio -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={video(3091)}
+        poster={poster(3091)}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Reunión de trabajo en la mesa del estudio de ESTUDIO TRAZO (imagen de demostración)."
+      ></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 72%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-32">
+      <p class="wm-kicker">Cómo trabajamos</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        Primero el problema, después el croquis
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        La primera reunión no es para cobrar: es para entender cómo vivís el espacio,
+        qué te molesta y qué no estás dispuesto a sacrificar. El croquis viene después.
+      </p>
+    </div>
+  </section>
+
+  <!-- Equipo -->
+  <section class="wm-container py-16 sm:py-24" id="equipo">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">El equipo</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">Quién te va a atender</h2>
+      <p class="mt-5 text-muted">
+        Somos cuatro. No hay un departamento de cuentas ni un teléfono sin respuesta:
+        escribís al estudio y respondemos nosotros.
+      </p>
+    </header>
+
+    <ul class="mt-12 grid gap-8 sm:grid-cols-2">
+      {
+        equipo.map((persona) => (
+          <li class="border-t border-line pt-6">
+            <p class="wm-kicker">{persona.rol}</p>
+            <h3 class="wm-display mt-4 text-[clamp(1.5rem,3vw,2.1rem)]">{persona.nombre}</h3>
+            <p class="mt-3 max-w-md text-muted">{persona.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-12 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">El lugar</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.8rem,4vw,2.6rem)]">
+          Un estudio con mesa grande y pared de proyectos
+        </h2>
+        <p class="mt-4 max-w-md text-muted">
+          Estamos en Palermo, a cuatro cuadras del Obelisco. Las reuniones son en el
+          estudio o en el sitio: si hay que hablar de una medianera, vamos a la
+          medianera.
+        </p>
+      </div>
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm">
+        <img
+          src={fotos.estudio}
+          alt="Estudio de arquitectura de ESTUDIO TRAZO con pasillo de vidrio y mesas de trabajo (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[16/10] w-full object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Método: las cuatro etapas, en versión compacta -->
+  <section class="wm-container py-16 sm:py-24" id="metodo">
+    <header class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      <div class="max-w-2xl">
+        <p class="wm-kicker">El método</p>
+        <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
+          Las cuatro etapas, siempre en este orden
+        </h2>
+      </div>
+      <a href={appUrl("/#proceso")} class="text-sm font-semibold text-accent underline underline-offset-4">
+        Ver el proceso completo
+      </a>
+    </header>
+
+    <ol class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        etapas.map((etapa, i) => (
+          <li class="border-t border-line pt-6">
+            <span class="wm-display text-4xl text-accent">{String(i + 1).padStart(2, "0")}</span>
+            <h3 class="wm-display mt-3 text-xl">{etapa.title}</h3>
+            <p class="mt-2 text-sm text-muted">{etapa.duracion}</p>
+            <p class="mt-3 text-sm text-muted">{etapa.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Premios -->
+  <section class="wm-container py-16 sm:py-24" id="premios">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">Premios</p>
+      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
+        Lo que ganamos, dónde y por qué
+      </h2>
+      <p class="mt-5 text-muted">
+        Un premio no reemplaza el proyecto, pero ordena el trabajo: muestra en qué
+        competencias se presentaron y con qué resultado.
+      </p>
+    </header>
+
+    <ul class="mt-12 divide-y divide-line border-y border-line">
+      {
+        premios.map((premio) => (
+          <li class="grid gap-3 py-6 sm:grid-cols-[6rem_1fr_auto] sm:items-baseline sm:gap-8">
+            <span class="wm-display text-2xl text-accent">{premio.anio}</span>
+            <span>
+              <span class="wm-display block text-xl leading-tight">{premio.titulo}</span>
+              <span class="mt-1 block text-sm text-muted">Obra: {premio.obra}</span>
+            </span>
+            <span class="wm-chip shrink-0">{premio.tipo}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="mt-6 text-sm text-muted">
+      Demo de portfolio: los premios, las obras y el equipo son ficticios.
+    </p>
+  </section>
+
+  <!-- Cierre -->
+  <section class="wm-container pb-24">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+      <p class="wm-kicker">Empezar</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Contanos qué querés hacer
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        Cotizá tu proyecto en cuatro pasos y quedás con un número de consulta para el
+        estudio. También podés escribirnos directo: contestamos dentro del día.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href={appUrl("/#cotizacion")} class="wm-btn">Cotizar mi proyecto</a>
+        <a href={appUrl("/contacto")} class="wm-btn wm-btn--ghost">Ir a contacto</a>
+      </div>
+    </div>
+  </section>
+</Base>

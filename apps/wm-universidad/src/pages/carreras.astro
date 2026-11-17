@@ -1,0 +1,172 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import CarreraFinder from "../components/CarreraFinder.tsx";
+import { universidad, carreras, fotos, clips, posters } from "../content/universidades";
+
+---
+
+<Base content={universidad} title={`Carreras · ${universidad.brand}`}>
+  <PageHead
+    kicker="Carreras"
+    title="Elegí con los números a la vista"
+    subtitle="Seis carreras, tres sedes, dos modalidades. Filtrá, compará y después leé el plan completo de la que te interese."
+  />
+
+  <!-- Buscador + comparacion -->
+  <section class="wm-container pb-16 sm:pb-20" id="buscador">
+    <CarreraFinder client:visible carreras={carreras} />
+  </section>
+
+  <!-- Banda de video: el campus virtual -->
+  <section class="relative overflow-hidden border-y border-line">
+    <div class="wm-grade wm-grain wm-vignette absolute inset-0">
+      <video
+        class="h-full w-full object-cover"
+        src={clips.estudio}
+        poster={posters.estudio}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label="Sala de estudio del campus virtual de la UNIVERSIDAD ALTA (imagen de demostración)."></video>
+    </div>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: linear-gradient(to right, var(--wm-bg) 0%, color-mix(in oklab, var(--wm-bg) 72%, transparent) 55%, transparent 100%)"
+    >
+    </div>
+    <div class="wm-container relative py-24 sm:py-32">
+      <p class="wm-kicker">Campus Virtual</p>
+      <h2 class="wm-display mt-5 max-w-2xl text-[clamp(2rem,5vw,3.4rem)]">
+        Si no podés venir, vengas a las 18:30
+      </h2>
+      <p class="mt-5 max-w-lg text-muted">
+        Las clases online se dan en vivo, con los mismos docentes y las mismas
+        consignas. La diferencia es dónde te sentás: el campus virtual tiene
+        salas de estudio abiertas y tutores de cursada.
+      </p>
+      <a href={appUrl("/admision#admision")} class="wm-btn mt-8">Pedir información</a>
+    </div>
+  </section>
+
+  <!-- Detalle de cada carrera -->
+  <section class="wm-container pb-16 sm:pb-24">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+      <div>
+        <p class="wm-kicker">Planes de estudio</p>
+        <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
+          Qué cursás, año por año
+        </h2>
+        <p class="mt-5 text-muted">
+          Cada carrera tiene su plan completo. Los ejes de abajo son los que se
+          ven en el primer cuatrimestre de cada año.
+        </p>
+        <p class="mt-5 max-w-lg text-muted">
+          La modalidad online no cambia el plan: cambia dónde cursás las
+          prácticas y cómo se dan las clases. El título es el mismo.
+        </p>
+      </div>
+
+      <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
+        <img
+          src={fotos.grupos}
+          alt="Estudiantes de la UNIVERSIDAD ALTA trabajando en grupo con notebooks (imagen de demostración)."
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+    </div>
+
+    <div class="mt-12 space-y-6">
+      {
+        carreras.map((c) => (
+          <article id={c.id} class="wm-card scroll-mt-32">
+            <div class="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
+              <div>
+                <div class="flex flex-wrap items-center gap-3">
+                  <span class="wm-chip">{c.area}</span>
+                  <span class="text-xs uppercase tracking-[0.14em] text-muted">
+                    {c.duracion} · {c.sede}
+                  </span>
+                </div>
+                <h3 class="wm-display mt-4 text-[clamp(1.8rem,4vw,2.6rem)] leading-tight">
+                  {c.title}
+                </h3>
+                <p class="mt-4 text-muted">{c.body}</p>
+
+                <dl class="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+                  <div>
+                    <dt class="text-xs uppercase tracking-[0.14em] text-muted">Modalidad</dt>
+                    <dd class="mt-1 text-fg">
+                      {c.modalidades.map((m) => (m === "online" ? "Online" : "Presencial")).join(" / ")}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt class="text-xs uppercase tracking-[0.14em] text-muted">Arancel</dt>
+                    <dd class="mt-1 font-semibold text-accent">
+                      {c.arancel} <span class="font-normal text-muted">final, IVA incluido</span>
+                    </dd>
+                  </div>
+                </dl>
+
+                <p class="mt-6 border-l-2 border-accent pl-4 text-sm">
+                  <span class="block text-xs uppercase tracking-[0.14em] text-muted">
+                    Salida laboral
+                  </span>
+                  <span class="mt-1 block text-fg">{c.salida}</span>
+                </p>
+
+                <a href={appUrl("/admision#admision")} class="wm-btn mt-7">
+                  Pedir información de {c.title.split(" ")[0]}
+                </a>
+              </div>
+
+              <div class="rounded-wm border border-line p-6">
+                <p class="wm-kicker">Ejes del plan</p>
+                <ol class="mt-5 space-y-3">
+                  {c.plan.map((materia, n) => (
+                    <li class="flex gap-3 text-sm">
+                      <span class="wm-display shrink-0 text-accent">
+                        {String(n + 1).padStart(2, "0")}
+                      </span>
+                      <span class="text-muted">{materia}</span>
+                    </li>
+                  ))}
+                </ol>
+
+                <p class="wm-kicker mt-7">Para admisiones</p>
+                <ul class="mt-4 space-y-1.5 text-sm text-muted">
+                  {c.points?.map((p) => (
+                    <li class="flex gap-2">
+                      <span aria-hidden="true" class="text-accent">→</span>
+                      <span>{p}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="wm-container pb-24 sm:pb-32">
+    <div class="rounded-wm-lg border border-line p-8 sm:p-12">
+      <p class="wm-kicker">¿Te quedaste con dos?</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">
+        Compará y pedí la información de una
+      </h2>
+      <p class="mt-4 max-w-xl text-muted">
+        El buscador de arriba te deja comparar hasta tres carreras lado a lado.
+        Cuando tengas la tuya, el paso a paso genera el pase con el turno de la
+        visita guiada.
+      </p>
+      <a href={appUrl("/admision#admision")} class="wm-btn mt-8">Ir al paso a paso</a>
+    </div>
+  </section>
+</Base>

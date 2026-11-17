@@ -1,0 +1,104 @@
+---
+import { appUrl } from "@lib/urls";
+import Base from "../layouts/Base.astro";
+import PageHead from "../components/PageHead.astro";
+import ReservaSteps from "../components/ReservaSteps.astro";
+import { brand, estetica, idsClases, opciones, sena, slotsPorClase, turnos } from "../content/estetica";
+
+const faq = estetica.sections.find((s) => s.id === "faq")!;
+---
+
+<Base content={estetica} title={`Reservar · ${estetica.brand}`}>
+  <PageHead
+    kicker="Reserva online"
+    title="Reservá tu turno y salí con pase"
+    subtitle="Tratamientos de estética o clases de yoga: cuatro pasos, sin registro y sin letra chica. Al confirmar te damos un pase con código para mostrar al llegar."
+  />
+
+  <ReservaSteps
+    title="Elegí un tratamiento o una clase"
+    body={estetica.conversion.body}
+    islaTitle="Completá tu reserva"
+    steps={estetica.conversion.steps}
+    options={opciones}
+    slots={turnos}
+    idsClases={idsClases}
+    slotsPorClase={slotsPorClase}
+    demoNotice={estetica.conversion.demoNotice}
+    sena={sena}
+    brand={brand}
+  />
+
+  <!-- La seña, explicada -->
+  <section class="border-y border-line">
+    <div class="wm-container grid gap-10 py-16 sm:py-20 lg:grid-cols-3">
+      <div>
+        <p class="wm-kicker">La seña</p>
+        <h2 class="wm-display mt-5 text-[clamp(1.6rem,4vw,2.2rem)]">
+          {sena.monto}, y no se cobran dos veces
+        </h2>
+        <p class="mt-4 text-muted">{sena.nota}</p>
+      </div>
+
+      <div class="wm-card">
+        <p class="wm-kicker">Si cancelás</p>
+        <ul class="mt-4 space-y-3 text-sm text-muted">
+          {
+            [
+              "Con más de 24 h de anticipación: te vuelve la seña entera.",
+              "Con menos de 24 h: la seña se queda, pero el lugar se libera.",
+              "Si no venís y no avisaste, la seña no se devuelve.",
+            ].map((p) => (
+              <li class="flex gap-2">
+                <span aria-hidden="true" class="text-accent">→</span>
+                <span>{p}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="wm-card">
+        <p class="wm-kicker">Demo</p>
+        <p class="mt-4 text-sm text-muted">
+          {estetica.conversion.demoNotice} No hay backend, no se cobra la seña y
+          no se guarda ningún dato: la pantalla muestra lo que se guardaría y
+          el pase que recibirías.
+        </p>
+        <a href={appUrl("/legal")} class="mt-4 inline-block text-sm font-semibold text-accent underline underline-offset-4">
+          Ver términos, precios y baja
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dudas de última hora -->
+  <section class="wm-container py-16 sm:py-20">
+    <header class="max-w-2xl">
+      <p class="wm-kicker">{faq.kicker}</p>
+      <h2 class="wm-display mt-5 text-[clamp(1.8rem,4.5vw,2.8rem)]">{faq.title}</h2>
+    </header>
+
+    <div class="mt-10 divide-y divide-line border-y border-line">
+      {
+        (faq.items ?? []).slice(0, 5).map((item) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6">
+              <span class="wm-display text-xl leading-snug">{item.title}</span>
+              <span aria-hidden="true" class="text-2xl text-accent transition-transform group-open:rotate-45">
+                +
+              </span>
+            </summary>
+            <p class="mt-4 max-w-3xl text-muted">{item.body}</p>
+          </details>
+        ))
+      }
+    </div>
+
+    <p class="mt-8 text-sm text-muted">
+      <a href={appUrl("/contacto")} class="font-semibold text-accent underline underline-offset-4">
+        Escribinos por WhatsApp si te queda una duda
+      </a>
+    </p>
+  </section>
+</Base>
