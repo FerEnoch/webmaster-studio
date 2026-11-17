@@ -55,7 +55,7 @@ test(`aggregate build publishes ${APPS.length} isolated apps without replacing t
   const { dir, env } = fixture(t);
   const result = run(dir, "build-site.mjs", [], env);
   assert.equal(result.status, 0, result.stderr);
-  assert.equal(result.stdout.trim().split("\n").at(-1), `Built ${APPS.length} apps into dist/.`);
+  assert.equal(result.stdout, `Built ${APPS.length} apps into dist/.\nCache: built ${APPS.length}, reused 0. Report: .build-cache/build-report.json\n`);
   assert.equal(result.stderr, "");
   assert.equal(readFileSync(join(dir, "dist/demos/index.html"), "utf8"), "catalogue");
   for (const slug of slugs) {
@@ -178,8 +178,17 @@ test("deployment help is read-only and copied kit sources stay consistent", (t) 
   }
   assert.deepEqual(readdirSync(dir), before);
   for (const slug of slugs) {
-    for (const file of ["rubros.ts", "urls.ts"]) {
-      assert.equal(readFileSync(join(root, `apps/wm-${slug}/src/lib/${file}`), "utf8"), readFileSync(join(root, `packages/webmaster-kit/${file}`), "utf8"));
+    assert.equal(readFileSync(join(root, `apps/wm-${slug}/src/lib/urls.ts`), "utf8"), readFileSync(join(root, "packages/webmaster-kit/urls.ts"), "utf8"));
+    const registry = readFileSync(join(root, `apps/wm-${slug}/src/lib/rubros.ts`), "utf8");
+    if (slug === "portfolio") {
+      assert.match(registry, /export \* from "\.\.\/\.\.\/\.\.\/\.\.\/packages\/webmaster-kit\/rubros\.ts"/);
+    } else {
+      // Demo registries are deliberately stable, self-contained snapshots. They
+      // need their own identity and deployment path, not every future catalogue entry.
+      assert.doesNotMatch(registry, /(?:import|export).*from/);
+      assert.ok(registry.includes(`id: "${slug}"`));
+      assert.ok(registry.includes(`demoUrl: "/demos/${slug}/"`));
+      assert.match(registry, /export function requireRubro/);
     }
     for (const file of ["BaseLayout.astro", "Nav.astro", "Footer.astro", "RubroCard.astro", "PageHero.astro"]) {
       assert.equal(readFileSync(join(root, `apps/wm-${slug}/src/components/ui/${file}`), "utf8"), readFileSync(join(root, `packages/webmaster-kit/components/${file}`), "utf8"));

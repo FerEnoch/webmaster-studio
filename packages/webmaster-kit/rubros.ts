@@ -1,5 +1,5 @@
 /**
- * Los 8 rubros del portfolio + el id del portfolio madre.
+ * Catálogo de demos agrupadas por rubro + el id del portfolio madre.
  *
  * Fuente de verdad de: slug, nombre, rubro, bajada, objeción que responde
  * la web, URL de la demo, paleta (1 fondo + 1 claro + 1 acento) y el
@@ -9,8 +9,10 @@
  */
 
 export interface Rubro {
-  /** Id estable. Es el mismo que el nombre de la app (`wm-<id>`). */
+  /** Id estable de la demo. Es el mismo que el nombre de la app (`wm-<id>`). */
   id: string;
+  /** Id estable del rubro compartido por todas sus variantes. */
+  rubroId: string;
   /** Slug de la app. */
   slug: string;
   /** Nombre del rubro, como lo muestra el portfolio. */
@@ -34,6 +36,7 @@ export interface Rubro {
 export const RUBROS: Rubro[] = [
   {
     id: "concesionario",
+    rubroId: "concesionario",
     slug: "concesionario",
     nombre: "Concesionario",
     rubro: "Concesionario de autos nuevos y usados",
@@ -49,6 +52,7 @@ export const RUBROS: Rubro[] = [
   },
   {
     id: "lavadero",
+    rubroId: "lavadero",
     slug: "lavadero",
     nombre: "Lavadero + bar",
     rubro: "Lavadero de autos con bar",
@@ -64,6 +68,7 @@ export const RUBROS: Rubro[] = [
   },
   {
     id: "lavadero-premium",
+    rubroId: "lavadero",
     slug: "lavadero-premium",
     nombre: "Lavadero Premium",
     rubro: "Lavadero de autos con bar",
@@ -79,6 +84,7 @@ export const RUBROS: Rubro[] = [
   },
   {
     id: "estetica",
+    rubroId: "estetica",
     slug: "estetica",
     nombre: "Estética + yoga",
     rubro: "Estudio de estética y yoga",
@@ -94,6 +100,7 @@ export const RUBROS: Rubro[] = [
   },
   {
     id: "universidad",
+    rubroId: "universidad",
     slug: "universidad",
     nombre: "Universidad privada",
     rubro: "Universidad privada",
@@ -109,6 +116,7 @@ export const RUBROS: Rubro[] = [
   },
   {
     id: "inmobiliaria",
+    rubroId: "inmobiliaria",
     slug: "inmobiliaria",
     nombre: "Inmobiliaria",
     rubro: "Inmobiliaria",
@@ -124,6 +132,7 @@ export const RUBROS: Rubro[] = [
   },
   {
     id: "arquitectura",
+    rubroId: "arquitectura",
     slug: "arquitectura",
     nombre: "Arquitectura",
     rubro: "Estudio de arquitectura y diseño",
@@ -139,6 +148,7 @@ export const RUBROS: Rubro[] = [
   },
   {
     id: "arquitectura-premium",
+    rubroId: "arquitectura",
     slug: "arquitectura-premium",
     nombre: "Arquitectura Premium",
     rubro: "Estudio de arquitectura y diseño",
@@ -189,4 +199,38 @@ export function requireRubro(id: string): Rubro {
   const r = getRubro(id);
   if (!r) throw new Error(`Rubro desconocido: "${id}". Revisar packages/webmaster-kit/rubros.ts`);
   return r;
+}
+
+/** Un chip por rubro; las demos conservan su identidad y orden originales. */
+export interface RubroGroup {
+  id: string;
+  nombre: string;
+  accent: string;
+  demos: Rubro[];
+}
+
+export function getRubroGroups(demos: readonly Rubro[] = RUBROS): RubroGroup[] {
+  const groups = new Map<string, RubroGroup>();
+  for (const demo of demos) {
+    let group = groups.get(demo.rubroId);
+    if (!group) {
+      const base = demos.find((item) => item.id === demo.rubroId) ?? demo;
+      group = { id: demo.rubroId, nombre: base.nombre, accent: base.palette.accent, demos: [] };
+      groups.set(group.id, group);
+    }
+    group.demos.push(demo);
+  }
+  return [...groups.values()];
+}
+
+/** Acepta ids de rubro y los enlaces históricos a una demo concreta. */
+export function resolveRubroFilter(requested: string | null | undefined, demos: readonly Rubro[] = RUBROS): string {
+  return requested && demos.some((demo) => demo.id === requested || demo.rubroId === requested)
+    ? requested
+    : "todos";
+}
+
+/** Contrato compartido por el catálogo y los atributos data-wm-rubro-*. */
+export function matchesRubroFilter(demo: Pick<Rubro, "id" | "rubroId">, filter: string): boolean {
+  return filter === "todos" || demo.id === filter || demo.rubroId === filter;
 }

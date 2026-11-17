@@ -6,8 +6,8 @@
  * estado del filtro y le dice al DOM que cards mostrar:
  *
  *   - toggles `.is-out` on `[data-wm-rubro-card]`: a card matches by its
- *     `data-wm-rubro-card` or its `data-wm-rubro-grupo` (so the architecture
- *     premium edition also shows under the "Arquitectura" chip)
+ *     `data-wm-rubro-card` (enlaces históricos) o `data-wm-rubro-grupo`
+ *     (todas las variantes comparten un único chip de industria)
  *   - sincroniza el filtro con la URL (?rubro=concesionario) para que el link sea
  *     compartible
  *   - anuncia el resultado en una region `aria-live`
@@ -17,6 +17,7 @@
  */
 
 import { useCallback, useEffect, useState } from "react";
+import { getRubro, matchesRubroFilter, resolveRubroFilter } from "@lib/rubros";
 
 export interface RubroChip {
   id: string;
@@ -45,10 +46,10 @@ export default function RubroFilter({ rubros, total }: RubroFilterProps) {
       const cards = document.querySelectorAll<HTMLElement>("[data-wm-rubro-card]");
       let visible = 0;
       cards.forEach((card) => {
-        const match =
-          id === ALL ||
-          card.dataset.wmRubroCard === id ||
-          card.dataset.wmRubroGrupo === id;
+        const match = matchesRubroFilter({
+          id: card.dataset.wmRubroCard ?? "",
+          rubroId: card.dataset.wmRubroGrupo ?? "",
+        }, id);
         if (match) visible += 1;
         card.classList.toggle("is-out", !match);
         card.setAttribute("aria-hidden", match ? "false" : "true");
@@ -56,21 +57,20 @@ export default function RubroFilter({ rubros, total }: RubroFilterProps) {
 
       const live = document.querySelector<HTMLElement>("[data-wm-filter-live]");
       if (live) {
-        const nombre = rubros.find((r) => r.id === id)?.nombre;
+        const nombre = rubros.find((r) => r.id === id)?.nombre ?? getRubro(id)?.nombre;
         live.textContent =
           id === ALL
             ? `Mostrando las ${visible} soluciones por industria.`
             : `Mostrando ${visible} ${visible === 1 ? "solución" : "soluciones"}: ${nombre ?? id}.`;
       }
     },
-    [rubros, total],
+    [rubros],
   );
 
   // Al montar: si la URL trae ?rubro=..., se arranca filtrado.
   useEffect(() => {
     const requested = new URLSearchParams(window.location.search).get("rubro");
-    const initial =
-      requested && rubros.some((r) => r.id === requested) ? requested : ALL;
+    const initial = resolveRubroFilter(requested);
     setActive(initial);
     setReady(true);
   }, [rubros]);
@@ -116,22 +116,25 @@ export default function RubroFilter({ rubros, total }: RubroFilterProps) {
           <span className="tabular-nums text-muted">({total})</span>
         </button>
 
-        {rubros.map((r) => (
-          <button
-            key={r.id}
-            type="button"
-            aria-pressed={active === r.id}
-            onClick={() => setActive(r.id)}
-            className={chip(active === r.id)}
-          >
-            <span
-              aria-hidden="true"
-              className="h-2 w-2 rounded-full"
-              style={{ backgroundColor: r.accent }}
-            />
-            {r.nombre}
-          </button>
-        ))}
+        {rubros.map((r) => {
+          const selected = active === r.id || getRubro(active)?.rubroId === r.id;
+          return (
+            <button
+              key={r.id}
+              type="button"
+              aria-pressed={selected}
+              onClick={() => setActive(r.id)}
+              className={chip(selected)}
+            >
+              <span
+                aria-hidden="true"
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: r.accent }}
+              />
+              {r.nombre}
+            </button>
+          );
+        })}
       </div>
 
       <p className="sr-only" aria-live="polite" data-wm-filter-live />

@@ -4,18 +4,9 @@ import PageHead from "../components/PageHead.astro";
 import SolutionCard from "../components/SolutionCard.astro";
 import RubroFilter from "../components/RubroFilter.tsx";
 import { portfolio, demoImages, solutions } from "../content/portfolio";
+import { getRubroGroups } from "@lib/rubros";
 
-const chips = solutions.map((r) => ({
-  id: r.id,
-  nombre: r.nombre,
-  accent: r.palette.accent,
-}));
-
-// The premium editions also answer to their base rubro chip, keeping their own one.
-const grupos: Record<string, string> = {
-  "arquitectura-premium": "arquitectura",
-  "lavadero-premium": "lavadero",
-};
+const chips = getRubroGroups(solutions).map(({ id, nombre, accent }) => ({ id, nombre, accent }));
 ---
 
 <Base content={portfolio} title={`Soluciones por industria · ${portfolio.brand}`}>
@@ -38,11 +29,11 @@ const grupos: Record<string, string> = {
           solutions.map((r, i) => (
             <div
               data-wm-rubro-card={r.id}
-              data-wm-rubro-grupo={grupos[r.id]}
+              data-wm-rubro-grupo={r.rubroId}
               class="wm-rubro-item"
               style={`--wm-stagger:${i}; --wm-accent:${r.palette.accent}`}
             >
-              <SolutionCard rubro={r} image={demoImages[r.id]} />
+              <SolutionCard rubro={r} image={demoImages[r.id] ?? demoImages[r.rubroId]} />
             </div>
           ))
         }
