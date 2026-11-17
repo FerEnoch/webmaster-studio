@@ -1,0 +1,158 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Serialize main through publication; cancel superseded PR checks only.
+# Pending runs may be reordered by GitHub, so deploy also verifies current main.
+concurrency:
+  group: studio-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://webmaster-studio.pages.dev' }}
+
+jobs:
+  checks:
+    name: Build, routes and browsers
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    outputs:
+      origin: ${{ steps.origin.outputs.origin }}
+    env:
+      E2E_SCOPE: ${{ github.event_name == 'workflow_dispatch' && 'all' || 'affected' }}
+      E2E_ARTIFACT_DIR: ${{ runner.temp }}/webmaster-e2e
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0; packageManager pin
+        with:
+          run_install: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm audit --audit-level high
+      - run: node --test scripts/*.test.mjs
+      - run: pnpm test:e2e:selection
+      - name: Validate canonical origin
+        id: origin
+        run: |
+          node --input-type=module -e 'import { siteOrigin } from "./scripts/site-config.mjs"; console.log("origin=" + siteOrigin());' >> "$GITHUB_OUTPUT"
+      - name: Restore main app outputs (never a previous report)
+        id: restore
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: .build-cache/outputs
+          key: app-outputs-v1-${{ runner.os }}-${{ runner.arch }}-main-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: app-outputs-v1-${{ runner.os }}-${{ runner.arch }}-main-
+      - run: pnpm build --check
+      - run: pnpm check:site
+      - run: pnpm exec playwright install chromium
+      - name: Render affected apps (manual dispatch checks all)
+        id: browsers
+        run: pnpm test:e2e
+      - name: Retain exactly the tested complete site
+        id: site
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: tested-site-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+      - name: Save verified main app outputs only
+        id: save
+        if: success() && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: .build-cache/outputs
+          key: ${{ steps.restore.outputs.cache-primary-key }}
+      - name: Retain browser diagnostics and build selection, including failures
+        id: diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ env.E2E_ARTIFACT_DIR }}/
+            .build-cache/build-report.json
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Explain deployment eligibility
+        id: deployment-status
+        env:
+          DEPLOY_ENABLED: ${{ vars.CLOUDFLARE_DEPLOY_ENABLED }}
+        run: |
+          if [[ "$DEPLOY_ENABLED" != true ]]; then
+            echo 'Cloudflare deployment disabled; this run is not published.' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Deployment enabled; publication still requires successful main checks and production approval.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  deploy:
+    name: Deploy production
+    needs: checks
+    if: >-
+      needs.checks.result == 'success' && github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+      vars.CLOUDFLARE_DEPLOY_ENABLED == 'true'
+    environment: production
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
+        with:
+          run_install: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      # Installs the pinned upload CLI; never rebuilds the site.
+      - run: pnpm install --frozen-lockfile
+      - name: Download this attempt's tested artifact only
+        id: download
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: tested-site-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/
+      - name: Reject stale main runs before publication
+        id: fresh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          current=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)
+          if [[ "$current" != "$GITHUB_SHA" ]]; then
+            echo 'Refusing stale deployment: run the workflow on current main.' >&2
+            exit 1
+          fi
+      - name: Validate credentials and upload without compilation
+        id: publish
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
+          CONFIGURED_ORIGIN: ${{ vars.PUBLIC_SITE_URL }}
+          TESTED_ORIGIN: ${{ needs.checks.outputs.origin }}
+          WRANGLER_SEND_METRICS: 'false'
+        run: |
+          for setting in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID CLOUDFLARE_PAGES_PROJECT CONFIGURED_ORIGIN; do
+            if [[ -z "${!setting}" ]]; then
+              echo "Missing required deployment setting: $setting (CONFIGURED_ORIGIN is PUBLIC_SITE_URL)" >&2
+              exit 1
+            fi
+          done
+          node --input-type=module -e 'import { siteOrigin } from "./scripts/site-config.mjs"; if (siteOrigin(process.env.CONFIGURED_ORIGIN) !== process.env.TESTED_ORIGIN) throw new Error("PUBLIC_SITE_URL differs from the tested artifact origin");'
+          pnpm exec wrangler pages deploy dist --project-name "$CLOUDFLARE_PAGES_PROJECT" --branch main

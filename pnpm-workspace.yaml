@@ -39,6 +39,9 @@ allowBuilds:
   sharp: true                   # servicio de imágenes de Astro
   '@parcel/watcher': true       # file watching en dev
   unrs-resolver: true           # resolver de eslint-config-next
+  # Wrangler 4.161.0: reviewed official platform-binary selector/version check.
+  # Approved 2026-11-16; matching optional binary must be installed (no npm fallback).
+  'workerd@1.20261110.1': true
 
 # Scripts de build no aprobados = ERROR de instalación (no warning).
 strictDepBuilds: true

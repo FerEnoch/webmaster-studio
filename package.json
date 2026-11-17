@@ -15,6 +15,8 @@
     "build:apps": "pnpm -r run build",
     "preview": "node scripts/preview-site.mjs",
     "check:site": "node scripts/check-site.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:selection": "node --test tests/e2e/selection.test.mjs",
     "dev:concesionario": "pnpm --filter wm-concesionario run dev",
     "build:concesionario": "pnpm --filter wm-concesionario run build",
     "dev:lavadero": "pnpm --filter wm-lavadero run dev",
@@ -38,5 +40,9 @@
     "outdated": "pnpm outdated",
     "check-deps": "pnpm audit --audit-level high && pnpm outdated",
     "install:frozen": "pnpm install --frozen-lockfile"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "wrangler": "4.161.0"
   }
 }
