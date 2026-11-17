@@ -75,7 +75,12 @@ test('checks run the implemented commands in order with one build and explicit E
   }
   assert.equal(runs.filter((run) => /pnpm build/.test(run)).length, 1);
   assert.match(job.env.E2E_SCOPE, /workflow_dispatch.*'all'.*'affected'/);
-  assert.match(job.env.E2E_ARTIFACT_DIR, /runner\.temp/);
+  assert.equal(job.env.E2E_ARTIFACT_DIR, undefined); // runner context is unavailable in job-level env
+  assert.doesNotMatch(JSON.stringify(job.env), /runner\./);
+  const artifactDir = job.steps.find((s) => typeof s.run === 'string' && /E2E_ARTIFACT_DIR=.*RUNNER_TEMP/.test(s.run));
+  assert.ok(artifactDir, 'a step defines E2E_ARTIFACT_DIR from $RUNNER_TEMP');
+  assert.match(artifactDir.run, /GITHUB_ENV/);
+  assert.ok(job.steps.indexOf(artifactDir) < job.steps.indexOf(step(job, 'browsers')));
   assert.match(w.env.PUBLIC_SITE_URL, /vars\.PUBLIC_SITE_URL.*https:\/\/webmaster-studio\.pages\.dev/);
 });
 
