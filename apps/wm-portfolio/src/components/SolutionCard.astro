@@ -1,6 +1,7 @@
 ---
 /** Tarjeta del catálogo del estudio, independiente del componente del kit. */
 import type { Rubro } from "@lib/rubros";
+import { getSolutionCapabilities } from "../content/portfolio";
 
 export interface Props {
   rubro: Rubro;
@@ -24,6 +25,10 @@ const { rubro, image } = Astro.props;
   <h3 class="wm-display mt-4 text-3xl leading-tight">{rubro.rubro}</h3>
   <p class="mt-3 text-muted">{rubro.tagline}</p>
   <p class="mt-5 border-l-2 border-accent pl-4 text-sm text-muted">{rubro.objeccion}</p>
+  <p id={`capabilities-${rubro.id}`} class="mt-5 text-sm font-semibold">Qué podés probar</p>
+  <ul aria-labelledby={`capabilities-${rubro.id}`} class="mt-2 list-disc space-y-2 pl-5 text-sm text-muted">
+    {getSolutionCapabilities(rubro.id).map((capability) => <li>{capability}</li>)}
+  </ul>
   <a href={rubro.demoUrl} data-astro-reload class="wm-btn mt-7 w-full sm:w-auto">
     Explorar solución
   </a>

@@ -6,43 +6,111 @@ import type { CatalogItem, RubroContent, Section } from "@lib/types";
 
 export const brand = "Webmaster Studio";
 
-/** Copy del catálogo del estudio; conserva las identidades y rutas del registro de rubros. */
-const solutionCopy: Record<string, { tagline: string; objeccion: string }> = {
+/** Copy exclusivo del portfolio: no amplía el contrato compartido de los rubros. */
+type SolutionId =
+  | "concesionario"
+  | "lavadero"
+  | "lavadero-premium"
+  | "estetica"
+  | "universidad"
+  | "inmobiliaria"
+  | "arquitectura"
+  | "arquitectura-premium";
+
+type SolutionCopy = {
+  tagline: string;
+  objeccion: string;
+  capabilities: readonly [string, string, string, string?, string?];
+};
+
+/** Cobertura de las ocho demos y entre tres y cinco ítems por tarjeta. */
+const solutionCopy: Record<string, SolutionCopy | undefined> = {
   concesionario: {
     tagline: "Catálogo de vehículos con fichas y consultas comerciales.",
     objeccion: "Información de cada vehículo y condiciones de compra en un mismo lugar.",
+    capabilities: [
+      "Consultá autos nuevos. Filtrá y ordená el stock de usados.",
+      "Abrí fichas con fotos y detalles de cada vehículo.",
+      "Estimá cuotas según el plazo de financiación.",
+      "Simulá una prueba de manejo y obtené un ticket de muestra.",
+    ],
   },
   lavadero: {
     tagline: "Presentación de servicios de lavado y gestión de reservas.",
     objeccion: "Detalle de los tratamientos y del cuidado del vehículo.",
+    capabilities: [
+      "Consultá servicios, precios y adicionales de lavado.",
+      "Explorá la carta del bar para la espera.",
+      "Probá una reserva simulada con ticket de muestra.",
+    ],
   },
   "lavadero-premium": {
     tagline: "Solución PREMIUM Gloss & Glass: showroom de luz, bar y detalle.",
     objeccion: "La experiencia premium del rubro: reserva en 30 segundos, cero letra chica.",
+    capabilities: [
+      "Cotizá en vivo según tamaño del auto, servicio y adicionales.",
+      "Recorré una entrada interactiva al desplazarte por la página.",
+      "Explorá los servicios y la carta del bar.",
+      "Probá una reserva simulada con ticket de muestra.",
+    ],
   },
   estetica: {
     tagline: "Servicios de estética, actividades y solicitud de turnos.",
     objeccion: "Información sobre tratamientos, profesionales y disponibilidad.",
+    capabilities: [
+      "Conocé los tratamientos y sus detalles.",
+      "Explorá las clases de yoga.",
+      "Compará imágenes de antes y después.",
+      "Probá una reserva de turno simulada.",
+    ],
   },
   universidad: {
     tagline: "Oferta académica, becas y consultas de admisión.",
     objeccion: "Programas de estudio y orientación para futuros estudiantes.",
+    capabilities: [
+      "Buscá carreras y compará hasta tres opciones.",
+      "Conocé el campus y la vida universitaria.",
+      "Consultá becas y requisitos de admisión.",
+      "Probá una preinscripción simulada.",
+    ],
   },
   inmobiliaria: {
     tagline: "Catálogo de propiedades y coordinación de visitas.",
     objeccion: "Fichas de propiedades con imágenes y características relevantes.",
+    capabilities: [
+      "Filtrá por zona, tipo, precio y ambientes.",
+      "Abrí fichas de propiedades con fotos y detalles.",
+      "Probá una visita simulada con ticket de muestra.",
+    ],
   },
   arquitectura: {
     tagline: "Presentación de proyectos y consultas de obra.",
     objeccion: "Etapas de trabajo, alcance y criterios para solicitar un presupuesto.",
+    capabilities: [
+      "Explorá proyectos y sus fichas con antes y después.",
+      "Conocé el estudio y las etapas de una obra.",
+      "Probá opciones de presupuesto en una consulta simulada.",
+    ],
   },
   "arquitectura-premium": {
     tagline: "Solución PREMIUM del rubro arquitectura: recorrido 3D, tour de obra y cotización en vivo.",
     objeccion: "Ver la obra terminada antes de firmar: recorrido 3D, tour y precio en vivo.",
+    capabilities: [
+      "Navegá un modelo 3D interactivo.",
+      "Explorá las fichas de proyectos.",
+      "Probá una cotización dinámica al cambiar las opciones.",
+      "Organizá una visita simulada, sin reserva real.",
+    ],
   },
-};
+} satisfies Record<SolutionId, SolutionCopy>;
 
 export const solutions = RUBROS.map((r) => ({ ...r, ...solutionCopy[r.id] }));
+
+export function getSolutionCapabilities(id: string): SolutionCopy["capabilities"] {
+  const copy = Object.hasOwn(solutionCopy, id) ? solutionCopy[id] : undefined;
+  if (!copy) throw new Error(`Falta el contenido del catálogo para la demo "${id}".`);
+  return copy.capabilities;
+}
 
 const servicios: Section = {
   id: "servicios",
