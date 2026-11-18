@@ -4,7 +4,7 @@ import { inventory, owner } from './inventory.mjs';
 const scope = inventory();
 const demos = scope.apps.filter((app) => app.base.startsWith('/demos/'));
 const studio = scope.apps.find((app) => app.base === '/');
-const returnLink = (page) => page.locator('[data-wm-header]').getByRole('link', { name: 'Volver al estudio', exact: true });
+const returnLink = (page) => page.locator('[data-wm-header]').getByRole('link', { name: 'Ir a Webmaster Studio', exact: true });
 const studioHeading = (page) => page.getByRole('heading', { level: 1, name: /Estudio de\s+Desarrollo\s+de Software/i });
 const skipUnchanged = (app) => test.skip(!scope.selected.includes(app), `Unchanged ${app.name}: ${scope.reason}`);
 
@@ -12,7 +12,17 @@ async function visibleReturn(page) {
   const link = returnLink(page);
   await expect(link).toBeVisible();
   await expect(link).toBeInViewport({ ratio: 1 });
-  await expect(link).toHaveText('Volver al estudio');
+  await expect(link).toHaveText(/^Ir a Webmaster Studio\s*↗$/);
+  await expect(link.locator('[aria-hidden="true"]')).toHaveText('↗');
+  expect(await link.evaluate((node) => node.closest('nav'))).toBeNull();
+  const typography = await link.evaluate((node) => {
+    const style = getComputedStyle(node);
+    const brand = document.querySelector('[data-wm-header] a.wm-display');
+    return { family: style.fontFamily, display: getComputedStyle(brand).fontFamily,
+      height: node.getBoundingClientRect().height };
+  });
+  expect(typography.family).toBe(typography.display);
+  expect(typography.height).toBeGreaterThanOrEqual(44);
   await expect(link).toHaveAttribute('href', '/');
   await expect(link).toHaveAttribute('data-astro-reload', '');
   await expect(page.locator('[data-wm-menu-panel]')).toHaveAttribute('data-open', 'false');
@@ -33,7 +43,7 @@ async function returnHome(page) {
   await link.click();
   await expect(page).toHaveURL('/');
   await expect(studioHeading(page)).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Volver al estudio', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Ir a Webmaster Studio', exact: true })).toHaveCount(0);
   expect(await page.evaluate(() => window.__studioReturnDocument)).toBeUndefined();
 }
 
@@ -102,7 +112,7 @@ test('studio home and its existing navigation have no self-return action', async
   skipUnchanged(studio);
   await page.goto('/');
   await expect(studioHeading(page)).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Volver al estudio', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Ir a Webmaster Studio', exact: true })).toHaveCount(0);
   const header = page.locator('[data-wm-header]');
   const brand = header.getByRole('link').first();
   await expect(brand).toHaveAttribute('href', '/');

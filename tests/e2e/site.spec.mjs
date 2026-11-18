@@ -94,6 +94,9 @@ test('hydrated family chips, counts, and all-results reset', async ({ page }) =>
   test.skip(!selected('portfolio'), 'Portfolio unchanged');
   const chips = await catalogue(page, '?source=e2e#catalogue');
   await expect(chips.getByRole('button')).toHaveCount(groups.length + 1);
+  for (const name of ['Concesionarios', 'Multiservicios', 'Estética', 'Institucional y educativo', 'Inmobiliaria', 'Estudios profesionales']) {
+    await expect(chips.getByRole('button', { name, exact: true })).toBeVisible();
+  }
   await results(page, RUBROS);
   for (const group of groups) {
     const chip = chips.getByRole('button', { name: group.nombre, exact: true });
@@ -131,6 +134,17 @@ for (const group of groups.filter((group) => ['lavadero', 'arquitectura'].includ
     }
   });
 }
+
+test('studio catalogue explains future growth with standard and premium service demos', async ({ page }) => {
+  test.skip(!selected('portfolio'), 'Portfolio unchanged');
+  await page.goto('/demos/');
+  const note = page.getByText('Vamos a sumar demos a cada categoría para mostrar las opciones estándar y premium del servicio de Webmaster Studio.', { exact: true });
+  await expect(note).toBeVisible();
+  await expect(page.locator('[data-wm-rubro-card]')).toHaveCount(8);
+  await page.goto('/');
+  await expect(page.locator('#demos')).toContainText('Ejemplos navegables');
+  await expect(page.locator('#demos')).not.toContainText('Siete ejemplos');
+});
 
 test('unknown query falls back without losing other URL state', async ({ page }) => {
   test.skip(!selected('portfolio'), 'Portfolio unchanged');

@@ -71,9 +71,10 @@ const whatsappHref = waLink(contact.whatsapp, `Hola, escribo desde la web de ${b
         <a
           href="/"
           data-astro-reload
-          class="inline-flex min-h-11 items-center rounded-full border border-line px-3 py-2 text-xs font-semibold text-fg hover:bg-soft"
+          class="wm-display inline-flex min-h-11 items-center gap-2 rounded-full border border-accent/60 px-3 py-2 text-xs leading-snug tracking-wide text-accent hover:bg-soft"
         >
-          Volver al estudio
+          Ir a Webmaster Studio
+          <span aria-hidden="true">↗</span>
         </a>
       )}
       <a href={whatsappHref} class="wm-btn hidden px-5 py-2.5 text-xs sm:inline-flex">

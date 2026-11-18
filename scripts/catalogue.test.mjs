@@ -15,7 +15,7 @@ test("one chip per family, in catalogue order, includes both base/premium pairs"
   const groups = catalogue.getRubroGroups();
   assert.deepEqual(ids(groups), ["concesionario", "lavadero", "estetica", "universidad", "inmobiliaria", "arquitectura"]);
   assert.equal(new Set(ids(groups)).size, groups.length);
-  for (const [id, nombre] of [["lavadero", "Lavadero + bar"], ["arquitectura", "Arquitectura"]]) {
+  for (const [id, nombre] of [["lavadero", "Multiservicios"], ["arquitectura", "Estudios profesionales"]]) {
     const group = groups.find((group) => group.id === id);
     assert.equal(group.nombre, nombre);
     assert.equal(group.accent, getRubro(id).palette.accent);
@@ -23,6 +23,18 @@ test("one chip per family, in catalogue order, includes both base/premium pairs"
     assert.deepEqual(visibleIds(id), [id, `${id}-premium`]);
   }
   assert.deepEqual(groups.flatMap((group) => group.demos), RUBROS);
+});
+
+test("family display names change without renaming demos or their public app metadata", () => {
+  assert.deepEqual(catalogue.getRubroGroups().map(({ id, nombre }) => [id, nombre]), [
+    ["concesionario", "Concesionarios"], ["lavadero", "Multiservicios"],
+    ["estetica", "Estética"], ["universidad", "Institucional y educativo"],
+    ["inmobiliaria", "Inmobiliaria"], ["arquitectura", "Estudios profesionales"],
+  ]);
+  const names = ["Concesionario", "Lavadero + bar", "Lavadero Premium", "Estética + yoga",
+    "Universidad privada", "Inmobiliaria", "Arquitectura", "Arquitectura Premium"];
+  assert.deepEqual(RUBROS.map(({ nombre }) => nombre), names);
+  assert.deepEqual(APPS.slice(0, -1).map(({ nombre }) => nombre), names);
 });
 
 test("new variants join existing families without name/suffix lists or mutation", () => {

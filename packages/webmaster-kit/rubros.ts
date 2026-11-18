@@ -209,13 +209,22 @@ export interface RubroGroup {
   demos: Rubro[];
 }
 
+/** Nombres de familia: no alteran los nombres ni los metadatos de cada demo. */
+const familyNames = new Map<string, string>([
+  ["concesionario", "Concesionarios"],
+  ["lavadero", "Multiservicios"],
+  ["estetica", "Estética"],
+  ["universidad", "Institucional y educativo"],
+  ["arquitectura", "Estudios profesionales"],
+]);
+
 export function getRubroGroups(demos: readonly Rubro[] = RUBROS): RubroGroup[] {
   const groups = new Map<string, RubroGroup>();
   for (const demo of demos) {
     let group = groups.get(demo.rubroId);
     if (!group) {
       const base = demos.find((item) => item.id === demo.rubroId) ?? demo;
-      group = { id: demo.rubroId, nombre: base.nombre, accent: base.palette.accent, demos: [] };
+      group = { id: demo.rubroId, nombre: familyNames.get(demo.rubroId) ?? base.nombre, accent: base.palette.accent, demos: [] };
       groups.set(group.id, group);
     }
     group.demos.push(demo);

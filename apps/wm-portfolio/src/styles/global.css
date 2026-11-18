@@ -144,3 +144,12 @@ html:has([data-wm-menu-panel][data-open="true"]) .wm-mobile-cta {
     padding-top: 8rem;
   }
 }
+
+/* Archivo Black needs more than 48rem for «Desarrollo» at desktop size.
+   Widen only the studio copy box; the subtitle keeps its own max-w-xl,
+   and the shared line masks, reveal and mobile layout stay unchanged. */
+@media (min-width: 1024px) {
+  [data-wm-hero] .absolute.inset-0 > .wm-container > .max-w-3xl {
+    max-width: 64rem;
+  }
+}
