@@ -9,7 +9,7 @@
  * del archivo del kit. Ver README del kit: máximo 8 fotos y 6 videos.
  */
 
-import { img, poster, video } from "@lib/media";
+import { img, pex, poster, video } from "@lib/media";
 import { RUBROS } from "@lib/rubros";
 import type { CatalogItem, RubroContent, Section } from "@lib/types";
 
@@ -50,14 +50,14 @@ const fotoCasaPiscina = img("1512917774080-9991f1c4c750", 1200);
 const fotoCasaTobogan = img("1600596542815-ffad4c1539a9", 1200);
 /** Living interior luminoso. */
 const fotoLiving = img("1600607687939-ce8a6c25118c", 1200);
-/** Edificio blanco de líneas puras. */
-const fotoEdificioBlanco = img("1487958449943-2429e8be8625", 1200);
-/** Casa moderna al atardecer con jardín. */
-const fotoCasaJardin = img("1600585154340-be6161a56a0c", 1200);
-/** Edificio de líneas curvas. */
-const fotoEdificioCurvo = img("1518005020951-eccb494ad742", 1200);
-/** Corredor de oficina (sección "la oficina"). */
-const fotoOficina = img("1497366754035-f200968a6e72", 1200);
+/** PH de ladrillo con cactus (Mercedes, AR): reemplaza la casa mínima de arquitectura. */
+const fotoEdificioBlanco = pex(29810846, 1200);
+/** Casa con patio de hiedra (Mendoza, AR): reemplaza la casa terminada de arquitectura. */
+const fotoCasaJardin = pex(13944645, 1200);
+/** Casa de piedra junto a vidrio moderno (Mar del Plata, AR): reemplaza la fachada de arquitectura. */
+const fotoEdificioCurvo = pex(37136105, 1200);
+/** Casa antigua de techo y reja (Córdoba, AR): local en construcción antigua, sin reusar el estudio de arquitectura. */
+const fotoOficina = pex(31689258, 1200);
 /** Casa modelo con llaves (sección "la entrega"). */
 const fotoLlaves = img("1560518883-ce09059eeffa", 1200);
 
@@ -628,6 +628,6 @@ export const fotos = {
 export const clips = {
   /** Oficina: mesa, sillas, luz de mañana. */
   oficina: { src: video(3092), poster: poster(3092) },
-  /** Edificio: hall y ascensor. */
-  edificio: { src: video(3093), poster: poster(3093) },
+  /** Barrio: casas con jardines desde arriba (único de inmobiliaria, sin reusar la obra 3093 de arquitectura). */
+  edificio: { src: video(42337), poster: poster(42337) },
 } as const;
