@@ -51,7 +51,7 @@ export const RUBROS: Rubro[] = [
     id: "lavadero",
     slug: "lavadero",
     nombre: "Lavadero + bar",
-    rubro: "Lavadero de autos con bar",
+    rubro: "Autolavado con bar",
     tagline: "Lavás tu auto, tomás algo y te vas.",
     objeccion: "«¿Me van a romper la pintura o el interior?»",
     demoUrl: "/demos/lavadero/",

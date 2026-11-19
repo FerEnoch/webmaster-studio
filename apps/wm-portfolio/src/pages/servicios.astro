@@ -16,14 +16,8 @@ const proceso = portfolio.sections.find((s) => s.id === "proceso")!;
     subtitle="Definimos cada proyecto según sus objetivos, funcionalidades e integraciones. Consultá nuestros servicios y valores de referencia para preparar una cotización."
   />
 
-  <section class="wm-container pb-20">
-    <header class="max-w-2xl">
-      <p class="wm-kicker">{servicios.kicker}</p>
-      <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">{servicios.title}</h2>
-      <p class="mt-5 text-muted">{servicios.body}</p>
-    </header>
-
-    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+  <section class="wm-container pb-20" aria-label="Tipos de servicio">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       {servicios.items?.map((item, i) => <PlanCard item={item} index={i} />)}
     </div>
   </section>

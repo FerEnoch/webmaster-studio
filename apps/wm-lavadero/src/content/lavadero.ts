@@ -389,7 +389,7 @@ export const lavadero: RubroContent = {
     { label: "Legal", href: "/legal" },
   ],
   hero: {
-    kicker: "Lavadero de autos con bar",
+    kicker: "Autolavado con bar",
     title: ["Lavá tu auto.", "Tomá algo.", "Te vas."],
     subtitle:
       "Reservás el turno, dejás el auto en el box y te sentás en la barra hasta que esté listo. El lavado sale con pase, la espera sale con café.",

@@ -37,6 +37,15 @@ test("family display names change without renaming demos or their public app met
   assert.deepEqual(APPS.slice(0, -1).map(({ nombre }) => nombre), names);
 });
 
+test("the standard car wash uses Autolavado and keeps its premium variant in Multiservicios", () => {
+  const group = portfolio.getRubroGroups().find(({ id }) => id === "lavadero");
+  assert.equal(group.nombre, "Multiservicios");
+  assert.deepEqual(group.demos.map(({ id, rubro }) => [id, rubro]), [
+    ["lavadero", "Autolavado con bar"],
+    ["lavadero-premium", "Centro de estética vehicular"],
+  ]);
+});
+
 test("new variants join existing families without name/suffix lists or mutation", () => {
   assert.equal(typeof catalogue.getRubroGroups, "function");
   const extra = [

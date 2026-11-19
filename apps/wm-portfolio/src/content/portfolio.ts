@@ -274,7 +274,7 @@ const faq: Section = {
     {
       id: "f2",
       title: "¿Qué representan las soluciones por industria?",
-      body: "Son ocho ejemplos navegables con marcas, precios y datos ficticios. Sus formularios simulan interacciones y no envían información a un servidor. No son servicios operativos ni proyectos de clientes.",
+      body: "Son ejemplos navegables con marcas, precios y datos ficticios. Sus formularios simulan interacciones y no envían información a un servidor. No son servicios operativos ni proyectos de clientes.",
     },
     {
       id: "f3",
@@ -325,7 +325,7 @@ export const portfolio: RubroContent = {
   },
   nav: [
     { label: "Inicio", href: "/" },
-    { label: "Soluciones por industria", href: "/demos" },
+    { label: "Soluciones a medida", href: "/demos" },
     { label: "Servicios", href: "/servicios" },
     { label: "Contacto", href: "/contacto" },
     { label: "Legal", href: "/legal" },
@@ -335,14 +335,13 @@ export const portfolio: RubroContent = {
     title: ["Estudio de", "Desarrollo", "de Software"],
     subtitle: "Diseñamos y desarrollamos sitios web, aplicaciones e integraciones. Acompañamos a tu organización desde la definición del proyecto hasta su implementación y mantenimiento.",
     cta: { label: "Solicitar cotización", href: "#demo" },
-    secondaryCta: { label: "Soluciones por industria", href: "/demos" },
+    secondaryCta: { label: "Soluciones a medida", href: "/demos" },
     video: {
       src: video(3257),
       poster: poster(3257),
       alt: "Equipo de software trabajando en un prototipo (imagen de demostración).",
       isVideo: true,
     },
-    live: { label: "Soluciones por industria", count: 8, min: 8, max: 8, unit: "soluciones", interval: 3400 },
   },
   sections: [servicios, precios, proceso, prueba, faq],
   conversion: {

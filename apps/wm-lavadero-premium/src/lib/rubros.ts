@@ -66,7 +66,7 @@ export const RUBROS: Rubro[] = [
     id: "lavadero-premium",
     slug: "lavadero-premium",
     nombre: "Lavadero Premium",
-    rubro: "Lavadero de autos con bar",
+    rubro: "Autolavado con bar",
     tagline: "La experiencia Gloss & Glass: luz, bar y detalle.",
     objeccion: "«Quiero el lavado premium, no el básico»",
     demoUrl: "/demos/lavadero-premium/",
