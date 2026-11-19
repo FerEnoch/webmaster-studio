@@ -56,11 +56,11 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
     photos: ["1596178065887-1198b6148b2b", "1515377905703-c4788e51af15", "1540555700478-4be289fbecef", "1571019613454-1cb2f99b2d8b"],
   },
   universidad: {
-    // OJO: el pool del kit (3099/3119/3120/3056) esta mal etiquetado: son un
-    // avion, una bici, una autopista y un edificio abandonado. Los IDs de
-    // abajo se verificaron con `curl -sI -m 15` (HTTP 200) y se revisaron
-    // cuadro a cuadro por poster el 2026-10-20.
-    videos: [3046, 3036, 3090, 3091, 3092, 3093],
+    // Set propio de campus (2026-11-19): 3046 plaza (hero, se conserva) +
+    // 4503/4560 estudiantes en campus, 8802/8861 biblioteca, 28329 estudio
+    // en pasillo. Sin reusar 3036/3090-3093 de arquitectura/inmobiliaria.
+    // Todos `curl -sI -m 15` HTTP 200 el 2026-11-19.
+    videos: [3046, 4503, 4560, 8802, 8861, 28329],
     photos: [
       "1562774053-701939374585", // campus: edificio + lawn
       "1509062522246-3755977927d7", // aula con docente y estudiantes

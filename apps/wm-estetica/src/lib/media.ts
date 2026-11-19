@@ -52,8 +52,20 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
     photos: ["1637430308606-86576d8fef3c", "1600661653561-629509216228", "1558618666-fcd25c85cd64", "1521543387600-c745f8e83d77"],
   },
   estetica: {
-    videos: [4210, 4212, 4258, 4346],
-    photos: ["1596178065887-1198b6148b2b", "1515377905703-c4788e51af15", "1540555700478-4be289fbecef", "1571019613454-1cb2f99b2d8b"],
+    // Pool sincronizado con el contenido real (2026-11-19): sin resorts ni
+    // fitness. Hero 4258 (relaxing), rodillo 4210, labios 4212. Las 8 fotos
+    // son las de `fotos` en content/estetica.ts, todas HTTP 200.
+    videos: [4258, 4210, 4212],
+    photos: [
+      "1601412436009-d964bd02edbc", // piel (comparativa)
+      "1570172619644-dfd03ed5d881", // tratamiento en curso
+      "1515377905703-c4788e51af15", // producto (sérum)
+      "1599447421416-3414500d18a5", // sala de yoga
+      "1518611012118-696072aa579a", // clase grupal
+      "1560750588-73207b1ef5b8", // salón cálido
+      "1573497019940-1c28c88b4f3e", // equipo (retrato)
+      "1540555700478-4be289fbecef", // insumos del gabinete
+    ],
   },
   universidad: {
     videos: [3099, 3119, 3120, 3056],
