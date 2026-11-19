@@ -10,7 +10,7 @@
  * propias de la app, siempre al lado del contrato.
  */
 
-import { img, poster, video } from "@lib/media";
+import { img, pex, poster, video } from "@lib/media";
 import { RUBROS } from "@lib/rubros";
 import type { CatalogItem, Conversion, RubroContent, Section } from "@lib/types";
 
@@ -255,6 +255,14 @@ export const fotos = {
   fachada: img("1518005020951-eccb494ad742", 1200),
   linea: img("1487958449943-2429e8be8625", 1200),
   estudio: img("1497366754035-f200968a6e72", 1200),
+  /** Interior porteño de hormigón y vidrio (Pexels 18204484, CABA): Galería Norte, único del premium. */
+  galeriaBA: pex(18204484, 1200),
+  /** Concreto con luz cenital (Pexels 38344729): Local Mitre en obra, único del premium. */
+  localConcreto: pex(38344729, 1200),
+  /** Hormigón y techo vidriado (Pexels 10301540): después de Casa Alameda, único del premium. */
+  alamedaInterior: pex(10301540, 1200),
+  /** Muros altos y asiento simple (Pexels 28993989): después de Piso Vélez, único del premium. */
+  velezReforma: pex(28993989, 1200),
 } as const;
 
 export const obras: Obra[] = [
@@ -274,8 +282,8 @@ export const obras: Obra[] = [
       alt: "Ambiente vacío de una vivienda en estado previo a la obra (imagen de demostración).",
     },
     despues: {
-      src: fotos.interior,
-      alt: "Interior terminado con mobiliario y luz natural (imagen de demostración).",
+      src: fotos.alamedaInterior,
+      alt: "Interior de hormigón con techo vidriado y luz cenital (imagen de demostración).",
     },
     nota: "Imágenes de demostración: ilustran estados de obra, no son fotos de esta obra.",
   },
@@ -291,8 +299,8 @@ export const obras: Obra[] = [
     equipo: ["Estudio Veta", "Cálculo & Estructuras", "Carpintería Costa"],
     entregables: ["Proyecto", "Licencia de obra", "Dirección de obra", "Habilitación de uso"],
     despues: {
-      src: fotos.obra,
-      alt: "Obra en curso con equipo de obra en el terreno (imagen de demostración).",
+      src: fotos.localConcreto,
+      alt: "Interior de hormigón con luz natural en obra (imagen de demostración).",
     },
     nota: "Obra en curso: la foto muestra el estado actual de un obra de demostración.",
   },
@@ -312,8 +320,8 @@ export const obras: Obra[] = [
       alt: "Ambiente vacío y luminoso en el estado previo a la reforma (imagen de demostración).",
     },
     despues: {
-      src: fotos.casaTerminada,
-      alt: "Vivienda terminada con volumen de vidrio y patio (imagen de demostración).",
+      src: fotos.velezReforma,
+      alt: "Reforma con muros de hormigón y estar minimalista (imagen de demostración).",
     },
     nota: "Imágenes de demostración: ilustran estados de obra, no son fotos de esta obra.",
   },
@@ -329,8 +337,8 @@ export const obras: Obra[] = [
     equipo: ["Estudio Veta", "Ingeniería Sparse", "Carpintería Costa"],
     entregables: ["Factibilidad y programa", "Anteproyecto", "Proyecto de reciclaje"],
     despues: {
-      src: fotos.fachada,
-      alt: "Fachada angular de un edificio de hormigón (imagen de demostración).",
+      src: fotos.galeriaBA,
+      alt: "Interior moderno de hormigón y vidrio en Buenos Aires (imagen de demostración).",
     },
     nota: "En anteproyecto: la imagen es una referencia del tipo de arquitectura, no del proyecto.",
   },

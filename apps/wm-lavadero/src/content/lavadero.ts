@@ -9,7 +9,7 @@
  * final muestra ese monto, no el total.
  */
 
-import { img, poster, video } from "@lib/media";
+import { img, pex, poster, video } from "@lib/media";
 import { RUBROS } from "@lib/rubros";
 import type { CatalogItem, RubroContent, Section } from "@lib/types";
 
@@ -389,7 +389,7 @@ export const lavadero: RubroContent = {
     { label: "Legal", href: "/legal" },
   ],
   hero: {
-    kicker: "Lavadero de autos con bar",
+    kicker: "Autolavado con bar",
     title: ["Lavá tu auto.", "Tomá algo.", "Te vas."],
     subtitle:
       "Reservás el turno, dejás el auto en el box y te sentás en la barra hasta que esté listo. El lavado sale con pase, la espera sale con café.",
@@ -487,7 +487,8 @@ export const fotos = {
   box: img("1590362891991-f776e747a588", 1200),
   garage: img("1492144534655-ae79c964c9d7", 1200),
   tecnico: img("1625047509248-ec889cbff17f", 1200),
-  chico: img("1549317661-bd32c8ce0db2", 900, 1000),
+  /** Compacto en calle urbana (Pexels 30782480): único del estándar, sin reusar el Fiat de concesionario. */
+  chico: pex(30782480, 900),
   barra: img("1517248135467-4c7edcad34c4", 1200),
   medialunas: img("1530610476181-d83430b64dcd", 900),
   brindis: img("1470337458703-46ad1756a187", 900),

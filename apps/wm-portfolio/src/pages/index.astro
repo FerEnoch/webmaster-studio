@@ -3,17 +3,20 @@ import Base from "../layouts/Base.astro";
 import PageHero from "../components/ui/PageHero.astro";
 import PinnedStory from "../components/PinnedStory.astro";
 import PlanCard from "../components/PlanCard.astro";
-import DemoIndex from "../components/DemoIndex.astro";
+
 import DemoRequest from "../components/DemoRequest.tsx";
 import LazyVideo from "../components/LazyVideo.astro";
-import { portfolio, fotoEstudio } from "../content/portfolio";
+import { demoImages, portfolio, fotoEstudio, solutions } from "../content/portfolio";
+import { getRubroGroups } from "@lib/rubros";
 import { poster, video } from "@lib/media";
+import { appUrl } from "@lib/urls";
 
 const servicios = portfolio.sections.find((s) => s.id === "servicios")!;
 const precios = portfolio.sections.find((s) => s.id === "precios")!;
 const proceso = portfolio.sections.find((s) => s.id === "proceso")!;
 const prueba = portfolio.sections.find((s) => s.id === "prueba")!;
 const faq = portfolio.sections.find((s) => s.id === "faq")!;
+const grupos = getRubroGroups(solutions);
 ---
 
 <Base content={portfolio}>
@@ -34,7 +37,7 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
           adecuada a tu actividad.
         </p>
         <div class="mt-8 flex flex-wrap gap-4">
-          <a href="/demos" class="wm-btn">Soluciones por industria</a>
+          <a href={appUrl("/demos")} class="wm-btn">Soluciones a medida</a>
           <a href="#demo" class="wm-btn wm-btn--ghost">Solicitar cotización</a>
         </div>
       </div>
@@ -42,7 +45,7 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
       <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm-lg">
         <img
           src={fotoEstudio}
-          alt="Mesa de trabajo de un estudio web con pantallas y planos (imagen de demostración)."
+          alt="Equipo de desarrollo trabajando en un prototipo de software (imagen de demostración)."
           loading="lazy"
           decoding="async"
           class="aspect-[4/3] w-full object-cover"
@@ -55,9 +58,9 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
   <section class="relative overflow-hidden border-y border-line">
     <div class="wm-grade wm-grain wm-vignette absolute inset-0">
       <LazyVideo
-        src={video(3091)}
-        poster={poster(3091)}
-        alt="Plano de una obra en marcha (imagen de demostración)."
+        src={video(13232)}
+        poster={poster(13232)}
+        alt="Equipo de diseño revisando un prototipo web (imagen de demostración)."
       />
     </div>
     <div
@@ -86,27 +89,49 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
     body={proceso.body}
   />
 
-  <!-- 4) Índice de soluciones por industria. -->
+  <!-- 4) Soluciones a medida por rubro. -->
   <section class="wm-container py-16 sm:py-20" id="demos">
     <header class="max-w-2xl">
       <p class="wm-kicker">Desarrollo aplicado</p>
       <h2 class="wm-display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
-        Soluciones por industria
+        Soluciones a medida
       </h2>
       <p class="mt-5 text-muted">
-        Siete ejemplos navegables muestran cómo adaptar contenido, diseño y
-        funcionalidades a distintas actividades. Son soluciones ilustrativas
-        con información ficticia y formularios simulados.
+        Explorá los rubros para conocer ejemplos de sitios y aplicaciones adaptados
+        a cada actividad. Las demos usan datos ficticios y formularios simulados.
       </p>
     </header>
 
-    <div class="mt-12">
-      <DemoIndex />
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {grupos.map((grupo) => (
+        <article class="wm-card group flex flex-col">
+          <div class="wm-grade wm-grain wm-vignette mb-6 overflow-hidden rounded-wm">
+            <img
+              src={demoImages[grupo.id] ?? demoImages[grupo.demos[0].id]}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              class="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+            />
+          </div>
+          <p class="wm-kicker">Solución a medida</p>
+          <h3 id={`rubro-${grupo.id}`} class="wm-display mt-4 text-2xl leading-tight">{grupo.nombre}</h3>
+          <p class="mt-3 mb-6 text-sm text-muted">{grupo.demos.map((demo) => demo.nombre).join(" · ")}</p>
+          <a
+            href={appUrl(`/demos?rubro=${grupo.id}`)}
+            data-astro-reload
+            aria-describedby={`rubro-${grupo.id}`}
+            class="wm-btn mt-auto self-start"
+          >
+            Ver rubro
+          </a>
+        </article>
+      ))}
     </div>
 
     <p class="mt-8 text-sm text-muted">
-      <a href="/demos" class="font-semibold text-accent underline underline-offset-4">
-        Filtrar soluciones por industria
+      <a href={appUrl("/demos")} class="font-semibold text-accent underline underline-offset-4">
+        Ver todas las soluciones
       </a>
     </p>
   </section>
@@ -115,9 +140,9 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
   <section class="relative overflow-hidden border-y border-line">
     <div class="wm-grade wm-grain wm-vignette absolute inset-0">
       <LazyVideo
-        src={video(4189)}
-        poster={poster(4189)}
-        alt="Auto en concesionario como ejemplo de una solución por industria (imagen ilustrativa)."
+        src={video(4907)}
+        poster={poster(4907)}
+        alt="Manos trabajando en una laptop, primer plano (imagen de demostración)."
       />
     </div>
     <div
@@ -135,7 +160,7 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
         presupuesto. Estas interacciones son simuladas: las integraciones
         operativas se definen y desarrollan según cada proyecto.
       </p>
-      <a href="/demos" class="wm-btn mt-8">Explorar soluciones</a>
+      <a href={appUrl("/demos")} class="wm-btn mt-8">Explorar soluciones a medida</a>
     </div>
   </section>
 
@@ -167,7 +192,7 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
           ))
         }
       </dl>
-      <a href="/servicios" class="wm-btn mt-8">Ver el detalle de los servicios</a>
+      <a href={appUrl("/servicios")} class="wm-btn mt-8">Ver el detalle de los servicios</a>
     </div>
   </section>
 
@@ -193,9 +218,9 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
   <section class="relative overflow-hidden border-y border-line">
     <div class="wm-grade wm-grain wm-vignette absolute inset-0">
       <LazyVideo
-        src={video(3093)}
-        poster={poster(3093)}
-        alt="Detalle de una maqueta en construcción (imagen de demostración)."
+        src={video(13231)}
+        poster={poster(13231)}
+        alt="Equipo planificando un proyecto web en la oficina (imagen de demostración)."
       />
     </div>
     <div
@@ -298,7 +323,7 @@ const faq = portfolio.sections.find((s) => s.id === "faq")!;
       </p>
       <div class="mt-8 flex flex-wrap gap-4">
         <a href="#demo" class="wm-btn">Solicitar cotización</a>
-        <a href="/contacto" class="wm-btn wm-btn--ghost">Ver contacto</a>
+        <a href={appUrl("/contacto")} class="wm-btn wm-btn--ghost">Ver contacto</a>
       </div>
     </div>
   </section>

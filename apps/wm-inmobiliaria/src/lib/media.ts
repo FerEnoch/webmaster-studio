@@ -8,6 +8,7 @@
  * - Video Mixkit:  https://assets.mixkit.co/videos/{id}/{id}-720.mp4
  * - Poster Mixkit: https://assets.mixkit.co/videos/{id}/{id}-thumb-720-0.jpg
  * - Foto Unsplash:  https://images.unsplash.com/photo-{id}?auto=format&fit=crop&w={w}
+ * - Foto Pexels:    https://images.pexels.com/photos/{id}/pexels-photo-{id}.jpeg?auto=compress&cs=tinysrgb&w={w}
  */
 
 /** URL del video 720p de Mixkit. */
@@ -24,6 +25,11 @@ export function poster(id: number): string {
 export function img(id: string, w = 1200, h?: number): string {
   const extra = h ? `&h=${h}` : "";
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}${extra}&q=75`;
+}
+
+/** URL de una foto de Pexels (hotlink estable del CDN). */
+export function pex(id: number, w = 1200): string {
+  return `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
 }
 
 /**
@@ -60,8 +66,19 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
     photos: ["1519452575417-564c1401ecc0", "1541339907198-e08756dedf3f", "1562774053-701939374585", "1523240795612-9a054b0db644"],
   },
   inmobiliaria: {
-    videos: [3090, 3092, 3046, 3056],
-    photos: ["1560518883-ce09059eeffa", "1512917774080-9991f1c4c750", "1600596542815-ffad4c1539a9", "1600607687939-ce8a6c25118c"],
+    // Set propio AR (2026-11-19): 3090 living (hero) + 3092 oficina + 42337
+    // barrio aéreo (banda Zonas, único, sin reusar la obra 3093) + 4 Pexels
+    // argentinas, sin reusar las 4 fotos de arquitectura. Todas HTTP 200.
+    videos: [3090, 3092, 42337, 3046, 3056],
+    photos: [
+      "1560518883-ce09059eeffa", // llaves / entrega
+      "1512917774080-9991f1c4c750", // casa con pileta
+      "1600596542815-ffad4c1539a9", // casa con tobogán
+      "1600607687939-ce8a6c25118c", // living luminoso
+      // Pexels AR (IDs numéricos, ver pex()): 29810846 PH ladrillo Mercedes,
+      // 13944645 patio con hiedra Mendoza, 37136105 piedra+vidrio Mardel,
+      // 31689258 casa antigua Córdoba (local).
+    ],
   },
   arquitectura: {
     videos: [3256, 3091, 3093, 3036],

@@ -1,48 +1,116 @@
 /** Contenido del sitio de Webmaster Studio. Los ejemplos y datos de contacto son ficticios. */
 
-import { img, poster, video } from "@lib/media";
+import { img, pex, poster, video } from "@lib/media";
 import { PORTFOLIO, RUBROS } from "@lib/rubros";
 import type { CatalogItem, RubroContent, Section } from "@lib/types";
 
 export const brand = "Webmaster Studio";
 
-/** Copy del catálogo del estudio; conserva las identidades y rutas del registro de rubros. */
-const solutionCopy: Record<string, { tagline: string; objeccion: string }> = {
+/** Copy exclusivo del portfolio: no amplía el contrato compartido de los rubros. */
+type SolutionId =
+  | "concesionario"
+  | "lavadero"
+  | "lavadero-premium"
+  | "estetica"
+  | "universidad"
+  | "inmobiliaria"
+  | "arquitectura"
+  | "arquitectura-premium";
+
+type SolutionCopy = {
+  tagline: string;
+  objeccion: string;
+  capabilities: readonly [string, string, string, string?, string?];
+};
+
+/** Cobertura de las ocho demos y entre tres y cinco ítems por tarjeta. */
+const solutionCopy: Record<string, SolutionCopy | undefined> = {
   concesionario: {
     tagline: "Catálogo de vehículos con fichas y consultas comerciales.",
     objeccion: "Información de cada vehículo y condiciones de compra en un mismo lugar.",
+    capabilities: [
+      "Consultá autos nuevos. Filtrá y ordená el stock de usados.",
+      "Abrí fichas con fotos y detalles de cada vehículo.",
+      "Estimá cuotas según el plazo de financiación.",
+      "Simulá una prueba de manejo y obtené un ticket de muestra.",
+    ],
   },
   lavadero: {
     tagline: "Presentación de servicios de lavado y gestión de reservas.",
     objeccion: "Detalle de los tratamientos y del cuidado del vehículo.",
+    capabilities: [
+      "Consultá servicios, precios y adicionales de lavado.",
+      "Explorá la carta del bar para la espera.",
+      "Probá una reserva simulada con ticket de muestra.",
+    ],
   },
   "lavadero-premium": {
     tagline: "Solución PREMIUM Gloss & Glass: showroom de luz, bar y detalle.",
     objeccion: "La experiencia premium del rubro: reserva en 30 segundos, cero letra chica.",
+    capabilities: [
+      "Cotizá en vivo según tamaño del auto, servicio y adicionales.",
+      "Recorré una entrada interactiva al desplazarte por la página.",
+      "Explorá los servicios y la carta del bar.",
+      "Probá una reserva simulada con ticket de muestra.",
+    ],
   },
   estetica: {
     tagline: "Servicios de estética, actividades y solicitud de turnos.",
     objeccion: "Información sobre tratamientos, profesionales y disponibilidad.",
+    capabilities: [
+      "Conocé los tratamientos y sus detalles.",
+      "Explorá las clases de yoga.",
+      "Compará imágenes de antes y después.",
+      "Probá una reserva de turno simulada.",
+    ],
   },
   universidad: {
     tagline: "Oferta académica, becas y consultas de admisión.",
     objeccion: "Programas de estudio y orientación para futuros estudiantes.",
+    capabilities: [
+      "Buscá carreras y compará hasta tres opciones.",
+      "Conocé el campus y la vida universitaria.",
+      "Consultá becas y requisitos de admisión.",
+      "Probá una preinscripción simulada.",
+    ],
   },
   inmobiliaria: {
     tagline: "Catálogo de propiedades y coordinación de visitas.",
     objeccion: "Fichas de propiedades con imágenes y características relevantes.",
+    capabilities: [
+      "Filtrá por zona, tipo, precio y ambientes.",
+      "Abrí fichas de propiedades con fotos y detalles.",
+      "Probá una visita simulada con ticket de muestra.",
+    ],
   },
   arquitectura: {
     tagline: "Presentación de proyectos y consultas de obra.",
     objeccion: "Etapas de trabajo, alcance y criterios para solicitar un presupuesto.",
+    capabilities: [
+      "Explorá proyectos y sus fichas con antes y después.",
+      "Conocé el estudio y las etapas de una obra.",
+      "Probá opciones de presupuesto en una consulta simulada.",
+    ],
   },
   "arquitectura-premium": {
     tagline: "Solución PREMIUM del rubro arquitectura: recorrido 3D, tour de obra y cotización en vivo.",
     objeccion: "Ver la obra terminada antes de firmar: recorrido 3D, tour y precio en vivo.",
+    capabilities: [
+      "Navegá un modelo 3D interactivo.",
+      "Explorá las fichas de proyectos.",
+      "Probá una cotización dinámica al cambiar las opciones.",
+      "Organizá una visita simulada, sin reserva real.",
+    ],
   },
-};
+} satisfies Record<SolutionId, SolutionCopy>;
 
 export const solutions = RUBROS.map((r) => ({ ...r, ...solutionCopy[r.id] }));
+
+export function getSolutionCapabilities(id: string): SolutionCopy["capabilities"] {
+  const copy = Object.hasOwn(solutionCopy, id) ? solutionCopy[id] : undefined;
+  if (!copy) throw new Error(`Falta el contenido del catálogo para la demo "${id}".`);
+  return copy.capabilities;
+}
 
 const servicios: Section = {
   id: "servicios",
@@ -206,7 +274,7 @@ const faq: Section = {
     {
       id: "f2",
       title: "¿Qué representan las soluciones por industria?",
-      body: "Son ocho ejemplos navegables con marcas, precios y datos ficticios. Sus formularios simulan interacciones y no envían información a un servidor. No son servicios operativos ni proyectos de clientes.",
+      body: "Son ejemplos navegables con marcas, precios y datos ficticios. Sus formularios simulan interacciones y no envían información a un servidor. No son servicios operativos ni proyectos de clientes.",
     },
     {
       id: "f3",
@@ -257,7 +325,7 @@ export const portfolio: RubroContent = {
   },
   nav: [
     { label: "Inicio", href: "/" },
-    { label: "Soluciones por industria", href: "/demos" },
+    { label: "Soluciones a medida", href: "/demos" },
     { label: "Servicios", href: "/servicios" },
     { label: "Contacto", href: "/contacto" },
     { label: "Legal", href: "/legal" },
@@ -267,14 +335,13 @@ export const portfolio: RubroContent = {
     title: ["Estudio de", "Desarrollo", "de Software"],
     subtitle: "Diseñamos y desarrollamos sitios web, aplicaciones e integraciones. Acompañamos a tu organización desde la definición del proyecto hasta su implementación y mantenimiento.",
     cta: { label: "Solicitar cotización", href: "#demo" },
-    secondaryCta: { label: "Soluciones por industria", href: "/demos" },
+    secondaryCta: { label: "Soluciones a medida", href: "/demos" },
     video: {
-      src: video(3256),
-      poster: poster(3256),
-      alt: "Plano de una obra en curso utilizado como imagen ilustrativa del estudio.",
+      src: video(3257),
+      poster: poster(3257),
+      alt: "Equipo de software trabajando en un prototipo (imagen de demostración).",
       isVideo: true,
     },
-    live: { label: "Soluciones por industria", count: 8, min: 8, max: 8, unit: "soluciones", interval: 3400 },
   },
   sections: [servicios, precios, proceso, prueba, faq],
   conversion: {
@@ -339,14 +406,14 @@ export const portfolio: RubroContent = {
 
 /** Imágenes ilustrativas de las ocho soluciones por industria. */
 export const demoImages: Record<string, string> = {
-  concesionario: img("1503376780353-7e6692767b70", 1200),
-  lavadero: img("1637430308606-86576d8fef3c", 1200),
-  "lavadero-premium": img("1637430308606-86576d8fef3c", 1200),
-  estetica: img("1596178065887-1198b6148b2b", 1200),
+  concesionario: img("1560958089-b8a1929cea89", 1200),
+  lavadero: img("1492144534655-ae79c964c9d7", 1200),
+  "lavadero-premium": img("1626668893632-6f3a4466d22f", 1200),
+  estetica: img("1570172619644-dfd03ed5d881", 1200),
   universidad: img("1562774053-701939374585", 1200),
   inmobiliaria: img("1512917774080-9991f1c4c750", 1200),
   arquitectura: img("1487958449943-2429e8be8625", 1200),
   "arquitectura-premium": img("1600585154340-be6161a56a0c", 1200),
 };
 
-export const fotoEstudio = img("1497366754035-f200968a6e72", 1200);
+export const fotoEstudio = pex(6804073, 1200);

@@ -21,9 +21,18 @@ industry. The portfolio re-exports this registry from `src/lib/rubros.ts`.
 
 `getRubroGroups(demos = RUBROS)` returns `{ id, nombre, accent, demos }[]` with
 one group per `rubroId`, ordered by first appearance. Each group's demos keep
-catalogue order. Chip copy/accent comes from the same-ID base demo when present,
-otherwise the first demo in that family. No separate chip list is maintained.
-The helpers do not mutate the input catalogue.
+catalogue order. Family display names are overridden only inside the grouping
+helper: `concesionario` → **Concesionarios**, `lavadero` → **Multiservicios**,
+`estetica` → **Estética**, `universidad` → **Institucional y educativo**, and
+`arquitectura` → **Estudios profesionales**. **Inmobiliaria** stays unchanged.
+Demo names and public `RUBROS`/`APPS` metadata retain their existing values.
+For other families, chip copy comes from the same-ID base demo when present,
+otherwise the first demo in that family; accent follows that same base lookup.
+There is no separate membership list. The helpers do not mutate the catalogue.
+
+The studio catalogue explains that demos will be added to each category to show
+both standard and premium service options. This describes future growth, not a
+claim that every family already has a premium demo.
 
 ## Filters and links
 
@@ -47,6 +56,11 @@ Without JavaScript all demos remain visible.
 Demo links retain `data-astro-reload` and their catalogue `demoUrl`; these are
 cross-app URLs, so do not run them through `appUrl()`. Use the existing
 `appUrl()` helper only for app-local paths. Build base paths are unchanged.
+
+Integrated demos show **Ir a Webmaster Studio** as a display-type utility link
+with an outbound cue outside the main navigation. It stays visible on mobile,
+uses the real root `href="/"` and `data-astro-reload`, and does not replace demo
+navigation or contact controls. Standalone demos and the studio omit this link.
 
 ## Adding another demo
 

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "gentle-ai-worker": {
+      "mode": "primary",
+      "model": "opencode-go/minimax-m3.1-flash-free"
+    },
+    "gentle-ai-verify": {
+      "model": "opencode-go/minimax-m3.1-flash-free"
+    }
+  },
+  "permission": {
+    "bash": {
+      "rsync": "allow",
+      "rsync *": "allow",
+      "rm": "allow",
+      "rm *": "allow",
+      "git push": "deny",
+      "git push *": "deny",
+      "git push --force*": "deny"
+    },
+    "external_directory": {
+      "/tmp/*": "allow",
+      "/home/ferenoch/.playwright-cli/*": "allow",
+      "/home/ferenoch/.cache/*": "allow"
+    }
+  }
+}

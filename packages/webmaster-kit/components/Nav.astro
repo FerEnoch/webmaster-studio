@@ -15,6 +15,8 @@ export interface Props {
 
 const { nav: links, brand, contact } = Astro.props;
 const nav = links.map((item) => ({ ...item, href: appUrl(item.href) }));
+// Only integrated demos have a studio at the origin root (standalone builds do not).
+const isIntegratedDemo = import.meta.env.BASE_URL.startsWith("/demos/");
 const current = appPath(Astro.url.pathname);
 const isActive = (href: string) => {
   const path = appPath(href.split(/[?#]/)[0]);
@@ -26,15 +28,15 @@ const whatsappHref = waLink(contact.whatsapp, `Hola, escribo desde la web de ${b
 <header
   data-wm-header
   data-hidden="false"
-  class="wm-header fixed inset-x-0 top-0 z-50 border-b border-line backdrop-blur-xl"
+  class:list={["wm-header fixed inset-x-0 top-0 z-50 border-b border-line backdrop-blur-xl", isIntegratedDemo && "w-screen"]}
 >
-  <div class="wm-container flex items-center justify-between gap-4 py-3.5">
+  <div class:list={["wm-container flex items-center justify-between gap-4 py-3.5", isIntegratedDemo && "flex-wrap"]}>
     <a href={appUrl("/")} class="wm-display text-2xl leading-none">
       {brand}<span class="text-accent">.</span>
     </a>
 
-    <nav aria-label="Principal" class="hidden md:block">
-      <ul class="wm-surface flex items-center gap-1 rounded-full border border-line p-1">
+    <nav aria-label="Principal" class:list={["hidden md:block", isIntegratedDemo && "order-last w-full xl:order-none xl:w-auto"]}>
+      <ul class:list={["wm-surface flex items-center gap-1 rounded-full border border-line p-1", isIntegratedDemo && "flex-wrap justify-center"]}>
         {
           nav.map((item) => (
             <li>
@@ -64,7 +66,17 @@ const whatsappHref = waLink(contact.whatsapp, `Hola, escribo desde la web de ${b
       </ul>
     </nav>
 
-    <div class="flex items-center gap-2">
+    <div class:list={["flex items-center gap-2", isIntegratedDemo && "ml-auto max-w-full basis-full flex-wrap justify-end sm:basis-auto"]}>
+      {isIntegratedDemo && (
+        <a
+          href="/"
+          data-astro-reload
+          class="wm-display inline-flex min-h-11 items-center gap-2 rounded-full border border-accent/60 px-3 py-2 text-xs leading-snug tracking-wide text-accent hover:bg-soft"
+        >
+          Ir a Webmaster Studio
+          <span aria-hidden="true">↗</span>
+        </a>
+      )}
       <a href={whatsappHref} class="wm-btn hidden px-5 py-2.5 text-xs sm:inline-flex">
         WhatsApp
       </a>

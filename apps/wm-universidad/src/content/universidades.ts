@@ -658,21 +658,21 @@ export const fotos = {
   graduacion: img("1541339907198-e08756dedf3f", 1200),
 } as const;
 
-/** Videos de Mixkit (6, mp4 + poster HTTP 200 y posters revisados). */
+/** Videos de Mixkit (6, mp4 + poster HTTP 200 y posters revisados). Set propio de campus, sin reusar arquitectura. */
 export const clips = {
   plaza: video(3046),
-  fachada: video(3036),
-  moderno: video(3090),
-  aula: video(3091),
-  estudio: video(3092),
-  escalera: video(3093),
+  fachada: video(4503),
+  moderno: video(4560),
+  aula: video(8802),
+  estudio: video(8861),
+  escalera: video(28329),
 } as const;
 
 export const posters = {
   plaza: poster(3046),
-  fachada: poster(3036),
-  moderno: poster(3090),
-  aula: poster(3091),
-  estudio: poster(3092),
-  escalera: poster(3093),
+  fachada: poster(4503),
+  moderno: poster(4560),
+  aula: poster(8802),
+  estudio: poster(8861),
+  escalera: poster(28329),
 } as const;

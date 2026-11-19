@@ -8,6 +8,7 @@
  * - Video Mixkit:  https://assets.mixkit.co/videos/{id}/{id}-720.mp4
  * - Poster Mixkit: https://assets.mixkit.co/videos/{id}/{id}-thumb-720-0.jpg
  * - Foto Unsplash:  https://images.unsplash.com/photo-{id}?auto=format&fit=crop&w={w}
+ * - Foto Pexels:    https://images.pexels.com/photos/{id}/pexels-photo-{id}.jpeg?auto=compress&cs=tinysrgb&w={w}
  */
 
 /** URL del video 720p de Mixkit. */
@@ -26,6 +27,11 @@ export function img(id: string, w = 1200, h?: number): string {
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}${extra}&q=75`;
 }
 
+/** URL de una foto de Pexels (hotlink estable del CDN). */
+export function pex(id: number, w = 1200): string {
+  return `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
+}
+
 /**
  * Pool de medios verificados por rubro.
  *
@@ -39,29 +45,28 @@ export function img(id: string, w = 1200, h?: number): string {
  */
 export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = {
   /**
-   * ARQUITECTURA PREMIUM — pool revisado a mano (2026-11-16).
+   * ARQUITECTURA PREMIUM — ESTUDIO VETA (2026-11-19).
    *
-   * Los ids del kit correspondian a la demo comun; esta edicion usa un
-   * set propio, re-verificado con `curl -sI -m 15` (todos HTTP 200) y
-   * revisado por poster para que cada foto sea de arquitectura o interior.
-   *
-   * Videos (2): 3091 interior de madera con luz natural (recorrido) ·
-   * 3093 estructura de obra en curso (antes/despues).
-   * Fotos (8): sala vacia luminosa, casa terminada con patio, interior
-   * amueblado, sala vacia de obra, obra gruesa con equipo, fachada
-   * angular, casa de linea minima, estudio con mesa.
+   * Hero 3091 (recorrido interior, se conserva); los 4 "después" son Pexels
+   * únicos del premium (HTTP 200): 18204484 interior porteño (Galería Norte),
+   * 38344729 concreto con luz (Local Mitre), 10301540 hormigón vidriado
+   * (Casa Alameda), 28993989 muros altos (Piso Vélez). Los "antes" genéricos
+   * (vacía/piso) y obra/estudio se comparten con el estándar dentro del mismo
+   * rubro; los resultados que venden son únicos por demo.
    */
   "arquitectura-premium": {
     videos: [3091, 3093],
     photos: [
       "1560448204-e02f11c3d0e2", // sala vacia y luminosa (estado previo)
-      "1600585154340-be6161a56a0c", // casa terminada con patio y vidrio
-      "1600210492486-724fe5c67fb0", // interior terminado con mobiliario
+      "1600585154340-be6161a56a0c", // casa terminada con patio y vidrio (legado)
+      "1600210492486-724fe5c67fb0", // interior terminado con mobiliario (legado)
       "1616486338812-3dadae4b4ace", // sala vacia de primer piso (estado previo)
       "1541888946425-d81bb19240f5", // obra gruesa con equipo en el terreno
-      "1518005020951-eccb494ad742", // fachada angular de hormigon
-      "1487958449943-2429e8be8625", // casa de linea minima
+      "1518005020951-eccb494ad742", // fachada angular de hormigon (legado)
+      "1487958449943-2429e8be8625", // casa de linea minima (legado)
       "1497366754035-f200968a6e72", // estudio con mesa y luz lateral
+      // Pexels premium (IDs numéricos, ver pex()): 18204484, 38344729,
+      // 10301540, 28993989.
     ],
   },
 };

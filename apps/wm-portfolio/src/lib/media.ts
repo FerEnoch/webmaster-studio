@@ -8,6 +8,7 @@
  * - Video Mixkit:  https://assets.mixkit.co/videos/{id}/{id}-720.mp4
  * - Poster Mixkit: https://assets.mixkit.co/videos/{id}/{id}-thumb-720-0.jpg
  * - Foto Unsplash:  https://images.unsplash.com/photo-{id}?auto=format&fit=crop&w={w}
+ * - Foto Pexels:    https://images.pexels.com/photos/{id}/pexels-photo-{id}.jpeg?auto=compress&cs=tinysrgb&w={w}
  */
 
 /** URL del video 720p de Mixkit. */
@@ -26,6 +27,11 @@ export function img(id: string, w = 1200, h?: number): string {
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}${extra}&q=75`;
 }
 
+/** URL de una foto de Pexels (hotlink estable del CDN). */
+export function pex(id: number, w = 1200): string {
+  return `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
+}
+
 /**
  * Pool de medios verificados por rubro.
  *
@@ -39,25 +45,50 @@ export function img(id: string, w = 1200, h?: number): string {
  */
 export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = {
   concesionario: {
-    videos: [4189, 4191, 4207, 4227],
+    // Pool revisado de wm-concesionario (2026-10): sin sala de subastas ni bebé.
+    videos: [4207, 4189, 4191],
     photos: [
-      "1515187029135-18ee286d815b",
-      "1493238792000-8113da705763",
-      "1503376780353-7e6692767b70",
+      "1549317661-bd32c8ce0db2",
+      "1541899481282-d53bffe3c35d",
+      "1550355291-bbee04a92027",
+      "1533473359331-0135ef1b58bf",
+      "1560958089-b8a1929cea89",
+      "1600661653561-629509216228",
+      "1502877338535-766e1452684a",
       "1449965408869-eaa3f722e40d",
     ],
   },
   lavadero: {
-    videos: [4345, 4189],
-    photos: ["1637430308606-86576d8fef3c", "1600661653561-629509216228", "1558618666-fcd25c85cd64", "1521543387600-c745f8e83d77"],
+    // Pool revisado de wm-lavadero/-premium (2026-10-20): sin PC ni gimnasio.
+    videos: [4307, 4293, 4295, 3082, 4189],
+    photos: [
+      "1626668893632-6f3a4466d22f",
+      "1590362891991-f776e747a588",
+      "1492144534655-ae79c964c9d7",
+      "1625047509248-ec889cbff17f",
+      "1549317661-bd32c8ce0db2",
+      "1517248135467-4c7edcad34c4",
+      "1530610476181-d83430b64dcd",
+      "1470337458703-46ad1756a187",
+    ],
   },
   estetica: {
     videos: [4210, 4212, 4258, 4346],
     photos: ["1596178065887-1198b6148b2b", "1515377905703-c4788e51af15", "1540555700478-4be289fbecef", "1571019613454-1cb2f99b2d8b"],
   },
   universidad: {
-    videos: [3099, 3119, 3120, 3056],
-    photos: ["1519452575417-564c1401ecc0", "1541339907198-e08756dedf3f", "1562774053-701939374585", "1523240795612-9a054b0db644"],
+    // Pool revisado de wm-universidad (2026-10-20): sin avión ni bici.
+    videos: [3046, 3036, 3090, 3091, 3092, 3093],
+    photos: [
+      "1562774053-701939374585",
+      "1509062522246-3755977927d7",
+      "1498243691581-b145c3f54a5a",
+      "1522202176988-66273c2fd55f",
+      "1519452575417-564c1401ecc0",
+      "1523240795612-9a054b0db644",
+      "1571260899304-425eee4c7efc",
+      "1541339907198-e08756dedf3f",
+    ],
   },
   inmobiliaria: {
     videos: [3090, 3092, 3046, 3056],
@@ -70,20 +101,23 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
   /**
    * Portfolio madre.
    *
-   * Los ids salen de los pools de arriba (una foto por rubro, para la tapa de
-   * cada card) mas el video de fondo. Todos verificados con
-   * `curl -sI -m 15` (HTTP 200) desde esta app: 7 fotos y 3 videos.
+   * Hero 3257 (pareja trabajando con software de diseño) + bandas 13232
+   * (equipo mirando un prototipo) y 13231 (planning de proyecto web): los
+   * tres de software, únicos del portfolio, sin reusar obra de arquitectura.
+   * Fotos: una por rubro desde los pools revisados + Pexels 6804073 para
+   * el estudio (devs, no mesa de arquitectura). Todos HTTP 200.
    */
   portfolio: {
-    videos: [3256, 3091, 3093],
+    videos: [3257, 13232, 13231, 4907],
     photos: [
-      "1503376780353-7e6692767b70", // concesionario
-      "1637430308606-86576d8fef3c", // lavadero
-      "1596178065887-1198b6148b2b", // estetica
-      "1562774053-701939374585", // universidad
-      "1512917774080-9991f1c4c750", // inmobiliaria
-      "1487958449943-2429e8be8625", // arquitectura
-      "1497366754035-f200968a6e72", // el estudio
+      "1560958089-b8a1929cea89", // concesionario (Tesla nuevo)
+      "1492144534655-ae79c964c9d7", // lavadero estándar (garage oscuro)
+      "1626668893632-6f3a4466d22f", // lavadero-premium (túnel turquesa)
+      "1570172619644-dfd03ed5d881", // estetica (tratamiento en curso)
+      "1562774053-701939374585", // universidad (campus)
+      "1512917774080-9991f1c4c750", // inmobiliaria (temporal, T6 la pasa a Pexels AR)
+      "1487958449943-2429e8be8625", // arquitectura (casa mínima)
+      "1600585154340-be6161a56a0c", // arquitectura-premium (casa terminada)
     ],
   },
 };

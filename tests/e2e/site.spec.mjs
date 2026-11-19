@@ -94,6 +94,9 @@ test('hydrated family chips, counts, and all-results reset', async ({ page }) =>
   test.skip(!selected('portfolio'), 'Portfolio unchanged');
   const chips = await catalogue(page, '?source=e2e#catalogue');
   await expect(chips.getByRole('button')).toHaveCount(groups.length + 1);
+  for (const name of ['Concesionarios', 'Multiservicios', 'Estética', 'Institucional y educativo', 'Inmobiliaria', 'Estudios profesionales']) {
+    await expect(chips.getByRole('button', { name, exact: true })).toBeVisible();
+  }
   await results(page, RUBROS);
   for (const group of groups) {
     const chip = chips.getByRole('button', { name: group.nombre, exact: true });
@@ -131,6 +134,98 @@ for (const group of groups.filter((group) => ['lavadero', 'arquitectura'].includ
     }
   });
 }
+
+test('studio home CTAs link directly to slash-terminated pages', async ({ page, request }) => {
+  test.skip(!selected('portfolio'), 'Portfolio unchanged');
+  expect((await page.goto('/')).status()).toBe(200);
+  const destinations = {
+    'Soluciones a medida': '/demos/',
+    'Ver todas las soluciones': '/demos/',
+    'Explorar soluciones a medida': '/demos/',
+    'Ver el detalle de los servicios': '/servicios/',
+    'Ver contacto': '/contacto/',
+  };
+  const main = page.getByRole('main');
+  const hrefs = {};
+  for (const name of Object.keys(destinations)) {
+    hrefs[name] = await main.getByRole('link', { name, exact: true }).getAttribute('href');
+  }
+  expect(hrefs).toEqual(destinations);
+  for (const href of new Set(Object.values(hrefs))) {
+    const response = await request.get(href, { maxRedirects: 0 });
+    expect(response.status(), href).toBe(200);
+    expect(response.headers()['content-type'], href).toContain('text/html');
+  }
+});
+
+test('studio home shows rubro cards and opens the filtered catalogue', async ({ page }) => {
+  test.skip(!selected('portfolio'), 'Portfolio unchanged');
+  expect((await page.goto('/')).status()).toBe(200);
+  const section = page.locator('#demos');
+  await expect(section.getByRole('heading', { name: 'Soluciones a medida', exact: true })).toBeVisible();
+  await expect(section).toContainText('Explorá los rubros para conocer ejemplos de sitios y aplicaciones adaptados a cada actividad. Las demos usan datos ficticios y formularios simulados.');
+  const cards = section.getByRole('article');
+  await expect(cards).toHaveCount(groups.length);
+  for (const group of groups) {
+    const card = cards.filter({ has: page.getByRole('heading', { name: group.nombre, level: 3, exact: true }) });
+    await expect(card.getByText('Solución a medida', { exact: true })).toBeVisible();
+    const demos = card.getByText(group.demos.map((demo) => demo.nombre).join(' · '), { exact: true });
+    await expect(card.getByRole('paragraph').and(demos)).toBeVisible();
+    await expect(card.locator('img')).toHaveAttribute('src', /\S/);
+    const link = card.getByRole('link', { name: 'Ver rubro', exact: true });
+    await expect(link).toHaveAttribute('href', `/demos/?rubro=${group.id}`);
+    await expect(link).toHaveAttribute('data-astro-reload', '');
+  }
+  const group = groups.find((group) => group.id === 'lavadero');
+  await section.locator(`a[href="/demos/?rubro=${group.id}"]`).click();
+  await expect(page).toHaveURL(`/demos/?rubro=${group.id}`);
+  await results(page, group.demos, group.id, group.nombre);
+});
+
+test('studio catalogue explains future growth with standard and premium service demos', async ({ page }) => {
+  test.skip(!selected('portfolio'), 'Portfolio unchanged');
+  await catalogue(page);
+  await expect(page.getByText('Explorá ejemplos de sitios y aplicaciones adaptados a distintas actividades. Filtrá por industria para conocer sus funcionalidades y recorridos.', { exact: true })).toBeVisible();
+  const note = page.getByText('Vamos a sumar demos a cada categoría para mostrar las opciones estándar y premium del servicio de Webmaster Studio.', { exact: true });
+  await expect(note).toBeVisible();
+  await expect(page.locator('[data-wm-rubro-card]')).toHaveCount(RUBROS.length);
+});
+
+test('studio services introduces the service cards only once', async ({ page }) => {
+  test.skip(!selected('portfolio'), 'Portfolio unchanged');
+  expect((await page.goto('/servicios/')).status()).toBe(200);
+  const main = page.getByRole('main');
+  await expect(main.getByRole('heading', { name: 'Servicios de desarrollo de software', level: 1 })).toBeVisible();
+  await expect(main.getByRole('heading', { name: 'Desarrollo de software para tu organización', exact: true })).toHaveCount(0);
+  const cards = main.locator('section').first().getByRole('article');
+  await expect(cards.getByRole('heading')).toHaveText([
+    'Análisis y cotización', 'Sitios web por industria', 'Aplicaciones e integraciones', 'Mantenimiento y soporte',
+  ]);
+});
+
+test('studio contact reuses the home inquiry form and keeps the contact details', async ({ page }) => {
+  test.skip(!selected('portfolio'), 'Portfolio unchanged');
+  expect((await page.goto('/contacto/')).status()).toBe(200);
+  const main = page.getByRole('main');
+  await expect(main.getByText('Evaluación inicial', { exact: true })).toHaveCount(0);
+  await expect(main.getByText('Datos de contacto ilustrativos', { exact: true })).toBeVisible();
+  await expect(main.getByRole('link', { name: 'hola@webmasterstudio.demo', exact: true })).toHaveAttribute('href', 'mailto:hola@webmasterstudio.demo');
+  const name = main.getByRole('textbox', { name: 'Tu nombre u organización', exact: true });
+  await hydrate(name);
+  await expect(main.getByRole('combobox', { name: 'Industria (opcional)', exact: true })).toBeVisible();
+  const submit = main.getByRole('button', { name: 'Simular consulta de cotización', exact: true });
+  await name.fill('Organización de ejemplo');
+  await submit.click();
+  await expect(main.getByRole('alert')).toHaveText('Ingresá un teléfono o un email de contacto.');
+  await expect(main.getByText('Sin enviar', { exact: true })).toBeVisible();
+  await expect(main.getByRole('status')).toHaveCount(0);
+  await main.getByRole('textbox', { name: 'Email', exact: true }).fill('demo@example.com');
+  await submit.click();
+  await expect(main.getByRole('status')).toContainText('No se envió la consulta ni se generó una cotización.');
+  await expect(main.getByText('Consulta simulada, no enviada', { exact: true })).toBeVisible();
+  await main.getByRole('button', { name: 'Revisar datos', exact: true }).click();
+  await expect(name).toHaveValue('Organización de ejemplo');
+});
 
 test('unknown query falls back without losing other URL state', async ({ page }) => {
   test.skip(!selected('portfolio'), 'Portfolio unchanged');

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dirección 04 — Cobre + brillo · GLOSS &amp; GLASS</title>
+<style>
+  :root { --bg: #0a0c10; --copper: #d08a3e; --ivory: #edeae2; }
+  * { margin: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ivory); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  canvas#bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
+  .sheet { position: relative; z-index: 1; min-height: 200vh; }
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 12vh 8vw; }
+  .kicker { font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--copper); }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 500; font-size: clamp(3rem, 9vw, 7.5rem); line-height: 1.0; margin: 1rem 0; }
+  h1 em { color: var(--copper); }
+  .sub { max-width: 34rem; color: rgba(237,234,226,0.72); line-height: 1.6; }
+  .scroll-hint { margin-top: 3rem; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(237,234,226,0.5); animation: bob 2.4s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(6px); } }
+  .spec { min-height: 100vh; display: flex; align-items: flex-end; padding: 10vh 8vw; }
+  .spec-card { max-width: 36rem; border-left: 2px solid var(--copper); padding-left: 1.5rem; }
+  .spec-card h2 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.6rem, 3.4vw, 2.4rem); margin-bottom: 0.8rem; }
+  .spec-card p, .spec-card li { color: rgba(237,234,226,0.72); line-height: 1.65; font-size: 0.95rem; }
+  .spec-card ul { padding-left: 1.1rem; margin-top: 0.6rem; }
+  .tag { display: inline-block; font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; border: 1px solid rgba(208,138,62,0.5); color: var(--copper); border-radius: 999px; padding: 0.35rem 0.9rem; margin-bottom: 1rem; }
+  @media (prefers-reduced-motion: reduce) { .scroll-hint { animation: none; } }
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="sheet">
+  <section class="hero">
+    <span class="tag">Mock del concepto · canvas 2D</span>
+    <p class="kicker">Dirección 04 — Cobre + brillo</p>
+    <h1>Polvo que <em>brilla</em>.</h1>
+    <p class="sub">Las motas de cobre viven dentro de la veta de luz: donde pasa el brillo, el polvo se enciende. Bajá con scroll: la veta viaja y el polvo la sigue.</p>
+    <p class="scroll-hint">↓ bajá para manejar el fondo</p>
+  </section>
+  <section class="spec">
+    <div class="spec-card">
+      <h2>Cómo se maneja con scroll</h2>
+      <ul>
+        <li>La veta viaja de izquierda a derecha con el scroll; su intensidad respira una vez.</li>
+        <li>Las partículas se concentran cerca de la veta y brillan más cuando ella pasa (el polvo "pertenece" a la luz del box).</li>
+        <li>El viento lateral crece con el scroll, como en la 01, pero siempre al servicio de la veta.</li>
+        <li>Versión three.js real: un solo sistema — Points + plano de luz con el mismo uniform de scroll; ~220 KB.</li>
+        <li>Versión canvas 2D: este mismo archivo en producción, ~10 KB, 0 dependencias.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+<script>
+  (() => {
+    const cv = document.getElementById("bg");
+    const ctx = cv.getContext("2d");
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W, H;
+    function size() { W = cv.width = innerWidth; H = cv.height = innerHeight; }
+    size(); addEventListener("resize", size);
+    const N = innerWidth < 700 ? 80 : 170;
+    const parts = [];
+    for (let i = 0; i < N; i++) parts.push({
+      x: Math.random(), y: Math.random(),
+      r: 0.8 + Math.random() * 2.4,
+      s: 0.25 + Math.random() * 0.75,
+      a: 0.2 + Math.random() * 0.5,
+      tw: Math.random() * Math.PI * 2
+    });
+    let progress = 0;
+    addEventListener("scroll", () => {
+      const max = document.body.scrollHeight - innerHeight;
+      progress = max > 0 ? scrollY / max : 0;
+    }, { passive: true });
+    let t = 0;
+    function frame() {
+      t += 0.016;
+      ctx.fillStyle = "#0a0c10";
+      ctx.fillRect(0, 0, W, H);
+      // --- veta de luz (capa base) ---
+      const cx = W * (0.12 + progress * 0.76);
+      const breathe = reduced ? 0.8 : 0.65 + 0.25 * Math.sin(t * 0.7);
+      const g = ctx.createRadialGradient(cx, H * 0.42, 0, cx, H * 0.42, W * 0.45);
+      g.addColorStop(0, `rgba(255,196,120,${(0.30 * breathe).toFixed(3)})`);
+      g.addColorStop(0.35, `rgba(208,138,62,${(0.11 * breathe).toFixed(3)})`);
+      g.addColorStop(1, "rgba(208,138,62,0)");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+      const y = H * (0.30 + progress * 0.24);
+      const lg = ctx.createLinearGradient(0, y - 60, 0, y + 60);
+      lg.addColorStop(0, "rgba(255,220,170,0)");
+      lg.addColorStop(0.5, `rgba(255,220,170,${(0.18 * breathe).toFixed(3)})`);
+      lg.addColorStop(1, "rgba(255,220,170,0)");
+      ctx.fillStyle = lg;
+      ctx.fillRect(0, y - 60, W, 120);
+      // --- polvo de cobre (vive dentro de la veta) ---
+      const wind = 0.0006 + progress * 0.004;
+      const zoom = 1 + progress * 0.3;
+      for (const p of parts) {
+        p.x += wind * p.s; p.y -= 0.0004 * p.s;
+        if (p.x > 1.05) p.x = -0.05;
+        if (p.y < -0.05) p.y = 1.05;
+        const x = (p.x - 0.5) * zoom + 0.5, y2 = (p.y - 0.5) * zoom + 0.5;
+        // cercanía a la veta: el polvo se enciende donde pasa el brillo
+        const px = x * W;
+        const near = Math.max(0, 1 - Math.abs(px - cx) / (W * 0.4));
+        const tw = reduced ? 1 : 0.6 + 0.4 * Math.sin(t * 1.4 + p.tw);
+        const glow = (0.25 + 0.75 * near) * breathe * tw;
+        ctx.beginPath();
+        ctx.arc(px, y2 * H, p.r * (1 + progress * 0.8) * (1 + near * 0.6), 0, 7);
+        ctx.fillStyle = `rgba(220,155,75,${(p.a * glow).toFixed(3)})`;
+        ctx.fill();
+      }
+      if (!reduced) requestAnimationFrame(frame);
+    }
+    frame();
+  })();
+</script>
+</body>
+</html>

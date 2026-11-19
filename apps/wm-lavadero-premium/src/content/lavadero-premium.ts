@@ -10,7 +10,7 @@
  * La seña es el 20% y el ticket final muestra ese monto, no el total.
  */
 
-import { img, poster, video } from "@lib/media";
+import { img, pex, poster, video } from "@lib/media";
 import { RUBROS } from "@lib/rubros";
 import type { CatalogItem, RubroContent, Section } from "@lib/types";
 
@@ -402,9 +402,9 @@ export const lavadero: RubroContent = {
     cta: { label: "Reservar mi lavado", href: "/reservar" },
     secondaryCta: { label: "Armar mi tratamiento", href: "/servicios" },
     video: {
-      src: video(4307),
-      poster: poster(4307),
-      alt: "Agua a presión sobre la carrocería en el box de GLOSS & GLASS (imagen de demostración).",
+      src: video(47833),
+      poster: poster(47833),
+      alt: "Detalle de pulido sobre la pintura en el box de GLOSS & GLASS (imagen de demostración).",
       isVideo: true,
     },
     live: { label: "Abierto ahora", count: 4, min: 2, max: 6, unit: "mesas libres", interval: 4200 },
@@ -493,7 +493,8 @@ export const fotos = {
   box: img("1590362891991-f776e747a588", 1200),
   garage: img("1492144534655-ae79c964c9d7", 1200),
   tecnico: img("1625047509248-ec889cbff17f", 1200),
-  chico: img("1549317661-bd32c8ce0db2", 900, 1000),
+  /** Blanco descapotable en calle urbana (Pexels 18542767): tamaño Compacto premium, sin reusar el Fiat de concesionario. */
+  chico: pex(18542767, 900),
   barra: img("1517248135467-4c7edcad34c4", 1200),
   medialunas: img("1530610476181-d83430b64dcd", 900),
   brindis: img("1470337458703-46ad1756a187", 900),
