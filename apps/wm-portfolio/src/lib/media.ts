@@ -108,7 +108,7 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
    * el estudio (devs, no mesa de arquitectura). Todos HTTP 200.
    */
   portfolio: {
-    videos: [3257, 13232, 13231],
+    videos: [3257, 13232, 13231, 4907],
     photos: [
       "1560958089-b8a1929cea89", // concesionario (Tesla nuevo)
       "1492144534655-ae79c964c9d7", // lavadero estándar (garage oscuro)
