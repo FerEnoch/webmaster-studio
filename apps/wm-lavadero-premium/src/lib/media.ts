@@ -8,6 +8,7 @@
  * - Video Mixkit:  https://assets.mixkit.co/videos/{id}/{id}-720.mp4
  * - Poster Mixkit: https://assets.mixkit.co/videos/{id}/{id}-thumb-720-0.jpg
  * - Foto Unsplash:  https://images.unsplash.com/photo-{id}?auto=format&fit=crop&w={w}
+ * - Foto Pexels:    https://images.pexels.com/photos/{id}/pexels-photo-{id}.jpeg?auto=compress&cs=tinysrgb&w={w}
  */
 
 /** URL del video 720p de Mixkit. */
@@ -24,6 +25,11 @@ export function poster(id: number): string {
 export function img(id: string, w = 1200, h?: number): string {
   const extra = h ? `&h=${h}` : "";
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}${extra}&q=75`;
+}
+
+/** URL de una foto de Pexels (hotlink estable del CDN). */
+export function pex(id: number, w = 1200): string {
+  return `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
 }
 
 /**
@@ -48,27 +54,20 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
     ],
   },
   /**
-   * LAVADERO — pool revisado a mano (2026-10-20).
+   * LAVADERO PREMIUM — GLOSS & GLASS (2026-11-19).
    *
-   * Los ids que traia el kit NO correspondian al rubro (4345 = una PC con
-   * codigo, 1637430308606 = un gimnasio, 1521543387600 = una casa de campo),
-   * asi que se re-verificaron todos por poster con `curl -sI -m 15` + revision
-   * visual de la hoja de contactos.
-   *
-   * Videos (5): 4307 agua a presion (hero) · 4293 barista · 4295 barra de
-   * copas · 3082 cafe + alfajores · 4189 auto clasico.
-   * Fotos (8): auto en tunel con luz turquesa, auto iluminado, garage
-   * oscuro, tecnico en el motor, auto chico, interior de bar, medialunas y
-   * un brindis.
+   * Hero 47833 (pulido en detalle) único del premium; el estándar conserva
+   * 4307 (agua a presión). Tamaño Compacto con Pexels 18542767
+   * (descapotable blanco, HTTP 200), sin reusar el Fiat 500 de concesionario.
    */
   lavadero: {
-    videos: [4307, 4293, 4295, 3082, 4189],
+    videos: [47833, 4307, 4293, 4295, 3082, 4189],
     photos: [
       "1626668893632-6f3a4466d22f", // auto en tunel con luz turquesa
       "1590362891991-f776e747a588", // auto blanco en garage iluminado
       "1492144534655-ae79c964c9d7", // garage oscuro + auto
       "1625047509248-ec889cbff17f", // tecnico trabajando en el motor
-      "1549317661-bd32c8ce0db2", // auto chico (tamanos)
+      // Pexels 18542767 (chico premium) + resto Unsplash:
       "1517248135467-4c7edcad34c4", // interior de bar
       "1530610476181-d83430b64dcd", // medialunas / facturas
       "1470337458703-46ad1756a187", // brindis (servicio a la barra)
