@@ -64,7 +64,10 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
     photos: ["1560518883-ce09059eeffa", "1512917774080-9991f1c4c750", "1600596542815-ffad4c1539a9", "1600607687939-ce8a6c25118c"],
   },
   arquitectura: {
-    videos: [3256, 3091, 3093, 3036],
+    // Estándar TRAZO (2026-11-19): hero 3093 (obra) + 3036 (obra gruesa banda)
+    // + 3091 (estudio) + 3110 (living minimalista banda, único, sin reusar el
+    // living 3090 de inmobiliaria). Todas HTTP 200.
+    videos: [3093, 3036, 3091, 3110],
     photos: ["1487958449943-2429e8be8625", "1497366754035-f200968a6e72", "1600585154340-be6161a56a0c", "1518005020951-eccb494ad742"],
   },
 };
