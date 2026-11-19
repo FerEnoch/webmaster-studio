@@ -1,6 +1,6 @@
 /** Contenido del sitio de Webmaster Studio. Los ejemplos y datos de contacto son ficticios. */
 
-import { img, poster, video } from "@lib/media";
+import { img, pex, poster, video } from "@lib/media";
 import { PORTFOLIO, RUBROS } from "@lib/rubros";
 import type { CatalogItem, RubroContent, Section } from "@lib/types";
 
@@ -337,9 +337,9 @@ export const portfolio: RubroContent = {
     cta: { label: "Solicitar cotización", href: "#demo" },
     secondaryCta: { label: "Soluciones por industria", href: "/demos" },
     video: {
-      src: video(3256),
-      poster: poster(3256),
-      alt: "Plano de una obra en curso utilizado como imagen ilustrativa del estudio.",
+      src: video(3257),
+      poster: poster(3257),
+      alt: "Equipo de software trabajando en un prototipo (imagen de demostración).",
       isVideo: true,
     },
     live: { label: "Soluciones por industria", count: 8, min: 8, max: 8, unit: "soluciones", interval: 3400 },
@@ -407,14 +407,14 @@ export const portfolio: RubroContent = {
 
 /** Imágenes ilustrativas de las ocho soluciones por industria. */
 export const demoImages: Record<string, string> = {
-  concesionario: img("1503376780353-7e6692767b70", 1200),
-  lavadero: img("1637430308606-86576d8fef3c", 1200),
-  "lavadero-premium": img("1637430308606-86576d8fef3c", 1200),
-  estetica: img("1596178065887-1198b6148b2b", 1200),
+  concesionario: img("1560958089-b8a1929cea89", 1200),
+  lavadero: img("1492144534655-ae79c964c9d7", 1200),
+  "lavadero-premium": img("1626668893632-6f3a4466d22f", 1200),
+  estetica: img("1570172619644-dfd03ed5d881", 1200),
   universidad: img("1562774053-701939374585", 1200),
   inmobiliaria: img("1512917774080-9991f1c4c750", 1200),
   arquitectura: img("1487958449943-2429e8be8625", 1200),
   "arquitectura-premium": img("1600585154340-be6161a56a0c", 1200),
 };
 
-export const fotoEstudio = img("1497366754035-f200968a6e72", 1200);
+export const fotoEstudio = pex(6804073, 1200);
