@@ -34,10 +34,10 @@ const totalM2 = ambientes.reduce((suma, ambiente) => suma + ambiente.m2, 0);
 ---
 
 <Base content={app} title={`${app.brand} · ${app.rubro}`}>
-  <!-- ─── Portada: la obra en cuatro etapas ────────────────────────── -->
+  <!-- ─── Portada: la promesa junto a la obra en cuatro etapas ─────── -->
   <section class="border-b border-[var(--vt-rule)]">
-    <div class="wm-container grid gap-10 pt-14 lg:pt-20">
-      <div class="max-w-3xl">
+    <div class="wm-container veta-cover">
+      <div class="veta-cover__copy">
         <p class="wm-kicker">{app.hero.kicker}</p>
         <h1 class="vt-head__title mt-6 !max-w-none">
           Recorré <span class="vt-script">la obra</span> antes de firmarla
@@ -67,7 +67,7 @@ const totalM2 = ambientes.reduce((suma, ambiente) => suma + ambiente.m2, 0);
     <div class="vt-numbers">
       {
         ambientes.map((ambiente) => (
-          <div class="vt-number" data-vt-plan={ambiente.id}>
+          <div class="vt-number" data-vt-plan={ambiente.id} id={`plan-${ambiente.id}`}>
             <p class="vt-number__value">{precioAmbiente(ambiente.usdM2, ambiente.m2)}</p>
             <p class="vt-number__label">
               {ambiente.nombre} · {ambiente.m2} m²
@@ -80,6 +80,7 @@ const totalM2 = ambientes.reduce((suma, ambiente) => suma + ambiente.m2, 0);
                 <li>{material}</li>
               ))}
             </ul>
+            <a class="vt-number__model" href="#veta-modelo">Ver en el modelo</a>
           </div>
         ))
       }

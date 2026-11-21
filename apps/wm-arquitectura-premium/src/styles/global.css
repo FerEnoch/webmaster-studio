@@ -604,6 +604,21 @@ body {
   background-color: color-mix(in oklab, var(--vt-brass) 8%, var(--wm-bg));
 }
 
+.vt-number__model {
+  display: inline-block;
+  margin-top: 0.9rem;
+  color: var(--vt-brass);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.vt-number__model:hover {
+  color: var(--vt-bone);
+}
+
 .vt-number__value {
   font-family: var(--vt-serif);
   font-weight: 400;
@@ -1050,9 +1065,42 @@ body {
   line-height: 1.5;
 }
 
+/* ─── Portada: la promesa junto a la obra ───────────────────────────
+   En desktop el titular y la maqueta comparten la primera vista: la
+   copia fija a la izquierda, la casa a la derecha. En móvil, ritmo
+   compacto: la promesa primero y la escena pegada debajo. */
+.veta-cover {
+  display: grid;
+  gap: 2.5rem;
+  /* El header fijo en móvil apila marca, CTAs y menú: se lo despeja. */
+  padding-top: 11.5rem;
+}
+
+@media (min-width: 1024px) {
+  .veta-cover {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+    padding-top: 4.5rem;
+  }
+
+  .veta-cover__copy {
+    position: sticky;
+    top: 5.5rem;
+    padding-block: 1rem 2rem;
+  }
+}
+
+/* Anclas nativas entre el modelo y el plan: que el fijo no las tape. */
+#veta-modelo,
+[id^="plan-"] {
+  scroll-margin-top: 5rem;
+}
+
 /* ─── Veta hero: la casa en cuatro etapas ─────────────────────────── */
 .veta-hero {
   padding-bottom: 3.5rem;
+  min-width: 0;
 }
 
 .veta-hero__stagebar {
@@ -1060,8 +1108,8 @@ body {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding-block: 1.75rem 1.25rem;
+  gap: 0.75rem;
+  padding-block: 1rem 0.75rem;
   border-top: 1px solid var(--vt-rule);
 }
 
@@ -1073,8 +1121,9 @@ body {
 
 .veta-stage {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.55rem;
+  min-height: 44px;
   border: 1px solid var(--vt-rule);
   background: transparent;
   color: var(--vt-dim);
@@ -1122,39 +1171,85 @@ body {
   color: var(--vt-brass);
 }
 
-/* Desplazamiento corto: el encuadre queda fijo y los paneles cuentan. */
+/* Una sola columna en todos los anchos: el encuadre arriba, la
+   narración debajo. El scroll nativo sugiere etapas por intersección;
+   un click explícito trae su panel al frente, junto al modelo. */
 .veta-hero__scroll {
   display: grid;
-  gap: 2.5rem;
+  gap: 2rem;
 }
 
-@media (min-width: 900px) {
+.veta-hero__sticky {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+
+.veta-hero__panels li {
+  display: block;
+}
+
+/* ─── Primera vista angosta: el dibujo sube junto al título ──────────
+   En angosto la botonera de etapas baja debajo del encuadre con `order`
+   (sigue en el DOM antes que el lienzo: teclado y lector la encuentran
+   en el mismo orden, sin scroll forzado). La copia se compacta sin
+   perder ningún contenido ni CTA. Solo narrow: desktop intacto. */
+@media (max-width: 1023.98px) {
+  .veta-cover {
+    gap: 2rem;
+  }
+
+  .veta-cover__copy > .vt-head__title {
+    margin-top: 1rem;
+  }
+
+  .veta-cover__copy > .vt-head__intro {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .veta-cover__copy > div {
+    margin-top: 1.25rem;
+    gap: 0.75rem;
+  }
+
+  .veta-cover__copy .wm-btn {
+    min-height: 44px;
+    padding-block: 0.7rem;
+  }
+
+  .veta-cover__copy > p:last-of-type {
+    margin-top: 1rem;
+  }
+
+  .veta-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
   .veta-hero__scroll {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    gap: 3rem;
-    align-items: start;
+    display: contents;
   }
 
   .veta-hero__sticky {
-    position: sticky;
-    top: 4.5rem;
-    min-height: calc(100svh - 4.5rem);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-block: 1rem 2rem;
+    order: 1;
   }
 
-  .veta-hero__panels li {
-    min-height: 58vh;
-    display: flex;
-    align-items: center;
+  .veta-hero__stagebar {
+    order: 2;
+  }
+
+  .veta-hero__panels {
+    order: 3;
   }
 }
 
 .veta-hero__frame {
   position: relative;
   aspect-ratio: 4 / 3;
+  max-height: 46vh;
   overflow: hidden;
   border: 1px solid var(--vt-rule);
   background:
@@ -1192,20 +1287,19 @@ body {
   height: 100%;
 }
 
-/* Leyenda de la etapa vigente: el encuadre siempre cuenta lo mismo. */
+/* Leyenda de la etapa vigente: título y meta en una línea editorial. */
 .veta-hero__caption {
-  margin-top: 1rem;
-  display: grid;
-  gap: 0.25rem;
-  min-height: 4.4em;
-  align-content: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 1rem;
 }
 
 .veta-hero__caption-title {
   font-family: var(--vt-serif);
   font-weight: 400;
-  font-size: clamp(1.25rem, 2.4vw, 1.7rem);
-  line-height: 1.15;
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  line-height: 1.2;
   color: var(--vt-bone);
 }
 
@@ -1214,6 +1308,120 @@ body {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--vt-brass);
+}
+
+/* Ambientes sobre el dibujo: una tira de chips al pie del encuadre,
+   legible sobre el póster y sobre el 3D. La selección se anuncia en
+   texto (ficha y estado), nunca solo con color. */
+.veta-hero__rooms {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  gap: 0.5rem;
+  padding: 1.1rem 0.75rem 0.6rem;
+  overflow-x: auto;
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--vt-ink) 84%, transparent),
+    transparent
+  );
+}
+
+.veta-room {
+  flex: 1 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid color-mix(in oklab, var(--vt-bone) 24%, transparent);
+  background: color-mix(in oklab, var(--vt-ink) 66%, transparent);
+  color: var(--vt-bone);
+  font-family: var(--vt-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    border-color 0.25s var(--vt-ease),
+    background-color 0.25s var(--vt-ease);
+}
+
+.veta-room__m {
+  color: var(--vt-dim);
+}
+
+.veta-room:hover {
+  border-color: var(--vt-bone);
+}
+
+.veta-room[aria-pressed="true"] {
+  border-color: var(--vt-brass);
+  background: color-mix(in oklab, var(--vt-brass) 24%, var(--vt-ink));
+}
+
+.veta-room[aria-pressed="true"] .veta-room__n {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.veta-room:focus-visible {
+  outline: 2px solid var(--vt-brass);
+  outline-offset: 2px;
+}
+
+/* Ficha del ambiente: nombre, superficie, precio orientativo y
+   materiales, con su puente nativo hacia el plan. */
+.veta-hero__room {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--vt-dim);
+}
+
+.veta-room__info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.9rem;
+}
+
+.veta-room__info[hidden] {
+  display: none;
+}
+
+.veta-room__line {
+  margin: 0;
+}
+
+.veta-room__line strong {
+  color: var(--vt-bone);
+  font-weight: 500;
+}
+
+.veta-room__link {
+  color: var(--vt-brass);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.veta-room__link:hover {
+  color: var(--vt-bone);
+}
+
+/* El ambiente vigente se lee también en el póster estático. */
+.veta-hero[data-veta-current-room="estar"] [data-room="estar"] .veta-plan__room,
+.veta-hero[data-veta-current-room="cocina"] [data-room="cocina"] .veta-plan__room,
+.veta-hero[data-veta-current-room="dormitorio"] [data-room="dormitorio"] .veta-plan__room,
+.veta-hero[data-veta-current-room="patio"] [data-room="patio"] .veta-plan__room {
+  fill: color-mix(in oklab, var(--vt-brass) 24%, transparent);
+  stroke-width: 1.1;
 }
 
 .veta-plan__lote {
@@ -1325,6 +1533,7 @@ body {
   .vt-card,
   .vt-obras__row,
   .veta-stage,
+  .veta-room,
   .veta-panel,
   .wm-btn {
     transition: none;

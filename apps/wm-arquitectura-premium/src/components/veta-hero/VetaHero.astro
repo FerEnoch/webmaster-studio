@@ -64,7 +64,16 @@ const rooms = ambientes.map((a) => ({
   m2: a.m2,
   caja: a.caja,
   alto: a.alto,
+  detalle: a.detalle,
+  usdM2: a.usdM2,
+  materiales: a.materiales,
 }));
+
+/** Precio orientativo del ambiente, en USD (misma base que el plan). */
+const precioRoom = (usdM2: number, m2: number) =>
+  new Intl.NumberFormat("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(
+    usdM2 * m2,
+  );
 
 /* Póster: la misma planta, dibujada a mano en SVG con los datos reales. */
 const PX = 120;
@@ -77,7 +86,7 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
 });
 ---
 
-<div class="veta-hero" data-veta-hero data-veta-rooms={JSON.stringify(rooms)}>
+<div class="veta-hero" id="veta-modelo" data-veta-hero data-veta-rooms={JSON.stringify(rooms)}>
   <div class="veta-hero__stagebar">
     <div class="veta-hero__stages" role="group" aria-label="Etapas de la casa" data-veta-stages>
       {
@@ -111,7 +120,7 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
               rooms.map((room) => {
                 const r = rect(room.caja);
                 return (
-                  <g>
+                  <g data-room={room.id}>
                     <rect x={r.x} y={r.y} width={r.w} height={r.h} class="veta-plan__room" />
                     <text x={r.x + r.w / 2} y={r.y + r.h / 2 - 1.5} text-anchor="middle" class="veta-plan__name">
                       {room.nombre}
@@ -144,10 +153,38 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
           hidden
           aria-label="Maqueta 3D de la casa en etapa Plano: planta técnica vista desde arriba."
         />
+        <div class="veta-hero__rooms" role="group" aria-label="Ambientes de la casa" data-veta-room-group>
+          {
+            rooms.map((room, i) => (
+              <button
+                type="button"
+                class="veta-room"
+                data-veta-room-btn={room.id}
+                aria-pressed={i === 0 ? "true" : "false"}
+              >
+                <span class="veta-room__n">{room.nombre}</span>
+                <span class="veta-room__m">{room.m2} m²</span>
+              </button>
+            ))
+          }
+        </div>
       </div>
       <div class="veta-hero__caption" data-veta-caption>
         <p class="veta-hero__caption-title" data-veta-caption-title>La planta, antes del ladrillo</p>
         <p class="veta-hero__caption-meta" data-veta-caption-meta>Vista cenital · dibujo técnico indicativo</p>
+      </div>
+      <div class="veta-hero__room" role="status" data-veta-room-detail>
+        {
+          rooms.map((room) => (
+            <div class="veta-room__info" data-veta-room-info={room.id}>
+              <p class="veta-room__line">
+                <strong>{room.nombre} · {room.m2} m²</strong>
+                <span> — {precioRoom(room.usdM2, room.m2)} orientativo · {room.materiales.join(" · ")}</span>
+              </p>
+              <a class="veta-room__link" href={`#plan-${room.id}`}>Ver el precio en el plan</a>
+            </div>
+          ))
+        }
       </div>
         <p class="vt-caption">
           Maqueta indicativa de demostración: las medidas y los materiales son ficticios.
@@ -209,6 +246,56 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
     }
 
     const order = ["plano", "volumen", "materiales", "entrega"];
+    const roomGroup = hero.querySelector<HTMLElement>("[data-veta-room-group]");
+    const roomInfos = Array.from(hero.querySelectorAll<HTMLElement>("[data-veta-room-info]"));
+    const roomIds = rooms.map((room) => room.id);
+    let currentRoom = roomIds[0] ?? "estar";
+    let setThreeRoom: ((id: string) => void) | null = null;
+
+    /* Un solo origen para el ambiente: chips, ficha, póster, plan y 3D
+       leen el mismo id. Sin JS, todas las fichas quedan visibles. */
+    const applyRoom = (id: string) => {
+      if (!roomIds.includes(id)) return;
+      currentRoom = id;
+      roomGroup?.querySelectorAll("[data-veta-room-btn]").forEach((button) => {
+        button.setAttribute("aria-pressed", button.getAttribute("data-veta-room-btn") === id ? "true" : "false");
+      });
+      roomInfos.forEach((info) => {
+        info.hidden = info.dataset.vetaRoomInfo !== id;
+      });
+      hero.dataset.vetaCurrentRoom = id;
+      /* La tira de precios existente es la otra vista de la misma selección. */
+      document.querySelectorAll<HTMLElement>("[data-vt-plan]").forEach((plan) => {
+        const active = plan.getAttribute("data-vt-plan") === id;
+        plan.dataset.active = active ? "true" : "false";
+        if (active) plan.setAttribute("aria-current", "true");
+        else plan.removeAttribute("aria-current");
+      });
+      setThreeRoom?.(id);
+    };
+
+    roomGroup?.querySelectorAll("[data-veta-room-btn]").forEach((button) => {
+      button.addEventListener("click", () => {
+        applyRoom(button.getAttribute("data-veta-room-btn") ?? "");
+      });
+    });
+
+    /* Teclado: flechas mueven el foco y activan, como en las etapas. */
+    roomGroup?.addEventListener("keydown", (event) => {
+      const buttons = Array.from(roomGroup.querySelectorAll<HTMLElement>("[data-veta-room-btn]"));
+      const at = buttons.indexOf(document.activeElement as HTMLElement);
+      if (at < 0) return;
+      let next: number | null = null;
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (at + 1) % buttons.length;
+      else if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (at - 1 + buttons.length) % buttons.length;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = buttons.length - 1;
+      if (next !== null) {
+        event.preventDefault();
+        buttons[next].focus();
+        applyRoom(buttons[next].getAttribute("data-veta-room-btn") ?? "");
+      }
+    });
     const labels: Record<string, string> = { plano: "Plano", volumen: "Volumen", materiales: "Materiales", entrega: "Entrega" };
     const shots: Record<string, string> = {
       plano: "planta técnica vista desde arriba",
@@ -309,6 +396,9 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
     desktop.addEventListener?.("change", rewatch);
     reduced.addEventListener?.("change", rewatch);
 
+    /* Ficha inicial: con JS solo el ambiente vigente queda a la vista. */
+    applyRoom(currentRoom);
+
     /* Three.js diferido: recién cuando el héroe se acerca a pantalla. */
     let mounted = false;
     const mount = async () => {
@@ -319,6 +409,7 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
         const THREE = await import("three");
         if ((window as unknown as { __vetaNoWebGL?: boolean }).__vetaNoWebGL) throw new Error("WebGL desactivado en este contexto.");
         setThreeStage = mountCasa(THREE, { canvas, frame, hero, rooms, reduced });
+        setThreeRoom?.(currentRoom);
         canvas.hidden = false;
         hero.dataset.vetaReady = "true";
         apply(current);
@@ -530,6 +621,34 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
         scene.add(win);
       }
 
+      /* El ambiente elegido se lee sobre la misma casa: un filete de
+         latón marca su huella en cualquier etapa, sin otro canvas. */
+      const selector = new THREE.Group();
+      const selectorFill = new THREE.Mesh(
+        new THREE.BoxGeometry(1, 0.5, 1),
+        new THREE.MeshBasicMaterial({ color: 0xd9a441, transparent: true, opacity: 0.16, depthWrite: false }),
+      );
+      selectorFill.position.y = 0.25;
+      const selectorEdge = new THREE.LineSegments(
+        new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 0.5, 1)),
+        new THREE.LineBasicMaterial({ color: 0xd9a441, transparent: true, opacity: 0.95 }),
+      );
+      selectorEdge.position.y = 0.25;
+      selector.add(selectorFill, selectorEdge);
+      selector.visible = false;
+      scene.add(selector);
+      const showRoom = (id: string) => {
+        const g = roomOf(id);
+        if (!g) {
+          selector.visible = false;
+          return;
+        }
+        selector.visible = true;
+        selector.position.set(g.cx, 0.12, g.cz);
+        selector.scale.set(g.w, 1, g.d);
+      };
+      setThreeRoom = (id: string) => showRoom(id);
+
       const cams: Record<string, { p: [number, number, number]; l: [number, number, number] }> = {
         plano: { p: [0, 21, 0.03], l: [0, 0, 0] },
         volumen: { p: [11.5, 9.5, 11.5], l: [0, 0.8, 0] },
@@ -538,6 +657,9 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
       };
       camera.position.set(...cams.plano.p);
       camera.lookAt(...cams.plano.l);
+      /* El parallax mira al foco de la etapa, nunca desde la cámara:
+         así sobrevolar el encuadre no rompe la pose. */
+      const lookTarget = new THREE.Vector3(...cams.plano.l);
 
       let raf = 0;
       let onScreen = true;
@@ -561,6 +683,7 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
 
       const tween = (id: string) => {
         const to = cams[id];
+        lookTarget.set(...to.l);
         const fromP = camera.position.clone();
         const fromL = new THREE.Vector3();
         camera.getWorldDirection(fromL);
@@ -625,6 +748,7 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
         if (instant || reduced.matches) {
           camera.position.set(...cams[id].p);
           camera.lookAt(...cams[id].l);
+          lookTarget.set(...cams[id].l);
           paint();
         } else {
           tween(id);
@@ -658,11 +782,13 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
 
       const onMove = (event: PointerEvent) => {
         if (!fine.matches || reduced.matches || !onScreen) return;
+        /* El plano es un dibujo técnico: queda fijo bajo el cursor. */
+        if (current === "plano") return;
         const r = deps.frame.getBoundingClientRect();
         parallax = { x: ((event.clientX - r.left) / r.width - 0.5) * 0.7, y: -((event.clientY - r.top) / r.height - 0.5) * 0.45 };
         cancelAnimationFrame(raf);
         raf = requestAnimationFrame(() => {
-          camera.lookAt(camera.position.clone().add(new THREE.Vector3(parallax.x * 0.2, parallax.y * 0.2, 0)));
+          camera.lookAt(new THREE.Vector3(lookTarget.x + parallax.x * 0.2, lookTarget.y + parallax.y * 0.2, lookTarget.z));
           paint();
           raf = 0;
         });
@@ -687,6 +813,8 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
         scene.traverse((obj: any) => {
           obj.geometry?.dispose?.();
         });
+        selectorFill.material.dispose?.();
+        (selectorEdge.material as any)?.dispose?.();
         Object.values(M).forEach((m: any) => m.dispose?.());
         Object.values(finishes).forEach((m: any) => m.dispose?.());
         renderer.dispose();
