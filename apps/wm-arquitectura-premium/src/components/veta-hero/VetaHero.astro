@@ -1,0 +1,706 @@
+---
+/**
+ * VETA HERO — la casa en construcción, en cuatro etapas.
+ *
+ * Astro es dueño del encuadre: titular, etapas, paneles y el póster
+ * estático existen en el HTML antes de que cargue JS. El 3D (Three.js
+ * diferido, un solo canvas) mejora ese encuadre cuando hay WebGL y
+ * movimiento permitido; sin eso, el póster y los paneles sostienen
+ * la narración sin takeover de cámara ni de scroll.
+ *
+ * Geometría alineada a los ambientes reales de la app (caja + alto),
+ * sin afirmaciones constructivas inventadas: todo es maqueta
+ * indicativa de demostración.
+ */
+import { ambientes } from "../../content/arquitectura-premium";
+
+interface Stage {
+  id: string;
+  n: string;
+  label: string;
+  title: string;
+  copy: string;
+  meta: string;
+}
+
+const stages: Stage[] = [
+  {
+    id: "plano",
+    n: "01",
+    label: "Plano",
+    title: "La planta, antes del ladrillo",
+    copy: "Acá empieza todo: 130 m² dibujados a escala —estar de 38, cocina de 16, dormitorio de 22 y patio de 54— con el norte y las medidas a la vista. Recorré el dibujo antes de firmar nada.",
+    meta: "Vista cenital · dibujo técnico indicativo",
+  },
+  {
+    id: "volumen",
+    n: "02",
+    label: "Volumen",
+    title: "La masa que vas a recorrer",
+    copy: "Los muros se levantan sobre la planta: el estar a doble altura ordena la casa y el patio queda contenido entre medianeras. Todavía sin terminaciones: solo estructura y proporción.",
+    meta: "Axonométrica · estructura y masa",
+  },
+  {
+    id: "materiales",
+    n: "03",
+    label: "Materiales",
+    title: "El corte que muestra cómo se termina",
+    copy: "Un corte sobre el frente deja ver el interior: cemento pulido en el estar, mármol en la cocina, cerámica en el dormitorio y quebracho en el patio. Paleta indicativa de demostración.",
+    meta: "Corte + paleta indicativa",
+  },
+  {
+    id: "entrega",
+    n: "04",
+    label: "Entrega",
+    title: "La casa, a la altura de tus ojos",
+    copy: "El exterior terminado con luz de tarde: ventanal al patio, pérgola de acero y el árbol que ya estaba. Así se ve la obra cuando te entregamos la llave.",
+    meta: "Peatonal · exterior terminado",
+  },
+];
+
+const rooms = ambientes.map((a) => ({
+  id: a.id,
+  nombre: a.nombre,
+  m2: a.m2,
+  caja: a.caja,
+  alto: a.alto,
+}));
+
+/* Póster: la misma planta, dibujada a mano en SVG con los datos reales. */
+const PX = 120;
+const PY = 80;
+const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
+  x: (caja.x / 100) * PX,
+  y: (caja.y / 100) * PY,
+  w: (caja.w / 100) * PX,
+  h: (caja.h / 100) * PY,
+});
+---
+
+<div class="veta-hero" data-veta-hero data-veta-rooms={JSON.stringify(rooms)}>
+  <div class="veta-hero__stagebar">
+    <div class="veta-hero__stages" role="group" aria-label="Etapas de la casa" data-veta-stages>
+      {
+        stages.map((stage, i) => (
+          <button
+            type="button"
+            class="veta-stage"
+            data-veta-stage={stage.id}
+            aria-pressed={i === 0 ? "true" : "false"}
+          >
+            <span class="veta-stage__n" aria-hidden="true">{stage.n}</span>
+            <span>{stage.label}</span>
+          </button>
+        ))
+      }
+    </div>
+    <p class="veta-hero__status" role="status" data-veta-status>Etapa 1 de 4 · Plano</p>
+  </div>
+
+  <div class="veta-hero__scroll" data-veta-scroll>
+    <div class="veta-hero__sticky">
+      <div class="veta-hero__frame" data-veta-frame>
+        <div class="veta-hero__poster" data-veta-poster>
+          <svg viewBox={`0 0 ${PX} ${PY + 22}`} role="img" aria-labelledby="veta-plano-titulo veta-plano-desc">
+            <title id="veta-plano-titulo">Planta indicativa de la casa patio</title>
+            <desc id="veta-plano-desc">
+              Plano de demostración con estar de 38 m², cocina de 16 m², dormitorio de 22 m² y patio de 54 m². Medidas y materiales ficticios.
+            </desc>
+            <rect x="1" y="1" width={PX - 2} height={PY - 2} class="veta-plan__lote" />
+            {
+              rooms.map((room) => {
+                const r = rect(room.caja);
+                return (
+                  <g>
+                    <rect x={r.x} y={r.y} width={r.w} height={r.h} class="veta-plan__room" />
+                    <text x={r.x + r.w / 2} y={r.y + r.h / 2 - 1.5} text-anchor="middle" class="veta-plan__name">
+                      {room.nombre}
+                    </text>
+                    <text x={r.x + r.w / 2} y={r.y + r.h / 2 + 4} text-anchor="middle" class="veta-plan__m2">
+                      {room.m2} m²
+                    </text>
+                  </g>
+                );
+              })
+            }
+            <g class="veta-plan__north" transform={`translate(${PX - 10}, 12)`}>
+              <circle r="6" />
+              <text y="2.5" text-anchor="middle">N</text>
+              <path d="M0 5 L0 -1" />
+            </g>
+            <g class="veta-plan__scale" transform={`translate(6, ${PY + 12})`}>
+              <path d={`M0 0 H40 M0 -2.5 V2.5 M10 -2.5 V2.5 M20 -2.5 V2.5 M30 -2.5 V2.5 M40 -2.5 V2.5`} />
+              <text x="0" y="8">0</text>
+              <text x="36" y="8">4 m</text>
+            </g>
+            <text x={PX - 6} y={PY + 16} text-anchor="end" class="veta-plan__sheet">
+              VETA · CASA PATIO · PLANO INDICATIVO
+            </text>
+          </svg>
+        </div>
+        <canvas
+          class="veta-hero__canvas"
+          data-veta-canvas
+          hidden
+          aria-label="Maqueta 3D de la casa en etapa Plano: planta técnica vista desde arriba."
+        />
+      </div>
+      <div class="veta-hero__caption" data-veta-caption>
+        <p class="veta-hero__caption-title" data-veta-caption-title>La planta, antes del ladrillo</p>
+        <p class="veta-hero__caption-meta" data-veta-caption-meta>Vista cenital · dibujo técnico indicativo</p>
+      </div>
+        <p class="vt-caption">
+          Maqueta indicativa de demostración: las medidas y los materiales son ficticios.
+          Elegí una etapa para recorrer la casa.
+        </p>
+    </div>
+
+    <ol class="veta-hero__panels" data-veta-panels>
+      {
+        stages.map((stage, i) => (
+          <li>
+            <article
+              class="veta-panel"
+              data-veta-panel={stage.id}
+              data-veta-target={stage.id}
+              data-active={i === 0 ? "true" : "false"}
+              aria-current={i === 0 ? "true" : undefined}
+            >
+              <p class="vt-index">Etapa {stage.n} / 04 · {stage.label}</p>
+              <h3 class="veta-panel__title">{stage.title}</h3>
+              <p class="veta-panel__copy">{stage.copy}</p>
+              <p class="veta-panel__meta">{stage.meta}</p>
+            </article>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</div>
+
+<script>
+  /**
+   * Veta hero: estado en el DOM, 3D diferido en un solo canvas.
+   *
+   * - Los botones son la fuente de la verdad (click + teclado).
+   * - El scroll solo sugiere etapas en desktop con movimiento permitido,
+   *   y nunca pelea con un click reciente.
+   * - El Three.js se importa tarde y pinta por demanda: sin rAF perpetuo,
+   *   sin trabajo fuera de pantalla, con limpieza al salir.
+   */
+  const hero = document.querySelector<HTMLElement>("[data-veta-hero]");
+  const boot = () => {
+    if (!hero || hero.dataset.vetaBooted === "true") return;
+    hero.dataset.vetaBooted = "true";
+
+    const group = hero.querySelector<HTMLElement>("[data-veta-stages]");
+    const status = hero.querySelector<HTMLElement>("[data-veta-status]");
+    const canvas = hero.querySelector<HTMLCanvasElement>("[data-veta-canvas]");
+    const poster = hero.querySelector<HTMLElement>("[data-veta-poster]");
+    const frame = hero.querySelector<HTMLElement>("[data-veta-frame]");
+    const panels = Array.from(hero.querySelectorAll<HTMLElement>("[data-veta-panel]"));
+    const targets = Array.from(hero.querySelectorAll<HTMLElement>("[data-veta-target]"));
+    const roomsRaw = hero.dataset.vetaRooms ?? "[]";
+    let rooms: { id: string; nombre: string; m2: number; caja: { x: number; y: number; w: number; h: number }; alto: number }[] = [];
+    try {
+      rooms = JSON.parse(roomsRaw);
+    } catch {
+      rooms = [];
+    }
+
+    const order = ["plano", "volumen", "materiales", "entrega"];
+    const labels: Record<string, string> = { plano: "Plano", volumen: "Volumen", materiales: "Materiales", entrega: "Entrega" };
+    const shots: Record<string, string> = {
+      plano: "planta técnica vista desde arriba",
+      volumen: "estructura y masa en axonométrica",
+      materiales: "corte con terminaciones indicativas",
+      entrega: "exterior terminado a la altura de tus ojos",
+    };
+    let current = "plano";
+    let lastClick = 0;
+    let setThreeStage: ((id: string, instant: boolean) => void) | null = null;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const desktop = window.matchMedia("(min-width: 900px)");
+    const canScrub = () => desktop.matches && !reduced.matches;
+
+    /* La lista es la única fuente de la verdad visible: una selección
+       explícita trae su artículo al frente, junto al modelo, sin mover
+       el documento. El scroll nativo sigue resolviendo por intersección. */
+    const apply = (id: string, explicit = false) => {
+      if (!order.includes(id)) return;
+      current = id;
+      const i = order.indexOf(id);
+      group?.querySelectorAll("[data-veta-stage]").forEach((button) => {
+        button.setAttribute("aria-pressed", button.getAttribute("data-veta-stage") === id ? "true" : "false");
+      });
+      if (status) status.textContent = `Etapa ${i + 1} de 4 · ${labels[id]}`;
+      panels.forEach((panel) => {
+        const active = panel.dataset.vetaPanel === id;
+        panel.dataset.active = active ? "true" : "false";
+        if (active) panel.setAttribute("aria-current", "true");
+        else panel.removeAttribute("aria-current");
+      });
+      if (canvas) canvas.setAttribute("aria-label", `Maqueta 3D de la casa en etapa ${labels[id]}: ${shots[id]}.`);
+      const activePanel = panels.find((panel) => panel.dataset.vetaPanel === id);
+      if (explicit && activePanel) {
+        const list = hero.querySelector("[data-veta-panels]");
+        const item = activePanel.closest("li");
+        if (list && item && list.firstElementChild !== item) list.prepend(item);
+      }
+      const captionTitle = hero.querySelector("[data-veta-caption-title]");
+      const captionMeta = hero.querySelector("[data-veta-caption-meta]");
+      if (activePanel && captionTitle) {
+        const title = activePanel.querySelector(".veta-panel__title")?.textContent?.trim();
+        if (title) captionTitle.textContent = title;
+      }
+      if (activePanel && captionMeta) {
+        const meta = activePanel.querySelector(".veta-panel__meta")?.textContent?.trim();
+        if (meta) captionMeta.textContent = meta;
+      }
+      hero.dataset.vetaCurrent = id;
+      setThreeStage?.(id, reduced.matches);
+    };
+
+    group?.querySelectorAll("[data-veta-stage]").forEach((button) => {
+      button.addEventListener("click", () => {
+        lastClick = Date.now();
+        apply(button.getAttribute("data-veta-stage") ?? "plano", true);
+      });
+    });
+
+    /* Teclado: flechas mueven el foco y activan, como una tablist compacta. */
+    group?.addEventListener("keydown", (event) => {
+      const buttons = Array.from(group.querySelectorAll<HTMLElement>("[data-veta-stage]"));
+      const at = buttons.indexOf(document.activeElement as HTMLElement);
+      if (at < 0) return;
+      let next: number | null = null;
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (at + 1) % buttons.length;
+      else if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (at - 1 + buttons.length) % buttons.length;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = buttons.length - 1;
+      if (next !== null) {
+        event.preventDefault();
+        buttons[next].focus();
+        lastClick = Date.now();
+        apply(buttons[next].getAttribute("data-veta-stage") ?? "plano", true);
+      }
+    });
+
+    /* Scroll corto solo en desktop con movimiento: sugiere, no impone. */
+    let observer: IntersectionObserver | null = null;
+    const watch = () => {
+      observer?.disconnect();
+      observer = null;
+      if (!canScrub() || targets.length === 0) return;
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (Date.now() - lastClick < 2500) return;
+          const hit = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          const id = hit?.target.getAttribute("data-veta-target");
+          if (id && id !== current) apply(id);
+        },
+        { rootMargin: "-40% 0px -40% 0px", threshold: [0, 0.25, 0.5] },
+      );
+      targets.forEach((t) => observer?.observe(t));
+    };
+    watch();
+    const rewatch = () => watch();
+    desktop.addEventListener?.("change", rewatch);
+    reduced.addEventListener?.("change", rewatch);
+
+    /* Three.js diferido: recién cuando el héroe se acerca a pantalla. */
+    let mounted = false;
+    const mount = async () => {
+      if (mounted || !canvas || !frame) return;
+      mounted = true;
+      try {
+        // @ts-expect-error three@0.187.0 no trae tipos: la frontera lazy lo aisla.
+        const THREE = await import("three");
+        if ((window as unknown as { __vetaNoWebGL?: boolean }).__vetaNoWebGL) throw new Error("WebGL desactivado en este contexto.");
+        setThreeStage = mountCasa(THREE, { canvas, frame, hero, rooms, reduced });
+        canvas.hidden = false;
+        hero.dataset.vetaReady = "true";
+        apply(current);
+      } catch {
+        /* Sin WebGL no hay canvas: el póster y los paneles ya cuentan la casa. */
+        hero.dataset.vetaFallback = "true";
+        if (poster) poster.hidden = false;
+      }
+    };
+
+    if ("IntersectionObserver" in window && frame) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            io.disconnect();
+            void mount();
+          }
+        },
+        { rootMargin: "420px" },
+      );
+      io.observe(frame);
+    } else {
+      void mount();
+    }
+
+    /* ── Renderer procedural: una casa patio desde los ambientes ── */
+    function mountCasa(
+      THREE: any,
+      deps: { canvas: HTMLCanvasElement; frame: HTMLElement; hero: HTMLElement; rooms: typeof rooms; reduced: MediaQueryList },
+    ): (id: string, instant: boolean) => void {
+      const W = 12;
+      const D = 8;
+      const T = 0.14;
+      const box = (r: { x: number; y: number; w: number; h: number }) => ({
+        x: (r.x / 100) * W - W / 2,
+        z: (r.y / 100) * D - D / 2,
+        w: (r.w / 100) * W,
+        d: (r.h / 100) * D,
+      });
+
+      let renderer: any;
+      try {
+        renderer = new THREE.WebGLRenderer({ canvas: deps.canvas, alpha: true, antialias: true });
+      } catch {
+        throw new Error("Sin contexto WebGL.");
+      }
+      renderer.setClearColor(0x000000, 0);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.Fog(0x14110d, 42, 95);
+      const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 220);
+
+      const hemi = new THREE.HemisphereLight(0xfff4e2, 0x2b241a, 1.0);
+      const sun = new THREE.DirectionalLight(0xffdfae, 2.3);
+      sun.position.set(11, 15, 7);
+      sun.castShadow = true;
+      sun.shadow.mapSize.set(1024, 1024);
+      sun.shadow.camera.left = -12;
+      sun.shadow.camera.right = 12;
+      sun.shadow.camera.top = 12;
+      sun.shadow.camera.bottom = -12;
+      sun.shadow.camera.far = 60;
+      sun.shadow.bias = -0.0004;
+      scene.add(hemi, sun);
+
+      const M = {
+        clay: new THREE.MeshStandardMaterial({ color: 0xd9d2c2, roughness: 0.94 }),
+        wall: new THREE.MeshStandardMaterial({ color: 0xe9e1cf, roughness: 0.9 }),
+        floor: new THREE.MeshStandardMaterial({ color: 0xcfc7b4, roughness: 0.96 }),
+        roof: new THREE.MeshStandardMaterial({ color: 0x35302a, roughness: 0.85 }),
+        steel: new THREE.MeshStandardMaterial({ color: 0x4a4d55, roughness: 0.5, metalness: 0.6 }),
+        wood: new THREE.MeshStandardMaterial({ color: 0x8a6844, roughness: 0.8 }),
+        glass: new THREE.MeshStandardMaterial({ color: 0xa9c2cf, roughness: 0.12, metalness: 0.7 }),
+        glow: new THREE.MeshStandardMaterial({ color: 0x3a332a, emissive: 0xffc98a, emissiveIntensity: 1.4 }),
+        ground: new THREE.MeshStandardMaterial({ color: 0x1e1a14, roughness: 1 }),
+        lot: new THREE.MeshStandardMaterial({ color: 0x2b251c, roughness: 1 }),
+        leaf: new THREE.MeshStandardMaterial({ color: 0x6f7f4e, roughness: 1 }),
+        trunk: new THREE.MeshStandardMaterial({ color: 0x5c4a36, roughness: 1 }),
+        ghost: new THREE.MeshBasicMaterial({ color: 0xd9a441, transparent: true, opacity: 0.08 }),
+        line: new THREE.LineBasicMaterial({ color: 0xd9a441, transparent: true, opacity: 0.9 }),
+      };
+      const finishes: Record<string, any> = {
+        estar: new THREE.MeshStandardMaterial({ color: 0xc9c1ae, roughness: 0.55 }),
+        cocina: new THREE.MeshStandardMaterial({ color: 0xece6d8, roughness: 0.3 }),
+        dormitorio: new THREE.MeshStandardMaterial({ color: 0xd8b36a, roughness: 0.7 }),
+        patio: new THREE.MeshStandardMaterial({ color: 0x8a6844, roughness: 0.85 }),
+      };
+
+      const ground = new THREE.Mesh(new THREE.PlaneGeometry(90, 90), M.ground);
+      ground.rotation.x = -Math.PI / 2;
+      ground.position.y = -0.2;
+      ground.receiveShadow = true;
+      const lot = new THREE.Mesh(new THREE.BoxGeometry(W + 1.6, 0.2, D + 1.6), M.lot);
+      lot.position.y = -0.1;
+      lot.receiveShadow = true;
+      scene.add(ground, lot);
+
+      const grid = new THREE.GridHelper(W, 24, 0xd9a441, 0x4a5a8a);
+      grid.scale.z = D / W;
+      grid.position.y = 0.02;
+      (grid.material as any).transparent = true;
+      (grid.material as any).opacity = 0.5;
+      grid.visible = true;
+      scene.add(grid);
+
+      interface RoomMesh {
+        id: string;
+        h: number;
+        cx: number;
+        cz: number;
+        w: number;
+        d: number;
+        floor: any;
+        walls: any[];
+        roof: any;
+        edges: any[];
+        glow: any | null;
+      }
+      const built: RoomMesh[] = [];
+      const roomOf = (id: string) => built.find((b) => b.id === id);
+
+      for (const room of deps.rooms) {
+        const b = box(room.caja);
+        const h = Math.max(0.7, room.alto / 10);
+        const cx = b.x + b.w / 2;
+        const cz = b.z + b.d / 2;
+        const grp: RoomMesh = { id: room.id, h, cx, cz, w: b.w, d: b.d, floor: null, walls: [], roof: null, edges: [], glow: null };
+        const floor = new THREE.Mesh(new THREE.BoxGeometry(b.w, 0.12, b.d), M.floor);
+        floor.position.set(cx, 0.06, cz);
+        floor.receiveShadow = true;
+        floor.castShadow = true;
+        grp.floor = floor;
+        scene.add(floor);
+        const wallGeo = (ww: number, dd: number) => new THREE.BoxGeometry(ww, 1, dd);
+        const defs = [
+          { w: b.w, d: T, x: cx, z: b.z + T / 2, front: false },
+          { w: b.w, d: T, x: cx, z: b.z + b.d - T / 2, front: true },
+          { w: T, d: b.d - 2 * T, x: b.x + T / 2, z: cz, front: false },
+          { w: T, d: b.d - 2 * T, x: b.x + b.w - T / 2, z: cz, front: false },
+        ];
+        for (const def of defs) {
+          const wall = new THREE.Mesh(wallGeo(def.w, def.d), M.clay);
+          wall.position.set(def.x, h / 2, def.z);
+          wall.scale.y = h;
+          wall.castShadow = true;
+          wall.receiveShadow = true;
+          wall.userData.front = def.front;
+          grp.walls.push(wall);
+          scene.add(wall);
+          const edges = new THREE.LineSegments(new THREE.EdgesGeometry(wall.geometry), M.line);
+          edges.position.copy(wall.position);
+          edges.scale.copy(wall.scale);
+          edges.visible = false;
+          grp.edges.push(edges);
+          scene.add(edges);
+        }
+        if (room.id !== "patio") {
+          const roof = new THREE.Mesh(new THREE.BoxGeometry(b.w + 0.35, 0.16, b.d + 0.35), M.roof);
+          roof.position.set(cx, h + 0.08, cz);
+          roof.castShadow = true;
+          roof.visible = false;
+          grp.roof = roof;
+          scene.add(roof);
+        }
+        built.push(grp);
+      }
+
+      /* Pérgola del patio + árboles: solo viven en Materiales y Entrega. */
+      const garden = new THREE.Group();
+      for (let i = 0; i < 5; i++) {
+        const beam = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.14, 3.4), M.steel);
+        beam.position.set(-3.4 + i * 0.85, 2.5, 2.4);
+        beam.castShadow = true;
+        garden.add(beam);
+      }
+      for (const px of [-3.8, -0.2]) {
+        for (const pz of [0.9, 3.9]) {
+          const post = new THREE.Mesh(new THREE.BoxGeometry(0.14, 2.5, 0.14), M.steel);
+          post.position.set(px, 1.25, pz);
+          post.castShadow = true;
+          garden.add(post);
+        }
+      }
+      const treeAt = (x: number, z: number, s: number) => {
+        const g = new THREE.Group();
+        const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.09 * s, 0.13 * s, 1.1 * s, 7), M.trunk);
+        trunk.position.y = 0.55 * s;
+        trunk.castShadow = true;
+        const crown = new THREE.Mesh(new THREE.IcosahedronGeometry(0.85 * s, 0), M.leaf);
+        crown.position.y = 1.5 * s;
+        crown.castShadow = true;
+        g.add(trunk, crown);
+        g.position.set(x, 0, z);
+        return g;
+      };
+      garden.add(treeAt(-2.2, 2.3, 1.25), treeAt(4.9, -3.1, 0.9), treeAt(-5.2, -2.6, 0.75));
+      garden.visible = false;
+      scene.add(garden);
+
+      /* Ventanal cálido del estar: solo en Entrega. */
+      const estar = roomOf("estar");
+      if (estar) {
+        const win = new THREE.Mesh(new THREE.PlaneGeometry(Math.min(3.4, estar.w * 0.7), 1.7), M.glow);
+        win.position.set(estar.cx, 1.25, estar.cz + estar.d / 2 + 0.02);
+        win.visible = false;
+        estar.glow = win;
+        scene.add(win);
+      }
+
+      const cams: Record<string, { p: [number, number, number]; l: [number, number, number] }> = {
+        plano: { p: [0, 21, 0.03], l: [0, 0, 0] },
+        volumen: { p: [11.5, 9.5, 11.5], l: [0, 0.8, 0] },
+        materiales: { p: [8.2, 6.4, 9.4], l: [-0.4, 0.9, 0.4] },
+        entrega: { p: [7.6, 2.2, 8.8], l: [-0.8, 1.7, -0.8] },
+      };
+      camera.position.set(...cams.plano.p);
+      camera.lookAt(...cams.plano.l);
+
+      let raf = 0;
+      let onScreen = true;
+      let parallax = { x: 0, y: 0 };
+      const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+      const paint = () => {
+        if (!onScreen || document.hidden) return;
+        renderer.render(scene, camera);
+      };
+
+      const lookNow = () => {
+        const vw = Math.max(1, deps.frame.clientWidth || 1);
+        const vh = Math.max(1, deps.frame.clientHeight || 1);
+        const dpr = Math.min(window.devicePixelRatio || 1, vw < 700 ? 1.5 : 1.75);
+        renderer.setPixelRatio(dpr);
+        renderer.setSize(vw, vh, false);
+        camera.aspect = vw / vh;
+        camera.updateProjectionMatrix();
+      };
+
+      const tween = (id: string) => {
+        const to = cams[id];
+        const fromP = camera.position.clone();
+        const fromL = new THREE.Vector3();
+        camera.getWorldDirection(fromL);
+        fromL.add(camera.position);
+        const toP = new THREE.Vector3(...to.p);
+        const toL = new THREE.Vector3(...to.l);
+        const t0 = performance.now();
+        const dur = 850;
+        cancelAnimationFrame(raf);
+        const step = (now: number) => {
+          const t = Math.min(1, (now - t0) / dur);
+          const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+          camera.position.lerpVectors(fromP, toP, e);
+          const look = new THREE.Vector3().lerpVectors(fromL, toL, e);
+          look.x += parallax.x;
+          look.y += parallax.y;
+          camera.lookAt(look);
+          paint();
+          if (t < 1 && onScreen && !document.hidden) raf = requestAnimationFrame(step);
+          else raf = 0;
+        };
+        raf = requestAnimationFrame(step);
+      };
+
+      const dress = (id: string) => {
+        const flat = id === "plano";
+        const clay = id === "plano" || id === "volumen";
+        grid.visible = flat;
+        garden.visible = id === "materiales" || id === "entrega";
+        if (estar?.glow) estar.glow.visible = id === "entrega";
+        for (const g of built) {
+          const cut = id === "materiales";
+          for (const wall of g.walls) {
+            const h = flat ? 0.06 : cut && wall.userData.front ? g.h * 0.42 : g.h;
+            wall.scale.y = h;
+            wall.position.y = h / 2;
+            wall.material = clay ? M.clay : M.wall;
+          }
+          for (const edge of g.edges) {
+            edge.visible = flat;
+            const wall = g.walls[g.edges.indexOf(edge)];
+            if (wall) {
+              edge.position.copy(wall.position);
+              edge.scale.copy(wall.scale);
+            }
+          }
+          g.floor.material = clay ? M.clay : (finishes[g.id] ?? M.floor);
+          if (g.roof) g.roof.visible = id === "materiales" ? g.id !== "estar" && g.id !== "patio" : id === "entrega";
+        }
+        sun.intensity = flat ? 0.5 : id === "entrega" ? 1.7 : 2.3;
+        sun.color.set(id === "entrega" ? 0xffc98f : 0xffdfae);
+        hemi.intensity = flat ? 1.1 : id === "entrega" ? 0.7 : 0.9;
+        deps.hero.dataset.vetaCurrent = id;
+      };
+
+      setThreeStage = (id: string, instant: boolean) => {
+        if (!cams[id]) return;
+        lookNow();
+        dress(id);
+        cancelAnimationFrame(raf);
+        raf = 0;
+        if (instant || reduced.matches) {
+          camera.position.set(...cams[id].p);
+          camera.lookAt(...cams[id].l);
+          paint();
+        } else {
+          tween(id);
+        }
+      };
+
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          onScreen = entry.isIntersecting;
+          if (onScreen) paint();
+          else {
+            cancelAnimationFrame(raf);
+            raf = 0;
+          }
+        },
+        { rootMargin: "80px" },
+      );
+      io.observe(deps.frame);
+
+      const onResize = () => {
+        if (document.hidden) return;
+        lookNow();
+        paint();
+      };
+      let resizeT = 0;
+      const onResizeDeb = () => {
+        window.clearTimeout(resizeT);
+        resizeT = window.setTimeout(onResize, 150);
+      };
+      window.addEventListener("resize", onResizeDeb);
+
+      const onMove = (event: PointerEvent) => {
+        if (!fine.matches || reduced.matches || !onScreen) return;
+        const r = deps.frame.getBoundingClientRect();
+        parallax = { x: ((event.clientX - r.left) / r.width - 0.5) * 0.7, y: -((event.clientY - r.top) / r.height - 0.5) * 0.45 };
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          camera.lookAt(camera.position.clone().add(new THREE.Vector3(parallax.x * 0.2, parallax.y * 0.2, 0)));
+          paint();
+          raf = 0;
+        });
+      };
+      deps.frame.addEventListener("pointermove", onMove);
+
+      const onVis = () => {
+        if (!document.hidden) {
+          lookNow();
+          paint();
+        }
+      };
+      document.addEventListener("visibilitychange", onVis);
+
+      const cleanup = () => {
+        cancelAnimationFrame(raf);
+        io.disconnect();
+        window.removeEventListener("resize", onResizeDeb);
+        deps.frame.removeEventListener("pointermove", onMove);
+        document.removeEventListener("visibilitychange", onVis);
+        document.removeEventListener("astro:before-swap", cleanup);
+        scene.traverse((obj: any) => {
+          obj.geometry?.dispose?.();
+        });
+        Object.values(M).forEach((m: any) => m.dispose?.());
+        Object.values(finishes).forEach((m: any) => m.dispose?.());
+        renderer.dispose();
+        setThreeStage = null;
+      };
+      document.addEventListener("astro:before-swap", cleanup, { once: true });
+
+      lookNow();
+      dress("plano");
+      paint();
+      return setThreeStage;
+    }
+  };
+
+  document.addEventListener("astro:page-load", boot);
+  boot();
+</script>

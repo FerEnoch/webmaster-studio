@@ -8,7 +8,7 @@
  * final el cotizador.
  */
 import Base from "../layouts/Base.astro";
-import Maqueta3D from "../components/Maqueta3D.astro";
+import VetaHero from "../components/veta-hero/VetaHero.astro";
 import AntesDespues from "../components/AntesDespues.astro";
 import { arquitecturaPremium as app, ambientes, obras, etapas } from "../content/arquitectura-premium";
 import { waLink } from "@lib/whatsapp";
@@ -34,10 +34,10 @@ const totalM2 = ambientes.reduce((suma, ambiente) => suma + ambiente.m2, 0);
 ---
 
 <Base content={app} title={`${app.brand} · ${app.rubro}`}>
-  <!-- ─── Portada: el modelo, no el video ───────────────────────────── -->
-  <section class="relative overflow-hidden border-b border-[var(--vt-rule)]">
-    <div class="wm-container grid gap-10 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:py-20">
-      <div>
+  <!-- ─── Portada: la obra en cuatro etapas ────────────────────────── -->
+  <section class="border-b border-[var(--vt-rule)]">
+    <div class="wm-container grid gap-10 pt-14 lg:pt-20">
+      <div class="max-w-3xl">
         <p class="wm-kicker">{app.hero.kicker}</p>
         <h1 class="vt-head__title mt-6 !max-w-none">
           Recorré <span class="vt-script">la obra</span> antes de firmarla
@@ -58,13 +58,7 @@ const totalM2 = ambientes.reduce((suma, ambiente) => suma + ambiente.m2, 0);
         </p>
       </div>
 
-      <div>
-        <Maqueta3D />
-        <p class="vt-caption">
-          Modelo de demostración: las medidas y los materiales son ficticios. Movés el cursor
-          sobre la maqueta y tocás un ambiente para ver su referencia.
-        </p>
-      </div>
+      <VetaHero />
     </div>
   </section>
 
