@@ -407,7 +407,8 @@ export const portfolio: RubroContent = {
 /** Imágenes ilustrativas de las ocho soluciones por industria. */
 export const demoImages: Record<string, string> = {
   concesionario: img("1560958089-b8a1929cea89", 1200),
-  lavadero: img("1492144534655-ae79c964c9d7", 1200),
+  // Cover composite: Unsplash 1517248135467-4c7edcad34c4 + https://www.pexels.com/photo/6872591/.
+  lavadero: "/images/autolavado-con-bar.webp",
   "lavadero-premium": img("1626668893632-6f3a4466d22f", 1200),
   estetica: img("1570172619644-dfd03ed5d881", 1200),
   universidad: img("1562774053-701939374585", 1200),

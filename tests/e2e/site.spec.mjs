@@ -182,6 +182,19 @@ test('studio home shows rubro cards and opens the filtered catalogue', async ({ 
   await results(page, group.demos, group.id, group.nombre);
 });
 
+test('studio shows washing and the bar in the standard car wash cover', async ({ page }) => {
+  test.skip(!selected('portfolio'), 'Portfolio unchanged');
+  const cover = '/images/autolavado-con-bar.webp';
+  expect((await page.goto('/')).status()).toBe(200);
+  await expect(page.locator('#demos article:has(#rubro-lavadero) img')).toHaveAttribute('src', cover);
+  expect((await page.goto('/demos/?rubro=lavadero')).status()).toBe(200);
+  await expect(page.locator('[data-wm-rubro-card="lavadero"] img')).toHaveAttribute('src', cover);
+  await expect(page.locator('[data-wm-rubro-card="lavadero-premium"] img')).toHaveAttribute('src', /photo-1626668893632-6f3a4466d22f\?/);
+  const image = await page.request.get(cover);
+  expect(image.status()).toBe(200);
+  expect(image.headers()['content-type']).toBe('image/webp');
+});
+
 test('studio catalogue explains future growth with standard and premium service demos', async ({ page }) => {
   test.skip(!selected('portfolio'), 'Portfolio unchanged');
   await catalogue(page);
