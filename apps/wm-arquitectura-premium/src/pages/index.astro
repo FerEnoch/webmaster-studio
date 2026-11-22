@@ -34,33 +34,20 @@ const totalM2 = ambientes.reduce((suma, ambiente) => suma + ambiente.m2, 0);
 ---
 
 <Base content={app} title={`${app.brand} · ${app.rubro}`}>
-  <!-- ─── Portada: la promesa junto a la obra en cuatro etapas ─────── -->
-  <section class="border-b border-[var(--vt-rule)]">
-    <div class="wm-container veta-cover">
-      <div class="veta-cover__copy">
-        <p class="wm-kicker">{app.hero.kicker}</p>
-        <h1 class="vt-head__title mt-6 !max-w-none">
-          Recorré <span class="vt-script">la obra</span> antes de firmarla
-        </h1>
-        <p class="vt-head__intro mt-6">
-          Un modelo navegable de tu proyecto con sus medidas reales, las obras del estudio con su
-          antes y su después, y un cotizador que te da un número antes de la primera visita.
-        </p>
-
-        <div class="mt-9 flex flex-wrap items-center gap-4">
-          <a href={appUrl("/cotizar")} class="wm-btn">Cotizar mi proyecto</a>
-          <a href={appUrl("/obras")} class="wm-btn wm-btn--ghost">Ver las obras</a>
-        </div>
-
-        <p class="mt-8 flex items-center gap-2 text-sm text-[var(--vt-dim)]">
-          <span class="inline-flex h-2 w-2 rounded-full bg-[var(--wm-accent)]" aria-hidden="true"></span>
-          {app.hero.live?.label}: {app.hero.live?.count} {app.hero.live?.unit}
-        </p>
+  <VetaHero>
+    <div class="veta-scene__intro">
+      <p class="wm-kicker">{app.hero.kicker}</p>
+      <h1 id="veta-title" class="vt-head__title">Recorré <span class="vt-script">la obra</span> antes de firmarla</h1>
+      <p class="vt-head__intro">
+        Explorá la casa del plano a la entrega. Conocé los ambientes, compará las obras del estudio
+        y estimá cuánto puede costar tu proyecto.
+      </p>
+      <div class="veta-scene__actions">
+        <a href={appUrl("/cotizar")} class="wm-btn">Cotizar mi proyecto</a>
+        <a href={appUrl("/obras")} class="wm-btn wm-btn--ghost">Ver las obras</a>
       </div>
-
-      <VetaHero />
     </div>
-  </section>
+  </VetaHero>
 
   <!-- ─── Resumen del plan: el precio, a la vista ───────────────────── -->
   <section class="wm-container border-b border-[var(--vt-rule)] py-12">

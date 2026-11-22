@@ -4,9 +4,8 @@
  *
  * Astro es dueño del encuadre: titular, etapas, paneles y el póster
  * estático existen en el HTML antes de que cargue JS. El 3D (Three.js
- * diferido, un solo canvas) mejora ese encuadre cuando hay WebGL y
- * movimiento permitido; sin eso, el póster y los paneles sostienen
- * la narración sin takeover de cámara ni de scroll.
+ * diferido, un solo canvas) mejora ese encuadre cuando hay WebGL.
+ * Sin WebGL, el póster y los paneles sostienen la narración.
  *
  * Geometría alineada a los ambientes reales de la app (caja + alto),
  * sin afirmaciones constructivas inventadas: todo es maqueta
@@ -86,28 +85,10 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
 });
 ---
 
-<div class="veta-hero" id="veta-modelo" data-veta-hero data-veta-rooms={JSON.stringify(rooms)}>
-  <div class="veta-hero__stagebar">
-    <div class="veta-hero__stages" role="group" aria-label="Etapas de la casa" data-veta-stages>
-      {
-        stages.map((stage, i) => (
-          <button
-            type="button"
-            class="veta-stage"
-            data-veta-stage={stage.id}
-            aria-pressed={i === 0 ? "true" : "false"}
-          >
-            <span class="veta-stage__n" aria-hidden="true">{stage.n}</span>
-            <span>{stage.label}</span>
-          </button>
-        ))
-      }
-    </div>
-    <p class="veta-hero__status" role="status" data-veta-status>Etapa 1 de 4 · Plano</p>
-  </div>
-
-  <div class="veta-hero__scroll" data-veta-scroll>
-    <div class="veta-hero__sticky">
+<div class="veta-hero" data-veta-hero data-veta-rooms={JSON.stringify(rooms)}>
+  <section class="veta-scene" id="veta-modelo" data-veta-scene aria-labelledby="veta-title">
+    <div class="wm-container veta-scene__layout">
+      <slot />
       <div class="veta-hero__frame" data-veta-frame>
         <div class="veta-hero__poster" data-veta-poster>
           <svg viewBox={`0 0 ${PX} ${PY + 22}`} role="img" aria-labelledby="veta-plano-titulo veta-plano-desc">
@@ -151,47 +132,76 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
           class="veta-hero__canvas"
           data-veta-canvas
           hidden
+          tabindex="0"
+          aria-describedby="veta-model-controls"
           aria-label="Maqueta 3D de la casa en etapa Plano: planta técnica vista desde arriba."
         />
-        <div class="veta-hero__rooms" role="group" aria-label="Ambientes de la casa" data-veta-room-group>
-          {
-            rooms.map((room, i) => (
-              <button
-                type="button"
-                class="veta-room"
-                data-veta-room-btn={room.id}
-                aria-pressed={i === 0 ? "true" : "false"}
-              >
-                <span class="veta-room__n">{room.nombre}</span>
-                <span class="veta-room__m">{room.m2} m²</span>
-              </button>
-            ))
-          }
+      </div>
+      <div class="veta-scene__hud">
+        <div>
+          <div class="veta-hero__stagebar">
+            <div class="veta-hero__stages" role="group" aria-label="Etapas de la casa" data-veta-stages>
+              {
+                stages.map((stage, i) => (
+                  <button
+                    type="button"
+                    class="veta-stage"
+                    data-veta-stage={stage.id}
+                    aria-pressed={i === 0 ? "true" : "false"}
+                  >
+                    <span class="veta-stage__n" aria-hidden="true">{stage.n}</span>
+                    <span>{stage.label}</span>
+                  </button>
+                ))
+              }
+            </div>
+            <p class="veta-hero__status" role="status" data-veta-status>Etapa 1 de 4 · Plano</p>
+          </div>
+          <div class="veta-hero__caption" data-veta-caption>
+            <p class="veta-hero__caption-title" data-veta-caption-title>La planta, antes del ladrillo</p>
+            <p class="veta-hero__caption-meta" data-veta-caption-meta>Vista cenital · dibujo técnico indicativo</p>
+          </div>
+        </div>
+        <div class="veta-scene__model-tools">
+          <p class="veta-hero__controls" id="veta-model-controls" data-veta-controls hidden>
+            <span class="veta-hero__wheel-hint">Scroll: cambiá de etapa · </span>
+            <span>Arrastrá hacia los lados para girar.</span>
+            <span class="sr-only">Con el foco en la maqueta, usá las flechas para girar e Inicio para volver a la vista de la etapa.</span>
+          </p>
+          <div class="veta-hero__rooms" role="group" aria-label="Ambientes de la casa" data-veta-room-group>
+            {
+              rooms.map((room, i) => (
+                <button
+                  type="button"
+                  class="veta-room"
+                  data-veta-room-btn={room.id}
+                  aria-pressed={i === 0 ? "true" : "false"}
+                >
+                  <span class="veta-room__n">{room.nombre}</span>
+                  <span class="veta-room__m">{room.m2} m²</span>
+                </button>
+              ))
+            }
+          </div>
+          <div class="veta-hero__room" role="status" data-veta-room-detail>
+            {
+              rooms.map((room) => (
+                <div class="veta-room__info" data-veta-room-info={room.id}>
+                  <p class="veta-room__line">
+                    <strong>{room.nombre} · {room.m2} m²</strong>
+                    <span> — {precioRoom(room.usdM2, room.m2)} orientativo · {room.materiales.join(" · ")}</span>
+                  </p>
+                  <a class="veta-room__link" href={`#plan-${room.id}`}>Ver el precio en el plan</a>
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
-      <div class="veta-hero__caption" data-veta-caption>
-        <p class="veta-hero__caption-title" data-veta-caption-title>La planta, antes del ladrillo</p>
-        <p class="veta-hero__caption-meta" data-veta-caption-meta>Vista cenital · dibujo técnico indicativo</p>
-      </div>
-      <div class="veta-hero__room" role="status" data-veta-room-detail>
-        {
-          rooms.map((room) => (
-            <div class="veta-room__info" data-veta-room-info={room.id}>
-              <p class="veta-room__line">
-                <strong>{room.nombre} · {room.m2} m²</strong>
-                <span> — {precioRoom(room.usdM2, room.m2)} orientativo · {room.materiales.join(" · ")}</span>
-              </p>
-              <a class="veta-room__link" href={`#plan-${room.id}`}>Ver el precio en el plan</a>
-            </div>
-          ))
-        }
-      </div>
-        <p class="vt-caption">
-          Maqueta indicativa de demostración: las medidas y los materiales son ficticios.
-          Elegí una etapa para recorrer la casa.
-        </p>
     </div>
-
+  </section>
+  <div class="wm-container veta-hero__narrative">
+    <p class="vt-caption">Maqueta indicativa de demostración: las medidas y los materiales son ficticios.</p>
     <ol class="veta-hero__panels" data-veta-panels>
       {
         stages.map((stage, i) => (
@@ -199,7 +209,6 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
             <article
               class="veta-panel"
               data-veta-panel={stage.id}
-              data-veta-target={stage.id}
               data-active={i === 0 ? "true" : "false"}
               aria-current={i === 0 ? "true" : undefined}
             >
@@ -219,9 +228,8 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
   /**
    * Veta hero: estado en el DOM, 3D diferido en un solo canvas.
    *
-   * - Los botones son la fuente de la verdad (click + teclado).
-   * - El scroll solo sugiere etapas en desktop con movimiento permitido,
-   *   y nunca pelea con un click reciente.
+   * - Los botones y la rueda dentro del encuadre eligen la etapa.
+   * - Arrastrar dentro del lienzo orbita la cámara sin cambiar de etapa.
    * - El Three.js se importa tarde y pinta por demanda: sin rAF perpetuo,
    *   sin trabajo fuera de pantalla, con limpieza al salir.
    */
@@ -235,8 +243,9 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
     const canvas = hero.querySelector<HTMLCanvasElement>("[data-veta-canvas]");
     const poster = hero.querySelector<HTMLElement>("[data-veta-poster]");
     const frame = hero.querySelector<HTMLElement>("[data-veta-frame]");
+    const sceneArea = hero.querySelector<HTMLElement>("[data-veta-scene]");
     const panels = Array.from(hero.querySelectorAll<HTMLElement>("[data-veta-panel]"));
-    const targets = Array.from(hero.querySelectorAll<HTMLElement>("[data-veta-target]"));
+    const controls = hero.querySelector<HTMLElement>("[data-veta-controls]");
     const roomsRaw = hero.dataset.vetaRooms ?? "[]";
     let rooms: { id: string; nombre: string; m2: number; caja: { x: number; y: number; w: number; h: number }; alto: number }[] = [];
     try {
@@ -303,20 +312,20 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
       materiales: "corte con terminaciones indicativas",
       entrega: "exterior terminado a la altura de tus ojos",
     };
+    const cameraTransitionMs = 850;
+    const finalViewDwellMs = 1250;
     let current = "plano";
-    let lastClick = 0;
+    let holdFinalViewUntil = 0;
     let setThreeStage: ((id: string, instant: boolean) => void) | null = null;
-
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const desktop = window.matchMedia("(min-width: 900px)");
-    const canScrub = () => desktop.matches && !reduced.matches;
 
-    /* La lista es la única fuente de la verdad visible: una selección
-       explícita trae su artículo al frente, junto al modelo, sin mover
-       el documento. El scroll nativo sigue resolviendo por intersección. */
-    const apply = (id: string, explicit = false) => {
+    /* Update the hero caption and the leading article without scroll or focus jumps. */
+    const apply = (id: string, fromWheel = false) => {
       if (!order.includes(id)) return;
       current = id;
+      holdFinalViewUntil = fromWheel && id === "entrega" && !reduced.matches
+        ? performance.now() + cameraTransitionMs + finalViewDwellMs
+        : 0;
       const i = order.indexOf(id);
       group?.querySelectorAll("[data-veta-stage]").forEach((button) => {
         button.setAttribute("aria-pressed", button.getAttribute("data-veta-stage") === id ? "true" : "false");
@@ -330,7 +339,7 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
       });
       if (canvas) canvas.setAttribute("aria-label", `Maqueta 3D de la casa en etapa ${labels[id]}: ${shots[id]}.`);
       const activePanel = panels.find((panel) => panel.dataset.vetaPanel === id);
-      if (explicit && activePanel) {
+      if (activePanel) {
         const list = hero.querySelector("[data-veta-panels]");
         const item = activePanel.closest("li");
         if (list && item && list.firstElementChild !== item) list.prepend(item);
@@ -351,8 +360,7 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
 
     group?.querySelectorAll("[data-veta-stage]").forEach((button) => {
       button.addEventListener("click", () => {
-        lastClick = Date.now();
-        apply(button.getAttribute("data-veta-stage") ?? "plano", true);
+        apply(button.getAttribute("data-veta-stage") ?? "plano");
       });
     });
 
@@ -369,32 +377,35 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
       if (next !== null) {
         event.preventDefault();
         buttons[next].focus();
-        lastClick = Date.now();
-        apply(buttons[next].getAttribute("data-veta-stage") ?? "plano", true);
+        apply(buttons[next].getAttribute("data-veta-stage") ?? "plano");
       }
     });
 
-    /* Scroll corto solo en desktop con movimiento: sugiere, no impone. */
-    let observer: IntersectionObserver | null = null;
-    const watch = () => {
-      observer?.disconnect();
-      observer = null;
-      if (!canScrub() || targets.length === 0) return;
-      observer = new IntersectionObserver(
-        (entries) => {
-          if (Date.now() - lastClick < 2500) return;
-          const hit = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-          const id = hit?.target.getAttribute("data-veta-target");
-          if (id && id !== current) apply(id);
-        },
-        { rootMargin: "-40% 0px -40% 0px", threshold: [0, 0.25, 0.5] },
-      );
-      targets.forEach((t) => observer?.observe(t));
-    };
-    watch();
-    const rewatch = () => watch();
-    desktop.addEventListener?.("change", rewatch);
-    reduced.addEventListener?.("change", rewatch);
+    // Preserve the last shot through the transition and a short viewing beat.
+    let wheelDistance = 0;
+    let lastWheel = 0;
+    sceneArea?.addEventListener("wheel", (event) => {
+      if (!frame || !canvas || canvas.hidden || event.ctrlKey || !event.cancelable) return;
+      const mode = event.deltaMode;
+      const { deltaX, deltaY, clientX, clientY, timeStamp } = event;
+      if (Math.abs(deltaY) <= Math.abs(deltaX)) return;
+      const { left, right, top, bottom } = frame.getBoundingClientRect();
+      if (clientX < left || clientX >= right || clientY < top || clientY >= bottom) return;
+      const direction = Math.sign(deltaY);
+      const next = order[order.indexOf(current) + direction];
+      if (!next) {
+        wheelDistance = 0;
+        if (direction > 0 && !reduced.matches && performance.now() < holdFinalViewUntil) event.preventDefault();
+        return;
+      }
+      event.preventDefault();
+      if (timeStamp - lastWheel > 180 || direction !== Math.sign(wheelDistance)) wheelDistance = 0;
+      lastWheel = timeStamp;
+      wheelDistance += deltaY * (mode === 1 ? 16 : mode === 2 ? frame.clientHeight : 1);
+      if (Math.abs(wheelDistance) < 100) return;
+      wheelDistance = 0;
+      apply(next, true);
+    }, { passive: false });
 
     /* Ficha inicial: con JS solo el ambiente vigente queda a la vista. */
     applyRoom(currentRoom);
@@ -411,8 +422,9 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
         setThreeStage = mountCasa(THREE, { canvas, frame, hero, rooms, reduced });
         setThreeRoom?.(currentRoom);
         canvas.hidden = false;
+        if (controls) controls.hidden = false;
         hero.dataset.vetaReady = "true";
-        apply(current);
+        setThreeStage(current, true);
       } catch {
         /* Sin WebGL no hay canvas: el póster y los paneles ya cuentan la casa. */
         hero.dataset.vetaFallback = "true";
@@ -655,16 +667,16 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
         materiales: { p: [8.2, 6.4, 9.4], l: [-0.4, 0.9, 0.4] },
         entrega: { p: [7.6, 2.2, 8.8], l: [-0.8, 1.7, -0.8] },
       };
-      camera.position.set(...cams.plano.p);
-      camera.lookAt(...cams.plano.l);
-      /* El parallax mira al foco de la etapa, nunca desde la cámara:
-         así sobrevolar el encuadre no rompe la pose. */
-      const lookTarget = new THREE.Vector3(...cams.plano.l);
+      const lookTarget = new THREE.Vector3();
+      const snap = (id: string) => {
+        camera.position.set(...cams[id].p);
+        lookTarget.set(...cams[id].l);
+        camera.lookAt(lookTarget);
+      };
+      snap("plano");
 
       let raf = 0;
       let onScreen = true;
-      let parallax = { x: 0, y: 0 };
-      const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
 
       const paint = () => {
         if (!onScreen || document.hidden) return;
@@ -677,30 +689,26 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
         const dpr = Math.min(window.devicePixelRatio || 1, vw < 700 ? 1.5 : 1.75);
         renderer.setPixelRatio(dpr);
         renderer.setSize(vw, vh, false);
-        camera.aspect = vw / vh;
-        camera.updateProjectionMatrix();
+        const desktop = vw >= 1024;
+        // Place the scene clear of the editorial copy and leave room for the controls.
+        camera.zoom = desktop ? 0.87 : Math.min(0.85, (vw / vh) * 0.82);
+        camera.setViewOffset(vw, vh, desktop ? -vw * 0.16 : 0, desktop ? vh * 0.025 : -vh * 0.055, vw, vh);
       };
 
       const tween = (id: string) => {
         const to = cams[id];
-        lookTarget.set(...to.l);
         const fromP = camera.position.clone();
-        const fromL = new THREE.Vector3();
-        camera.getWorldDirection(fromL);
-        fromL.add(camera.position);
+        const fromL = lookTarget.clone();
         const toP = new THREE.Vector3(...to.p);
         const toL = new THREE.Vector3(...to.l);
         const t0 = performance.now();
-        const dur = 850;
         cancelAnimationFrame(raf);
         const step = (now: number) => {
-          const t = Math.min(1, (now - t0) / dur);
+          const t = Math.min(1, (now - t0) / cameraTransitionMs);
           const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
           camera.position.lerpVectors(fromP, toP, e);
-          const look = new THREE.Vector3().lerpVectors(fromL, toL, e);
-          look.x += parallax.x;
-          look.y += parallax.y;
-          camera.lookAt(look);
+          lookTarget.lerpVectors(fromL, toL, e);
+          camera.lookAt(lookTarget);
           paint();
           if (t < 1 && onScreen && !document.hidden) raf = requestAnimationFrame(step);
           else raf = 0;
@@ -745,10 +753,8 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
         dress(id);
         cancelAnimationFrame(raf);
         raf = 0;
-        if (instant || reduced.matches) {
-          camera.position.set(...cams[id].p);
-          camera.lookAt(...cams[id].l);
-          lookTarget.set(...cams[id].l);
+        if (instant || reduced.matches || !onScreen || document.hidden) {
+          snap(id);
           paint();
         } else {
           tween(id);
@@ -759,9 +765,10 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
         ([entry]) => {
           onScreen = entry.isIntersecting;
           if (onScreen) paint();
-          else {
+          else if (raf) {
             cancelAnimationFrame(raf);
             raf = 0;
+            snap(current);
           }
         },
         { rootMargin: "80px" },
@@ -773,27 +780,58 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
         lookNow();
         paint();
       };
-      let resizeT = 0;
-      const onResizeDeb = () => {
-        window.clearTimeout(resizeT);
-        resizeT = window.setTimeout(onResize, 150);
-      };
-      window.addEventListener("resize", onResizeDeb);
+      const resize = new ResizeObserver(onResize);
+      resize.observe(deps.frame);
 
-      const onMove = (event: PointerEvent) => {
-        if (!fine.matches || reduced.matches || !onScreen) return;
-        /* El plano es un dibujo técnico: queda fijo bajo el cursor. */
-        if (current === "plano") return;
-        const r = deps.frame.getBoundingClientRect();
-        parallax = { x: ((event.clientX - r.left) / r.width - 0.5) * 0.7, y: -((event.clientY - r.top) / r.height - 0.5) * 0.45 };
+      const offset = new THREE.Vector3();
+      const angles = new THREE.Spherical();
+      const orbit = (horizontal: number, vertical: number) => {
         cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(() => {
-          camera.lookAt(new THREE.Vector3(lookTarget.x + parallax.x * 0.2, lookTarget.y + parallax.y * 0.2, lookTarget.z));
-          paint();
-          raf = 0;
-        });
+        raf = 0;
+        angles.setFromVector3(offset.subVectors(camera.position, lookTarget));
+        angles.theta += horizontal;
+        angles.phi = THREE.MathUtils.clamp(angles.phi + vertical, 0.001, Math.PI / 2 - 0.02);
+        camera.position.copy(offset.setFromSpherical(angles)).add(lookTarget);
+        camera.lookAt(lookTarget);
+        paint();
       };
-      deps.frame.addEventListener("pointermove", onMove);
+
+      let drag: { id: number; x: number; y: number } | null = null;
+      const startDrag = (event: PointerEvent) => {
+        if (drag || !event.isPrimary || event.button !== 0) return;
+        drag = { id: event.pointerId, x: event.clientX, y: event.clientY };
+        deps.canvas.setPointerCapture(event.pointerId);
+        deps.canvas.dataset.dragging = "true";
+      };
+      const moveDrag = (event: PointerEvent) => {
+        if (!drag || event.pointerId !== drag.id) return;
+        const dx = event.clientX - drag.x;
+        const dy = event.pointerType === "touch" ? 0 : event.clientY - drag.y;
+        drag.x = event.clientX;
+        drag.y = event.clientY;
+        if (dx || dy) orbit(-dx * 0.008, -dy * 0.008);
+      };
+      const endDrag = (event: PointerEvent) => {
+        if (!drag || event.pointerId !== drag.id) return;
+        drag = null;
+        delete deps.canvas.dataset.dragging;
+      };
+      const cameraKeys = (event: KeyboardEvent) => {
+        const step = 0.12;
+        if (event.key === "ArrowLeft") orbit(step, 0);
+        else if (event.key === "ArrowRight") orbit(-step, 0);
+        else if (event.key === "ArrowUp") orbit(0, -step);
+        else if (event.key === "ArrowDown") orbit(0, step);
+        else if (event.key === "Home") setThreeStage?.(current, true);
+        else return;
+        event.preventDefault();
+      };
+      const input = new AbortController();
+      const options = { signal: input.signal };
+      deps.canvas.addEventListener("pointerdown", startDrag, options);
+      deps.canvas.addEventListener("pointermove", moveDrag, options);
+      deps.canvas.addEventListener("lostpointercapture", endDrag, options);
+      deps.canvas.addEventListener("keydown", cameraKeys, options);
 
       const onVis = () => {
         if (!document.hidden) {
@@ -806,8 +844,8 @@ const rect = (caja: { x: number; y: number; w: number; h: number }) => ({
       const cleanup = () => {
         cancelAnimationFrame(raf);
         io.disconnect();
-        window.removeEventListener("resize", onResizeDeb);
-        deps.frame.removeEventListener("pointermove", onMove);
+        resize.disconnect();
+        input.abort();
         document.removeEventListener("visibilitychange", onVis);
         document.removeEventListener("astro:before-swap", cleanup);
         scene.traverse((obj: any) => {

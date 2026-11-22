@@ -109,24 +109,86 @@ test('veta reduced motion keeps stages without camera takeover', async ({ page }
   expect(spinning).toBe(false);
 });
 
-test('veta desktop scroll advances stages without fighting explicit buttons', async ({ page }, info) => {
-  test.skip(info.project.name !== 'desktop', 'Short scrub section is a desktop enhancement');
+test('veta wheel changes stages only inside the model frame', async ({ page }, info) => {
+  test.skip(info.project.name !== 'desktop', 'Wheel and trackpad input');
+  await page.clock.install();
   expect((await page.goto(ROUTE)).status()).toBe(200);
-  const group = page.locator('[data-veta-stages]');
-  await expect(group).toBeVisible();
-  const scroller = page.locator('[data-veta-scroll]');
-  if (!(await scroller.count())) test.skip(true, 'No scroll enhancement on this viewport');
-  await page.locator('[data-veta-panel="materiales"]').scrollIntoViewIfNeeded();
-  await expect(group.getByRole('button', { name: /materiales/i })).toHaveAttribute('aria-pressed', 'true', { timeout: 8000 });
-  // An explicit click wins over the scroll observer afterwards.
-  await group.getByRole('button', { name: /plano/i }).click();
-  await expect(group.getByRole('button', { name: /plano/i })).toHaveAttribute('aria-pressed', 'true');
-  await page.waitForTimeout(1200);
-  await expect(group.getByRole('button', { name: /plano/i })).toHaveAttribute('aria-pressed', 'true');
+  const canvas = page.locator('[data-veta-canvas]');
+  const group = page.getByRole('group', { name: 'Etapas de la casa' });
+  const status = page.locator('[data-veta-status]');
+  const expectStage = async (label) => {
+    await expect(group.getByRole('button', { name: new RegExp(label, 'i') })).toHaveAttribute('aria-pressed', 'true');
+    await expect(status).toContainText(label);
+  };
+  const scrollY = () => page.evaluate(() => window.scrollY);
+  await canvas.hover();
+  const initialY = await scrollY();
+  for (const { label } of STAGES.slice(1)) {
+    await page.mouse.wheel(0, 240);
+    await expectStage(label);
+    expect(await scrollY(), 'the frame consumes a wheel step when another stage exists').toBe(initialY);
+  }
+
+  // A momentum wheel event after the camera settles still belongs to the final scene.
+  await page.clock.fastForward(950);
+  await page.mouse.wheel(0, 240);
+  await page.waitForTimeout(180);
+  expect(await scrollY(), 'Entrega stays in view beyond its camera transition').toBe(initialY);
+  await expectStage('Entrega');
+
+  await page.clock.fastForward(1250);
+  await page.mouse.wheel(0, 240);
+  await expect.poll(scrollY).toBeGreaterThan(initialY);
+  await expectStage('Entrega');
+
+  await canvas.hover();
+  const reverseY = await scrollY();
+  for (const { label } of STAGES.slice(0, -1).reverse()) {
+    await page.mouse.wheel(0, -240);
+    await expectStage(label);
+    expect(await scrollY()).toBe(reverseY);
+  }
+
+  await page.locator('[data-vt-plan="estar"]').scrollIntoViewIfNeeded();
+  const beforeOutside = await scrollY();
+  await page.mouse.move(5, 680);
+  await page.mouse.wheel(0, 850);
+  await expect.poll(scrollY).toBeGreaterThan(beforeOutside + 500);
+  await expectStage('Plano');
+});
+
+test('veta camera orbits on drag and resets with the keyboard', async ({ page }, info) => {
+  test.skip(info.project.name !== 'desktop', 'Mouse drag and keyboard');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  expect((await page.goto(ROUTE)).status()).toBe(200);
+  const canvas = page.locator('[data-veta-canvas]');
+  await expect(canvas).toBeVisible();
+  await page.getByRole('button', { name: /volumen/i }).click();
+  const box = await canvas.boundingBox();
+  // Compare the rendered model, not the canvas's keyboard-focus outline.
+  const clip = { x: box.x + 10, y: box.y + 10, width: box.width - 20, height: box.height * 0.65 };
+  const captureModel = () => page.screenshot({ clip });
+  const initial = await captureModel();
+  const x = box.x + box.width * 0.47;
+  const y = box.y + box.height * 0.38;
+  const scrollBefore = await page.evaluate(() => window.scrollY);
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x + 100, y + 24, { steps: 6 });
+  await page.mouse.up();
+  expect((await captureModel()).equals(initial), 'drag redraws the same stage from another angle').toBe(false);
+  await expect(page.locator('[data-veta-status]')).toContainText('Volumen');
+  expect(await page.evaluate(() => window.scrollY)).toBe(scrollBefore);
+
+  await canvas.focus();
+  await canvas.press('Home');
+  expect((await captureModel()).equals(initial), 'Home restores the authored view').toBe(true);
+  await canvas.press('ArrowLeft');
+  expect((await captureModel()).equals(initial), 'arrow keys also orbit the camera').toBe(false);
 });
 
 test('veta prominent narrative follows the selected stage at rest', async ({ page }, info) => {
-  test.skip(info.project.name !== 'desktop', 'Adjacency to the sticky visual is a desktop layout');
+  test.skip(info.project.name !== 'desktop', 'The scene caption and model share the desktop fold');
   expect((await page.goto(ROUTE)).status()).toBe(200);
   const group = page.locator('[data-veta-stages]');
   await expect(group).toBeVisible();
@@ -142,14 +204,10 @@ test('veta prominent narrative follows the selected stage at rest', async ({ pag
   await expect(lead().locator('.veta-panel__title')).toHaveText('La casa, a la altura de tus ojos');
   expect(await page.evaluate(() => window.scrollY), 'explicit selection never moves the document').toBe(0);
 
-  // The lead narrative and the finished model share the viewport at rest.
-  const vh = (await page.viewportSize()).height;
-  const [panelBox, frameBox] = await Promise.all([lead().boundingBox(), page.locator('[data-veta-frame]').boundingBox()]);
-  for (const box of [panelBox, frameBox]) {
-    expect(box, 'model and lead narrative share the viewport').not.toBeNull();
-    expect(box.y, 'starts inside the viewport').toBeLessThan(vh);
-    expect(box.y + box.height, 'is not pushed out').toBeGreaterThan(0);
-  }
+  // The lead article follows below the full-bleed scene; its caption stays on the scene.
+  const caption = page.locator('[data-veta-caption-title]');
+  await expect(caption).toHaveText('La casa, a la altura de tus ojos');
+  await expect(caption).toBeInViewport();
 
   // Keyboard selection agrees too, without moving focus away or scrolling.
   await group.getByRole('button', { name: /entrega/i }).focus();
@@ -171,23 +229,23 @@ test('veta keeps the conversion and catalogue contract on the shared markup', as
   await expect(page.getByRole('link', { name: 'Ir al cotizador' })).toHaveAttribute('href', /cotizar\/$/);
 });
 
-test('veta first fold pairs the headline with the living scene on desktop', async ({ page }, info) => {
-  test.skip(info.project.name !== 'desktop', 'Headline beside the model is a desktop composition');
+test('veta full-bleed 3D is the backdrop of the hero with readable foreground controls', async ({ page }) => {
   expect((await page.goto(ROUTE)).status()).toBe(200);
-  await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible();
-  const frame = page.locator('[data-veta-frame]');
-  await expect(frame).toBeVisible();
-  const vh = (await page.viewportSize()).height;
-  const vw = (await page.viewportSize()).width;
-  const box = await frame.boundingBox();
-  expect(box, 'scene frame is laid out').not.toBeNull();
-  expect(box.y, 'scene starts inside the first viewport, not in a sliver at its edge').toBeLessThan(vh * 0.75);
-  expect(box.x, 'scene sits beside the headline, not stacked full-width below it').toBeGreaterThan(vw * 0.35);
-  expect(box.height, 'scene is a readable drawing, not a cropped strip').toBeGreaterThan(200);
-  // Promise and drawing share the viewport at rest, with no scrolling.
-  expect(await page.evaluate(() => window.scrollY), 'first fold needs no scrolling').toBe(0);
-  const headline = await page.getByRole('heading', { level: 1 }).first().boundingBox();
-  expect(headline.y + headline.height, 'headline shares the first viewport with the scene').toBeLessThan(vh);
+  const hero = page.locator('#veta-modelo');
+  const canvas = page.locator('[data-veta-canvas]');
+  const headline = page.getByRole('heading', { level: 1 }).first();
+  await expect(canvas).toBeVisible();
+  await expect(headline).toBeInViewport();
+  await expect(page.getByRole('link', { name: 'Cotizar mi proyecto' }).first()).toBeInViewport();
+  await expect(page.getByRole('button', { name: /entrega/i })).toBeInViewport();
+  const viewport = page.viewportSize();
+  const [heroBox, canvasBox, headlineBox] = await Promise.all([hero.boundingBox(), canvas.boundingBox(), headline.boundingBox()]);
+  expect(heroBox.width).toBe(viewport.width);
+  expect(canvasBox).toEqual(heroBox);
+  expect(canvasBox.height).toBeGreaterThanOrEqual(viewport.height - 2);
+  expect(headlineBox.y).toBeGreaterThan(canvasBox.y);
+  expect(headlineBox.y + headlineBox.height).toBeLessThan(viewport.height);
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
 });
 
 test('veta room selection names the space on the same house', async ({ page }) => {
