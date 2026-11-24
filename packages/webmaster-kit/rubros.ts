@@ -131,6 +131,20 @@ export const RUBROS: Rubro[] = [
     },
   },
   {
+    id: "inmobiliaria-premium",
+    rubroId: "inmobiliaria",
+    slug: "inmobiliaria-premium",
+    nombre: "Estudio Real State",
+    rubro: "Inmobiliaria premium",
+    tagline: "Recorridos interactivos, asoleamiento 3D y simuladores.",
+    objeccion: "Recorré la propiedad antes de coordinar una visita.",
+    demoUrl: "/demos/inmobiliaria-premium/",
+    port: 3033,
+    palette: { bg: "#14130F", fg: "#F4F1EA", accent: "#B18A52" },
+    // La demo no tiene un canal de contacto: este número no es marcable.
+    whatsapp: { phone: "0000000000000", template: "Consulta de demostración (no se envía)." },
+  },
+  {
     id: "arquitectura",
     rubroId: "arquitectura",
     slug: "arquitectura",
@@ -164,20 +178,20 @@ export const RUBROS: Rubro[] = [
   },
 ];
 
-/** El portfolio madre: no es un rubro, es el índice de las 8 demos. */
+/** El portfolio madre: no es un rubro, es el índice de las demos. */
 export const PORTFOLIO = {
   id: "portfolio",
   slug: "portfolio",
   nombre: "Portfolio",
   rubro: "Portfolio de demos por rubro",
-  tagline: "Nueve webs, seis rubros, una sola firma visual.",
+  tagline: "Seis rubros, una sola firma visual.",
   objeccion: "«¿Cada web es un template o está hecha para mi rubro?»",
   demoUrl: "/",
   port: 3027,
   palette: { bg: "#111113", fg: "#EFEFEA", accent: "#D7FF4A" },
 } as const;
 
-/** Todas las apps del monorepo (8 ejemplos + portfolio madre). */
+/** Todas las apps del monorepo (demos + portfolio madre). */
 export const APPS: { id: string; nombre: string; rubro: string; demoUrl: string; port: number }[] = [
   ...RUBROS.map((r) => ({
     id: r.id,

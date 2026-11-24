@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "version": "0.1.0",
-  "description": "Portfolio freelance: 9 apps Astro (8 demos + portfolio madre) con kit compartido.",
+  "description": "Portfolio freelance y demos de rubro en Astro con kit compartido.",
   "packageManager": "pnpm@12.11.2",
   "engines": {
     "node": ">=22.22.0",
@@ -29,6 +29,8 @@
     "build:universidad": "pnpm --filter wm-universidad run build",
     "dev:inmobiliaria": "pnpm --filter wm-inmobiliaria run dev",
     "build:inmobiliaria": "pnpm --filter wm-inmobiliaria run build",
+    "dev:inmobiliaria-premium": "pnpm --filter wm-inmobiliaria-premium run dev",
+    "build:inmobiliaria-premium": "pnpm --filter wm-inmobiliaria-premium run build",
     "dev:arquitectura": "pnpm --filter wm-arquitectura run dev",
     "build:arquitectura": "pnpm --filter wm-arquitectura run build",
     "dev:arquitectura-premium": "pnpm --filter wm-arquitectura-premium run dev",

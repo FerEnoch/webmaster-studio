@@ -4,7 +4,7 @@ Portfolio freelance y **demos de rubro** con Astro, React y Tailwind. Un sitio
 estático reúne el portfolio en `/`, el catálogo en `/demos/` y cada demo en
 `/demos/<slug>/`, sin cambiar de dominio.
 
-Actualmente hay nueve apps independientes: ocho demos agrupadas en seis familias
+Actualmente hay diez apps independientes: nueve demos agrupadas en seis familias
 y el portfolio madre. El catálogo deriva del registro, no de una cantidad fija:
 
 | Familia | Demos actuales |
@@ -13,7 +13,7 @@ y el portfolio madre. El catálogo deriva del registro, no de una cantidad fija:
 | Lavadero + bar | Lavadero y premium Gloss & Glass |
 | Estética | Estética y yoga |
 | Educación | Universidad privada |
-| Inmobiliaria | Propiedades |
+| Inmobiliaria | Propiedades y Estudio Real State, con tour fotográfico y asoleamiento 3D |
 | Arquitectura | Estudio y edición premium con 3D/tour |
 
 ## Empezar en local
@@ -35,6 +35,7 @@ pnpm run dev:concesionario         # app de referencia: http://localhost:3021
 | `wm-estetica` | 3023 | `pnpm run dev:estetica` |
 | `wm-universidad` | 3024 | `pnpm run dev:universidad` |
 | `wm-inmobiliaria` | 3025 | `pnpm run dev:inmobiliaria` |
+| `wm-inmobiliaria-premium` | 3033 | `pnpm run dev:inmobiliaria-premium` |
 | `wm-arquitectura` | 3026 | `pnpm run dev:arquitectura` |
 | `wm-arquitectura-premium` | 3032 | `pnpm run dev:arquitectura-premium` |
 | `wm-portfolio` | 3027 | `pnpm run dev:portfolio` |
@@ -42,6 +43,8 @@ pnpm run dev:concesionario         # app de referencia: http://localhost:3021
 Cada alias `dev:<id>` conserva su equivalente `build:<id>` para compilar una app
 independiente. `pnpm build:apps` conserva el build recursivo del workspace;
 ninguno de esos comandos prepara por sí solo la publicación integrada.
+Estudio Real State se abre en `http://127.0.0.1:3033/demos/inmobiliaria-premium/`.
+Para compilarla sola: `pnpm run build:inmobiliaria-premium`.
 
 ## Compilar y recorrer todo el sitio
 
