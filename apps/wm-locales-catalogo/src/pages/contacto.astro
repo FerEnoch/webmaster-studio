@@ -1,0 +1,33 @@
+---
+import Base from "../layouts/Base.astro";
+import { appUrl } from "@lib/urls";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Colecciones", href: "/colecciones" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+---
+
+<Base
+  title="Contacto · Telar"
+  description="Dónde está Telar, horarios y cómo reservar una prenda del catálogo."
+  nav={nav}
+>
+  <div class="wm-container" style="padding-block:2rem 3rem;max-width:60rem">
+    <p class="wm-kicker">Contacto</p>
+    <h1 class="wm-display" style="font-size:clamp(2.2rem,5vw,3.6rem);margin:.6rem 0">Vení a probarte</h1>
+    <p class="wm-muted">Telar es un local con catálogo online: elegís acá y te probás allá. Si viste una prenda que te gusta, avisanos y te la guardamos 48 horas.</p>
+    <ul style="display:grid;gap:.6rem;padding:0;list-style:none">
+      <li><strong>Dirección:</strong> Gorriti 4380, Palermo, Buenos Aires.</li>
+      <li><strong>Horarios:</strong> lunes a sábado de 10 a 20 h.</li>
+      <li><strong>Teléfono:</strong> +54 11 4832-1188.</li>
+      <li><strong>Correo:</strong> hola@telar.ejemplo.</li>
+    </ul>
+    <p style="display:flex;gap:.8rem;flex-wrap:wrap">
+      <a class="wm-btn wm-btn--ghost" href={appUrl("/catalogo")}>Volver al catálogo</a>
+    </p>
+  </div>
+</Base>

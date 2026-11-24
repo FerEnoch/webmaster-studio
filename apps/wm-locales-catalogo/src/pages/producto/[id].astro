@@ -1,0 +1,116 @@
+---
+import Base from "../../layouts/Base.astro";
+import ProductPhoto from "../../components/ProductPhoto.astro";
+import { appUrl } from "@lib/urls";
+import { AVAILABILITY_LABEL, PRODUCTS, availabilityOf, formatPrice, productById } from "@lib/products";
+
+export function getStaticPaths() {
+  return PRODUCTS.map((p) => ({ params: { id: p.id } }));
+}
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Colecciones", href: "/colecciones" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+
+const product = productById(Astro.params.id ?? "");
+if (!product) throw new Error(`Prenda desconocida: "${Astro.params.id}"`);
+const relacionados = PRODUCTS.filter((p) => p.categoria === product.categoria && p.id !== product.id).slice(0, 3);
+const variantes = product.stock;
+---
+
+<Base
+  title={`${product.nombre} · Telar`}
+  description={`${product.nombre}: ${product.descripcion}`}
+  nav={nav}
+>
+  <div class="wm-container">
+    <p style="padding-top:1.5rem"><a class="wm-link" href={appUrl("/catalogo")}>← Volver al catálogo</a></p>
+    <div class="wm-detail">
+      <figure style="margin:0">
+        <ProductPhoto photo={product.photo} priority />
+        <figcaption class="wm-muted wm-photo-caption">Foto de referencia; no representa la variante elegida.</figcaption>
+      </figure>
+      <div>
+        <p class="wm-kicker">{product.categoria}</p>
+        <h1 class="wm-display" style="font-size:clamp(2rem,5vw,3.2rem);margin:.5rem 0">{product.nombre}</h1>
+        <p class="wm-price" style="font-size:1.4rem">{formatPrice(product.precio)}</p>
+        <p class="wm-muted">Precio final, IVA incluido. Esta prenda se vende solo en el local.</p>
+        <p>{product.descripcion}</p>
+        <ul>
+          {product.detalles.map((d) => (<li>{d}</li>))}
+        </ul>
+
+        <h2 class="wm-display" style="font-size:1.2rem;margin-top:1.4rem">Variantes y disponibilidad</h2>
+        <form id="variante" aria-label="Elegir variante para ver disponibilidad">
+          <p><strong>Color</strong></p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap" role="radiogroup" aria-label="Color">
+            {product.colores.map((c, i) => (
+              <label style="display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--wm-line);border-radius:999px;padding:.35rem .8rem .35rem .4rem;cursor:pointer">
+                <input type="radio" name="color" value={c.id} checked={i === 0} />
+                <span class="wm-dot" style={`background:${c.hex}`} aria-hidden="true"></span> {c.nombre}
+              </label>
+            ))}
+          </div>
+          <p style="margin-top:1rem"><strong>Talle</strong> · <a class="wm-link" href={appUrl("/guia-de-talles")}>ver guía</a></p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap" role="radiogroup" aria-label="Talle">
+            {product.talles.map((t, i) => (
+              <label style="display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--wm-line);border-radius:.6rem;padding:.4rem .8rem;cursor:pointer">
+                <input type="radio" name="talle" value={t} checked={i === 0} /> {t}
+              </label>
+            ))}
+          </div>
+        </form>
+        <p role="status" aria-live="polite" data-disponibilidad style="font-weight:700"></p>
+        <p class="wm-muted" style="font-size:.9rem">Anotá tu variante y pedila en el local.</p>
+      </div>
+    </div>
+
+    {relacionados.length > 0 && (
+      <section aria-labelledby="rel" style="padding-block:1rem 3rem">
+        <h2 id="rel" class="wm-display" style="font-size:1.8rem">También en {product.categoria.toLowerCase()}</h2>
+        <div class="wm-grid" style="margin-top:1rem">
+          {relacionados.map((r) => (
+            <article class="wm-card">
+              <ProductPhoto photo={r.photo} />
+              <div class="wm-card__body">
+                <span class="wm-badge">{AVAILABILITY_LABEL[availabilityOf(r)]}</span>
+                <h3 class="wm-display">{r.nombre}</h3>
+                <p>{formatPrice(r.precio)}</p>
+                <a class="wm-link" href={appUrl(`/producto/${r.id}`)}>Ver ficha →</a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+
+  <script define:vars={{ variantes }}>
+    const form = document.getElementById("variante");
+    const out = document.querySelector("[data-disponibilidad]");
+    if (!(form instanceof HTMLFormElement) || !(out instanceof HTMLElement)) {
+      throw new Error("Variante no disponible");
+    }
+    const sel = () => ({
+      color: (form.querySelector('input[name="color"]:checked') || {}).value || "",
+      size: (form.querySelector('input[name="talle"]:checked') || {}).value || "",
+    });
+    const paint = () => {
+      const found = sel();
+      const v = variantes.find((x) => x.color === found.color && x.size === found.size);
+      if (!v || v.qty <= 0) {
+        out.textContent = "Agotada en esta variante. Consultanos por reposición.";
+      } else if (v.qty <= 2) {
+        out.textContent = "Quedan " + v.qty + " en el local: te la guardamos 48 h si avisás.";
+      } else {
+        out.textContent = "Disponible en el local: " + v.qty + " unidades.";
+      }
+    };
+    form.addEventListener("change", paint);
+    paint();
+  </script>
+</Base>

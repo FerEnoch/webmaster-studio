@@ -1,0 +1,46 @@
+---
+import Base from "../layouts/Base.astro";
+import ProductPhoto from "../components/ProductPhoto.astro";
+import { appUrl } from "@lib/urls";
+import { COLECCIONES, PRODUCTS, formatPrice } from "@lib/products";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Colecciones", href: "/colecciones" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+---
+
+<Base
+  title="Colecciones · Telar"
+  description="Las tres colecciones de Telar: lino de verano, oficina flexible y noche simple."
+  nav={nav}
+>
+  <div class="wm-container" style="padding-block:2rem 3rem">
+    <p class="wm-kicker">Colecciones</p>
+    <h1 class="wm-display" style="font-size:clamp(2.2rem,5vw,3.6rem);margin:.6rem 0">Tres formas de vestirse</h1>
+    {COLECCIONES.map((c) => {
+      const prendas = PRODUCTS.filter((p) => p.coleccion === c.id);
+      return (
+        <section id={c.id} aria-label={c.nombre} style="padding-block:1.6rem">
+          <h2 class="wm-display" style="font-size:clamp(1.6rem,3.6vw,2.4rem);margin:0 0 .3rem">{c.nombre}</h2>
+          <p class="wm-muted" style="max-width:44rem">{c.bajada}</p>
+          <div class="wm-grid" style="margin-top:1.2rem">
+            {prendas.map((p) => (
+              <article class="wm-card">
+                <ProductPhoto photo={p.photo} />
+                <div class="wm-card__body">
+                  <h3 class="wm-display">{p.nombre}</h3>
+                  <p>{p.categoria} · {formatPrice(p.precio)}</p>
+                  <a class="wm-link" href={appUrl(`/producto/${p.id}`)}>Ver ficha completa →</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    })}
+  </div>
+</Base>

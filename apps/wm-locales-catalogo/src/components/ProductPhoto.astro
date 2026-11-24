@@ -1,0 +1,28 @@
+---
+import type { TelarPhoto } from "@lib/products";
+import { appUrl } from "@lib/urls";
+
+interface Props {
+  photo: TelarPhoto;
+  priority?: boolean;
+}
+
+const { photo, priority = false } = Astro.props;
+const small = appUrl(`/media/${photo.file}-480.webp`);
+const large = appUrl(`/media/${photo.file}-960.webp`);
+const cardSizes = "(min-width: 1160px) 265px, (min-width: 1060px) calc(25vw - 25px), (min-width: 800px) calc((100vw - 80px) / 3), (min-width: 540px) calc(50vw - 30px), calc(100vw - 40px)";
+const detailSizes = "(min-width: 1160px) 544px, (min-width: 900px) calc(50vw - 36px), calc(100vw - 40px)";
+---
+
+<img
+  class="wm-art"
+  src={priority ? large : small}
+  srcset={`${small} 480w, ${large} 960w`}
+  sizes={priority ? detailSizes : cardSizes}
+  width="960"
+  height="1200"
+  alt={photo.alt}
+  loading={priority ? "eager" : "lazy"}
+  fetchpriority={priority ? "high" : undefined}
+  decoding="async"
+/>
