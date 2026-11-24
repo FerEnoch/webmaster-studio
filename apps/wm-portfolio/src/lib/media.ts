@@ -121,3 +121,29 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
     ],
   },
 };
+
+/** Portada local de una demo de indumentaria: foto real verificada con recorte propio. */
+export interface ApparelCover {
+  file: string;
+  widths: readonly [number, ...number[]];
+  alt: string;
+}
+
+/**
+ * Portadas reales de Locales y tiendas: recortes 16:10 propios de sesiones ya
+ * verificadas dentro de cada demo (TELAR editorial de percheros; TRAMA callejero).
+ * Sin SVG presentado como foto. Créditos, fuentes y licencias en
+ * apps/wm-portfolio/public/media/ATTRIBUTION.txt.
+ */
+export const apparelCovers: Record<"locales-catalogo" | "tiendas-ecommerce", ApparelCover> = {
+  "locales-catalogo": {
+    file: "locales-catalogo-cover",
+    widths: [480, 800],
+    alt: "Percheros con prendas de tonos neutros en un local de ropa",
+  },
+  "tiendas-ecommerce": {
+    file: "tiendas-ecommerce-cover",
+    widths: [480, 800],
+    alt: "Dos personas con looks urbanos y camperas oscuras sobre una vereda de adoquines",
+  },
+} as const;

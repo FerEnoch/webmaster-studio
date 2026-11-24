@@ -1,6 +1,6 @@
 # webmaster-kit
 
-Carpeta **fuente de verdad** del sistema de diseño de las 9 apps Astro del
+Carpeta **fuente de verdad** del sistema de diseño de las apps Astro del
 portfolio. **No es un paquete npm**: se COPIA dentro de cada app.
 
 ```bash
@@ -113,7 +113,7 @@ relativas.
   conserva puertos y no sobrescribe destinos. Una app nueva sigue necesitando
   contenido, registro en el catálogo y aliases en raíz.
 - No copiar a mano un build parcial a `dist/`: el comando raíz compila y combina
-  las ocho apps antes de promover el output completo. La configuración de Pages,
+  todas las apps registradas antes de promover el output completo. La configuración de Pages,
   Node/pnpm, previews y `PUBLIC_SITE_URL` está en el [README raíz](../../README.md#publicar-bajo-un-solo-dominio-cloudflare-pages).
 
 ## Reglas de contenido
@@ -152,4 +152,6 @@ relativas.
 | `wm-inmobiliaria` | 3025 |
 | `wm-arquitectura` | 3026 |
 | `wm-arquitectura-premium` | 3032 |
+| `wm-locales-catalogo` | 3028 |
+| `wm-tiendas-ecommerce` | 3029 |
 | `wm-portfolio` | 3027 |

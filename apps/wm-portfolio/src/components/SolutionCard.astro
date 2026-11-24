@@ -1,6 +1,8 @@
 ---
 /** Tarjeta del catálogo del estudio, independiente del componente del kit. */
 import type { Rubro } from "@lib/rubros";
+import { apparelCovers } from "@lib/media";
+import { appUrl } from "@lib/urls";
 import { getSolutionCapabilities } from "../content/portfolio";
 
 export interface Props {
@@ -9,17 +11,42 @@ export interface Props {
 }
 
 const { rubro, image } = Astro.props;
+// Las demos de indumentaria usan portadas fotográficas locales (ver
+// public/media/ATTRIBUTION.txt); el resto mantiene su imagen de pool.
+const cover = apparelCovers[rubro.id as keyof typeof apparelCovers];
+const coverClass = "aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]";
+const coverSrc = (file: string, size: number) => appUrl(`/media/${file}-${size}.webp`);
+const coverMain = cover ? coverSrc(cover.file, Math.max(...cover.widths)) : "";
+const coverSrcset = cover
+  ? cover.widths.map((size) => `${coverSrc(cover.file, size)} ${size}w`).join(", ")
+  : "";
 ---
 
 <article class="wm-card group relative overflow-hidden">
   <div class="wm-grade wm-grain wm-vignette mb-6 overflow-hidden rounded-wm">
-    <img
-      src={image}
-      alt={`${rubro.rubro}: imagen ilustrativa`}
-      loading="lazy"
-      decoding="async"
-      class="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-    />
+    {
+      cover ? (
+        <img
+          src={coverMain}
+          srcset={coverSrcset}
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          width={800}
+          height={500}
+          alt={cover.alt}
+          loading="lazy"
+          decoding="async"
+          class={coverClass}
+        />
+      ) : (
+        <img
+          src={image}
+          alt={`${rubro.rubro}: imagen ilustrativa`}
+          loading="lazy"
+          decoding="async"
+          class={coverClass}
+        />
+      )
+    }
   </div>
   <p class="wm-kicker">{rubro.nombre}</p>
   <h3 class="wm-display mt-4 text-3xl leading-tight">{rubro.rubro}</h3>

@@ -1,0 +1,114 @@
+---
+/**
+ * Layout de TELAR. Una sola salida al estudio por página (solo en
+ * despliegue integrado, como el resto del kit): `href="/"`.
+ */
+import { appPath, appUrl } from "@lib/urls";
+import "../styles/global.css";
+
+export interface Props {
+  title: string;
+  description: string;
+  nav: { label: string; href: string }[];
+  canonicalPath?: string;
+}
+const { title, description, nav, canonicalPath } = Astro.props;
+const origin = Astro.site ? new URL(Astro.site).origin : Astro.url.origin;
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, origin).href;
+const current = appPath(Astro.url.pathname);
+const isIntegrated = import.meta.env.BASE_URL.startsWith("/demos/");
+const isActive = (href: string) => {
+  const p = appPath(href.split(/[?#]/)[0]);
+  return p === "/" ? current === "/" : current === p || current.startsWith(p + "/");
+};
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href={appUrl("/favicon.svg")} type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#faf6ee" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Telar" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ClothingStore",
+      name: "Telar",
+      description,
+      url: canonical,
+      address: { "@type": "PostalAddress", streetAddress: "Gorriti 4380", addressLocality: "Palermo", addressCountry: "AR" },
+      telephone: "+54 11 4832-1188",
+      priceRange: "$$",
+    })} />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="wm-header" data-wm-header>
+      <div class="wm-container wm-header__in">
+        <a href={appUrl("/")} class="wm-display wm-brand">Telar<span style="color:var(--wm-accent)">.</span></a>
+        {isIntegrated && (
+          <a href="/" data-astro-reload class="wm-display wm-studio">Ir a Webmaster Studio <span aria-hidden="true">↗</span></a>
+        )}
+        <button type="button" class="wm-menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="wm-menu-mobile" data-nav-toggle>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M2 5h14M2 9h14M2 13h14" />
+          </svg>
+        </button>
+        <nav id="wm-menu-mobile" class="wm-nav" aria-label="Principal" data-wm-menu-panel data-open="false">
+          <ul>
+            {nav.map((item) => (
+              <li><a href={appUrl(item.href)} aria-current={isActive(item.href) ? "page" : undefined}>{item.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="contenido"><slot /></main>
+    <footer class="wm-footer">
+      <div class="wm-container wm-footer__grid">
+        <div>
+          <p class="wm-display" style="font-size:2.4rem;margin:0">Telar<span style="color:var(--wm-accent)">.</span></p>
+          <p class="wm-muted">Catálogo online de ropa. Gorriti 4380, Palermo · lun a sáb de 10 a 20 h.</p>
+        </div>
+        <nav aria-label="Pie de página">
+          <p class="wm-kicker">Secciones</p>
+          <ul style="list-style:none;margin:.6rem 0 0;padding:0;display:grid;gap:.35rem">
+            {nav.map((item) => (<li><a href={appUrl(item.href)}>{item.label}</a></li>))}
+          </ul>
+        </nav>
+        <div>
+          <p class="wm-kicker">Contacto</p>
+          <p class="wm-muted">+54 11 4832-1188<br />hola@telar.ejemplo<br />Precios finales, IVA incluido.</p>
+        </div>
+      </div>
+    </footer>
+    <script>
+      const header = document.querySelector<HTMLElement>("[data-wm-header]");
+      const toggle = header?.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+      const panel = header?.querySelector<HTMLElement>("[data-wm-menu-panel]");
+
+      if (header && toggle && panel) {
+        const setMenu = (open: boolean) => {
+          panel.dataset.open = String(open);
+          toggle.setAttribute("aria-expanded", String(open));
+        };
+        toggle.addEventListener("click", () => setMenu(panel.dataset.open !== "true"));
+        header.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && panel.dataset.open === "true" && toggle.offsetWidth > 0) {
+            setMenu(false);
+            toggle.focus();
+          }
+        });
+        header.dataset.menuReady = "true";
+      }
+    </script>
+  </body>
+</html>

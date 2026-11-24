@@ -1,0 +1,34 @@
+---
+import Base from "../layouts/Base.astro";
+import { appUrl } from "@lib/urls";
+import { DELIVERY } from "@lib/shop";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Envíos", href: "/envios" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+---
+
+<Base
+  title="Envíos · Trama"
+  description="Opciones de entrega de Trama: retiro gratis en Palermo y envíos con costo fijo."
+  nav={nav}
+>
+  <div class="wm-container" style="padding-block:2rem 3rem;max-width:60rem">
+    <p class="wm-kicker">Envíos</p>
+    <h1 class="wm-display" style="font-size:clamp(2.2rem,5vw,3.6rem);margin:.6rem 0">Recibila donde quieras</h1>
+    <table class="wm-table">
+      <thead><tr><th>Entrega</th><th>Tiempo</th><th>Costo</th></tr></thead>
+      <tbody>
+        {DELIVERY.map((d) => (
+          <tr><td><strong>{d.nombre}</strong><br /><span class="wm-muted">{d.detalle}</span></td><td>{d.id === "retiro" ? "En el día" : d.id === "caba" ? "24 a 48 h hábiles" : "3 a 6 días hábiles"}</td><td>{d.costo === 0 ? "Sin costo" : `$ ${d.costo.toLocaleString("es-AR")}`}</td></tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="wm-muted">El costo de entrega se suma en el checkout y figura en el comprobante. Los plazos son orientativos: la confirmación local no prepara retiros, despacha paquetes ni habilita seguimiento.</p>
+    <p><a class="wm-btn" href={appUrl("/catalogo")}>Elegir prendas</a></p>
+  </div>
+</Base>

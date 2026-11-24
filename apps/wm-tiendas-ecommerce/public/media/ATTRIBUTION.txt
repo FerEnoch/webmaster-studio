@@ -1,0 +1,53 @@
+TRAMA storefront photography
+Source pages and license verified on 2026-11-22. These stock photographs
+illustrate garment styles, not the actual stock variants, and do not imply
+endorsement by any person, photographer, or brand shown.
+
+street-editorial-{600,1200}.webp
+Photographer: Nastasya Banana
+Source: https://www.pexels.com/photo/men-in-streetwear-posing-on-paved-street-15694146/
+License: Pexels License — https://www.pexels.com/license/
+Derivative: cropped to frame outerwear and pavement; resized to 600×750 and
+1200×1500; metadata stripped; WebP. The page crops further for narrow screens.
+
+remera-pesada-{400,800,1000}.webp
+Photographer: Jose Raul
+Source: https://www.pexels.com/photo/man-in-black-t-shirt-standing-near-concrete-wall-9379462/
+License: Pexels License — https://www.pexels.com/license/
+Derivative: portrait crop emphasizing the shirt; resized to 400×500, 800×1000
+and 1000×1250; metadata stripped; WebP.
+
+hoodie-capucha-{400,800,1000}.webp
+Photographer: Monstera Production
+Source: https://www.pexels.com/photo/stylish-african-american-man-in-black-hoodie-standing-near-rough-wall-6311682/
+License: Pexels License — https://www.pexels.com/license/
+Derivative: portrait crop from the source landscape, focusing on the hood
+and silhouette; resized to 400×500, 800×1000 and 1000×1250; metadata stripped; WebP.
+
+cargo-ancho-{400,800,1000}.webp
+Photographer: Emiliano García Garrido
+Source: https://www.pexels.com/photo/smiling-man-holding-hands-in-pockets-of-his-cargo-pants-20384982/
+License: Pexels License — https://www.pexels.com/license/
+Derivative: portrait crop from waist to knee emphasizing the cargo pockets;
+resized to 400×500, 800×1000 and 1000×1250; metadata stripped; WebP.
+
+campera-rompeviento-{400,800,1000}.webp
+Photographer: Liliana Drew
+Source: https://www.pexels.com/photo/man-wearing-windbreaker-jacket-8497715/
+License: Pexels License — https://www.pexels.com/license/
+Derivative: portrait crop from the source landscape, focusing on the collar and
+zipper; resized to 400×500, 800×1000 and 1000×1250; metadata stripped; WebP.
+
+vestido-utilitario-{400,800,1000}.webp
+Photographer: Tuấn Kiệt Jr.
+Source: https://www.pexels.com/photo/stylish-woman-in-elegant-black-dress-on-city-street-32558177/
+License: Pexels License — https://www.pexels.com/license/
+Derivative: portrait crop framed around the seated dress silhouette; resized
+to 400×500, 800×1000 and 1000×1250; metadata stripped; WebP.
+
+gorra-bordada-{400,800,1000}.webp
+Photographer: Tailan Mangabeira
+Source: https://www.pexels.com/photo/man-standing-in-t-shirt-and-cap-26447865/
+License: Pexels License — https://www.pexels.com/license/
+Derivative: tight portrait crop emphasizing the cap's embroidery and brim;
+resized to 400×500, 800×1000 and 1000×1250; metadata stripped; WebP.

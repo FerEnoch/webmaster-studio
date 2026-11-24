@@ -97,6 +97,12 @@ by hashing the whole app input tree.
    snapshots are **not** bulk-synchronized with the canonical registry.
    `pnpm check:site` validates all integrated paths.
 
+For Locales y tiendas, use `pnpm run build:locales-catalogo` (Telar, port 3028)
+or `pnpm run build:tiendas-ecommerce` (TRAMA, port 3029) for standalone output.
+The integrated build mounts `/demos/locales-catalogo/` and
+`/demos/tiendas-ecommerce/` separately from the portfolio, each with its own
+assets and app-local navigation. The cross-app Studio links always target `/`.
+
 Removing an APPS entry removes its routes on the next complete assembly, even if
 an old cached artifact remains. The portfolio's canonical re-export means a
 catalogue edit rebuilds the portfolio but not unrelated demos. Cached historical

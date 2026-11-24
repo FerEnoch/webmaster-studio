@@ -24,7 +24,7 @@ one group per `rubroId`, ordered by first appearance. Each group's demos keep
 catalogue order. Family display names are overridden only inside the grouping
 helper: `concesionario` → **Concesionarios**, `lavadero` → **Multiservicios**,
 `estetica` → **Estética**, `universidad` → **Institucional y educativo**, and
-`arquitectura` → **Estudios profesionales**. **Inmobiliaria** stays unchanged.
+`arquitectura` → **Estudios profesionales**. `locales-y-tiendas` → **Locales y tiendas**. **Inmobiliaria** stays unchanged.
 Demo names and public `RUBROS`/`APPS` metadata retain their existing values.
 For other families, chip copy comes from the same-ID base demo when present,
 otherwise the first demo in that family; accent follows that same base lookup.
@@ -44,6 +44,10 @@ Without JavaScript all demos remain visible.
 
 - `/demos/?rubro=lavadero` shows both lavadero variants.
 - `/demos/?rubro=arquitectura` shows both architecture variants.
+- `/demos/?rubro=locales-y-tiendas` shows the Telar and TRAMA cards together.
+  `/demos/?rubro=locales-catalogo` and `/demos/?rubro=tiendas-ecommerce` show the
+  corresponding card only. Telar is browse-only; TRAMA has a local checkout
+  with separate Mercado Pago and MODO simulations, not a payment integration.
 - Historical `/demos/?rubro=lavadero-premium` and
   `/demos/?rubro=arquitectura-premium` still show just that variant. The family
   chip is selected; clicking it shows the complete family and updates the query.
@@ -97,8 +101,8 @@ canonical registry is no longer valid. Build tests should instead verify the
 portfolio's canonical exports, stable app URLs/bases and isolated app snapshots;
 do not restore equality by overwriting demo sources or customized kit UI.
 
-Browser coverage should verify six family chips plus “Todas”, eight cards,
-two results for each lavadero/architecture family, one result for each premium
+Browser coverage verifies seven family chips plus “Todas”, ten cards,
+two results for each lavadero/architecture/apparel family, one result for each premium
 deep link, unknown-filter fallback, URL preservation, live announcements and
 navigation to the original demo routes. Appended variants must be discoverable
 through their `rubroId` without changing a hardcoded alias table. Deterministic

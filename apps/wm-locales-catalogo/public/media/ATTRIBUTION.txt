@@ -1,0 +1,59 @@
+telar-editorial.webp
+Photograph: Thom Bradley (@thombradley), Unsplash photo mwa_nzFpnJw.
+Source: https://unsplash.com/photos/clothing-racks-with-neutral-toned-garments-mwa_nzFpnJw
+License: https://unsplash.com/license
+Changes: cropped and converted to WebP for this site. Editorial artwork, not a product photo.
+
+Garment SVGs and the favicon are original artwork created for Telar.
+
+Catalogue photography
+These images illustrate garment styles; they do not show the selected stock variant
+or imply model or photographer endorsement.
+
+camisa-lino-480.webp, camisa-lino-960.webp
+Photograph: dayong tien.
+Source: https://www.pexels.com/photo/shirt-on-hanger-on-branch-22441297/
+License: Pexels License — https://www.pexels.com/license/
+Changes: cropped to 4:5, resized to 480 × 600 and 960 × 1200, stripped metadata and converted to WebP.
+
+remera-esencial-480.webp, remera-esencial-960.webp
+Photograph: MART PRODUCTION.
+Source: https://www.pexels.com/photo/woman-in-white-crew-neck-t-shirt-9558752/
+License: Pexels License — https://www.pexels.com/license/
+Changes: cropped to 4:5, resized to 480 × 600 and 960 × 1200, stripped metadata and converted to WebP.
+
+pantalon-sastrero-480.webp, pantalon-sastrero-960.webp
+Photograph: Criativa Pix Fotografia.
+Source: https://www.pexels.com/photo/model-in-black-longline-blazer-and-pants-with-a-crease-18173609/
+License: Pexels License — https://www.pexels.com/license/
+Changes: cropped to 4:5, resized to 480 × 600 and 960 × 1200, stripped metadata and converted to WebP.
+
+vestido-marta-480.webp, vestido-marta-960.webp
+Photograph: cottonbro studio.
+Source: https://www.pexels.com/photo/a-woman-in-black-sleeveless-dress-7761075/
+License: Pexels License — https://www.pexels.com/license/
+Changes: cropped to 4:5, resized to 480 × 600 and 960 × 1200, stripped metadata and converted to WebP.
+
+campera-campo-480.webp, campera-campo-960.webp
+Photograph: RALPH JOSHUA NORIEL.
+Source: https://www.pexels.com/photo/a-woman-in-an-olive-jacket-13260209/
+License: Pexels License — https://www.pexels.com/license/
+Changes: cropped to 4:5, resized to 480 × 600 and 960 × 1200, stripped metadata and converted to WebP.
+
+pollera-tubo-480.webp, pollera-tubo-960.webp
+Photograph: Gisele Seidel.
+Source: https://www.pexels.com/photo/woman-in-multicolored-top-and-black-long-pencil-posing-by-a-wall-17822244/
+License: Pexels License — https://www.pexels.com/license/
+Changes: cropped to 4:5, resized to 480 × 600 and 960 × 1200, stripped metadata and converted to WebP.
+
+sweater-nordico-480.webp, sweater-nordico-960.webp
+Photograph: Mayara Caroline Mombelli.
+Source: https://www.pexels.com/photo/woman-in-cozy-sweater-in-autumn-forest-31972444/
+License: Pexels License — https://www.pexels.com/license/
+Changes: cropped to 4:5, resized to 480 × 600 and 960 × 1200, stripped metadata and converted to WebP.
+
+vestido-lino-largo-480.webp, vestido-lino-largo-960.webp
+Photograph: cottonbro studio.
+Source: https://www.pexels.com/photo/woman-in-white-sleeveless-dress-standing-beside-white-wall-8441588/
+License: Pexels License — https://www.pexels.com/license/
+Changes: cropped to 4:5, resized to 480 × 600 and 960 × 1200, stripped metadata and converted to WebP.

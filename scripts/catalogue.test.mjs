@@ -13,7 +13,7 @@ const visibleIds = (requested, demos = RUBROS) => {
 test("one chip per family, in catalogue order, includes both base/premium pairs", () => {
   assert.equal(typeof catalogue.getRubroGroups, "function");
   const groups = catalogue.getRubroGroups();
-  assert.deepEqual(ids(groups), ["concesionario", "lavadero", "estetica", "universidad", "inmobiliaria", "arquitectura"]);
+  assert.deepEqual(ids(groups), ["concesionario", "lavadero", "estetica", "universidad", "inmobiliaria", "arquitectura", "locales-y-tiendas"]);
   assert.equal(new Set(ids(groups)).size, groups.length);
   for (const [id, nombre] of [["lavadero", "Multiservicios"], ["arquitectura", "Estudios profesionales"]]) {
     const group = groups.find((group) => group.id === id);
@@ -30,9 +30,10 @@ test("family display names change without renaming demos or their public app met
     ["concesionario", "Concesionarios"], ["lavadero", "Multiservicios"],
     ["estetica", "Estética"], ["universidad", "Institucional y educativo"],
     ["inmobiliaria", "Inmobiliaria"], ["arquitectura", "Estudios profesionales"],
+    ["locales-y-tiendas", "Locales y tiendas"],
   ]);
   const names = ["Concesionario", "Lavadero + bar", "Lavadero Premium", "Estética + yoga",
-    "Universidad privada", "Inmobiliaria", "Arquitectura", "Arquitectura Premium"];
+    "Universidad privada", "Inmobiliaria", "Arquitectura", "Arquitectura Premium", "Catalogo online", "Ecommerce"];
   assert.deepEqual(RUBROS.map(({ nombre }) => nombre), names);
   assert.deepEqual(APPS.slice(0, -1).map(({ nombre }) => nombre), names);
 });
@@ -55,13 +56,13 @@ test("new variants join existing families without name/suffix lists or mutation"
   const demos = Object.freeze([...RUBROS, ...extra].map((demo) => Object.freeze({ ...demo })));
   const before = structuredClone(demos);
   const groups = catalogue.getRubroGroups(demos);
-  assert.equal(groups.length, 6);
+  assert.equal(groups.length, 7);
   assert.deepEqual(ids(groups.find((group) => group.id === "estetica").demos), ["estetica", "aura"]);
   assert.deepEqual(visibleIds("estetica", demos), ["estetica", "aura"]);
   assert.deepEqual(visibleIds("lavadero", demos), ["lavadero", "lavadero-premium", "gloss-nocturno"]);
   assert.deepEqual(visibleIds("aura", demos), ["aura"]);
   assert.deepEqual(demos, before);
-  assert.equal(RUBROS.length, 8);
+  assert.equal(RUBROS.length, 10);
 });
 
 test("a new family derives its own chip even without a same-named base demo", () => {
@@ -101,7 +102,8 @@ test("demo IDs, app ordering, ports, URLs and lookup aliases remain unchanged", 
   const expected = [
     ["concesionario", 3021], ["lavadero", 3022], ["lavadero-premium", 3031],
     ["estetica", 3023], ["universidad", 3024], ["inmobiliaria", 3025],
-    ["arquitectura", 3026], ["arquitectura-premium", 3032], ["portfolio", 3027],
+    ["arquitectura", 3026], ["arquitectura-premium", 3032],
+    ["locales-catalogo", 3028], ["tiendas-ecommerce", 3029], ["portfolio", 3027],
   ];
   assert.deepEqual(APPS.map(({ id, port }) => [id, port]), expected);
   assert.equal(new Set(ids(APPS)).size, APPS.length);
@@ -122,4 +124,13 @@ test("portfolio consumes the canonical registry instead of maintaining a copied 
   assert.equal(portfolio.RUBROS, RUBROS);
   assert.equal(portfolio.APPS, APPS);
   assert.equal(portfolio.getRubroGroups, catalogue.getRubroGroups);
+});
+
+test("apparel family groups both demos while individual aliases select one", () => {
+  const apparel = ["locales-catalogo", "tiendas-ecommerce"];
+  const group = catalogue.getRubroGroups().find(({ id }) => id === "locales-y-tiendas");
+  assert.equal(group?.nombre, "Locales y tiendas");
+  assert.deepEqual(ids(group.demos), apparel);
+  assert.deepEqual(visibleIds("locales-y-tiendas"), apparel);
+  for (const id of apparel) assert.deepEqual(visibleIds(id), [id]);
 });

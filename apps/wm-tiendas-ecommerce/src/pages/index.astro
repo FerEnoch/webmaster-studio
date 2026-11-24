@@ -1,0 +1,78 @@
+---
+import Base from "../layouts/Base.astro";
+import StorePhoto from "../components/StorePhoto.astro";
+import { editorialPhoto, productPhoto } from "@lib/photos";
+import { appUrl } from "@lib/urls";
+import { formatPrice, productById } from "@lib/shop";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Envíos", href: "/envios" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+const destacados = ["hoodie-capucha", "cargo-ancho", "remera-pesada"]
+  .map((id) => productById(id)!)
+  .filter(Boolean);
+---
+
+<Base
+  title="Trama · Tienda de ropa urbana"
+  description="Trama: seis prendas urbanas, con entrega a domicilio o retiro."
+  nav={nav}
+>
+  <div class="wm-container">
+    <section class="wm-hero">
+      <div>
+        <p class="wm-kicker">Tienda · Palermo</p>
+        <h1 class="wm-display">Ropa de calle <span>sin vueltas</span></h1>
+        <p class="wm-muted">
+          Seis prendas urbanas que funcionan solas y mejor juntas. Elegí tu calce
+          y recibí tu selección en casa o retirala en Palermo.
+        </p>
+        <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.4rem">
+          <a class="wm-btn" href={appUrl("/catalogo")}>Ver las seis prendas</a>
+          <a class="wm-btn wm-btn--ghost" href={appUrl("/envios")}>Cómo son los envíos</a>
+        </div>
+      </div>
+      <figure>
+        <StorePhoto photo={editorialPhoto} placement="hero" priority />
+      </figure>
+    </section>
+  </div>
+
+  <div class="wm-strip" aria-hidden="true">
+    <div class="wm-container">Retiro gratis en Palermo · Envíos a todo el país · Cambios por 30 días ·&nbsp;</div>
+  </div>
+
+  <div class="wm-container">
+    <section aria-labelledby="destacados" style="padding-block:2.5rem">
+      <p class="wm-kicker">Las que más salen</p>
+      <h2 id="destacados" class="wm-display" style="font-size:clamp(2rem,5vw,3.2rem);margin:.6rem 0 1.2rem">Tres para empezar</h2>
+      <div class="wm-grid">
+        {destacados.map((p) => (
+          <article class="wm-card">
+            <StorePhoto photo={productPhoto(p)} />
+            <div class="wm-card__body">
+              <h3 class="wm-display">{p.nombre}</h3>
+              <p>{p.categoria} · {formatPrice(p.precio)}</p>
+              <a class="wm-link" style="color:var(--wm-accent);font-weight:700" href={appUrl(`/producto/${p.id}`)}>Ver y agregar →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="como" style="padding-block:1rem 3rem">
+      <p class="wm-kicker">Cómo comprar</p>
+      <h2 id="como" class="wm-display" style="font-size:clamp(2rem,5vw,3.2rem);margin:.6rem 0 1.2rem">Tres pasos y listo</h2>
+      <ol style="display:grid;gap:1rem;margin:1.2rem 0 0;padding:0;list-style:none">
+        <li class="wm-panel"><strong>1 · Armá el carrito.</strong><p class="wm-muted">Elegí color y talle con stock; el carrito se guarda en tu navegador.</p></li>
+        <li class="wm-panel"><strong>2 · Elegí entrega y pago.</strong><p class="wm-muted">Retiro en Palermo o envío con costo fijo. Elegí Mercado Pago o MODO.</p></li>
+        <li class="wm-panel"><strong>3 · Confirmá.</strong><p class="wm-muted">Revisá las prendas, la modalidad de entrega y el total antes de confirmar.</p></li>
+      </ol>
+      <p style="margin-top:1.4rem"><a class="wm-btn" href={appUrl("/carrito")}>Ver mi carrito</a></p>
+    </section>
+  </div>
+</Base>

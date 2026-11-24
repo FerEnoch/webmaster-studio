@@ -1,0 +1,302 @@
+---
+import Base from "../layouts/Base.astro";
+import CheckoutReceipt from "../components/CheckoutReceipt.astro";
+import { appUrl } from "@lib/urls";
+import { DELIVERY, PAY_METHODS, formatPrice } from "@lib/shop";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Envíos", href: "/envios" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+---
+
+<Base title="Entrega y pago · Trama" description="Revisá la entrega y el pago de tu selección en Trama." nav={nav}>
+  <div class="wm-container checkout">
+    <p class="wm-kicker">Carrito / Entrega y pago</p>
+    <h1 class="wm-display">Revisá tu pedido</h1>
+    <noscript><p>Activá JavaScript para usar el carrito y el checkout.</p></noscript>
+    <section data-empty hidden>
+      <p class="wm-muted">Tu carrito está vacío.</p>
+      <a class="wm-btn" href={appUrl("/catalogo")}>Volver a la tienda</a>
+    </section>
+
+    <div data-checkout hidden class="checkout-grid">
+      <div>
+        <section data-options>
+          <fieldset>
+            <legend class="wm-display">1 / Entrega</legend>
+            <div class="wm-radio">
+              {DELIVERY.map((d, i) => (
+                <label><input type="radio" name="entrega" value={d.id} checked={i === 0} />
+                  <span><strong>{d.nombre}</strong> · {d.costo === 0 ? "Sin costo" : formatPrice(d.costo)}<br /><span class="wm-muted">{d.detalle}</span></span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend class="wm-display">2 / Medio de pago</legend>
+            <div class="wm-radio">
+              {PAY_METHODS.map((m, i) => (
+                <label><input type="radio" name="pago" value={m.id} checked={i === 0} />
+                  <span><strong>{m.nombre}</strong><br /><span class="wm-muted">{m.bajada}</span></span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset class="contact">
+            <legend class="wm-display">3 / Contacto</legend>
+            <label for="checkout-email">Correo electrónico de prueba</label>
+            <p class="wm-muted" id="checkout-email-help">Comprá sin cuenta. Usá un correo de ejemplo, como compra@example.com, para ver cómo se vería el mensaje de confirmación. No se guarda ni se envía.</p>
+            <input id="checkout-email" type="email" required autocomplete="off" maxlength="254"
+              spellcheck="false" placeholder="compra@example.com" aria-describedby="checkout-email-help checkout-email-error" />
+            <p id="checkout-email-error" role="alert"></p>
+          </fieldset>
+          <p class="wm-muted">El siguiente paso es una simulación local. No ingreses datos de pago: no se hacen cargos ni se preparan envíos o retiros.</p>
+          <div class="checkout-actions">
+            <button class="wm-btn" type="button" data-continue>Continuar con Mercado Pago</button>
+            <a class="wm-btn wm-btn--ghost" href={appUrl("/carrito")}>Editar carrito</a>
+          </div>
+        </section>
+
+        <section data-preview="mercadopago" class="wm-panel provider" hidden>
+          <p class="wm-kicker">Vista previa / Mercado Pago</p>
+          <h2 tabindex="-1">Revisá el pago</h2>
+          <fieldset>
+            <legend>Elegí un medio de prueba</legend>
+            <div class="wm-radio">
+              <label><input type="radio" name="mp-source" value="Saldo de prueba" checked /> Saldo de prueba</label>
+              <label><input type="radio" name="mp-source" value="Tarjeta de prueba" /> Tarjeta de prueba</label>
+            </div>
+          </fieldset>
+          <p class="wm-muted">No ingreses datos de una cuenta o tarjeta.</p>
+          <div class="checkout-actions">
+            <button class="wm-btn" type="button" data-confirm="mercadopago">Confirmar con Mercado Pago</button>
+            <button class="wm-btn wm-btn--ghost" type="button" data-back>Volver a entrega y pago</button>
+          </div>
+        </section>
+        <section data-preview="modo" class="wm-panel provider" hidden>
+          <p class="wm-kicker">Vista previa / MODO</p>
+          <h2 tabindex="-1">Aprobación en la billetera</h2>
+          <p>En una compra real, aprobarías la operación en tu billetera. Acá no necesitás una app ni escanear nada.</p>
+          <p class="wm-badge">Solicitud local · Sin cargo</p>
+          <div class="checkout-actions">
+            <button class="wm-btn" type="button" data-confirm="modo">Simular aprobación con MODO</button>
+            <button class="wm-btn wm-btn--ghost" type="button" data-back>Volver a entrega y pago</button>
+          </div>
+        </section>
+        <p role="status" data-status></p>
+      </div>
+
+      <section aria-labelledby="resumen" class="wm-panel totals">
+        <h2 id="resumen" class="wm-display">Resumen</h2>
+        <ul data-lines></ul>
+        <dl><div><dt>Subtotal</dt><dd data-subtotal></dd></div>
+          <div><dt>Entrega</dt><dd data-shipping></dd></div>
+          <div class="total"><dt>Total</dt><dd data-total></dd></div>
+        </dl>
+      </section>
+    </div>
+
+    <CheckoutReceipt>
+      <a class="wm-btn wm-btn--ghost" href={appUrl("/catalogo")}>Volver a la tienda</a>
+      <a class="wm-btn wm-btn--ghost" href={appUrl("/carrito")}>Ver mi carrito</a>
+    </CheckoutReceipt>
+  </div>
+</Base>
+
+<style>
+  .checkout { padding-block: 2rem 3rem; }
+  h1 { font-size: clamp(2.8rem, 6vw, 5rem); margin: .6rem 0 1.6rem; }
+  fieldset { border: 0; min-inline-size: 0; padding: 0; margin: 0 0 1.2rem; }
+  legend { padding: 0; margin-bottom: .75rem; font-weight: 700; font-size: 1.3rem; }
+  .checkout-grid, .checkout-actions { display: grid; gap: 1rem; }
+  .checkout-actions { display: flex; flex-wrap: wrap; }
+  .totals { align-self: start; }
+  .totals h2, .provider h2 { margin-top: .35rem; }
+  .contact label { font-weight: 700; }
+  .contact p { margin-block: .35rem .65rem; }
+  .contact input {
+    display: block; box-sizing: border-box; width: 100%; max-width: 25rem; padding: .75rem;
+    border: 1px solid var(--wm-line); border-radius: .65rem; color: inherit;
+    font: inherit; background: var(--wm-soft);
+  }
+  .contact input::placeholder { color: var(--wm-muted); }
+  .contact input[aria-invalid="true"] { border-color: var(--wm-accent); }
+  #checkout-email-error { color: #ff9daf; }
+  #checkout-email-error:empty { margin: 0; }
+  dl div { display: flex; justify-content: space-between; gap: .75rem; }
+  dd { margin: 0; text-align: right; }
+  .total { font-size: 1.25rem; font-weight: 800; margin-top: .5rem; border-top: 1px solid var(--wm-line); padding-top: .5rem; }
+  [data-lines] { padding-inline-start: 1.1rem; }
+  @media (min-width: 740px) { .checkout-grid { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); } }
+</style>
+
+<script>
+  import { CART_KEY, DELIVERY, PAY_METHODS, formatPrice, parseCart, productById, totals } from "@lib/shop";
+  import type { CartLine, DeliveryId, PayMethod } from "@lib/shop";
+
+  function element<T extends HTMLElement = HTMLElement>(selector: string): T {
+    const el = document.querySelector<T>(selector);
+    if (!el) throw new Error(`Missing checkout element: ${selector}`);
+    return el;
+  }
+  const box = element("[data-checkout]");
+  const options = element("[data-options]");
+  const empty = element("[data-empty]");
+  const confirmation = element("[data-confirmation]");
+  const continueButton = element("[data-continue]");
+  const email = element<HTMLInputElement>("#checkout-email");
+  const emailError = element("#checkout-email-error");
+  const panels = Array.from(document.querySelectorAll<HTMLElement>("[data-preview]"));
+  const status = element("[data-status]");
+  const read = (name: string) => document.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`)?.value;
+  const delivery = () => DELIVERY.find((d) => d.id === read("entrega")) ?? DELIVERY[0];
+  const payment = () => PAY_METHODS.find((m) => m.id === read("pago")) ?? PAY_METHODS[0];
+  const readCart = () => {
+    try { return parseCart(JSON.parse(localStorage.getItem(CART_KEY) ?? "[]")); }
+    catch { return []; }
+  };
+  let preview: PayMethod | null = null;
+  let finished = false;
+
+  function lineLabel(line: CartLine, itemized = false): string {
+    const product = productById(line.producto);
+    const color = product?.colores.find(({ id }) => id === line.color)?.nombre;
+    const label = `${line.qty} × ${product?.nombre} · ${color} / ${line.size}`;
+    return itemized && product ? `${label} · ${formatPrice(product.precio * line.qty)}` : label;
+  }
+
+  function paintLines(target: string, labels: string[]) {
+    element(target).replaceChildren(...labels.map((label) => {
+      const row = document.createElement("li");
+      row.textContent = label;
+      return row;
+    }));
+  }
+
+  function clearEmailError() {
+    email.removeAttribute("aria-invalid");
+    emailError.textContent = "";
+  }
+
+  function validateEmail(): boolean {
+    if (email.validity.valid) return true;
+    email.setAttribute("aria-invalid", "true");
+    emailError.textContent = email.validity.valueMissing
+      ? "Ingresá un correo electrónico de prueba."
+      : "Ingresá un correo válido, por ejemplo compra@example.com.";
+    email.focus();
+    return false;
+  }
+
+  function nextStep(deliveryId: DeliveryId): string {
+    return deliveryId === "retiro"
+      ? "En una compra real, recibirías un aviso cuando el pedido esté listo para retirar. No hace falta acercarse al local."
+      : "En una compra real, recibirías un enlace de seguimiento cuando el pedido salga. No hay un paquete ni seguimiento activo.";
+  }
+
+  function showReceipt(cart: CartLine[], shipment: ReturnType<typeof delivery>, paymentLabel: string) {
+    const bytes = crypto.getRandomValues(new Uint8Array(8));
+    const reference = `TR-${Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("").toUpperCase()}`;
+    const lines = cart.map((line) => lineLabel(line, true));
+    const summary = totals(cart, shipment.id);
+    const shipping = summary.shipping ? formatPrice(summary.shipping) : "Sin costo";
+    const total = formatPrice(summary.total);
+    const subtotal = formatPrice(summary.subtotal);
+    const next = nextStep(shipment.id);
+    const recipient = `${email.value[0]}•••${email.value.slice(email.value.lastIndexOf("@"))}`;
+    email.value = "";
+
+    element("[data-reference]").textContent = reference;
+    paintLines("[data-receipt-lines]", lines);
+    element("[data-receipt-subtotal]").textContent = subtotal;
+    element("[data-receipt-shipping]").textContent = shipping;
+    element("[data-receipt-total]").textContent = total;
+    element("[data-receipt-method]").textContent = paymentLabel;
+    element("[data-receipt-delivery]").textContent = shipment.nombre;
+    element("[data-receipt-next]").textContent = next;
+    element("[data-email-recipient]").textContent = recipient;
+    element("[data-email-message]").textContent = `Tu pedido ${reference} quedó registrado en esta simulación. Total: ${total}. ${shipment.nombre}. ${next}`;
+
+    const receipt = [
+      "Trama · Comprobante local",
+      `Referencia: ${reference}`, "", ...lines, "",
+      `Subtotal: ${subtotal}`, `Entrega: ${shipment.nombre} · ${shipping}`,
+      `Total: ${total}`, `Medio de pago: ${paymentLabel}`, "",
+      next, "Sin cargo, envío, retiro ni correo real.", "",
+    ].join("\n");
+
+    element("[data-download]").addEventListener("click", () => {
+      const url = URL.createObjectURL(new Blob([receipt], { type: "text/plain;charset=utf-8" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `Trama-${reference}.txt`;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 0);
+    });
+  }
+
+  function paint() {
+    const cart = readCart();
+    empty.hidden = finished || cart.length > 0;
+    box.hidden = finished || cart.length === 0;
+    options.hidden = preview !== null;
+    for (const panel of panels) panel.hidden = panel.dataset.preview !== preview;
+    continueButton.textContent = `Continuar con ${payment().nombre}`;
+    const summary = totals(cart, delivery().id);
+    element("[data-subtotal]").textContent = formatPrice(summary.subtotal);
+    element("[data-shipping]").textContent = summary.shipping ? formatPrice(summary.shipping) : "Sin costo";
+    element("[data-total]").textContent = formatPrice(summary.total);
+    paintLines("[data-lines]", cart.map((line) => lineLabel(line)));
+  }
+
+  function openPreview() {
+    if (!readCart().length) return;
+    if (!validateEmail()) return;
+    clearEmailError();
+    preview = payment().id;
+    paint();
+    panels.find((panel) => !panel.hidden)?.querySelector("h2")?.focus();
+  }
+  continueButton.addEventListener("click", openPreview);
+  email.addEventListener("input", clearEmailError);
+  email.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.isComposing) return;
+    event.preventDefault();
+    openPreview();
+  });
+  for (const back of document.querySelectorAll("[data-back]")) {
+    back.addEventListener("click", () => { preview = null; status.textContent = ""; paint(); email.focus(); });
+  }
+  for (const button of document.querySelectorAll<HTMLButtonElement>("[data-confirm]")) {
+    button.addEventListener("click", () => {
+      if (finished || !preview || button.dataset.confirm !== preview || preview !== payment().id) return;
+      const cart = readCart();
+      if (!cart.length) { paint(); return; }
+      if (!email.validity.valid) {
+        preview = null;
+        paint();
+        validateEmail();
+        return;
+      }
+      const method = payment();
+      const shipment = delivery();
+      try { localStorage.removeItem(CART_KEY); }
+      catch { status.textContent = "No se pudo vaciar el carrito. No se confirmó el pedido."; return; }
+      finished = true;
+      const source = preview === "mercadopago" ? ` (${read("mp-source")})` : " (aprobación local)";
+      showReceipt(cart, shipment, method.nombre + source);
+      confirmation.hidden = false;
+      window.dispatchEvent(new Event("trama:cart"));
+      paint();
+      confirmation.querySelector("h2")?.focus();
+    });
+  }
+  options.addEventListener("change", paint);
+  window.addEventListener("storage", paint);
+  window.addEventListener("pageshow", paint);
+  paint();
+</script>
