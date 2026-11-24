@@ -4,7 +4,7 @@ Portfolio freelance y **demos de rubro** con Astro, React y Tailwind. Un sitio
 estático reúne el portfolio en `/`, el catálogo en `/demos/` y cada demo en
 `/demos/<slug>/`, sin cambiar de dominio.
 
-Actualmente hay nueve apps independientes: ocho demos agrupadas en seis familias
+Actualmente hay once apps independientes: diez demos agrupadas en siete familias
 y el portfolio madre. El catálogo deriva del registro, no de una cantidad fija:
 
 | Familia | Demos actuales |
@@ -15,6 +15,7 @@ y el portfolio madre. El catálogo deriva del registro, no de una cantidad fija:
 | Educación | Universidad privada |
 | Inmobiliaria | Propiedades |
 | Arquitectura | Estudio y edición premium con 3D/tour |
+| Locales y tiendas | Catalogo online (Telar) en `/demos/locales-catalogo/` y Ecommerce (TRAMA) en `/demos/tiendas-ecommerce/` |
 
 ## Empezar en local
 
@@ -37,6 +38,8 @@ pnpm run dev:concesionario         # app de referencia: http://localhost:3021
 | `wm-inmobiliaria` | 3025 | `pnpm run dev:inmobiliaria` |
 | `wm-arquitectura` | 3026 | `pnpm run dev:arquitectura` |
 | `wm-arquitectura-premium` | 3032 | `pnpm run dev:arquitectura-premium` |
+| `wm-locales-catalogo` | 3028 | `pnpm run dev:locales-catalogo` |
+| `wm-tiendas-ecommerce` | 3029 | `pnpm run dev:tiendas-ecommerce` |
 | `wm-portfolio` | 3027 | `pnpm run dev:portfolio` |
 
 Cada alias `dev:<id>` conserva su equivalente `build:<id>` para compilar una app

@@ -162,22 +162,54 @@ export const RUBROS: Rubro[] = [
       template: "Hola, quiero cotizar un proyecto de {tipo} en la edición premium.",
     },
   },
+  {
+    id: "locales-catalogo",
+    rubroId: "locales-y-tiendas",
+    slug: "locales-catalogo",
+    nombre: "Catalogo online",
+    rubro: "Catálogo digital de indumentaria",
+    tagline: "Telar: mostrá prendas, variantes y disponibilidad sin vender en línea.",
+    objeccion: "«¿Cómo muestro lo que tengo en el local sin sumar una tienda online?»",
+    demoUrl: "/demos/locales-catalogo/",
+    port: 3028,
+    palette: { bg: "#FAF6EE", fg: "#1E1B16", accent: "#A34A24" },
+    whatsapp: {
+      phone: "5491100000000",
+      template: "Hola, quería consultar por {prenda} en Telar.",
+    },
+  },
+  {
+    id: "tiendas-ecommerce",
+    rubroId: "locales-y-tiendas",
+    slug: "tiendas-ecommerce",
+    nombre: "Ecommerce",
+    rubro: "Tienda online de ropa urbana",
+    tagline: "TRAMA: de la variante en stock a un checkout con entrega y pago simulado.",
+    objeccion: "«¿Puedo ofrecer retiro y envío sin que se complique el checkout?»",
+    demoUrl: "/demos/tiendas-ecommerce/",
+    port: 3029,
+    palette: { bg: "#14110F", fg: "#F4EFE4", accent: "#FF4D6D" },
+    whatsapp: {
+      phone: "5491100000000",
+      template: "Hola, quería consultar por {prenda} en TRAMA.",
+    },
+  },
 ];
 
-/** El portfolio madre: no es un rubro, es el índice de las 8 demos. */
+/** El portfolio madre: no es un rubro, es el índice de las demos. */
 export const PORTFOLIO = {
   id: "portfolio",
   slug: "portfolio",
   nombre: "Portfolio",
   rubro: "Portfolio de demos por rubro",
-  tagline: "Nueve webs, seis rubros, una sola firma visual.",
+  tagline: "Demos por rubro, con recorridos distintos para cada negocio.",
   objeccion: "«¿Cada web es un template o está hecha para mi rubro?»",
   demoUrl: "/",
   port: 3027,
   palette: { bg: "#111113", fg: "#EFEFEA", accent: "#D7FF4A" },
 } as const;
 
-/** Todas las apps del monorepo (8 ejemplos + portfolio madre). */
+/** Todas las apps del monorepo (demos + portfolio madre). */
 export const APPS: { id: string; nombre: string; rubro: string; demoUrl: string; port: number }[] = [
   ...RUBROS.map((r) => ({
     id: r.id,
@@ -216,6 +248,7 @@ const familyNames = new Map<string, string>([
   ["estetica", "Estética"],
   ["universidad", "Institucional y educativo"],
   ["arquitectura", "Estudios profesionales"],
+  ["locales-y-tiendas", "Locales y tiendas"],
 ]);
 
 export function getRubroGroups(demos: readonly Rubro[] = RUBROS): RubroGroup[] {

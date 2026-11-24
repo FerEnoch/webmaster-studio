@@ -7,6 +7,10 @@ const studio = scope.apps.find((app) => app.base === '/');
 const returnLink = (page) => page.locator('[data-wm-header]').getByRole('link', { name: 'Ir a Webmaster Studio', exact: true });
 const studioHeading = (page) => page.getByRole('heading', { level: 1, name: /Estudio de\s+Desarrollo\s+de Software/i });
 const skipUnchanged = (app) => test.skip(!scope.selected.includes(app), `Unchanged ${app.name}: ${scope.reason}`);
+const storefrontContacts = new Map([
+  ['wm-locales-catalogo', { heading: 'Vení a probarte', email: 'hola@telar.ejemplo' }],
+  ['wm-tiendas-ecommerce', { heading: 'Hablamos', email: 'hola@trama.ejemplo' }],
+]);
 
 async function visibleReturn(page) {
   const link = returnLink(page);
@@ -48,6 +52,8 @@ async function returnHome(page) {
 }
 
 for (const app of demos) {
+  const contact = storefrontContacts.get(app.name);
+
   test(`${app.name}: top action returns to the real studio with a full reload`, async ({ page }) => {
     skipUnchanged(app);
     expect((await page.goto(app.base)).status()).toBe(200);
@@ -61,7 +67,11 @@ for (const app of demos) {
     const link = await visibleReturn(page);
     const brand = page.locator('[data-wm-header] a').first();
     const menu = page.getByRole('button', { name: 'Abrir menu', exact: true });
-    for (const control of [brand, menu]) {
+    const controls = [brand, menu];
+    if (app.name === 'wm-tiendas-ecommerce') {
+      controls.push(page.getByRole('link', { name: 'Ver carrito', exact: true }));
+    }
+    for (const control of controls) {
       await expect(control).toBeVisible();
       await expect(control).toBeInViewport({ ratio: 1 });
       const a = await link.boundingBox(), b = await control.boundingBox();
@@ -69,6 +79,32 @@ for (const app of demos) {
         'return action must not overlap brand or menu').toBe(true);
     }
     expect(await link.evaluate((node) => node.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+    if (contact) {
+      expect(await link.evaluate((node) => node.getBoundingClientRect().width)).toBeGreaterThanOrEqual(44);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+      const panel = page.locator('[data-wm-menu-panel]');
+      const contactLink = panel.getByRole('link', { name: 'Contacto', exact: true });
+      await expect(panel).toBeHidden();
+      await menu.focus();
+      await menu.press('Enter');
+      await expect(menu).toHaveAttribute('aria-expanded', 'true');
+      await expect(contactLink).toBeVisible();
+      await contactLink.focus();
+      await contactLink.press('Escape');
+      await expect(menu).toBeFocused();
+      await expect(menu).toHaveAttribute('aria-expanded', 'false');
+      await expect(panel).toBeHidden();
+      await menu.click();
+      await expect(contactLink).toHaveAttribute('href', app.base + 'contacto/');
+      await contactLink.click();
+      await expect(page).toHaveURL(app.base + 'contacto/');
+      await expect(page.getByRole('heading', { level: 1, name: contact.heading })).toBeVisible();
+      await expect(page.getByRole('main')).toContainText(contact.email);
+      await expect(panel).toHaveAttribute('data-open', 'false');
+      await menu.click();
+      await expect(contactLink).toHaveAttribute('aria-current', 'page');
+      return;
+    }
     await menu.click();
     await expect(page.getByRole('navigation', { name: 'Menu mobile', exact: true })
       .getByRole('link').first()).toBeVisible();
@@ -81,8 +117,11 @@ for (const app of demos) {
     const header = page.locator('[data-wm-header]');
     const brand = header.getByRole('link').first();
     await expect(brand).toHaveAttribute('href', app.base);
-    const nav = page.getByRole('navigation', { name: isMobile ? 'Menu mobile' : 'Principal', exact: true });
-    if (isMobile) await header.getByRole('button', { name: 'Abrir menu', exact: true }).click();
+    const nav = page.getByRole('navigation', { name: isMobile && !contact ? 'Menu mobile' : 'Principal', exact: true });
+    if (contact) {
+      await expect(nav.getByRole('link', { name: 'Contacto', exact: true })).toHaveAttribute('href', app.base + 'contacto/');
+      await expect(header.locator('a[href*="wa.me"], a[href*="whatsapp.com"]')).toHaveCount(0);
+    } else if (isMobile) await header.getByRole('button', { name: 'Abrir menu', exact: true }).click();
     else await expect(header.getByRole('link', { name: 'WhatsApp', exact: true })).toBeVisible();
     const internal = nav.getByRole('link').filter({ hasNotText: /^Inicio$/ }).first();
     const href = await internal.getAttribute('href');
