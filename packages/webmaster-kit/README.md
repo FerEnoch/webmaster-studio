@@ -25,7 +25,7 @@ rsync -a packages/webmaster-kit/styles/tokens.css apps/wm-concesionario/src/styl
 | Ruta | Que es | Se copia a |
 | --- | --- | --- |
 | `types.ts` | Contrato de contenido (`RubroContent`, `Theme`, `Section`, `Legal`, ...) | `src/lib/types.ts` |
-| `rubros.ts` | Los 8 ejemplos: id, rubro, objecion, paleta, WhatsApp, puerto | `src/lib/rubros.ts` |
+| `rubros.ts` | Demos: id, rubro, objecion, paleta, WhatsApp, puerto | `src/lib/rubros.ts` |
 | `urls.ts` | `appUrl(href)` y `appPath(pathname)` para bases locales/integradas | `src/lib/urls.ts` |
 | `whatsapp.ts` | `waLink(phone, text)` y `rubroWhatsapp(id, ctx)` | `src/lib/whatsapp.ts` |
 | `media.ts` | Helpers de medios + pool de IDs **verificados** | `src/lib/media.ts` |
@@ -74,7 +74,7 @@ Los componentes del kit importan los tipos por `@lib/*`:
 Por eso el kit compila solo si el alias esta bien: no cambies `@lib/` por rutas
 relativas.
 
-## La firma (lo que tienen que compartir las 9 webs)
+## La firma (lo que tienen que compartir las webs)
 
 1. **Cortina entre rutas** — `astro:transitions` (`<ClientRouter />`) + overlay
    `.wm-curtain`, animado en `astro:before-preparation` / `astro:after-swap`.
@@ -150,6 +150,7 @@ relativas.
 | `wm-estetica` | 3023 |
 | `wm-universidad` | 3024 |
 | `wm-inmobiliaria` | 3025 |
+| `wm-inmobiliaria-premium` | 3033 |
 | `wm-arquitectura` | 3026 |
 | `wm-arquitectura-premium` | 3032 |
 | `wm-locales-catalogo` | 3028 |

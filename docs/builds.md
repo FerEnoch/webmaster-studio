@@ -20,6 +20,9 @@ are rejected before any build/cache writes.
   unknown routes return real 404 responses, not an SPA fallback.
 - `pnpm build:apps` and per-app `pnpm run build:<id>` aliases remain standalone
   development tools; they do not publish an integrated Pages artifact.
+  For Estudio Real State, run `pnpm run build:inmobiliaria-premium` or
+  `pnpm run dev:inmobiliaria-premium` (port 3033, base
+  `/demos/inmobiliaria-premium/`).
 - `node scripts/build-site.mjs --help` describes the production build interface.
 
 ## Cache and CI/E2E report

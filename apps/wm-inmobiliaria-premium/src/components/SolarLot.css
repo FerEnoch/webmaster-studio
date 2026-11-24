@@ -1,0 +1,231 @@
+.solar-lot {
+  --plan-paper: #f1eee3;
+  --plan-line: #344534;
+  --plan-house: #53654a;
+  --plan-sun: #87501d;
+  --plan-gold: #ddc18f;
+  container: solar-lot / inline-size;
+  min-width: 0;
+  padding: clamp(.75rem, 2.4vw, 2rem);
+  border-radius: 1.75rem;
+  background: var(--color-moss);
+  color: var(--color-ivory);
+}
+
+.solar-lot__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem 1.5rem;
+  padding: .5rem .25rem 1.15rem;
+}
+
+.solar-lot__kicker {
+  color: var(--plan-gold);
+  font-size: .6875rem;
+  font-weight: 650;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.solar-lot__header h3 {
+  margin-top: .3rem;
+  font: 400 clamp(1.65rem, 3.7vw, 3.2rem) / 1 var(--font-serif);
+}
+
+.solar-lot__size {
+  display: grid;
+  gap: .2rem;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.solar-lot__size strong { font: 400 clamp(1.25rem, 2.4vw, 2rem) / 1 var(--font-serif); }
+.solar-lot__size span { color: var(--plan-gold); font-size: .75rem; }
+.solar-lot__layout { display: grid; gap: .75rem; }
+
+.solar-lot__sheet {
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 1rem;
+  background-color: var(--plan-paper);
+  background-image:
+    linear-gradient(rgb(52 69 52 / .06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(52 69 52 / .06) 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: center;
+  color: var(--plan-line);
+}
+
+.solar-lot__views {
+  display: flex;
+  justify-content: center;
+  gap: .3rem;
+  padding: .45rem;
+  border-bottom: 1px solid #d7cfbc;
+  background: var(--plan-paper);
+}
+
+.solar-lot__views button {
+  min-height: 2.5rem;
+  padding-inline: clamp(.6rem, 2vw, 1.25rem);
+  border-radius: 2rem;
+  font-size: .8rem;
+  font-weight: 650;
+}
+
+.solar-lot__views button[aria-pressed="true"] { background: var(--plan-line); color: var(--plan-paper); }
+.solar-lot__views button:disabled { opacity: .58; cursor: default; }
+.solar-lot__views button:not(:disabled)[aria-pressed="false"]:hover { background: #dedbcc; }
+
+.solar-lot__presentation { display: grid; grid-template-areas: "stage" "help"; }
+.solar-lot__plan-slot, .solar-lot__viewport { grid-area: stage; min-width: 0; }
+.solar-lot__plan-slot { aspect-ratio: 7 / 6; width: 100%; max-height: 32.57rem; }
+.solar-lot__presentation [data-covered] { visibility: hidden; }
+.solar-lot__plan { display: block; width: min(100%, 38rem); height: auto; margin-inline: auto; }
+
+.solar-lot__viewport {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  background: #f0ebde;
+  cursor: grab;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+}
+
+.solar-lot__viewport:active { cursor: grabbing; }
+.solar-lot__viewport:focus-visible { outline-offset: -4px; }
+.solar-lot__viewport canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+
+.solar-lot__view-help {
+  grid-area: help;
+  min-height: 5.65rem;
+  padding: .4rem .6rem;
+  border-top: 1px solid #d7cfbc;
+  background: var(--plan-paper);
+  font-size: .75rem;
+  text-align: center;
+}
+
+.solar-lot__plan-help { display: grid; place-content: center; }
+.solar-lot__camera { display: grid; align-content: center; justify-items: center; gap: .22rem; }
+.solar-lot__camera-buttons { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .22rem; width: min(100%, 15rem); }
+.solar-lot__camera-buttons button {
+  min-height: 2.75rem;
+  border: 1px solid #c8c4b1;
+  border-radius: .55rem;
+  background: #f9f6ed;
+  color: var(--plan-line);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.solar-lot__camera-buttons button:hover { background: #e5e4d5; }
+.solar-lot__plan text { fill: currentColor; }
+.solar-lot__street rect { fill: #e5decd; }
+.solar-lot__street path, .solar-lot__dimensions path { fill: none; stroke: #817a64; stroke-width: .9; }
+.solar-lot__street text { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.solar-lot__dimensions text { font-size: 16px; font-weight: 700; }
+.solar-lot__parcel { fill: #dce3cd; }
+.solar-lot__axis { fill: none; stroke: #98a383; stroke-width: .8; stroke-dasharray: 4 4; }
+.solar-lot__boundary { fill: none; stroke: var(--plan-line); stroke-width: 1.7; }
+.solar-lot__frontage { stroke: var(--plan-line); stroke-width: 3.2; }
+.solar-lot__corners { stroke: var(--plan-line); stroke-linecap: round; stroke-width: 5; }
+.solar-lot__footprint rect:first-child { fill: var(--plan-house); stroke: var(--plan-line); stroke-width: 1.8; }
+.solar-lot__footprint rect + rect, .solar-lot__footprint path { fill: none; stroke: #c8d2b7; stroke-width: .9; }
+.solar-lot__bearing { stroke: var(--plan-sun); stroke-width: 1.8; stroke-dasharray: 4 3; }
+.solar-lot__sun { fill: #bc7837; stroke: var(--plan-sun); stroke-width: 1.1; stroke-linecap: round; }
+.solar-lot__sun-halo { fill: #fff0c9; }
+.solar-lot__compass { font-size: 11px; font-weight: 650; }
+.solar-lot__compass circle, .solar-lot__compass path { fill: none; stroke: var(--plan-line); stroke-width: .8; }
+.solar-lot__compass .solar-lot__north { fill: var(--plan-line); }
+.solar-lot__north-label { font-size: 16px; }
+
+.solar-lot__legend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .55rem .65rem;
+  padding: .8rem clamp(.65rem, 2vw, 1.35rem);
+  border-top: 1px solid #d7cfbc;
+  background: var(--plan-paper);
+  font-size: .75rem;
+  line-height: 1.3;
+}
+
+.solar-lot__legend li { display: flex; align-items: center; gap: .4rem; }
+.solar-lot__key { flex: 0 0 .875rem; height: .7rem; border-radius: .1rem; }
+.solar-lot__key--boundary { border: 1.5px solid var(--plan-line); background: #dce3cd; }
+.solar-lot__key--footprint { border: 1px solid var(--plan-line); background: var(--plan-house); }
+.solar-lot__key--shadow { background: repeating-linear-gradient(135deg, #78856d 0 1px, transparent 1px 3px), #dce3cd; }
+.solar-lot__key--sun { flex-basis: .7rem; margin-inline: .0875rem; border: 1px solid var(--plan-sun); border-radius: 50%; background: #e8b375; }
+
+.solar-lot__controls {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  min-width: 0;
+  padding: clamp(.85rem, 2.3vw, 1.75rem);
+  border: 1px solid rgb(244 241 234 / .18);
+  border-radius: 1rem;
+  background: rgb(20 19 15 / .19);
+}
+
+.solar-lot__intro { margin-top: .45rem; font: 400 clamp(1.15rem, 2vw, 1.55rem) / 1.24 var(--font-serif); }
+.solar-lot__hour label > span, .solar-lot__endpoints { display: flex; justify-content: space-between; gap: .5rem; }
+.solar-lot__hour label > span { font-size: .875rem; }
+.solar-lot__hour strong, .solar-lot__endpoints { color: var(--plan-gold); font-variant-numeric: tabular-nums; }
+.solar-lot__endpoints { font-size: .75rem; }
+
+.solar-lot__controls input[type="range"] {
+  display: block;
+  width: 100%;
+  min-height: 2rem;
+  accent-color: var(--plan-gold);
+  cursor: pointer;
+}
+
+.solar-lot__seasons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .25rem;
+  padding: .25rem;
+  border: 1px solid rgb(244 241 234 / .24);
+  border-radius: 1.5rem;
+}
+
+.solar-lot__seasons button {
+  min-height: 2.75rem;
+  padding: .25rem;
+  border-radius: 1.2rem;
+  font-size: .875rem;
+}
+
+.solar-lot__seasons button[aria-pressed="true"] { background: var(--plan-gold); color: var(--color-ink); font-weight: 700; }
+.solar-lot__seasons button[aria-pressed="false"]:hover { background: rgb(244 241 234 / .09); }
+.solar-lot__toggle { display: flex; align-items: center; gap: .6rem; min-height: 2.75rem; cursor: pointer; font-size: .875rem; }
+.solar-lot__toggle input { flex: 0 0 auto; width: 1.1rem; height: 1.1rem; accent-color: var(--plan-gold); }
+.solar-lot__readout {
+  min-height: 1.4em;
+  margin-top: .45rem;
+  color: var(--plan-gold);
+  font-size: .875rem;
+  font-weight: 600;
+}
+
+.solar-lot__note { margin: .85rem .25rem 0; color: #dddccf; font-size: .75rem; line-height: 1.45; }
+
+@container solar-lot (max-width: 22rem) {
+  .solar-lot__controls { gap: .65rem; }
+  .solar-lot__intro { display: none; }
+}
+
+@container solar-lot (min-width: 33rem) {
+  .solar-lot__legend { grid-template-columns: repeat(4, auto); justify-content: space-between; }
+}
+
+@container solar-lot (min-width: 47rem) {
+  .solar-lot__layout { grid-template-columns: minmax(0, 2.15fr) minmax(15rem, 1fr); gap: 1rem; }
+  .solar-lot__size { text-align: right; }
+}

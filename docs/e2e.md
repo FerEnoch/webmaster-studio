@@ -39,7 +39,9 @@ derived family chips, counts/visibility/ARIA announcements, all-results reset,
 family and historical premium deep links, reload, unknown fallback, preserved
 query/hash state, and actual premium-card navigation. The financing demo changes
 its term and verifies that payments change and restore, without submitting any
-form or contacting WhatsApp.
+form or contacting WhatsApp. The real-estate smoke checks the two Inmobiliaria
+cards and full navigation between the studio and each demo:
+`pnpm exec playwright test tests/e2e/inmobiliaria-premium.spec.mjs`.
 
 The Studio-return suite checks the visible action, keyboard focus, full reload,
 and a 320px header with a working disclosure. TELAR and TRAMA use their existing

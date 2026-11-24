@@ -16,6 +16,7 @@ type SolutionId =
   | "estetica"
   | "universidad"
   | "inmobiliaria"
+  | "inmobiliaria-premium"
   | "arquitectura"
   | "arquitectura-premium"
   | "locales-catalogo"
@@ -92,6 +93,16 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
       "Filtrá por zona, tipo, precio y ambientes.",
       "Abrí fichas de propiedades con fotos y detalles.",
       "Probá una visita simulada con ticket de muestra.",
+    ],
+  },
+  "inmobiliaria-premium": {
+    tagline: "Demo premium de propiedades con recorridos fotográficos y asoleamiento 3D.",
+    objeccion: "Probá la experiencia con propiedades ficticias, sin enviar datos.",
+    capabilities: [
+      "Recorré los ambientes con un tour fotográfico interactivo.",
+      "Cambiá la hora y la estación para ver el asoleamiento del lote en 3D.",
+      "Probá simuladores de tasación y de visita, sin generar una solicitud real.",
+      "Guardá tus favoritos en este navegador.",
     ],
   },
   arquitectura: {
@@ -446,6 +457,7 @@ export const demoImages: Record<string, string> = {
   estetica: img("1570172619644-dfd03ed5d881", 1200),
   universidad: img("1562774053-701939374585", 1200),
   inmobiliaria: img("1512917774080-9991f1c4c750", 1200),
+  "inmobiliaria-premium": pex(30781823, 1200), // Misma foto editorial que el hero de la demo.
   arquitectura: img("1487958449943-2429e8be8625", 1200),
   "arquitectura-premium": img("1600585154340-be6161a56a0c", 1200),
   "locales-catalogo": apparelCoverSrc(apparelCovers["locales-catalogo"]),

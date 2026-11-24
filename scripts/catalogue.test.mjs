@@ -10,12 +10,12 @@ const visibleIds = (requested, demos = RUBROS) => {
   return ids(demos.filter((demo) => catalogue.matchesRubroFilter(demo, filter)));
 };
 
-test("one chip per family, in catalogue order, includes both base/premium pairs", () => {
+test("one chip per family, in catalogue order, includes the base/premium pairs", () => {
   assert.equal(typeof catalogue.getRubroGroups, "function");
   const groups = catalogue.getRubroGroups();
   assert.deepEqual(ids(groups), ["concesionario", "lavadero", "estetica", "universidad", "inmobiliaria", "arquitectura", "locales-y-tiendas"]);
   assert.equal(new Set(ids(groups)).size, groups.length);
-  for (const [id, nombre] of [["lavadero", "Multiservicios"], ["arquitectura", "Estudios profesionales"]]) {
+  for (const [id, nombre] of [["lavadero", "Multiservicios"], ["inmobiliaria", "Inmobiliaria"], ["arquitectura", "Estudios profesionales"]]) {
     const group = groups.find((group) => group.id === id);
     assert.equal(group.nombre, nombre);
     assert.equal(group.accent, getRubro(id).palette.accent);
@@ -33,7 +33,7 @@ test("family display names change without renaming demos or their public app met
     ["locales-y-tiendas", "Locales y tiendas"],
   ]);
   const names = ["Concesionario", "Lavadero + bar", "Lavadero Premium", "Estética + yoga",
-    "Universidad privada", "Inmobiliaria", "Arquitectura", "Arquitectura Premium", "Catalogo online", "Ecommerce"];
+    "Universidad privada", "Inmobiliaria", "Estudio Real State", "Arquitectura", "Arquitectura Premium", "Catalogo online", "Ecommerce"];
   assert.deepEqual(RUBROS.map(({ nombre }) => nombre), names);
   assert.deepEqual(APPS.slice(0, -1).map(({ nombre }) => nombre), names);
 });
@@ -50,8 +50,8 @@ test("the standard car wash uses Autolavado and keeps its premium variant in Mul
 test("new variants join existing families without name/suffix lists or mutation", () => {
   assert.equal(typeof catalogue.getRubroGroups, "function");
   const extra = [
-    { ...getRubro("estetica"), id: "aura", slug: "aura", rubroId: "estetica", nombre: "Aura", demoUrl: "/demos/aura/", port: 3033 },
-    { ...getRubro("lavadero"), id: "gloss-nocturno", slug: "gloss-nocturno", rubroId: "lavadero", nombre: "Gloss nocturno", demoUrl: "/demos/gloss-nocturno/", port: 3034 },
+    { ...getRubro("estetica"), id: "aura", slug: "aura", rubroId: "estetica", nombre: "Aura", demoUrl: "/demos/aura/", port: 3034 },
+    { ...getRubro("lavadero"), id: "gloss-nocturno", slug: "gloss-nocturno", rubroId: "lavadero", nombre: "Gloss nocturno", demoUrl: "/demos/gloss-nocturno/", port: 3035 },
   ];
   const demos = Object.freeze([...RUBROS, ...extra].map((demo) => Object.freeze({ ...demo })));
   const before = structuredClone(demos);
@@ -62,7 +62,7 @@ test("new variants join existing families without name/suffix lists or mutation"
   assert.deepEqual(visibleIds("lavadero", demos), ["lavadero", "lavadero-premium", "gloss-nocturno"]);
   assert.deepEqual(visibleIds("aura", demos), ["aura"]);
   assert.deepEqual(demos, before);
-  assert.equal(RUBROS.length, 10);
+  assert.equal(RUBROS.length, 11);
 });
 
 test("a new family derives its own chip even without a same-named base demo", () => {
@@ -91,7 +91,7 @@ test("all previously supported rubro deep links retain their selection, includin
     const url = new URL(`/demos/?rubro=${demo.id}&source=portfolio#catalogue`, "https://studio.example");
     const requested = url.searchParams.get("rubro");
     assert.equal(catalogue.resolveRubroFilter(requested), demo.id);
-    const expected = demo.id === "lavadero" || demo.id === "arquitectura"
+    const expected = ["lavadero", "inmobiliaria", "arquitectura"].includes(demo.id)
       ? [demo.id, `${demo.id}-premium`]
       : [demo.id];
     assert.deepEqual(visibleIds(requested), expected);
@@ -102,7 +102,7 @@ test("demo IDs, app ordering, ports, URLs and lookup aliases remain unchanged", 
   const expected = [
     ["concesionario", 3021], ["lavadero", 3022], ["lavadero-premium", 3031],
     ["estetica", 3023], ["universidad", 3024], ["inmobiliaria", 3025],
-    ["arquitectura", 3026], ["arquitectura-premium", 3032],
+    ["inmobiliaria-premium", 3033], ["arquitectura", 3026], ["arquitectura-premium", 3032],
     ["locales-catalogo", 3028], ["tiendas-ecommerce", 3029], ["portfolio", 3027],
   ];
   assert.deepEqual(APPS.map(({ id, port }) => [id, port]), expected);
