@@ -8,7 +8,7 @@
  * final el cotizador.
  */
 import Base from "../layouts/Base.astro";
-import Maqueta3D from "../components/Maqueta3D.astro";
+import VetaHero from "../components/veta-hero/VetaHero.astro";
 import AntesDespues from "../components/AntesDespues.astro";
 import { arquitecturaPremium as app, ambientes, obras, etapas } from "../content/arquitectura-premium";
 import { waLink } from "@lib/whatsapp";
@@ -34,46 +34,27 @@ const totalM2 = ambientes.reduce((suma, ambiente) => suma + ambiente.m2, 0);
 ---
 
 <Base content={app} title={`${app.brand} · ${app.rubro}`}>
-  <!-- ─── Portada: el modelo, no el video ───────────────────────────── -->
-  <section class="relative overflow-hidden border-b border-[var(--vt-rule)]">
-    <div class="wm-container grid gap-10 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:py-20">
-      <div>
-        <p class="wm-kicker">{app.hero.kicker}</p>
-        <h1 class="vt-head__title mt-6 !max-w-none">
-          Recorré <span class="vt-script">la obra</span> antes de firmarla
-        </h1>
-        <p class="vt-head__intro mt-6">
-          Un modelo navegable de tu proyecto con sus medidas reales, las obras del estudio con su
-          antes y su después, y un cotizador que te da un número antes de la primera visita.
-        </p>
-
-        <div class="mt-9 flex flex-wrap items-center gap-4">
-          <a href={appUrl("/cotizar")} class="wm-btn">Cotizar mi proyecto</a>
-          <a href={appUrl("/obras")} class="wm-btn wm-btn--ghost">Ver las obras</a>
-        </div>
-
-        <p class="mt-8 flex items-center gap-2 text-sm text-[var(--vt-dim)]">
-          <span class="inline-flex h-2 w-2 rounded-full bg-[var(--wm-accent)]" aria-hidden="true"></span>
-          {app.hero.live?.label}: {app.hero.live?.count} {app.hero.live?.unit}
-        </p>
-      </div>
-
-      <div>
-        <Maqueta3D />
-        <p class="vt-caption">
-          Modelo de demostración: las medidas y los materiales son ficticios. Movés el cursor
-          sobre la maqueta y tocás un ambiente para ver su referencia.
-        </p>
+  <VetaHero>
+    <div class="veta-scene__intro">
+      <p class="wm-kicker">{app.hero.kicker}</p>
+      <h1 id="veta-title" class="vt-head__title">Recorré <span class="vt-script">la obra</span> antes de firmarla</h1>
+      <p class="vt-head__intro">
+        Explorá la casa del plano a la entrega. Conocé los ambientes, compará las obras del estudio
+        y estimá cuánto puede costar tu proyecto.
+      </p>
+      <div class="veta-scene__actions">
+        <a href={appUrl("/cotizar")} class="wm-btn">Cotizar mi proyecto</a>
+        <a href={appUrl("/obras")} class="wm-btn wm-btn--ghost">Ver las obras</a>
       </div>
     </div>
-  </section>
+  </VetaHero>
 
   <!-- ─── Resumen del plan: el precio, a la vista ───────────────────── -->
   <section class="wm-container border-b border-[var(--vt-rule)] py-12">
     <div class="vt-numbers">
       {
         ambientes.map((ambiente) => (
-          <div class="vt-number" data-vt-plan={ambiente.id}>
+          <div class="vt-number" data-vt-plan={ambiente.id} id={`plan-${ambiente.id}`}>
             <p class="vt-number__value">{precioAmbiente(ambiente.usdM2, ambiente.m2)}</p>
             <p class="vt-number__label">
               {ambiente.nombre} · {ambiente.m2} m²
@@ -86,6 +67,7 @@ const totalM2 = ambientes.reduce((suma, ambiente) => suma + ambiente.m2, 0);
                 <li>{material}</li>
               ))}
             </ul>
+            <a class="vt-number__model" href="#veta-modelo">Ver en el modelo</a>
           </div>
         ))
       }
