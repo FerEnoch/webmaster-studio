@@ -1,0 +1,30 @@
+---
+import Base from "../layouts/Base.astro";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Envíos", href: "/envios" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+---
+
+<Base
+  title="Información legal · Trama"
+  description="Precios, cambios, arrepentimiento y privacidad de la tienda Trama."
+  nav={nav}
+>
+  <div class="wm-container" style="padding-block:2rem 3rem;max-width:60rem">
+    <p class="wm-kicker">Información legal</p>
+    <h1 class="wm-display" style="font-size:clamp(2.2rem,5vw,3.6rem);margin:.6rem 0">Condiciones claras</h1>
+    <h2 class="wm-display" style="font-size:1.4rem">Precios</h2>
+    <p>Todos los precios publicados son finales, con IVA incluido, en pesos argentinos.</p>
+    <h2 class="wm-display" style="font-size:1.4rem">Cambios y arrepentimiento</h2>
+    <p>30 días de cambio por talle o color con etiqueta y ticket. 10 días para revocar la compra (art. 34, Ley 24.240) con reintegro por el mismo medio.</p>
+    <h2 class="wm-display" style="font-size:1.4rem">Privacidad</h2>
+    <p>Solo se guardan las variantes y cantidades del carrito en tu navegador. El correo de prueba se usa en esa pantalla para mostrar una confirmación local. No se transmite, no se guarda y no se incluye en el comprobante descargable. No se crean cuentas ni se envían correos.</p>
+    <h2 class="wm-display" style="font-size:1.4rem">Defensa del consumidor</h2>
+    <p>Dirección Nacional de Defensa del Consumidor: <a style="color:var(--wm-accent);font-weight:700" href="https://www.argentina.gob.ar/defensadelconsumidor">argentina.gob.ar/defensadelconsumidor</a>.</p>
+  </div>
+</Base>

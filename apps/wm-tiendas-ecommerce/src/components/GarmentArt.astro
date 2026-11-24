@@ -1,0 +1,68 @@
+---
+// Arte original de TRAMA: siluetas urbanas en SVG local sobre tinta.
+// Nada externo. `motivo` define la silueta, `color` el relleno.
+export interface Props {
+  motivo: "remera" | "hoodie" | "cargo" | "campera" | "vestido" | "gorra";
+  color: string;
+  label: string;
+}
+const { motivo, color, label } = Astro.props;
+const gid = `m${Math.abs([...label].reduce((a, c) => a + c.charCodeAt(0), 0)) % 997}`;
+---
+
+<svg viewBox="0 0 400 500" role="img" aria-label={label} class="wm-art">
+  <defs>
+    <pattern id={gid} width="22" height="22" patternUnits="userSpaceOnUse">
+      <path d="M22 0H0V22" fill="none" stroke="rgba(244,239,228,.12)" stroke-width="1" />
+      <circle cx="4" cy="4" r="1.5" fill="rgba(244,239,228,.18)" />
+    </pattern>
+  </defs>
+  <rect width="400" height="500" fill="#1B1B20" />
+  <rect width="400" height="500" fill={`url(#${gid})`} />
+  <rect x="24" y="24" width="352" height="452" fill="none" stroke="rgba(244,239,228,.30)" stroke-width="2" />
+  <rect x="24" y="24" width="120" height="26" fill="#FF4D6D" />
+  <ellipse cx="200" cy="452" rx="110" ry="12" fill="rgba(0,0,0,.45)" />
+  {motivo === "remera" && (
+    <g>
+      <path d="M138 118 L84 160 L112 212 L138 196 L138 400 L262 400 L262 196 L288 212 L316 160 L262 118 Q200 150 138 118Z" fill={color} stroke="rgba(244,239,228,.65)" stroke-width="3" />
+      <rect x="150" y="250" width="100" height="60" fill="none" stroke="#FF4D6D" stroke-width="4" />
+      <path d="M160 280H240" stroke="#FF4D6D" stroke-width="4" />
+    </g>
+  )}
+  {motivo === "hoodie" && (
+    <g>
+      <path d="M160 90 Q200 50 240 90 L260 130 L240 150 L160 150 L140 130Z" fill={color} stroke="rgba(244,239,228,.65)" stroke-width="3" />
+      <path d="M140 150 L100 190 L125 235 L145 222 L145 400 L255 400 L255 222 L275 235 L300 190 L260 150Z" fill={color} stroke="rgba(244,239,228,.65)" stroke-width="3" />
+      <rect x="160" y="300" width="80" height="55" fill="rgba(0,0,0,.30)" />
+    </g>
+  )}
+  {motivo === "cargo" && (
+    <g>
+      <path d="M138 92 L262 92 L272 400 L214 400 L200 190 L186 400 L128 400Z" fill={color} stroke="rgba(244,239,228,.65)" stroke-width="3" />
+      <rect x="140" y="200" width="42" height="60" fill="none" stroke="#FF4D6D" stroke-width="4" />
+      <rect x="218" y="200" width="42" height="60" fill="none" stroke="#FF4D6D" stroke-width="4" />
+    </g>
+  )}
+  {motivo === "campera" && (
+    <g>
+      <path d="M132 125 L82 168 L108 222 L134 206 L134 400 L266 400 L266 206 L292 222 L318 168 L268 125 L200 155Z" fill={color} stroke="rgba(244,239,228,.65)" stroke-width="3" />
+      <path d="M200 155 L200 400" stroke="#FF4D6D" stroke-width="5" />
+      <path d="M132 125 L200 155 L175 100Z M268 125 L200 155 L225 100Z" fill="rgba(244,239,228,.25)" />
+    </g>
+  )}
+  {motivo === "vestido" && (
+    <g>
+      <path d="M162 85 L238 85 L252 205 L302 400 L98 400 L148 205Z" fill={color} stroke="rgba(244,239,228,.65)" stroke-width="3" />
+      <rect x="140" y="260" width="44" height="52" fill="none" stroke="#FF4D6D" stroke-width="4" />
+      <rect x="216" y="260" width="44" height="52" fill="none" stroke="#FF4D6D" stroke-width="4" />
+    </g>
+  )}
+  {motivo === "gorra" && (
+    <g>
+      <path d="M110 260 Q110 150 200 150 Q290 150 290 260Z" fill={color} stroke="rgba(244,239,228,.65)" stroke-width="3" />
+      <path d="M90 260 L310 260 L350 300 L60 300Z" fill={color} stroke="rgba(244,239,228,.65)" stroke-width="3" />
+      <circle cx="200" cy="150" r="10" fill="#FF4D6D" />
+      <path d="M200 150 L200 260" stroke="rgba(0,0,0,.35)" stroke-width="3" />
+    </g>
+  )}
+</svg>

@@ -1,0 +1,74 @@
+---
+/**
+ * Confirmación local de "Agregar al carrito": región viva educada, de
+ * posición fija (sin corrimiento de layout), alcanzable por teclado y sin
+ * robo de foco. La animación vive en global.css y se apaga con
+ * prefers-reduced-motion. Sin red ni dependencias nuevas.
+ */
+import { appUrl } from "@lib/urls";
+---
+
+<aside
+  class="wm-toast"
+  data-cart-toast
+  role="status"
+  aria-live="polite"
+  aria-label="Agregado a tu carrito"
+  hidden
+>
+  <p class="wm-toast__title">Agregado a tu carrito</p>
+  <p class="wm-toast__summary" data-cart-toast-summary></p>
+  <p class="wm-toast__note wm-muted" data-cart-toast-note></p>
+  <div class="wm-toast__actions">
+    <a class="wm-btn" href={appUrl("/carrito")}>Ver tu carrito</a>
+    <a class="wm-btn wm-btn--ghost" href={appUrl("/catalogo")}>Seguir explorando</a>
+    <button class="wm-toast__close" type="button" data-cart-toast-close aria-label="Cerrar aviso de carrito">×</button>
+  </div>
+</aside>
+
+<script>
+  import { CART_KEY, formatPrice, parseCart, productById, stockOf } from "@lib/shop";
+  import type { CartLine } from "@lib/shop";
+
+  const panel = document.querySelector("[data-cart-toast]");
+  const summary = document.querySelector("[data-cart-toast-summary]");
+  const note = document.querySelector("[data-cart-toast-note]");
+  const close = document.querySelector("[data-cart-toast-close]");
+
+  if (
+    panel instanceof HTMLElement &&
+    summary instanceof HTMLElement &&
+    note instanceof HTMLElement &&
+    close instanceof HTMLButtonElement
+  ) {
+    const hide = (): void => {
+      panel.hidden = true;
+    };
+    close.addEventListener("click", hide);
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !panel.hidden) hide();
+    });
+
+    window.addEventListener("trama:cart", (event) => {
+      const line = (event as CustomEvent<{ line: CartLine }>).detail?.line;
+      if (!line) return;
+      const product = productById(line.producto);
+      if (!product) return;
+      const color = product.colores.find((c) => c.id === line.color)?.nombre ?? line.color;
+      summary.textContent = `${line.qty} × ${product.nombre} · ${color} / ${line.size} · ${formatPrice(product.precio * line.qty)}`;
+      // Aviso de stock restante con los totales determinísticos existentes.
+      let inCart = 0;
+      try {
+        const cart = parseCart(JSON.parse(localStorage.getItem(CART_KEY) ?? "[]"));
+        inCart = cart
+          .filter((l) => l.producto === line.producto && l.color === line.color && l.size === line.size)
+          .reduce((sum, l) => sum + l.qty, 0);
+      } catch {
+        /* sin almacenamiento: el resumen ya se mostró */
+      }
+      const rest = Math.max(0, stockOf(line.producto, line.color, line.size) - inCart);
+      note.textContent = rest === 0 ? "No queda más stock de esta variante." : `Quedan ${rest} en esta variante.`;
+      panel.hidden = false;
+    });
+  }
+</script>

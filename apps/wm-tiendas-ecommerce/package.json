@@ -1,0 +1,19 @@
+{
+  "name": "wm-tiendas-ecommerce",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --port 3029 --host",
+    "build": "astro build",
+    "preview": "astro preview --port 3029 --host",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "astro": "^7.4.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3"
+  }
+}
