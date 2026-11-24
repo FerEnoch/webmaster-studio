@@ -130,14 +130,19 @@ test('veta wheel changes stages only inside the model frame', async ({ page }, i
   }
 
   // A momentum wheel event after the camera settles still belongs to the final scene.
+  // Freeze virtual time so the hold window can't expire on slow machines; it only
+  // advances via the explicit fastForwards below. The +50ms keeps the pause target
+  // strictly in the future so pauseAt never rejects as "to the past".
+  await page.clock.pauseAt(Date.now() + 50);
   await page.clock.fastForward(950);
   await page.mouse.wheel(0, 240);
-  await page.waitForTimeout(180);
+  await page.clock.fastForward(180);
   expect(await scrollY(), 'Entrega stays in view beyond its camera transition').toBe(initialY);
   await expectStage('Entrega');
 
   await page.clock.fastForward(1250);
   await page.mouse.wheel(0, 240);
+  await page.clock.resume();
   await expect.poll(scrollY).toBeGreaterThan(initialY);
   await expectStage('Entrega');
 
