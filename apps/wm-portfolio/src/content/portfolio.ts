@@ -21,12 +21,15 @@ type SolutionCopy = {
   tagline: string;
   objeccion: string;
   capabilities: readonly [string, string, string, string?, string?];
+  /** Título del panel destacado del rubro en el home. Solo lo usan las demos destacadas. */
+  panelTitle?: string;
 };
 
 /** Cobertura de las ocho demos y entre tres y cinco ítems por tarjeta. */
 const solutionCopy: Record<string, SolutionCopy | undefined> = {
   concesionario: {
     tagline: "Catálogo de vehículos con fichas y consultas comerciales.",
+    panelTitle: "Stock y fichas de vehículos",
     objeccion: "Información de cada vehículo y condiciones de compra en un mismo lugar.",
     capabilities: [
       "Consultá autos nuevos. Filtrá y ordená el stock de usados.",
@@ -37,6 +40,7 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
   },
   lavadero: {
     tagline: "Presentación de servicios de lavado y gestión de reservas.",
+    panelTitle: "Reservas de lavado + bar",
     objeccion: "Detalle de los tratamientos y del cuidado del vehículo.",
     capabilities: [
       "Consultá servicios, precios y adicionales de lavado.",
@@ -56,6 +60,7 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
   },
   estetica: {
     tagline: "Servicios de estética, actividades y solicitud de turnos.",
+    panelTitle: "Turnos de estética y clases",
     objeccion: "Información sobre tratamientos, profesionales y disponibilidad.",
     capabilities: [
       "Conocé los tratamientos y sus detalles.",
@@ -66,6 +71,7 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
   },
   universidad: {
     tagline: "Oferta académica, becas y consultas de admisión.",
+    panelTitle: "Oferta académica y admisión",
     objeccion: "Programas de estudio y orientación para futuros estudiantes.",
     capabilities: [
       "Buscá carreras y compará hasta tres opciones.",
@@ -76,6 +82,7 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
   },
   inmobiliaria: {
     tagline: "Catálogo de propiedades y coordinación de visitas.",
+    panelTitle: "Catálogo de propiedades y visitas",
     objeccion: "Fichas de propiedades con imágenes y características relevantes.",
     capabilities: [
       "Filtrá por zona, tipo, precio y ambientes.",
@@ -85,6 +92,7 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
   },
   arquitectura: {
     tagline: "Presentación de proyectos y consultas de obra.",
+    panelTitle: "Proyectos y presupuesto de obra",
     objeccion: "Etapas de trabajo, alcance y criterios para solicitar un presupuesto.",
     capabilities: [
       "Explorá proyectos y sus fichas con antes y después.",

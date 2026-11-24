@@ -6,7 +6,7 @@ import PlanCard from "../components/PlanCard.astro";
 
 import DemoRequest from "../components/DemoRequest.tsx";
 import LazyVideo from "../components/LazyVideo.astro";
-import { demoImages, portfolio, fotoEstudio, solutions } from "../content/portfolio";
+import { demoImages, fotoEstudio, getSolutionCapabilities, portfolio, solutions } from "../content/portfolio";
 import { getRubroGroups } from "@lib/rubros";
 import { poster, video } from "@lib/media";
 import { appUrl } from "@lib/urls";
@@ -89,7 +89,7 @@ const grupos = getRubroGroups(solutions);
     body={proceso.body}
   />
 
-  <!-- 4) Soluciones a medida por rubro. -->
+  <!-- 4) Soluciones a medida por rubro: un ejemplo destacado con tabs. -->
   <section class="wm-container py-16 sm:py-20" id="demos">
     <header class="max-w-2xl">
       <p class="wm-kicker">Desarrollo aplicado</p>
@@ -97,44 +97,182 @@ const grupos = getRubroGroups(solutions);
         Soluciones a medida
       </h2>
       <p class="mt-5 text-muted">
-        Explorá los rubros para conocer ejemplos de sitios y aplicaciones adaptados
-        a cada actividad. Las demos usan datos ficticios y formularios simulados.
+        Explorá las posibilidades de tu negocio o empresa a través de demos interactivas.
       </p>
     </header>
 
-    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {grupos.map((grupo) => (
-        <article class="wm-card group flex flex-col">
-          <div class="wm-grade wm-grain wm-vignette mb-6 overflow-hidden rounded-wm">
-            <img
-              src={demoImages[grupo.id] ?? demoImages[grupo.demos[0].id]}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              class="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-            />
-          </div>
-          <p class="wm-kicker">Solución a medida</p>
-          <h3 id={`rubro-${grupo.id}`} class="wm-display mt-4 text-2xl leading-tight">{grupo.nombre}</h3>
-          <p class="mt-3 mb-6 text-sm text-muted">{grupo.demos.map((demo) => demo.nombre).join(" · ")}</p>
-          <a
-            href={appUrl(`/demos?rubro=${grupo.id}`)}
-            data-astro-reload
-            aria-describedby={`rubro-${grupo.id}`}
-            class="wm-btn mt-auto self-start"
+    <div class="mt-8 grid gap-6 lg:grid-cols-[16rem_1fr] lg:gap-x-12">
+      <div class="demos-tabs" role="tablist" aria-label="Rubros">
+        {grupos.map((grupo, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${grupo.id}`}
+            aria-selected={i === 0 ? "true" : "false"}
+            aria-controls={`panel-${grupo.id}`}
+            data-grupo={grupo.id}
+            tabindex={i === 0 ? undefined : -1}
+            class="demos-tab"
           >
-            Ver rubro
-          </a>
-        </article>
-      ))}
+            {grupo.nombre}
+            <span class="demos-tab__sub">
+              {grupo.demos.map((demo) => demo.nombre).join(" · ")}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      <div>
+        {grupos.map((grupo, i) => {
+          const destacado = grupo.demos[0];
+          const titulo = solutions.find((s) => s.id === destacado.id)?.panelTitle ?? destacado.rubro;
+          return (
+            <article
+              role="tabpanel"
+              id={`panel-${grupo.id}`}
+              aria-labelledby={`tab-${grupo.id}`}
+              hidden={i !== 0}
+              data-panel={grupo.id}
+              class="wm-card demos-panel"
+            >
+              <div class="wm-grade wm-grain wm-vignette overflow-hidden rounded-wm">
+                <img
+                  src={demoImages[grupo.id] ?? demoImages[destacado.id]}
+                  alt=""
+                  loading={i === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  class="aspect-[16/8] w-full object-cover"
+                />
+              </div>
+              <div>
+                <p class="wm-kicker">Ejemplo destacado</p>
+                <h3 class="wm-display mt-4 text-2xl leading-tight">{titulo}</h3>
+                <p class="mt-3 text-muted">{destacado.objeccion}</p>
+                <ul class="mt-5 space-y-2 text-sm text-muted">
+                  {getSolutionCapabilities(destacado.id).slice(0, 3).map((capability) => (
+                    <li class="flex gap-2">
+                      <span aria-hidden="true" class="font-semibold text-accent">—</span>
+                      <span>{capability}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div class="mt-6 flex flex-wrap gap-3">
+                  <a href="#demo" class="wm-btn">Solicitar cotización</a>
+                  <a
+                    href={appUrl(`/demos?rubro=${grupo.id}`)}
+                    data-astro-reload
+                    class="wm-btn wm-btn--ghost"
+                  >
+                    Ver este ejemplo
+                  </a>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
     </div>
 
-    <p class="mt-8 text-sm text-muted">
-      <a href={appUrl("/demos")} class="font-semibold text-accent underline underline-offset-4">
-        Ver todas las soluciones
+    <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+      <a href={appUrl("/demos")} class="wm-btn wm-btn--ghost w-full sm:w-auto">
+        Ver todas las demos
       </a>
-    </p>
+      <p class="text-sm text-muted">Demos interactivas con datos ficticios.</p>
+    </div>
   </section>
+
+  <style>
+    .demos-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+    }
+    .demos-tab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      border-radius: 999px;
+      padding: 0.7rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-align: center;
+      background: transparent;
+      color: var(--wm-fg);
+      box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--wm-fg) 20%, transparent);
+      cursor: pointer;
+    }
+    .demos-tab[aria-selected="true"] {
+      background: var(--wm-fg);
+      color: var(--wm-bg);
+      box-shadow: none;
+    }
+    .demos-tab__sub {
+      display: none;
+    }
+    .demos-panel {
+      display: grid;
+      gap: 1.5rem;
+    }
+    .demos-panel[hidden] {
+      display: none;
+    }
+    @media (min-width: 1024px) {
+      .demos-tabs {
+        display: flex;
+        flex-direction: column;
+      }
+      .demos-tab {
+        display: block;
+        text-align: left;
+        border-radius: var(--wm-radius);
+        padding: 0.8rem 0.9rem;
+      }
+      .demos-tab[aria-selected="true"] {
+        background: color-mix(in oklab, var(--wm-fg) 7%, transparent);
+        color: var(--wm-fg);
+        box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--wm-fg) 20%, transparent);
+      }
+      .demos-tab__sub {
+        display: block;
+        margin-top: 0.15rem;
+        font-size: 0.75rem;
+        font-weight: 400;
+        color: color-mix(in oklab, var(--wm-fg) 62%, var(--wm-bg));
+      }
+    }
+  </style>
+
+  <script>
+    (() => {
+      const tabs = Array.from(document.querySelectorAll('#demos [role="tab"]')) as HTMLElement[];
+      const panels = Array.from(document.querySelectorAll('#demos [role="tabpanel"]')) as HTMLElement[];
+      if (!tabs.length || !panels.length) return;
+      const select = (tab: HTMLElement): void => {
+        tabs.forEach((t) => {
+          const on = t === tab;
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+          t.tabIndex = on ? 0 : -1;
+        });
+        panels.forEach((p) => {
+          const on = p.getAttribute('data-panel') === tab.getAttribute('data-grupo');
+          if (on) p.removeAttribute('hidden');
+          else p.setAttribute('hidden', '');
+        });
+      };
+      tabs.forEach((tab, i) => {
+        tab.addEventListener('click', () => select(tab));
+        tab.addEventListener('keydown', (e: Event) => {
+          const ke = e as KeyboardEvent;
+          if (ke.key !== 'ArrowRight' && ke.key !== 'ArrowLeft') return;
+          ke.preventDefault();
+          const next = ke.key === 'ArrowRight' ? tabs[(i + 1) % tabs.length] : tabs[(i - 1 + tabs.length) % tabs.length];
+          next.focus();
+          select(next);
+        });
+      });
+    })();
+  </script>
 
   <!-- 5) Funcionalidades por industria. -->
   <section class="relative overflow-hidden border-y border-line">
