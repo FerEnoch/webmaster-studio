@@ -1,5 +1,5 @@
 import { formatPrice, type Property } from "../lib/properties";
-import { propertyHref } from "../lib/urls";
+import { propertyHref } from "../lib/paths";
 
 export default function MapView({ items, active, onHover, className = "" }: { items: Property[]; active?: string | null; onHover?: (slug: string | null) => void; className?: string }) {
   return (

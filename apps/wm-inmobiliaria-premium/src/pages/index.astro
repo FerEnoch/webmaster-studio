@@ -7,7 +7,8 @@ import RoomTour from "../components/RoomTour";
 import SolarLot from "../components/SolarLot";
 import { CASA_LAGUNA_TOUR, SOLAR_BY_SLUG } from "../lib/experiences";
 import { properties } from "../lib/properties";
-import { href, propertyHref } from "../lib/urls";
+import { appUrl } from "../lib/urls";
+import { propertyHref } from "../lib/paths";
 const casa = properties[0];
 const lote = properties.find((property) => property.experience === "lot")!;
 const loteSolar = SOLAR_BY_SLUG[lote.slug] ?? SOLAR_BY_SLUG["lote-pilar-del-este"];
@@ -88,7 +89,7 @@ const loteSolar = SOLAR_BY_SLUG[lote.slug] ?? SOLAR_BY_SLUG["lote-pilar-del-este
         <p class="text-lg leading-relaxed text-ivory/75">Barrio, tipología y metros son el comienzo. Una estimación orientativa nunca reemplaza la mirada profesional sobre el estado, la orientación y los detalles que hacen único a cada lugar.</p>
         <p class="mt-5 rounded-2xl border border-ivory/15 p-4 text-sm leading-relaxed text-ivory/60">Simuladores 100% locales en cada ficha: tasación, cuota y visita de prueba. Esta demo no solicita, guarda ni transmite datos personales.</p>
         <div class="mt-6 flex flex-wrap gap-3">
-          <a href={href("propiedades")} class="inline-flex rounded-full bg-ivory px-6 py-3 text-sm text-ink transition-colors hover:bg-sand">Explorar propiedades →</a>
+          <a href={appUrl("/propiedades")} class="inline-flex rounded-full bg-ivory px-6 py-3 text-sm text-ink transition-colors hover:bg-sand">Explorar propiedades →</a>
           <a href={`${propertyHref(casa.slug)}#simuladores`} class="inline-flex rounded-full border border-ivory/30 px-6 py-3 text-sm transition-colors hover:bg-ivory hover:text-ink">Probar simuladores →</a>
         </div>
       </div>

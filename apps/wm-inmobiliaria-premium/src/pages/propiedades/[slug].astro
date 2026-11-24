@@ -8,7 +8,8 @@ import Simulators from "../../components/Simulators";
 import SolarLot from "../../components/SolarLot";
 import { roomsFor, solarFor } from "../../lib/experiences";
 import { formatPrice, properties, type Property } from "../../lib/properties";
-import { href, propertyHref } from "../../lib/urls";
+import { appUrl } from "../../lib/urls";
+import { propertyHref } from "../../lib/paths";
 
 export const getStaticPaths = (() => properties.map((property) => ({ params: { slug: property.slug }, props: { property } }))) satisfies GetStaticPaths;
 const { property } = Astro.props as { property: Property };
@@ -24,7 +25,7 @@ const experienceLabel = rooms ? "Recorrido" : solar ? "Lote solar" : "Detalle";
   <article class="px-4 pt-28 pb-24 sm:px-8">
     <div class="mx-auto max-w-[1400px]">
       <nav aria-label="Migas de pan" class="mb-6 flex items-center gap-2 text-xs tracking-[0.12em] text-ink/50 uppercase">
-        <a href={href("propiedades")} class="hover:text-brass">Propiedades</a><span aria-hidden="true">/</span><span>{property.barrio}</span>
+        <a href={appUrl("/propiedades")} class="hover:text-brass">Propiedades</a><span aria-hidden="true">/</span><span>{property.barrio}</span>
       </nav>
       <div class="grid items-end gap-6 lg:grid-cols-[1fr_auto]">
         <div>
@@ -107,7 +108,7 @@ const experienceLabel = rooms ? "Recorrido" : solar ? "Lote solar" : "Detalle";
       <section class="mt-20 border-t border-ink/15 pt-12" aria-labelledby="seguir-explorando">
         <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <h2 id="seguir-explorando" class="scroll-mt-40 font-serif text-4xl sm:scroll-mt-44 sm:text-5xl">Seguir <span class="italic">explorando</span></h2>
-          <a href={href("propiedades")} class="button-ink w-fit">Ver las ocho propiedades →</a>
+          <a href={appUrl("/propiedades")} class="button-ink w-fit">Ver las ocho propiedades →</a>
         </div>
         <ul class="mt-7 grid gap-4 sm:grid-cols-3">
           {others.map((item) => <li><a href={propertyHref(item.slug)} class="flex items-center justify-between rounded-2xl bg-sand px-5 py-4 hover:bg-ink hover:text-ivory"><span><span class="block font-serif text-xl">{item.title}</span><span class="text-xs opacity-60">{item.barrio}</span></span><span aria-hidden="true">→</span></a></li>)}

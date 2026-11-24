@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { imagePath, imageSrcSet } from "../lib/urls";
+import { imagePath, imageSrcSet } from "../lib/paths";
 
 export type GalleryImage = { imagen: string; alt: string; titulo: string };
 

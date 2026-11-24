@@ -11,6 +11,10 @@ const storefrontContacts = new Map([
   ['wm-locales-catalogo', { heading: 'Vení a probarte', email: 'hola@telar.ejemplo' }],
   ['wm-tiendas-ecommerce', { heading: 'Hablamos', email: 'hola@trama.ejemplo' }],
 ]);
+// Demos sin canal comercial: cumplen el resto del contrato de chrome pero no
+// ofrecen CTA de WhatsApp (inmobiliaria-premium declara número no marcable y
+// "sin atención comercial"). Se verifica la ausencia en vez de la presencia.
+const noWhatsapp = new Set(['wm-inmobiliaria-premium']);
 
 async function visibleReturn(page) {
   const link = returnLink(page);
@@ -108,7 +112,8 @@ for (const app of demos) {
     await menu.click();
     await expect(page.getByRole('navigation', { name: 'Menu mobile', exact: true })
       .getByRole('link').first()).toBeVisible();
-    await expect(page.locator('[data-wm-menu-panel]').getByRole('link', { name: 'Escribir por WhatsApp', exact: true })).toBeVisible();
+    if (noWhatsapp.has(app.name)) await expect(page.locator('[data-wm-menu-panel]').getByRole('link', { name: 'Escribir por WhatsApp', exact: true })).toHaveCount(0);
+    else await expect(page.locator('[data-wm-menu-panel]').getByRole('link', { name: 'Escribir por WhatsApp', exact: true })).toBeVisible();
   });
 
   test(`${app.name}: original navigation, active state, brand and contact remain intact`, async ({ page, isMobile }) => {
@@ -122,6 +127,7 @@ for (const app of demos) {
       await expect(nav.getByRole('link', { name: 'Contacto', exact: true })).toHaveAttribute('href', app.base + 'contacto/');
       await expect(header.locator('a[href*="wa.me"], a[href*="whatsapp.com"]')).toHaveCount(0);
     } else if (isMobile) await header.getByRole('button', { name: 'Abrir menu', exact: true }).click();
+    else if (noWhatsapp.has(app.name)) await expect(header.getByRole('link', { name: 'WhatsApp', exact: true })).toHaveCount(0);
     else await expect(header.getByRole('link', { name: 'WhatsApp', exact: true })).toBeVisible();
     const internal = nav.getByRole('link').filter({ hasNotText: /^Inicio$/ }).first();
     const href = await internal.getAttribute('href');

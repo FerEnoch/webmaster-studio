@@ -76,3 +76,5 @@ button, input, select { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
   [data-room-tour] img, [data-solar-scene] canvas { transition: none !important; }
 }
+
+.wm-display { font-family: var(--font-serif); }

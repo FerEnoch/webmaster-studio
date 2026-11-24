@@ -26,9 +26,9 @@ test("brand and working five-step hero/search behavior", async ({ page }, testIn
   await page.getByRole("button", { name: "Alquiler", exact: true }).click();
   await page.getByLabel("Tipo de propiedad").selectOption("Loft");
   const search = page.getByRole("link", { name: /Buscar/ });
-  await expect(search).toHaveAttribute("href", `${BASE}propiedades?op=Alquiler&type=Loft`);
+  await expect(search).toHaveAttribute("href", `${BASE}propiedades/?op=Alquiler&type=Loft`);
   await search.click();
-  await expect(page).toHaveURL(/propiedades\?op=Alquiler&type=Loft$/);
+  await expect(page).toHaveURL(/propiedades\/\?op=Alquiler&type=Loft$/);
   await expect(page.getByTestId("property-card")).toHaveCount(1);
 
   await page.goto(BASE);
@@ -48,7 +48,7 @@ test("brand and working five-step hero/search behavior", async ({ page }, testIn
   await expect(all).toBeInViewport({ ratio: 1 });
   await expect(page.locator("[data-hero-step]")).toBeInViewport({ ratio: 0.9 });
   await expect(page.getByRole("banner")).toBeInViewport({ ratio: 1 });
-  await expect(all).toHaveAttribute("href", `${BASE}propiedades`);
+  await expect(all).toHaveAttribute("href", `${BASE}propiedades/`);
   await page.screenshot({ path: testInfo.outputPath("hero-step5-desktop.png"), fullPage: false, animations: "disabled" });
 });
 

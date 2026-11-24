@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import manifest from "../data/asset-manifest.json";
-import { href } from "../lib/urls";
+import { appUrl } from "../lib/urls";
 ---
 <Base title="Créditos fotográficos — Estudio Real State" description="Procedencia, autores, licencias y transformaciones de las fotografías locales de la demo.">
   <div class="px-4 pt-32 pb-24 sm:px-8">
@@ -21,12 +21,12 @@ import { href } from "../lib/urls";
                 <p class="mt-1 text-sm text-ink/65"><strong class="font-medium text-ink">Licencia del original y derivados:</strong> {asset.license}{asset.attributionRequired ? " · requiere atribución" : " · atribución no obligatoria"}</p>
                 <p class="mt-3 text-xs leading-relaxed text-ink/50"><strong class="font-medium text-ink">Usos:</strong> {asset.roles.join(" · ")}</p>
               </div>
-              <img src={href(`images/${asset.id}-480.webp`)} width="240" height="160" alt="" loading="lazy" class="h-40 w-full rounded-2xl object-cover md:w-60" />
+              <img src={appUrl(`/images/${asset.id}-480.webp`)} width="240" height="160" alt="" loading="lazy" class="h-40 w-full rounded-2xl object-cover md:w-60" />
             </div>
             <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
               <a href={asset.itemUrl} target="_blank" rel="noreferrer" class="text-brass underline underline-offset-4">Ficha del original</a>
               <a href={asset.licenseUrl} target="_blank" rel="noreferrer" class="text-brass underline underline-offset-4">Texto de la licencia</a>
-              <a href={href(`images/${asset.id}-1600.webp`)} class="text-ink/65 underline underline-offset-4">Derivado local 1600 px</a>
+              <a href={appUrl(`/images/${asset.id}-1600.webp`)} class="text-ink/65 underline underline-offset-4">Derivado local 1600 px</a>
             </div>
             <details class="mt-4 text-xs text-ink/55">
               <summary class="cursor-pointer font-medium text-ink/70">Evidencia del derivado y hashes</summary>
@@ -38,7 +38,7 @@ import { href } from "../lib/urls";
           </article>
         ))}
       </div>
-      <a href={href()} class="button-ink mt-10">Volver al inicio →</a>
+      <a href={appUrl("/")} class="button-ink mt-10">Volver al inicio →</a>
     </div>
   </div>
 </Base>

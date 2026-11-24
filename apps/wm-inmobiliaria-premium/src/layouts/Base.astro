@@ -1,16 +1,26 @@
 ---
 import "../styles/global.css";
-import { href } from "../lib/urls";
+import { appPath, appUrl } from "../lib/urls";
 
 interface Props { title: string; description?: string }
 const { title, description = "Estudio Real State: casas, departamentos y terrenos para recorrer antes de visitar. Demo inmobiliaria premium." } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const integrated = import.meta.env.BASE_URL !== "/";
+const current = appPath(Astro.url.pathname);
+const currentFull = current + Astro.url.search;
+const isActive = (href: string) => {
+  const q = href.indexOf("?");
+  const h = href.indexOf("#");
+  const cut = Math.min(q === -1 ? href.length : q, h === -1 ? href.length : h);
+  const target = appPath(href.slice(0, cut)) + (q === -1 ? "" : href.slice(q, h === -1 ? undefined : h));
+  if (!target.includes("?")) return currentFull === target || currentFull.startsWith(target.replace(/\/$/, "") + "/");
+  return currentFull === target;
+};
 const navigation = [
-  ["Propiedades", href("propiedades")],
-  ["Venta", `${href("propiedades")}?op=Venta`],
-  ["Alquiler", `${href("propiedades")}?op=Alquiler`],
-  ["Terrenos", `${href("propiedades")}?type=Terreno`],
+  ["Propiedades", appUrl("/propiedades")],
+  ["Venta", `${appUrl("/propiedades")}?op=Venta`],
+  ["Alquiler", `${appUrl("/propiedades")}?op=Alquiler`],
+  ["Terrenos", `${appUrl("/propiedades")}?type=Terreno`],
 ];
 ---
 <!doctype html>
@@ -27,36 +37,47 @@ const navigation = [
   </head>
   <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
-    <header class="fixed inset-x-0 top-3 z-50 flex justify-center px-3 sm:top-4 sm:px-4">
+    <header data-wm-header class="fixed inset-x-0 top-3 z-50 flex flex-col items-center px-3 sm:top-4 sm:px-4">
       <div class="flex w-full max-w-6xl items-center justify-between rounded-full border border-white/40 bg-ivory/85 py-2 pr-2 pl-4 shadow-[0_10px_40px_-10px_rgba(20,19,15,0.25)] backdrop-blur-xl sm:pl-5">
-        <a href={href()} aria-label="Estudio Real State" class="flex items-baseline gap-2 rounded-full">
+        <a href={appUrl("/")} aria-label="Estudio Real State" class="wm-display flex items-baseline gap-2 rounded-full">
           <span class="font-serif text-[1.45rem] leading-none italic sm:text-2xl">Estudio</span>
           <span class="text-[9px] font-medium tracking-[0.22em] text-ink/55 uppercase sm:text-[10px]">Real State</span>
         </a>
-        <nav class="hidden items-center gap-1 md:flex" aria-label="Navegación principal">
-          {navigation.map(([label, url]) => <a href={url} class="rounded-full px-4 py-2 text-sm text-ink/80 transition-colors hover:bg-ink/5 hover:text-ink">{label}</a>)}
+        <nav class="hidden items-center gap-1 md:flex" aria-label="Principal">
+          {navigation.map(([label, url]) => <a href={url} aria-current={isActive(url) ? "page" : undefined} class="rounded-full px-4 py-2 text-sm text-ink/80 transition-colors hover:bg-ink/5 hover:text-ink">{label}</a>)}
         </nav>
         <div class="flex items-center gap-1.5">
           {integrated && (
             <a
               href="/"
               data-astro-reload
-              class="hidden items-center gap-1.5 rounded-full border border-ink/20 px-4 py-2.5 text-xs font-medium tracking-wide whitespace-nowrap uppercase hover:bg-ink hover:text-ivory sm:inline-flex"
+              class="wm-display hidden min-h-[44px] items-center gap-1.5 rounded-full border border-ink/20 px-4 py-2.5 text-xs font-medium tracking-wide whitespace-nowrap uppercase hover:bg-ink hover:text-ivory sm:inline-flex"
             >
               Ir a Webmaster Studio <span aria-hidden="true">↗</span>
             </a>
           )}
-          <a href={`${href("propiedades")}?favs=1`} class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-ink/5" aria-label="Favoritos">
+          <a href={`${appUrl("/propiedades")}?favs=1`} class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-ink/5" aria-label="Favoritos">
             <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.6 3.5 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2Z" /></svg>
           </a>
-          <a href={`${href()}#tasacion`} class="hidden rounded-full bg-ink px-5 py-2.5 text-sm text-ivory transition-colors hover:bg-moss sm:block">Tasá tu propiedad</a>
-          <button type="button" data-menu-button aria-expanded="false" aria-controls="mobile-navigation" aria-label="Abrir menú" class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-ink/5 md:hidden">
+          <a href={`${appUrl("/")}#tasacion`} class="hidden rounded-full bg-ink px-5 py-2.5 text-sm text-ivory transition-colors hover:bg-moss sm:block">Tasá tu propiedad</a>
+          <button type="button" data-menu-button aria-expanded="false" aria-controls="mobile-navigation" aria-label="Abrir menu" class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-ink/5 md:hidden">
             <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 8h16M4 16h16" /></svg>
           </button>
         </div>
       </div>
-      <nav id="mobile-navigation" data-mobile-menu hidden class="absolute inset-x-3 top-16 rounded-3xl border border-ink/10 bg-ivory p-4 shadow-2xl md:hidden" aria-label="Navegación móvil">
-        {navigation.map(([label, url]) => <a href={url} class="block border-b border-ink/10 px-3 py-3 font-serif text-3xl last:border-0">{label}</a>)}
+      <div class="w-full max-w-6xl sm:hidden">
+        {integrated && (
+          <a
+            href="/"
+            data-astro-reload
+            class="wm-display mt-2 inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-full border border-white/40 bg-ivory/85 px-4 py-2.5 text-xs font-medium tracking-wide whitespace-nowrap uppercase hover:bg-ink hover:text-ivory"
+          >
+            Ir a Webmaster Studio <span aria-hidden="true">↗</span>
+          </a>
+        )}
+      </div>
+      <nav id="mobile-navigation" data-mobile-menu data-wm-menu-panel data-open="false" hidden class="absolute inset-x-3 top-16 rounded-3xl border border-ink/10 bg-ivory p-4 shadow-2xl md:hidden" aria-label="Menu mobile">
+        {navigation.map(([label, url]) => <a href={url} aria-current={isActive(url) ? "page" : undefined} class="block border-b border-ink/10 px-3 py-3 font-serif text-3xl last:border-0">{label}</a>)}
         {integrated && (
           <a href="/" data-astro-reload class="mt-3 flex items-center justify-between rounded-2xl bg-ink px-4 py-3 text-sm text-ivory">
             Ir a Webmaster Studio <span aria-hidden="true">↗</span>
@@ -83,7 +104,7 @@ const navigation = [
         <div>
           <p class="mb-4 text-xs tracking-[0.2em] text-ivory/40 uppercase">Sobre esta demo</p>
           <p class="max-w-sm text-sm leading-relaxed text-ivory/65">Propiedades ficticias y fotografías editoriales con procedencia documentada. No hay atención comercial, formularios ni envío de datos.</p>
-          <a href={href("creditos")} class="mt-4 inline-block text-sm text-brass underline underline-offset-4">Créditos fotográficos y licencias</a>
+          <a href={appUrl("/creditos")} class="mt-4 inline-block text-sm text-brass underline underline-offset-4">Créditos fotográficos y licencias</a>
         </div>
       </div>
       <p aria-hidden="true" class="pointer-events-none py-8 text-center font-serif text-[20vw] leading-[0.75] italic whitespace-nowrap text-ivory/[0.07] select-none">Estudio</p>
@@ -95,16 +116,18 @@ const navigation = [
       const closeMenu = (restoreFocus = false) => {
         if (!menuButton || !menu) return;
         menu.hidden = true;
+        menu.dataset.open = "false";
         menuButton.setAttribute("aria-expanded", "false");
-        menuButton.setAttribute("aria-label", "Abrir menú");
+        menuButton.setAttribute("aria-label", "Abrir menu");
         if (restoreFocus) menuButton.focus();
       };
       menuButton?.addEventListener("click", () => {
         if (!menu) return;
         const open = menu.hidden;
         menu.hidden = !open;
+        menu.dataset.open = String(open);
         menuButton.setAttribute("aria-expanded", String(open));
-        menuButton.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+        menuButton.setAttribute("aria-label", open ? "Cerrar menu" : "Abrir menu");
       });
       menu?.addEventListener("click", (event) => {
         if ((event.target as HTMLElement).closest("a")) closeMenu();

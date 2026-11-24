@@ -1,21 +1,15 @@
-const BASE = import.meta.env.BASE_URL;
-
-/** App-local links use Astro's configured base in standalone and deployment builds. */
-export function href(path = ""): string {
-  const clean = path.replace(/^\/+/, "");
-  return clean ? `${BASE}${clean}` : BASE;
+// App-local paths stay on the current origin in both standalone and integrated builds.
+export function appUrl(href: string): string {
+  if (!href.startsWith("/") || href.startsWith("//")) return href;
+  const base = import.meta.env.BASE_URL;
+  const [path] = href.split(/[?#]/);
+  const suffix = href.slice(path.length);
+  const local = base !== "/" && path.startsWith(base) ? path : base + path.slice(1);
+  return (local.endsWith("/") || /\.[^/]+$/.test(local) ? local : local + "/") + suffix;
 }
 
-export function propertyHref(slug: string): string {
-  return href(`propiedades/${slug}/`);
-}
-
-export const imageWidths = [480, 960, 1600] as const;
-
-export function imagePath(key: string, width: number = 960): string {
-  return href(`images/${key}-${width}.webp`);
-}
-
-export function imageSrcSet(key: string): string {
-  return imageWidths.map((width) => `${imagePath(key, width)} ${width}w`).join(", ");
+export function appPath(pathname: string): string {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const local = base && (pathname === base || pathname.startsWith(base + "/")) ? pathname.slice(base.length) : pathname;
+  return local.replace(/\/$/, "") || "/";
 }

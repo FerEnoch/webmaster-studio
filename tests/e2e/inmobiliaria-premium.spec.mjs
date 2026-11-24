@@ -36,7 +36,7 @@ for (const [id, name] of [
     await expect(page.getByRole('heading', { level: 1 }).first()).toBeVisible();
     if (id === 'inmobiliaria-premium') await expect(page).toHaveTitle(/Estudio Real State/);
 
-    const back = page.getByRole('link', { name: 'Ir a Webmaster Studio' });
+    const back = page.getByRole('banner').getByRole('link', { name: 'Ir a Webmaster Studio' });
     await expect(back).toHaveAttribute('href', '/');
     await expect(back).toHaveAttribute('data-astro-reload', '');
     const [studio] = await Promise.all([

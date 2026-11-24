@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { heroWalk } from "../lib/properties";
-import { href, imagePath, imageSrcSet } from "../lib/urls";
+import { appUrl } from "../lib/urls";
+import { imagePath, imageSrcSet } from "../lib/paths";
 
 const clamp = (value: number, min = 0, max = 1) => Math.min(max, Math.max(min, value));
 
@@ -51,7 +52,7 @@ export default function HeroWalk() {
     window.scrollTo({ top: top + (distance * index) / (heroWalk.length - 1), behavior: "auto" });
   };
 
-  const searchHref = `${href("propiedades")}?op=${operation}${type !== "Todas" ? `&type=${encodeURIComponent(type)}` : ""}`;
+  const searchHref = `${appUrl("/propiedades")}?op=${operation}${type !== "Todas" ? `&type=${encodeURIComponent(type)}` : ""}`;
   const introOpacity = 1 - clamp(progress / 0.35);
   const fraction = progress - Math.floor(progress);
   const barHeight = reducedMotion ? 0 : Math.sin(fraction * Math.PI) * 7;
@@ -161,7 +162,7 @@ export default function HeroWalk() {
 
         {step === heroWalk.length - 1 && (
           <div className="absolute inset-x-0 bottom-12 z-10 flex justify-center px-5">
-            <a href={href("propiedades")} className="group flex items-center gap-3 rounded-full bg-ivory py-2 pr-2 pl-6 text-sm text-ink shadow-2xl">
+            <a href={appUrl("/propiedades")} className="group flex items-center gap-3 rounded-full bg-ivory py-2 pr-2 pl-6 text-sm text-ink shadow-2xl">
               Ver todas las propiedades
               <span aria-hidden="true" className="flex h-10 w-10 items-center justify-center rounded-full bg-ink text-ivory transition-transform group-hover:translate-x-1">→</span>
             </a>

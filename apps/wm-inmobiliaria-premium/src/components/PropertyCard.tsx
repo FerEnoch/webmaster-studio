@@ -1,5 +1,5 @@
 import { formatPrice, type Property } from "../lib/properties";
-import { imagePath, imageSrcSet, propertyHref } from "../lib/urls";
+import { imagePath, imageSrcSet, propertyHref } from "../lib/paths";
 import FavoriteButton from "./FavoriteButton";
 
 export default function PropertyCard({ property, highlighted = false, onHover }: { property: Property; highlighted?: boolean; onHover?: (slug: string | null) => void }) {

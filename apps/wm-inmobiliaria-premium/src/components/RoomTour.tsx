@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { imagePath, imageSrcSet } from "../lib/urls";
+import { imagePath, imageSrcSet } from "../lib/paths";
 import type { TourRoom } from "../lib/experiences";
 import "./RoomTour.css";
 
