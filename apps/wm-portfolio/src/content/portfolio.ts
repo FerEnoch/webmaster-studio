@@ -1,6 +1,8 @@
 /** Contenido del sitio de Webmaster Studio. Los ejemplos y datos de contacto son ficticios. */
 
-import { img, pex, poster, video } from "@lib/media";
+import { apparelCovers, img, pex, poster, video } from "@lib/media";
+import type { ApparelCover } from "@lib/media";
+import { appUrl } from "@lib/urls";
 import { PORTFOLIO, RUBROS } from "@lib/rubros";
 import type { CatalogItem, RubroContent, Section } from "@lib/types";
 
@@ -15,7 +17,9 @@ type SolutionId =
   | "universidad"
   | "inmobiliaria"
   | "arquitectura"
-  | "arquitectura-premium";
+  | "arquitectura-premium"
+  | "locales-catalogo"
+  | "tiendas-ecommerce";
 
 type SolutionCopy = {
   tagline: string;
@@ -23,7 +27,7 @@ type SolutionCopy = {
   capabilities: readonly [string, string, string, string?, string?];
 };
 
-/** Cobertura de las ocho demos y entre tres y cinco ítems por tarjeta. */
+/** Cobertura de las demos y entre tres y cinco ítems por tarjeta. */
 const solutionCopy: Record<string, SolutionCopy | undefined> = {
   concesionario: {
     tagline: "Catálogo de vehículos con fichas y consultas comerciales.",
@@ -100,6 +104,24 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
       "Explorá las fichas de proyectos.",
       "Probá una cotización dinámica al cambiar las opciones.",
       "Organizá una visita simulada, sin reserva real.",
+    ],
+  },
+  "locales-catalogo": {
+    tagline: "Telar: catálogo de indumentaria para explorar antes de visitar el local.",
+    objeccion: "Mostrá talles, colores y disponibilidad sin sumar un carrito.",
+    capabilities: [
+      "Combiná filtros por categoría, talle, color y disponibilidad.",
+      "Abrí la ficha de una prenda y consultá el stock por variante.",
+      "Recorré las colecciones y consultá la guía de talles.",
+    ],
+  },
+  "tiendas-ecommerce": {
+    tagline: "TRAMA: tienda de ropa urbana con carrito de compras, entrega y checkout.",
+    objeccion: "Mostrá el costo total antes de confirmar el pedido.",
+    capabilities: [
+      "Elegí variantes con stock y editá las cantidades del carrito.",
+      "Compará el costo de envío con el retiro en el local.",
+      "Probá los recorridos de Mercado Pago y MODO en un checkout simulado, sin cargos.",
     ],
   },
 } satisfies Record<SolutionId, SolutionCopy>;
@@ -404,7 +426,11 @@ export const portfolio: RubroContent = {
   },
 };
 
-/** Imágenes ilustrativas de las ocho soluciones por industria. */
+/** URL de la portada local más ancha de una demo de indumentaria. */
+const apparelCoverSrc = (cover: ApparelCover): string =>
+  appUrl(`/media/${cover.file}-${Math.max(...cover.widths)}.webp`);
+
+/** Imágenes ilustrativas de las soluciones por industria. */
 export const demoImages: Record<string, string> = {
   concesionario: img("1560958089-b8a1929cea89", 1200),
   lavadero: img("1492144534655-ae79c964c9d7", 1200),
@@ -414,6 +440,8 @@ export const demoImages: Record<string, string> = {
   inmobiliaria: img("1512917774080-9991f1c4c750", 1200),
   arquitectura: img("1487958449943-2429e8be8625", 1200),
   "arquitectura-premium": img("1600585154340-be6161a56a0c", 1200),
+  "locales-catalogo": apparelCoverSrc(apparelCovers["locales-catalogo"]),
+  "tiendas-ecommerce": apparelCoverSrc(apparelCovers["tiendas-ecommerce"]),
 };
 
 export const fotoEstudio = pex(6804073, 1200);
