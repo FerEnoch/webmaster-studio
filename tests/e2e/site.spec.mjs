@@ -140,7 +140,7 @@ test('studio home CTAs link directly to slash-terminated pages', async ({ page, 
   expect((await page.goto('/')).status()).toBe(200);
   const destinations = {
     'Soluciones a medida': '/demos/',
-    'Ver todas las soluciones': '/demos/',
+    'Ver todas las demos': '/demos/',
     'Explorar soluciones a medida': '/demos/',
     'Ver el detalle de los servicios': '/servicios/',
     'Ver contacto': '/contacto/',
@@ -158,28 +158,46 @@ test('studio home CTAs link directly to slash-terminated pages', async ({ page, 
   }
 });
 
-test('studio home shows rubro cards and opens the filtered catalogue', async ({ page }) => {
+test('studio home shows rubro tabs and opens the filtered catalogue', async ({ page }) => {
   test.skip(!selected('portfolio'), 'Portfolio unchanged');
   expect((await page.goto('/')).status()).toBe(200);
   const section = page.locator('#demos');
   await expect(section.getByRole('heading', { name: 'Soluciones a medida', exact: true })).toBeVisible();
-  await expect(section).toContainText('Explorá los rubros para conocer ejemplos de sitios y aplicaciones adaptados a cada actividad. Las demos usan datos ficticios y formularios simulados.');
-  const cards = section.getByRole('article');
-  await expect(cards).toHaveCount(groups.length);
+  await expect(section).toContainText('Explorá las posibilidades de tu negocio o empresa a través de demos interactivas.');
+  const tabs = section.getByRole('tab');
+  await expect(tabs).toHaveCount(groups.length);
   for (const group of groups) {
-    const card = cards.filter({ has: page.getByRole('heading', { name: group.nombre, level: 3, exact: true }) });
-    await expect(card.getByText('Solución a medida', { exact: true })).toBeVisible();
-    const demos = card.getByText(group.demos.map((demo) => demo.nombre).join(' · '), { exact: true });
-    await expect(card.getByRole('paragraph').and(demos)).toBeVisible();
-    await expect(card.locator('img')).toHaveAttribute('src', /\S/);
-    const link = card.getByRole('link', { name: 'Ver rubro', exact: true });
-    await expect(link).toHaveAttribute('href', `/demos/?rubro=${group.id}`);
-    await expect(link).toHaveAttribute('data-astro-reload', '');
+    await expect(tabs.filter({ hasText: group.nombre }).first()).toBeVisible();
   }
+  await expect(tabs.first()).toHaveAttribute('aria-selected', 'true');
+  await expect(section.locator('[role="tabpanel"]')).toHaveCount(groups.length);
+  const panels = section.getByRole('tabpanel');
+  await expect(panels).toHaveCount(1);
+  const visible = panels.first();
+  await expect(visible.getByRole('heading', { name: 'Stock y fichas de vehículos', exact: true })).toBeVisible();
+  await expect(visible.locator('img')).toHaveAttribute('src', /\S/);
+  await expect(visible.getByRole('link', { name: 'Solicitar cotización', exact: true })).toHaveAttribute('href', '#demo');
+  await expect(visible.getByRole('link', { name: 'Ver este ejemplo', exact: true })).toHaveAttribute('href', '/demos/?rubro=concesionario');
+  await expect(section.getByRole('link', { name: 'Ver todas las demos', exact: true })).toHaveAttribute('href', '/demos/');
   const group = groups.find((group) => group.id === 'lavadero');
-  await section.locator(`a[href="/demos/?rubro=${group.id}"]`).click();
+  await tabs.filter({ hasText: group.nombre }).first().click();
+  await expect(panels.first()).toContainText('Reservas de lavado + bar');
+  await panels.first().getByRole('link', { name: 'Ver este ejemplo', exact: true }).click();
   await expect(page).toHaveURL(`/demos/?rubro=${group.id}`);
   await results(page, group.demos, group.id, group.nombre);
+});
+
+test('studio shows washing and the bar in the standard car wash cover', async ({ page }) => {
+  test.skip(!selected('portfolio'), 'Portfolio unchanged');
+  const cover = '/images/autolavado-con-bar.webp';
+  expect((await page.goto('/')).status()).toBe(200);
+  await expect(page.locator('#demos [data-panel="lavadero"] img')).toHaveAttribute('src', cover);
+  expect((await page.goto('/demos/?rubro=lavadero')).status()).toBe(200);
+  await expect(page.locator('[data-wm-rubro-card="lavadero"] img')).toHaveAttribute('src', cover);
+  await expect(page.locator('[data-wm-rubro-card="lavadero-premium"] img')).toHaveAttribute('src', /photo-1626668893632-6f3a4466d22f\?/);
+  const image = await page.request.get(cover);
+  expect(image.status()).toBe(200);
+  expect(image.headers()['content-type']).toBe('image/webp');
 });
 
 test('studio catalogue explains future growth with standard and premium service demos', async ({ page }) => {

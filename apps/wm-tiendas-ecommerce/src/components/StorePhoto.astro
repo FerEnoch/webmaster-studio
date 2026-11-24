@@ -1,0 +1,49 @@
+---
+import { appUrl } from "@lib/urls";
+import type { Photo } from "@lib/photos";
+
+interface Props {
+  photo: Photo;
+  placement?: "card" | "detail" | "hero";
+  priority?: boolean;
+}
+
+const { photo, placement = "card", priority = false } = Astro.props;
+const width = Math.max(...photo.widths);
+const media = (size: number) => appUrl(`/media/${photo.name}-${size}.webp`);
+const sizes = {
+  card: "(min-width: 1160px) 265px, (min-width: 1060px) calc((100vw - 100px) / 4), (min-width: 800px) calc((100vw - 80px) / 3), (min-width: 540px) calc((100vw - 60px) / 2), calc(100vw - 40px)",
+  detail: "(min-width: 1160px) 544px, (min-width: 900px) calc((100vw - 72px) / 2), calc(100vw - 40px)",
+  hero: "(min-width: 1160px) 517px, (min-width: 900px) calc((100vw - 72px) * .475), calc(100vw - 40px)",
+};
+---
+
+<img
+  class:list={["photo", `photo--${placement}`]}
+  src={media(width)}
+  srcset={photo.widths.map((size) => `${media(size)} ${size}w`).join(", ")}
+  sizes={sizes[placement]}
+  width={width}
+  height={width * 5 / 4}
+  alt={photo.alt}
+  loading={priority ? "eager" : "lazy"}
+  fetchpriority={priority ? "high" : undefined}
+  decoding="async"
+/>
+
+<style>
+  .photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--wm-soft);
+    object-fit: cover;
+  }
+
+  .photo--detail { border-radius: var(--wm-radius); }
+  .photo--hero { aspect-ratio: 5 / 4; object-position: center 28%; }
+
+  @media (min-width: 900px) {
+    .photo--hero { aspect-ratio: 1; }
+  }
+</style>

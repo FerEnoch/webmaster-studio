@@ -1,0 +1,44 @@
+---
+import Base from "../layouts/Base.astro";
+import manifest from "../data/asset-manifest.json";
+import { appUrl } from "../lib/urls";
+---
+<Base title="Créditos fotográficos — Estudio Real State" description="Procedencia, autores, licencias y transformaciones de las fotografías locales de la demo.">
+  <div class="px-4 pt-32 pb-24 sm:px-8">
+    <div class="mx-auto max-w-[1200px]">
+      <p class="text-xs tracking-[0.25em] text-brass uppercase">Procedencia verificable</p>
+      <h1 class="mt-3 max-w-4xl font-serif text-[clamp(3rem,6vw,6rem)] leading-[0.9]">Fotografías con <span class="italic">historia y crédito.</span></h1>
+      <p class="mt-6 max-w-3xl text-lg leading-relaxed text-ink/65">Las imágenes son reemplazos editoriales visualmente alineados, no las fotografías exactas de la referencia. Se obtuvieron de fichas individuales de Wikimedia Commons y Pexels, se sirven localmente y conservan su licencia. Las propiedades del catálogo son ficticias: las fotos no documentan inventario real.</p>
+      <p class="mt-4 max-w-3xl rounded-2xl bg-sand p-4 text-sm leading-relaxed text-ink/65">Transformación aplicada a todas: orientación automática, eliminación de metadatos, redimensión sin ampliar y codificación WebP a calidad 82. Los recortes responsivos se realizan con <code>object-fit</code> y focos editoriales. No hay ediciones generativas.</p>
+      <div class="mt-12 space-y-5">
+        {manifest.assets.map((asset) => (
+          <article class="rounded-[24px] border border-ink/10 p-5 sm:p-7" id={asset.id}>
+            <div class="grid gap-5 md:grid-cols-[1fr_auto] md:items-start">
+              <div>
+                <p class="text-xs tracking-[0.15em] text-brass uppercase">{asset.id}</p>
+                <h2 class="mt-2 font-serif text-2xl leading-tight sm:text-3xl">{asset.title.replace(/^File:/, "")}</h2>
+                <p class="mt-3 text-sm text-ink/65"><strong class="font-medium text-ink">Autoría:</strong> {asset.creator}</p>
+                <p class="mt-1 text-sm text-ink/65"><strong class="font-medium text-ink">Licencia del original y derivados:</strong> {asset.license}{asset.attributionRequired ? " · requiere atribución" : " · atribución no obligatoria"}</p>
+                <p class="mt-3 text-xs leading-relaxed text-ink/50"><strong class="font-medium text-ink">Usos:</strong> {asset.roles.join(" · ")}</p>
+              </div>
+              <img src={appUrl(`/images/${asset.id}-480.webp`)} width="240" height="160" alt="" loading="lazy" class="h-40 w-full rounded-2xl object-cover md:w-60" />
+            </div>
+            <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+              <a href={asset.itemUrl} target="_blank" rel="noreferrer" class="text-brass underline underline-offset-4">Ficha del original</a>
+              <a href={asset.licenseUrl} target="_blank" rel="noreferrer" class="text-brass underline underline-offset-4">Texto de la licencia</a>
+              <a href={appUrl(`/images/${asset.id}-1600.webp`)} class="text-ink/65 underline underline-offset-4">Derivado local 1600 px</a>
+            </div>
+            <details class="mt-4 text-xs text-ink/55">
+              <summary class="cursor-pointer font-medium text-ink/70">Evidencia del derivado y hashes</summary>
+              <p class="mt-3 break-all"><strong>SHA-256 de adquisición:</strong> <code>{asset.acquiredSha256}</code></p>
+              <ul class="mt-2 space-y-1">
+                {asset.derivatives.map((derivative) => <li class="break-all"><code>{derivative.path}</code> · {derivative.dimensions} · {(derivative.bytes / 1024).toFixed(1)} KiB · SHA-256 <code>{derivative.sha256}</code></li>)}
+              </ul>
+            </details>
+          </article>
+        ))}
+      </div>
+      <a href={appUrl("/")} class="button-ink mt-10">Volver al inicio →</a>
+    </div>
+  </div>
+</Base>

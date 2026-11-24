@@ -1,0 +1,45 @@
+<section class="wm-panel confirmation" data-confirmation aria-labelledby="order-complete" hidden>
+  <p class="wm-kicker">Resumen local</p>
+  <h2 id="order-complete" tabindex="-1">Simulación completada</h2>
+  <p class="wm-muted">No se hizo ningún cargo ni se generó un envío. Tampoco se preparó un retiro. El carrito quedó vacío.</p>
+
+  <section aria-labelledby="receipt-heading">
+    <h3 id="receipt-heading">Comprobante del pedido</h3>
+    <p>Referencia local: <strong data-reference></strong></p>
+    <ul data-receipt-lines></ul>
+    <dl>
+      <div><dt>Subtotal</dt><dd data-receipt-subtotal></dd></div>
+      <div><dt>Entrega</dt><dd data-receipt-shipping></dd></div>
+      <div class="total"><dt>Total</dt><dd data-receipt-total></dd></div>
+      <div><dt>Medio de pago</dt><dd data-receipt-method></dd></div>
+      <div><dt>Modalidad</dt><dd data-receipt-delivery></dd></div>
+    </dl>
+    <p class="wm-muted" data-receipt-next></p>
+  </section>
+
+  <details>
+    <summary>Ver correo simulado</summary>
+    <p>Para (oculto parcialmente): <span data-email-recipient></span></p>
+    <p data-email-message></p>
+    <p class="wm-muted">No se envió ningún correo. Este mensaje solo se muestra en tu navegador.</p>
+  </details>
+
+  <p class="wm-muted">Podés descargar el comprobante sin el correo. No hay seguimiento real ni forma de recuperar la referencia si cerrás o recargás esta página.</p>
+  <div class="actions">
+    <button class="wm-btn" type="button" data-download>Descargar comprobante</button>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .confirmation { max-width: 46rem; }
+  h2 { margin-top: .35rem; }
+  ul { padding-inline-start: 1.1rem; }
+  dl div { display: flex; justify-content: space-between; gap: .75rem; }
+  dt { flex-shrink: 0; }
+  dd { margin: 0; text-align: right; }
+  .total { font-size: 1.25rem; font-weight: 800; margin-block: .5rem; border-top: 1px solid var(--wm-line); padding-top: .5rem; }
+  details { border: 1px solid var(--wm-line); border-radius: var(--wm-radius); padding: .75rem 1rem; overflow-wrap: anywhere; }
+  summary { font-weight: 700; cursor: pointer; }
+  .actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+</style>

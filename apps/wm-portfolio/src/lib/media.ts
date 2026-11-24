@@ -111,7 +111,7 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
     videos: [3257, 13232, 13231, 4907],
     photos: [
       "1560958089-b8a1929cea89", // concesionario (Tesla nuevo)
-      "1492144534655-ae79c964c9d7", // lavadero estándar (garage oscuro)
+      "1517248135467-4c7edcad34c4", // interior de bar (fuente de la portada compuesta)
       "1626668893632-6f3a4466d22f", // lavadero-premium (túnel turquesa)
       "1570172619644-dfd03ed5d881", // estetica (tratamiento en curso)
       "1562774053-701939374585", // universidad (campus)
@@ -121,3 +121,29 @@ export const VERIFIED: Record<string, { videos: number[]; photos: string[] }> = 
     ],
   },
 };
+
+/** Portada local de una demo de indumentaria: foto real verificada con recorte propio. */
+export interface ApparelCover {
+  file: string;
+  widths: readonly [number, ...number[]];
+  alt: string;
+}
+
+/**
+ * Portadas reales de Locales y tiendas: recortes 16:10 propios de sesiones ya
+ * verificadas dentro de cada demo (TELAR editorial de percheros; TRAMA callejero).
+ * Sin SVG presentado como foto. Créditos, fuentes y licencias en
+ * apps/wm-portfolio/public/media/ATTRIBUTION.txt.
+ */
+export const apparelCovers: Record<"locales-catalogo" | "tiendas-ecommerce", ApparelCover> = {
+  "locales-catalogo": {
+    file: "locales-catalogo-cover",
+    widths: [480, 800],
+    alt: "Percheros con prendas de tonos neutros en un local de ropa",
+  },
+  "tiendas-ecommerce": {
+    file: "tiendas-ecommerce-cover",
+    widths: [480, 800],
+    alt: "Dos personas con looks urbanos y camperas oscuras sobre una vereda de adoquines",
+  },
+} as const;

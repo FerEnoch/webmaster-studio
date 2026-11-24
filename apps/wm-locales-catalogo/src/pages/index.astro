@@ -1,0 +1,90 @@
+---
+import Base from "../layouts/Base.astro";
+import ProductPhoto from "../components/ProductPhoto.astro";
+import { appUrl } from "@lib/urls";
+import { AVAILABILITY_LABEL, COLECCIONES, PRODUCTS, availabilityOf, formatPrice, productById } from "@lib/products";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Colecciones", href: "/colecciones" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+const destacados = ["camisa-lino", "vestido-marta", "campera-campo"]
+  .map((id) => productById(id)!)
+  .filter(Boolean);
+---
+
+<Base
+  title="Telar · Catálogo online de ropa"
+  description="Catálogo online de Telar: ocho prendas con filtros por categoría, talle, color y disponibilidad, fichas por variante y colecciones."
+  nav={nav}
+>
+  <div class="wm-container">
+    <section class="wm-hero">
+      <div>
+        <p class="wm-kicker">Catálogo online · Palermo</p>
+        <h1 class="wm-display">La ropa, como en el perchero: toda a la vista.</h1>
+        <p class="wm-muted">
+          Encontrá tu talle y color, recorré las colecciones y elegí qué probarte en Telar.
+        </p>
+        <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.4rem">
+          <a class="wm-btn" href={appUrl("/catalogo")}>Ver el catálogo</a>
+          <a class="wm-btn wm-btn--ghost" href={appUrl("/colecciones")}>Ver colecciones</a>
+        </div>
+        <p class="wm-muted" style="font-size:.85rem">Gorriti 4380, Palermo · lun a sáb de 10 a 20 h.</p>
+      </div>
+      <figure>
+        <img class="wm-art wm-editorial" src={appUrl("/media/telar-editorial.webp")}
+          alt="Percheros de prendas crudas y terracota junto a una planta" width="1000" height="1170" fetchpriority="high" />
+      </figure>
+    </section>
+
+    <section aria-labelledby="destacados" style="padding-block:1rem 3rem">
+      <p class="wm-kicker">Destacados</p>
+      <h2 id="destacados" class="wm-display" style="font-size:clamp(1.8rem,4vw,2.8rem);margin:.6rem 0 1.2rem">Tres prendas que salen mucho</h2>
+      <div class="wm-grid">
+        {destacados.map((p) => (
+          <article class="wm-card">
+            <ProductPhoto photo={p.photo} />
+            <div class="wm-card__body">
+              <span class="wm-badge">{AVAILABILITY_LABEL[availabilityOf(p)]}</span>
+              <h3 class="wm-display">{p.nombre}</h3>
+              <p>{p.categoria} · {formatPrice(p.precio)}</p>
+              <a class="wm-link" href={appUrl(`/producto/${p.id}`)}>Ver ficha completa →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="colecciones" style="padding-block:1rem 3rem">
+      <p class="wm-kicker">Colecciones</p>
+      <h2 id="colecciones" class="wm-display" style="font-size:clamp(1.8rem,4vw,2.8rem);margin:.6rem 0 1.2rem">Tres ideas para vestirse</h2>
+      <div class="wm-grid">
+        {COLECCIONES.map((c) => (
+          <article class="wm-card">
+            <div class="wm-card__body">
+              <h3 class="wm-display">{c.nombre}</h3>
+              <p>{c.bajada}</p>
+              <p class="wm-muted">{PRODUCTS.filter((p) => p.coleccion === c.id).length} prendas</p>
+              <a class="wm-link" href={appUrl(`/colecciones#${c.id}`)}>Explorar la colección →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="como" style="padding-block:1rem 3rem">
+      <p class="wm-kicker">Cómo funciona</p>
+      <h2 id="como" class="wm-display" style="font-size:clamp(1.8rem,4vw,2.8rem);margin:.6rem 0 1.2rem">Elegís acá, te probás allá</h2>
+      <ol style="display:grid;gap:1rem;margin:1.2rem 0 0;padding:0;list-style:none">
+        <li class="wm-card"><div class="wm-card__body"><strong>1 · Filtrá el catálogo</strong><p>Por categoría, talle, color y disponibilidad real por variante.</p></div></li>
+        <li class="wm-card"><div class="wm-card__body"><strong>2 · Abrí la ficha</strong><p>Cada prenda muestra sus variantes, detalles de tela y calce.</p></div></li>
+        <li class="wm-card"><div class="wm-card__body"><strong>3 · Vení al local</strong><p>Te guardamos la prenda 48 h cuando consultás en el local.</p></div></li>
+      </ol>
+      <p style="margin-top:1.4rem"><a class="wm-btn wm-btn--ghost" href={appUrl("/guia-de-talles")}>Consultar la guía de talles</a></p>
+    </section>
+  </div>
+</Base>

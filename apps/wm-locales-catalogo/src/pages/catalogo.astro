@@ -1,0 +1,111 @@
+---
+import Base from "../layouts/Base.astro";
+import ProductPhoto from "../components/ProductPhoto.astro";
+import { appUrl } from "@lib/urls";
+import { AVAILABILITY_LABEL, CATEGORIAS, PRODUCTS, availabilityOf, formatPrice } from "@lib/products";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Colecciones", href: "/colecciones" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+const colores = [...new Map(PRODUCTS.flatMap((p) => p.colores).map((c) => [c.id, c])).values()];
+const talles = [...new Set(PRODUCTS.flatMap((p) => p.talles))];
+---
+
+<Base
+  title="Catálogo · Telar"
+  description="Catálogo completo de Telar con filtros por categoría, talle, color y disponibilidad."
+  nav={nav}
+>
+  <div class="wm-container" style="padding-block:2rem 3rem">
+    <p class="wm-kicker">Catálogo</p>
+    <h1 class="wm-display" style="font-size:clamp(2.2rem,5vw,3.6rem);margin:.6rem 0">Las ocho prendas, sin vueltas</h1>
+    <p class="wm-muted" style="max-width:44rem">Filtrá por lo que importa: si hay en tu talle y en tu color. La disponibilidad es por variante y se actualiza con cada reposición del local. Las fotos son de referencia.</p>
+
+    <form class="wm-filters" id="filtros" aria-label="Filtros del catálogo">
+      <label>Categoría
+        <select name="categoria" data-filtro="categoria">
+          <option value="">Todas</option>
+          {CATEGORIAS.map((c) => (<option value={c}>{c}</option>))}
+        </select>
+      </label>
+      <label>Talle
+        <select name="talle" data-filtro="talle">
+          <option value="">Todos</option>
+          {talles.map((t) => (<option value={t}>{t}</option>))}
+        </select>
+      </label>
+      <label>Color
+        <select name="color" data-filtro="color">
+          <option value="">Todos</option>
+          {colores.map((c) => (<option value={c.id}>{c.nombre}</option>))}
+        </select>
+      </label>
+      <label>Disponibilidad
+        <select name="disponibilidad" data-filtro="disponibilidad">
+          <option value="">Toda</option>
+          <option value="en-stock">En stock</option>
+          <option value="ultimas">Últimas unidades</option>
+          <option value="agotado">Agotado</option>
+        </select>
+      </label>
+    </form>
+    <p class="wm-muted" role="status" data-filtro-cuenta aria-live="polite"></p>
+
+    <div class="wm-grid" data-productos>
+      {PRODUCTS.map((p) => {
+        const disp = availabilityOf(p);
+        return (
+          <article
+            class="wm-card"
+            data-producto={p.id}
+          >
+            <ProductPhoto photo={p.photo} />
+            <div class="wm-card__body">
+              <span class="wm-badge" data-insignia>{AVAILABILITY_LABEL[disp]}</span>
+              <h3 class="wm-display">{p.nombre}</h3>
+              <p>{p.categoria} · {p.colores.map((c) => c.nombre).join(" · ")}</p>
+              <p class="wm-price">{formatPrice(p.precio)}</p>
+              <a class="wm-link" href={appUrl(`/producto/${p.id}`)}>Ver ficha completa →</a>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+    <p class="wm-empty" data-filtro-vacio hidden>Ninguna prenda coincide con esos filtros. Probá con otra combinación.</p>
+  </div>
+
+  <script>
+    import { matchesFilters, productById } from "@lib/products";
+    const form = document.getElementById("filtros");
+    const cards = [...document.querySelectorAll("[data-producto]")];
+    const cuenta = document.querySelector("[data-filtro-cuenta]");
+    const vacio = document.querySelector("[data-filtro-vacio]");
+    if (!(form instanceof HTMLFormElement) || !cuenta || !(vacio instanceof HTMLElement)) {
+      throw new Error("Filtros no disponibles");
+    }
+    const get = (n: string): string =>
+      form.querySelector<HTMLSelectElement>(`[data-filtro="${n}"]`)?.value ?? "";
+    const apply = (): void => {
+      const categoria = get("categoria");
+      const talle = get("talle");
+      const color = get("color");
+      const disp = get("disponibilidad");
+      let n = 0;
+      for (const card of cards) {
+        if (!(card instanceof HTMLElement)) continue;
+        const product = productById(card.dataset.producto ?? "");
+        const ok = !!product && matchesFilters(product, { categoria, talle, color, disponibilidad: disp });
+        card.hidden = !ok;
+        if (ok) n++;
+      }
+      cuenta.textContent = `${n} de ${cards.length} prendas`;
+      vacio.hidden = n !== 0;
+    };
+    form.addEventListener("change", apply);
+    apply();
+  </script>
+</Base>

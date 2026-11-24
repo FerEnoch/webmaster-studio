@@ -1,0 +1,30 @@
+---
+import Base from "../layouts/Base.astro";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Colecciones", href: "/colecciones" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+---
+
+<Base
+  title="Información legal · Telar"
+  description="Precios, cambios y privacidad del catálogo online de Telar."
+  nav={nav}
+>
+  <div class="wm-container" style="padding-block:2rem 3rem;max-width:60rem">
+    <p class="wm-kicker">Información legal</p>
+    <h1 class="wm-display" style="font-size:clamp(2.2rem,5vw,3.6rem);margin:.6rem 0">Condiciones claras</h1>
+    <h2 class="wm-display" style="font-size:1.4rem">Precios</h2>
+    <p>Todos los precios publicados son finales, con IVA incluido, en pesos argentinos.</p>
+    <h2 class="wm-display" style="font-size:1.4rem">Cambios</h2>
+    <p>Las prendas tienen 30 días de cambio por talle o color, con etiqueta y sin uso, presentando el ticket de compra del local.</p>
+    <h2 class="wm-display" style="font-size:1.4rem">Privacidad</h2>
+    <p>Este catálogo no crea cuentas, no pide datos personales y no registra tu navegación.</p>
+    <h2 class="wm-display" style="font-size:1.4rem">Defensa del consumidor</h2>
+    <p>Para reclamos, la Dirección Nacional de Defensa del Consumidor: <a class="wm-link" href="https://www.argentina.gob.ar/defensadelconsumidor">argentina.gob.ar/defensadelconsumidor</a>.</p>
+  </div>
+</Base>

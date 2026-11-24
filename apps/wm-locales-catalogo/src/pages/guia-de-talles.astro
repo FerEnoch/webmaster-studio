@@ -1,0 +1,56 @@
+---
+import Base from "../layouts/Base.astro";
+import { appUrl } from "@lib/urls";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Colecciones", href: "/colecciones" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+---
+
+<Base
+  title="Guía de talles · Telar"
+  description="Guía de talles de Telar: medidas en centímetros y cómo medirte en casa."
+  nav={nav}
+>
+  <div class="wm-container" style="padding-block:2rem 3rem;max-width:60rem">
+    <p class="wm-kicker">Guía de talles</p>
+    <h1 class="wm-display" style="font-size:clamp(2.2rem,5vw,3.6rem);margin:.6rem 0">El talle que te queda bien</h1>
+    <p class="wm-muted">Medidas en centímetros, tomadas sobre la prenda. Si estás entre dos talles, en Telar recomendamos el más grande: la ropa tiene que dejarte mover.</p>
+
+    <h2 class="wm-display" style="font-size:1.5rem;margin-top:2rem">Partes de arriba</h2>
+    <table class="wm-table">
+      <thead><tr><th>Talle</th><th>Pecho</th><th>Cintura</th><th>Largo</th></tr></thead>
+      <tbody>
+        <tr><td>XS</td><td>84</td><td>66</td><td>62</td></tr>
+        <tr><td>S</td><td>88</td><td>70</td><td>64</td></tr>
+        <tr><td>M</td><td>94</td><td>76</td><td>66</td></tr>
+        <tr><td>L</td><td>100</td><td>82</td><td>68</td></tr>
+        <tr><td>XL</td><td>106</td><td>88</td><td>70</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="wm-display" style="font-size:1.5rem;margin-top:2rem">Partes de abajo</h2>
+    <table class="wm-table">
+      <thead><tr><th>Talle</th><th>Cintura</th><th>Cadera</th><th>Tiro</th></tr></thead>
+      <tbody>
+        <tr><td>XS</td><td>64</td><td>90</td><td>26</td></tr>
+        <tr><td>S</td><td>68</td><td>94</td><td>27</td></tr>
+        <tr><td>M</td><td>74</td><td>100</td><td>28</td></tr>
+        <tr><td>L</td><td>80</td><td>106</td><td>29</td></tr>
+        <tr><td>XL</td><td>86</td><td>112</td><td>30</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="wm-display" style="font-size:1.5rem;margin-top:2rem">Cómo medirte</h2>
+    <ol>
+      <li>Pecho: rodeá el torso a la altura del busto, sin apretar.</li>
+      <li>Cintura: medí donde se dobla el cuerpo, dos dedos flojos.</li>
+      <li>Cadera: pies juntos, rodeá la parte más ancha.</li>
+    </ol>
+    <p><a class="wm-btn" href={appUrl("/catalogo")}>Volver al catálogo</a></p>
+  </div>
+</Base>

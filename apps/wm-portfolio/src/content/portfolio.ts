@@ -1,6 +1,8 @@
 /** Contenido del sitio de Webmaster Studio. Los ejemplos y datos de contacto son ficticios. */
 
-import { img, pex, poster, video } from "@lib/media";
+import { apparelCovers, img, pex, poster, video } from "@lib/media";
+import type { ApparelCover } from "@lib/media";
+import { appUrl } from "@lib/urls";
 import { PORTFOLIO, RUBROS } from "@lib/rubros";
 import type { CatalogItem, RubroContent, Section } from "@lib/types";
 
@@ -14,19 +16,25 @@ type SolutionId =
   | "estetica"
   | "universidad"
   | "inmobiliaria"
+  | "inmobiliaria-premium"
   | "arquitectura"
-  | "arquitectura-premium";
+  | "arquitectura-premium"
+  | "locales-catalogo"
+  | "tiendas-ecommerce";
 
 type SolutionCopy = {
   tagline: string;
   objeccion: string;
   capabilities: readonly [string, string, string, string?, string?];
+  /** Título del panel destacado del rubro en el home. Solo lo usan las demos destacadas. */
+  panelTitle?: string;
 };
 
-/** Cobertura de las ocho demos y entre tres y cinco ítems por tarjeta. */
+/** Cobertura de las demos y entre tres y cinco ítems por tarjeta. */
 const solutionCopy: Record<string, SolutionCopy | undefined> = {
   concesionario: {
     tagline: "Catálogo de vehículos con fichas y consultas comerciales.",
+    panelTitle: "Stock y fichas de vehículos",
     objeccion: "Información de cada vehículo y condiciones de compra en un mismo lugar.",
     capabilities: [
       "Consultá autos nuevos. Filtrá y ordená el stock de usados.",
@@ -37,6 +45,7 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
   },
   lavadero: {
     tagline: "Presentación de servicios de lavado y gestión de reservas.",
+    panelTitle: "Reservas de lavado + bar",
     objeccion: "Detalle de los tratamientos y del cuidado del vehículo.",
     capabilities: [
       "Consultá servicios, precios y adicionales de lavado.",
@@ -56,6 +65,7 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
   },
   estetica: {
     tagline: "Servicios de estética, actividades y solicitud de turnos.",
+    panelTitle: "Turnos de estética y clases",
     objeccion: "Información sobre tratamientos, profesionales y disponibilidad.",
     capabilities: [
       "Conocé los tratamientos y sus detalles.",
@@ -66,6 +76,7 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
   },
   universidad: {
     tagline: "Oferta académica, becas y consultas de admisión.",
+    panelTitle: "Oferta académica y admisión",
     objeccion: "Programas de estudio y orientación para futuros estudiantes.",
     capabilities: [
       "Buscá carreras y compará hasta tres opciones.",
@@ -76,6 +87,7 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
   },
   inmobiliaria: {
     tagline: "Catálogo de propiedades y coordinación de visitas.",
+    panelTitle: "Catálogo de propiedades y visitas",
     objeccion: "Fichas de propiedades con imágenes y características relevantes.",
     capabilities: [
       "Filtrá por zona, tipo, precio y ambientes.",
@@ -83,8 +95,19 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
       "Probá una visita simulada con ticket de muestra.",
     ],
   },
+  "inmobiliaria-premium": {
+    tagline: "Demo premium de propiedades con recorridos fotográficos y asoleamiento 3D.",
+    objeccion: "Probá la experiencia con propiedades ficticias, sin enviar datos.",
+    capabilities: [
+      "Recorré los ambientes con un tour fotográfico interactivo.",
+      "Cambiá la hora y la estación para ver el asoleamiento del lote en 3D.",
+      "Probá simuladores de tasación y de visita, sin generar una solicitud real.",
+      "Guardá tus favoritos en este navegador.",
+    ],
+  },
   arquitectura: {
     tagline: "Presentación de proyectos y consultas de obra.",
+    panelTitle: "Proyectos y presupuesto de obra",
     objeccion: "Etapas de trabajo, alcance y criterios para solicitar un presupuesto.",
     capabilities: [
       "Explorá proyectos y sus fichas con antes y después.",
@@ -100,6 +123,24 @@ const solutionCopy: Record<string, SolutionCopy | undefined> = {
       "Explorá las fichas de proyectos.",
       "Probá una cotización dinámica al cambiar las opciones.",
       "Organizá una visita simulada, sin reserva real.",
+    ],
+  },
+  "locales-catalogo": {
+    tagline: "Telar: catálogo de indumentaria para explorar antes de visitar el local.",
+    objeccion: "Mostrá talles, colores y disponibilidad sin sumar un carrito.",
+    capabilities: [
+      "Combiná filtros por categoría, talle, color y disponibilidad.",
+      "Abrí la ficha de una prenda y consultá el stock por variante.",
+      "Recorré las colecciones y consultá la guía de talles.",
+    ],
+  },
+  "tiendas-ecommerce": {
+    tagline: "TRAMA: tienda de ropa urbana con carrito de compras, entrega y checkout.",
+    objeccion: "Mostrá el costo total antes de confirmar el pedido.",
+    capabilities: [
+      "Elegí variantes con stock y editá las cantidades del carrito.",
+      "Compará el costo de envío con el retiro en el local.",
+      "Probá los recorridos de Mercado Pago y MODO en un checkout simulado, sin cargos.",
     ],
   },
 } satisfies Record<SolutionId, SolutionCopy>;
@@ -404,16 +445,24 @@ export const portfolio: RubroContent = {
   },
 };
 
-/** Imágenes ilustrativas de las ocho soluciones por industria. */
+/** URL de la portada local más ancha de una demo de indumentaria. */
+const apparelCoverSrc = (cover: ApparelCover): string =>
+  appUrl(`/media/${cover.file}-${Math.max(...cover.widths)}.webp`);
+
+/** Imágenes ilustrativas de las soluciones por industria. */
 export const demoImages: Record<string, string> = {
   concesionario: img("1560958089-b8a1929cea89", 1200),
-  lavadero: img("1492144534655-ae79c964c9d7", 1200),
+  // Cover composite: Unsplash 1517248135467-4c7edcad34c4 + https://www.pexels.com/photo/6872591/.
+  lavadero: "/images/autolavado-con-bar.webp",
   "lavadero-premium": img("1626668893632-6f3a4466d22f", 1200),
   estetica: img("1570172619644-dfd03ed5d881", 1200),
   universidad: img("1562774053-701939374585", 1200),
   inmobiliaria: img("1512917774080-9991f1c4c750", 1200),
+  "inmobiliaria-premium": pex(30781823, 1200), // Misma foto editorial que el hero de la demo.
   arquitectura: img("1487958449943-2429e8be8625", 1200),
   "arquitectura-premium": img("1600585154340-be6161a56a0c", 1200),
+  "locales-catalogo": apparelCoverSrc(apparelCovers["locales-catalogo"]),
+  "tiendas-ecommerce": apparelCoverSrc(apparelCovers["tiendas-ecommerce"]),
 };
 
 export const fotoEstudio = pex(6804073, 1200);

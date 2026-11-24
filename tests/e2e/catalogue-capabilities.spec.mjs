@@ -11,14 +11,17 @@ const capabilities = [
   { id: 'estetica', highlights: [/tratamientos/i, /yoga/i, /antes.*después/i] },
   { id: 'universidad', highlights: [/compar.*tres/i, /becas/i, /preinscripción.*simulad/i] },
   { id: 'inmobiliaria', highlights: [/zona.*tipo.*precio.*ambientes/i, /fichas/i, /visita.*simulad/i] },
+  { id: 'inmobiliaria-premium', highlights: [/tour.*fotográfico/i, /asoleamiento.*3D/i, /simuladores.*tasación.*visita/i, /favoritos.*navegador/i] },
   { id: 'arquitectura', highlights: [/proyectos/i, /antes.*después/i, /presupuesto/i] },
   { id: 'arquitectura-premium', highlights: [/3D.*interactiv/i, /cotiz[aá].*(dinámic|en vivo)/i, /visita.*simulad/i] },
+  { id: 'locales-catalogo', highlights: [/categoría.*talle.*color.*disponibilidad/i, /stock.*variante/i, /colecciones.*guía de talles/i] },
+  { id: 'tiendas-ecommerce', highlights: [/stock.*carrito/i, /envío.*retiro/i, /Mercado Pago.*MODO.*sin cargos/i] },
 ];
 
 test('every solution explains what to try before its usable demo CTA, including premium differences', async ({ page, request }) => {
   test.skip(!scope.selected.some((app) => app.name === 'wm-portfolio'), 'Portfolio unchanged');
   expect((await page.goto('/demos/')).status()).toBe(200);
-  await expect(page.locator('[data-wm-rubro-card]')).toHaveCount(8);
+  await expect(page.locator('[data-wm-rubro-card]')).toHaveCount(capabilities.length);
 
   for (const { id, highlights } of capabilities) {
     const card = page.locator(`[data-wm-rubro-card="${id}"]`);
@@ -36,7 +39,9 @@ test('every solution explains what to try before its usable demo CTA, including 
 
     // Premium experiences must be discoverable here, not attributed to the base card.
     if (id === 'lavadero') await expect(list).not.toContainText(/cotiz[aá].*tamaño|entrada.*desplaz/i);
+    if (id === 'inmobiliaria') await expect(list).not.toContainText(/tour.*fotográfico|asoleamiento|favoritos/i);
     if (id === 'arquitectura') await expect(list).not.toContainText(/3D|cotiz[aá].*(dinámic|en vivo)/i);
+    if (id === 'locales-catalogo') await expect(list).not.toContainText(/carrito|checkout|pago/i);
 
     const cta = card.getByRole('link', { name: 'Explorar solución', exact: true });
     await expect(cta).toHaveAttribute('href', `/demos/${id}/`);

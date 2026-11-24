@@ -20,6 +20,9 @@ are rejected before any build/cache writes.
   unknown routes return real 404 responses, not an SPA fallback.
 - `pnpm build:apps` and per-app `pnpm run build:<id>` aliases remain standalone
   development tools; they do not publish an integrated Pages artifact.
+  For Estudio Real State, run `pnpm run build:inmobiliaria-premium` or
+  `pnpm run dev:inmobiliaria-premium` (port 3033, base
+  `/demos/inmobiliaria-premium/`).
 - `node scripts/build-site.mjs --help` describes the production build interface.
 
 ## Cache and CI/E2E report
@@ -96,6 +99,12 @@ by hashing the whole app input tree.
 5. `pnpm build --check` compiles the new app and catalogue; unchanged demo
    snapshots are **not** bulk-synchronized with the canonical registry.
    `pnpm check:site` validates all integrated paths.
+
+For Locales y tiendas, use `pnpm run build:locales-catalogo` (Telar, port 3028)
+or `pnpm run build:tiendas-ecommerce` (TRAMA, port 3029) for standalone output.
+The integrated build mounts `/demos/locales-catalogo/` and
+`/demos/tiendas-ecommerce/` separately from the portfolio, each with its own
+assets and app-local navigation. The cross-app Studio links always target `/`.
 
 Removing an APPS entry removes its routes on the next complete assembly, even if
 an old cached artifact remains. The portfolio's canonical re-export means a

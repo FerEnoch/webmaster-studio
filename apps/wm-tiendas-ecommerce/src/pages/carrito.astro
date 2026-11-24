@@ -1,0 +1,127 @@
+---
+import Base from "../layouts/Base.astro";
+import { appUrl } from "@lib/urls";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Envíos", href: "/envios" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+---
+
+<Base
+  title="Mi carrito · Trama"
+  description="Tu carrito de compras en Trama: cantidades editables y totales antes de elegir entrega y pago."
+  nav={nav}
+>
+  <div class="wm-container" style="padding-block:2rem 3rem">
+    <p class="wm-kicker">Tu carrito</p>
+    <h1 class="wm-display" style="font-size:clamp(2.2rem,5vw,3.6rem);margin:.6rem 0">Lo que elegiste</h1>
+    <p role="status" data-bag-status></p>
+    <div data-vacia hidden>
+      <p class="wm-muted">Tu carrito está vacío. El catálogo tiene seis prendas esperándote.</p>
+      <p><a class="wm-btn" href={appUrl("/catalogo")}>Ver el catálogo</a></p>
+    </div>
+    <div data-llena hidden>
+      <div data-lineas style="display:grid;gap:.8rem"></div>
+      <div class="wm-panel" style="margin-top:1.2rem">
+        <p style="display:flex;justify-content:space-between;margin:0"><span>Prendas</span> <strong data-total-count>0</strong></p>
+        <p style="display:flex;justify-content:space-between;margin:.4rem 0 0"><span>Subtotal</span> <strong data-subtotal>$ 0</strong></p>
+        <p class="wm-muted" style="font-size:.85rem">El costo de entrega se elige en el checkout. Simulación local: nada cobra y nada sale de tu navegador.</p>
+      </div>
+      <p style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem">
+        <a class="wm-btn" href={appUrl("/checkout")}>Seguir al checkout</a>
+        <button class="wm-btn wm-btn--ghost" type="button" data-vaciar>Vaciar el carrito</button>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    import { CART_KEY, parseCart, productById, setLineQty, stockOf, totals, formatPrice } from "@lib/shop";
+    import type { CartLine } from "@lib/shop";
+    const vacia = document.querySelector("[data-vacia]");
+    const llena = document.querySelector("[data-llena]");
+    const lineas = document.querySelector("[data-lineas]");
+    const vaciarBtn = document.querySelector("[data-vaciar]");
+    const countEl = document.querySelector("[data-total-count]");
+    const subEl = document.querySelector("[data-subtotal]");
+    if (!(vacia instanceof HTMLElement) || !(llena instanceof HTMLElement) || !(lineas instanceof HTMLElement) || !(vaciarBtn instanceof HTMLButtonElement) || !countEl || !subEl) {
+      throw new Error("Carrito no disponible");
+    }
+    const load = (): CartLine[] => {
+      try {
+        const raw: unknown = JSON.parse(localStorage.getItem(CART_KEY) ?? "[]");
+        return parseCart(raw);
+      } catch { return []; }
+    };
+    const save = (cart: CartLine[]): void => {
+      const status = document.querySelector("[data-bag-status]");
+      try {
+        if (cart.length) localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        else localStorage.removeItem(CART_KEY);
+        if (status) status.textContent = "";
+        window.dispatchEvent(new Event("trama:cart"));
+      } catch { if (status) status.textContent = "No pudimos actualizar el carrito."; }
+    };
+    const paint = (): void => {
+      const cart = load();
+      vacia.hidden = cart.length !== 0;
+      llena.hidden = cart.length === 0;
+      lineas.innerHTML = "";
+      for (const line of cart) {
+        const p = productById(line.producto);
+        if (!p) continue;
+        const color = p.colores.find((c) => c.id === line.color);
+        const row = document.createElement("div");
+        row.className = "wm-line";
+        const info = document.createElement("div");
+        const t = document.createElement("p");
+        const strong = document.createElement("strong");
+        strong.textContent = p.nombre;
+        t.appendChild(strong);
+        const meta = document.createElement("p");
+        meta.className = "wm-muted";
+        meta.style.margin = "0";
+        meta.style.fontSize = ".85rem";
+        meta.textContent = `${color?.nombre ?? line.color} · Talle ${line.size} · ${formatPrice(p.precio)} c/u`;
+        const qty = document.createElement("div");
+        qty.className = "wm-qty";
+        const menos = document.createElement("button");
+        menos.type = "button"; menos.textContent = "−"; menos.setAttribute("aria-label", `Quitar uno de ${p.nombre}`);
+        const out = document.createElement("output");
+        out.textContent = String(line.qty);
+        out.setAttribute("aria-live", "polite");
+        const mas = document.createElement("button");
+        mas.disabled = line.qty >= stockOf(line.producto, line.color, line.size);
+        mas.type = "button"; mas.textContent = "+"; mas.setAttribute("aria-label", `Agregar uno de ${p.nombre}`);
+        const quitar = document.createElement("button");
+        quitar.type = "button"; quitar.textContent = "Quitar"; quitar.className = "wm-btn wm-btn--ghost";
+        menos.addEventListener("click", () => { save(setLineQty(load(), line.producto, line.color, line.size, line.qty - 1)); paint(); });
+        mas.addEventListener("click", () => { save(setLineQty(load(), line.producto, line.color, line.size, line.qty + 1)); paint(); });
+        quitar.addEventListener("click", () => { save(setLineQty(load(), line.producto, line.color, line.size, 0)); paint(); });
+        qty.append(menos, out, mas);
+        const right = document.createElement("div");
+        right.style.display = "grid"; right.style.gap = ".5rem"; right.style.justifyItems = "end";
+        const sub = document.createElement("strong");
+        sub.textContent = formatPrice(p.precio * line.qty);
+        right.append(sub, quitar);
+        info.append(t, meta, qty);
+        const badge = document.createElement("span");
+        badge.className = "wm-badge";
+        badge.textContent = `${line.qty} u.`;
+        info.prepend(badge);
+        row.append(info, right);
+        lineas.appendChild(row);
+      }
+      const tot = totals(cart, "retiro");
+      countEl.textContent = String(tot.count);
+      subEl.textContent = formatPrice(tot.subtotal);
+    };
+    vaciarBtn.addEventListener("click", () => { save([]); paint(); });
+    window.addEventListener("storage", paint);
+    window.addEventListener("pageshow", paint);
+    paint();
+  </script>
+</Base>

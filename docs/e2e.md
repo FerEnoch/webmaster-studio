@@ -39,7 +39,32 @@ derived family chips, counts/visibility/ARIA announcements, all-results reset,
 family and historical premium deep links, reload, unknown fallback, preserved
 query/hash state, and actual premium-card navigation. The financing demo changes
 its term and verifies that payments change and restore, without submitting any
-form or contacting WhatsApp.
+form or contacting WhatsApp. The real-estate smoke checks the two Inmobiliaria
+cards and full navigation between the studio and each demo:
+`pnpm exec playwright test tests/e2e/inmobiliaria-premium.spec.mjs`.
+
+The Studio-return suite checks the visible action, keyboard focus, full reload,
+and a 320px header with a working disclosure. TELAR and TRAMA use their existing
+internal Contacto pages; the other demos still have to expose their WhatsApp
+actions. The storefront links remain inline when space permits and use the same
+navigation landmark in the narrow menu.
+
+The apparel suite (`tests/e2e/tiendas.spec.mjs`) also opens both catalogue cards
+— each with a real, distinct, rights-credited local cover photo — and follows
+their Studio return links. It exercises Telar's variant filters and TRAMA's
+editable cart, delivery totals, and both local payment simulations on desktop
+and touch. Adding to the cart announces a dismissible "Agregado a tu carrito"
+live region with "Ver tu carrito" / "Seguir explorando" actions and bumps the
+header count; the motion is CSS-only and `prefers-reduced-motion` disables it.
+Each TRAMA branch requires a sample email to open the
+payment preview: empty and invalid submissions leave the cart and URL
+unchanged, and returning from the preview lets the guest edit the address.
+Confirmation shows an itemized receipt, a local reference, delivery or pickup
+next steps, and a simulated message with a masked recipient. Tests verify that
+the reference matches the download, that the file excludes contact data, and
+that completing checkout clears the cart without persisting the address or
+order. Demo flows reject off-origin requests and non-GET submissions; checkout
+interactions must send no requests at all.
 
 ### Explicit offline scope
 

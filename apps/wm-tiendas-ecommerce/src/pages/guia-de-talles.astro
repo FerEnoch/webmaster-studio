@@ -1,0 +1,47 @@
+---
+import Base from "../layouts/Base.astro";
+import { appUrl } from "@lib/urls";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Envíos", href: "/envios" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+---
+
+<Base
+  title="Guía de talles · Trama"
+  description="Guía de talles de Trama: medidas en centímetros y cómo medirte en casa."
+  nav={nav}
+>
+  <div class="wm-container" style="padding-block:2rem 3rem;max-width:60rem">
+    <p class="wm-kicker">Guía de talles</p>
+    <h1 class="wm-display" style="font-size:clamp(2.2rem,5vw,3.6rem);margin:.6rem 0">El talle justo</h1>
+    <p class="wm-muted">Trama calza oversize: si estás entre dos talles, quedate con el más chico. Medidas en centímetros.</p>
+    <h2 class="wm-display" style="font-size:1.5rem;margin-top:2rem">Partes de arriba</h2>
+    <table class="wm-table">
+      <thead><tr><th>Talle</th><th>Pecho</th><th>Largo</th></tr></thead>
+      <tbody>
+        <tr><td>XS</td><td>90</td><td>66</td></tr>
+        <tr><td>S</td><td>96</td><td>68</td></tr>
+        <tr><td>M</td><td>102</td><td>70</td></tr>
+        <tr><td>L</td><td>108</td><td>72</td></tr>
+        <tr><td>XL</td><td>114</td><td>74</td></tr>
+      </tbody>
+    </table>
+    <h2 class="wm-display" style="font-size:1.5rem;margin-top:2rem">Partes de abajo</h2>
+    <table class="wm-table">
+      <thead><tr><th>Talle</th><th>Cintura</th><th>Cadera</th></tr></thead>
+      <tbody>
+        <tr><td>XS</td><td>68</td><td>94</td></tr>
+        <tr><td>S</td><td>72</td><td>98</td></tr>
+        <tr><td>M</td><td>78</td><td>104</td></tr>
+        <tr><td>L</td><td>84</td><td>110</td></tr>
+        <tr><td>XL</td><td>90</td><td>116</td></tr>
+      </tbody>
+    </table>
+    <p><a class="wm-btn" href={appUrl("/catalogo")}>Volver al catálogo</a></p>
+  </div>
+</Base>

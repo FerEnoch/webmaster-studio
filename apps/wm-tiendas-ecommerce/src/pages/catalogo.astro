@@ -1,0 +1,83 @@
+---
+import Base from "../layouts/Base.astro";
+import StorePhoto from "../components/StorePhoto.astro";
+import { productPhoto } from "@lib/photos";
+import { appUrl } from "@lib/urls";
+import { PRODUCTS, formatPrice, stockOf } from "@lib/shop";
+
+const nav = [
+  { label: "Inicio", href: "/" },
+  { label: "Catálogo", href: "/catalogo" },
+  { label: "Envíos", href: "/envios" },
+  { label: "Guía de talles", href: "/guia-de-talles" },
+  { label: "Contacto", href: "/contacto" },
+];
+const categorias = [...new Set(PRODUCTS.map((p) => p.categoria))];
+---
+
+<Base
+  title="Catálogo · Trama"
+  description="Las seis prendas de Trama con stock por variante, listas para agregar al carrito."
+  nav={nav}
+>
+  <div class="wm-container" style="padding-block:2rem 3rem">
+    <p class="wm-kicker">Catálogo</p>
+    <h1 class="wm-display" style="font-size:clamp(2.4rem,6vw,4rem);margin:.6rem 0">Las seis, de una</h1>
+    <form class="wm-radio" id="filtros" aria-label="Filtros del catálogo" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));display:grid">
+      <label style="display:grid;gap:.3rem">Categoría
+        <select name="categoria" data-filtro="categoria" style="padding:.6rem;border-radius:.6rem;background:#0008;color:inherit;border:1px solid var(--wm-line)">
+          <option value="">Todas</option>
+          {categorias.map((c) => (<option value={c}>{c}</option>))}
+        </select>
+      </label>
+      <label style="display:grid;gap:.3rem">Con talle disponible
+        <select name="talle" data-filtro="talle" style="padding:.6rem;border-radius:.6rem;background:#0008;color:inherit;border:1px solid var(--wm-line)">
+          <option value="">Cualquiera</option>
+          <option value="XS">XS</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
+        </select>
+      </label>
+    </form>
+    <p class="wm-muted" role="status" data-filtro-cuenta aria-live="polite"></p>
+    <p class="wm-muted">Fotos ilustrativas. Consultá los colores de cada prenda en su ficha.</p>
+    <div class="wm-grid" style="margin-top:1rem">
+      {PRODUCTS.map((p, index) => {
+        const tallesOk = [...new Set(p.stock.filter((v) => v.qty > 0).map((v) => v.size))];
+        void stockOf;
+        return (
+          <article class="wm-card" data-producto data-categoria={p.categoria} data-talles={tallesOk.join(",")}>
+            <StorePhoto photo={productPhoto(p)} priority={index === 0} />
+            <div class="wm-card__body">
+              <h3 class="wm-display">{p.nombre}</h3>
+              <p>{p.categoria} · {p.colores.map((c) => c.nombre).join(" · ")}</p>
+              <p class="wm-price">{formatPrice(p.precio)}</p>
+              <a class="wm-link" style="color:var(--wm-accent);font-weight:700" href={appUrl(`/producto/${p.id}`)}>Ver y agregar →</a>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+  <script>
+    const form = document.getElementById("filtros");
+    const cards = [...document.querySelectorAll("[data-producto]")];
+    const cuenta = document.querySelector("[data-filtro-cuenta]");
+    if (!(form instanceof HTMLFormElement) || !cuenta) throw new Error("Filtros no disponibles");
+    const val = (n: string): string =>
+      form.querySelector<HTMLSelectElement>(`[data-filtro="${n}"]`)?.value ?? "";
+    const apply = (): void => {
+      const cat = val("categoria");
+      const talle = val("talle");
+      let n = 0;
+      for (const card of cards) {
+        if (!(card instanceof HTMLElement)) continue;
+        const ok = (!cat || card.dataset.categoria === cat) &&
+          (!talle || (card.dataset.talles ?? "").split(",").includes(talle));
+        card.hidden = !ok;
+        if (ok) n++;
+      }
+      cuenta.textContent = `${n} de ${cards.length} prendas`;
+    };
+    form.addEventListener("change", apply);
+    apply();
+  </script>
+</Base>

@@ -1,0 +1,21 @@
+Portfolio demo covers
+Source pages and licenses verified on 2026-11-24. Each cover is a new 16:10
+crop of an already-verified in-demo shoot, so no new rights surface is added.
+The stock photographs illustrate each demo's direction; they do not imply
+endorsement by any person, photographer, or brand shown.
+
+locales-catalogo-cover-{480,800}.webp
+Photograph: Thom Bradley (@thombradley), Unsplash photo mwa_nzFpnJw.
+Source: https://unsplash.com/photos/clothing-racks-with-neutral-toned-garments-mwa_nzFpnJw
+License: https://unsplash.com/license
+Derivative: new 16:10 center crop of the Telar editorial racks artwork, framing
+the neutral-toned garments; resized to 480×300 and 800×500; metadata
+stripped; WebP. Same verified source as the Telar hero, distinct crop.
+
+tiendas-ecommerce-cover-{480,800}.webp
+Photographer: Nastasya Banana
+Source: https://www.pexels.com/photo/men-in-streetwear-posing-on-paved-street-15694146/
+License: Pexels License — https://www.pexels.com/license/
+Derivative: new 16:10 upper crop of the TRAMA street editorial, framing the
+streetwear looks; resized to 480×300 and 800×500; metadata stripped; WebP.
+Same verified source as the TRAMA hero, distinct crop.
