@@ -123,6 +123,11 @@ test('veta wheel changes stages only inside the model frame', async ({ page }, i
   const scrollY = () => page.evaluate(() => window.scrollY);
   await canvas.hover();
   const initialY = await scrollY();
+  // Freeze virtual time before driving stages: the hold window is measured in virtual
+  // ms, so freezing makes it immune to machine slowness. The +5000ms jump is absorbed
+  // because the hold is armed later, inside this frozen frame; only fastForwards advance it.
+  const virtualNow = await page.evaluate(() => Date.now());
+  await page.clock.pauseAt(virtualNow + 5000);
   for (const { label } of STAGES.slice(1)) {
     await page.mouse.wheel(0, 240);
     await expectStage(label);
@@ -130,10 +135,6 @@ test('veta wheel changes stages only inside the model frame', async ({ page }, i
   }
 
   // A momentum wheel event after the camera settles still belongs to the final scene.
-  // Freeze virtual time so the hold window can't expire on slow machines; it only
-  // advances via the explicit fastForwards below. The +50ms keeps the pause target
-  // strictly in the future so pauseAt never rejects as "to the past".
-  await page.clock.pauseAt(Date.now() + 50);
   await page.clock.fastForward(950);
   await page.mouse.wheel(0, 240);
   await page.clock.fastForward(180);
