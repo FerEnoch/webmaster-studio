@@ -1,0 +1,317 @@
+.room-tour {
+  --tour-muted: color-mix(in srgb, var(--color-ivory) 70%, var(--color-ink));
+  --tour-accent: color-mix(in srgb, var(--color-brass) 68%, var(--color-ivory));
+  --tour-edge: clamp(.9rem, 2.3vw, 2rem);
+  overflow: hidden;
+  border-radius: 1.75rem;
+  background: var(--color-ink);
+  color: var(--color-ivory);
+  color-scheme: dark;
+}
+
+.room-tour__viewer {
+  position: relative;
+  isolation: isolate;
+  inline-size: 100%;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  background: var(--color-moss);
+}
+
+.room-tour__viewer:focus-visible {
+  z-index: 1;
+}
+
+.room-tour__backdrop,
+.room-tour__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.room-tour__backdrop {
+  background-position: center;
+  background-size: cover;
+  filter: blur(1.5rem) brightness(.5);
+  transform: scale(1.12);
+}
+
+.room-tour__photo {
+  object-fit: cover;
+}
+
+.room-tour__photo--portrait {
+  object-fit: contain;
+}
+
+.room-tour__slate,
+.room-tour__badge {
+  border-radius: 999px;
+  background: var(--color-ink);
+  color: var(--color-ivory);
+  font-variant-numeric: tabular-nums;
+}
+
+.room-tour__slate {
+  position: absolute;
+  inset-block-start: var(--tour-edge);
+  inset-inline-start: var(--tour-edge);
+  padding: .5rem .8rem;
+  color: var(--tour-muted);
+  font-size: .68rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.room-tour__slate b {
+  color: var(--color-ivory);
+}
+
+.room-tour__navigation {
+  position: absolute;
+  inset-inline: var(--tour-edge);
+  inset-block-end: var(--tour-edge);
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: .65rem;
+}
+
+.room-tour__previous,
+.room-tour__next {
+  display: flex;
+  min-block-size: 3rem;
+  align-items: center;
+  border-radius: 1.5rem;
+  box-shadow: 0 .25rem 1.25rem rgb(0 0 0 / .28);
+}
+
+.room-tour__previous {
+  flex: none;
+  inline-size: 3rem;
+  justify-content: center;
+  border: 1px solid var(--tour-muted);
+  background: var(--color-ink);
+  font-size: 1.25rem;
+}
+
+.room-tour__next {
+  margin-inline-start: auto;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .55rem .8rem .6rem 1rem;
+  background: var(--color-ivory);
+  color: var(--color-ink);
+  text-align: start;
+  line-height: 1.18;
+  font-weight: 650;
+}
+
+.room-tour__next:hover {
+  background: var(--color-sand);
+}
+
+.room-tour__next small {
+  display: block;
+  margin-block-end: .2rem;
+  color: var(--color-moss);
+  font-size: .64rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.room-tour__arrow {
+  display: grid;
+  flex: none;
+  inline-size: 1.9rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-moss);
+  color: var(--color-ivory);
+  font-size: 1.15rem;
+}
+
+.room-tour__caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  padding: clamp(1rem, 2.5vw, 1.7rem) var(--tour-edge);
+}
+
+.room-tour__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.15rem, 4vw, 3.6rem);
+  line-height: 1;
+}
+
+.room-tour__description {
+  max-inline-size: 60ch;
+  margin-block-start: .5rem;
+  color: var(--tour-muted);
+  font-size: .95rem;
+}
+
+.room-tour__guide button {
+  display: flex;
+  min-block-size: 2.75rem;
+  align-items: center;
+  gap: .6rem;
+  border: 1px solid rgb(244 241 234 / .35);
+  border-radius: 999px;
+  padding-inline: .9rem;
+  font-size: .82rem;
+}
+
+.room-tour__guide button span {
+  color: var(--tour-accent);
+  font-size: .72rem;
+}
+
+.room-tour__guide button[aria-pressed="true"],
+.room-tour__guide button:hover:not(:disabled),
+.room-tour__previous:hover {
+  background: var(--color-moss);
+}
+
+.room-tour__guide button:disabled {
+  color: var(--tour-muted);
+  cursor: default;
+}
+
+.room-tour__guide p {
+  margin-block-start: .35rem;
+  color: var(--tour-muted);
+  font-size: .75rem;
+}
+
+.room-tour__storyboard {
+  border-block-start: 1px solid rgb(244 241 234 / .18);
+  padding: clamp(.9rem, 2vw, 1.2rem) var(--tour-edge) var(--tour-edge);
+}
+
+.room-tour__storyboard-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .3rem 1rem;
+  margin-block-end: .7rem;
+}
+
+.room-tour__storyboard-heading h4 {
+  color: var(--tour-accent);
+  font-size: .75rem;
+  font-weight: 650;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.room-tour__storyboard-heading p,
+.room-tour__disclaimer {
+  color: var(--tour-muted);
+  font-size: .78rem;
+}
+
+.room-tour__rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(7.75rem, 1fr);
+  gap: .55rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-brass) transparent;
+}
+
+.room-tour__stop {
+  display: flex;
+  inline-size: 100%;
+  block-size: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: .8rem;
+  background: rgb(244 241 234 / .08);
+  text-align: start;
+}
+
+.room-tour__stop:hover {
+  border-color: var(--tour-muted);
+}
+
+.room-tour__stop:focus-visible {
+  outline: 2px solid var(--color-ivory);
+  outline-offset: -4px;
+}
+
+.room-tour__stop[aria-current="step"] {
+  border-color: var(--tour-accent);
+  background: var(--color-sand);
+  color: var(--color-ink);
+}
+
+.room-tour__stop[aria-current="step"]:focus-visible {
+  outline-color: var(--color-ink);
+}
+
+.room-tour__thumbnail {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  block-size: clamp(3.75rem, 8vw, 6.5rem);
+  flex: none;
+}
+
+.room-tour__thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.room-tour__badge {
+  position: absolute;
+  inset-block-start: .35rem;
+  padding: .15rem .42rem;
+  font-size: .64rem;
+  font-weight: 650;
+}
+
+.room-tour__badge--number {
+  inset-inline-start: .35rem;
+}
+
+.room-tour__badge--current {
+  inset-inline-end: .35rem;
+  background: var(--tour-accent);
+  color: var(--color-ink);
+}
+
+.room-tour__stop-title {
+  padding: .48rem .55rem;
+  font-size: .84rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.room-tour__disclaimer {
+  margin-block-start: .75rem;
+}
+
+@media (min-width: 640px) {
+  .room-tour__viewer {
+    aspect-ratio: 16 / 9;
+    max-block-size: min(36rem, 60svh);
+  }
+
+  .room-tour__rail {
+    gap: .75rem;
+  }
+
+  .room-tour__next {
+    min-inline-size: 10rem;
+  }
+}

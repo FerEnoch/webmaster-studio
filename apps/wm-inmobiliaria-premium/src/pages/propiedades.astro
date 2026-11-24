@@ -1,0 +1,9 @@
+---
+import Base from "../layouts/Base.astro";
+import Catalog from "../components/Catalog";
+import { parseCatalogQuery } from "../lib/catalog";
+const initialQuery = parseCatalogQuery(Astro.url.searchParams);
+---
+<Base title="Propiedades — Estudio Real State" description="Explorá ocho propiedades destacadas por operación, tipo, ambientes y precio.">
+  <Catalog initialQuery={initialQuery} client:load />
+</Base>

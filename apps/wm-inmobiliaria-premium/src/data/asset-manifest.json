@@ -1,0 +1,572 @@
+{
+  "schemaVersion": 1,
+  "project": "Estudio Real State",
+  "note": "Verified Wikimedia Commons and Pexels replacements, not exact reference photographs. Each derivative retains the source item license and the modification notice. Original acquisition files and provenance records remain outside the tracked app.",
+  "assets": [
+    {
+      "title": "File:Llao Llao Peninsula.jpg",
+      "id": "angostura-lake",
+      "status": "verified-visually-aligned-replacement",
+      "exactReferencePhoto": false,
+      "roles": [
+        "cover:lote-villa-la-angostura",
+        "detail:lote-villa-la-angostura"
+      ],
+      "itemUrl": "https://commons.wikimedia.org/wiki/File:Llao_Llao_Peninsula.jpg",
+      "creator": "Fernando",
+      "source": "Own work",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "derivativeLicense": "CC BY-SA 4.0",
+      "attributionRequired": true,
+      "originalItemFileUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Llao_Llao_Peninsula.jpg",
+      "acquiredFileUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Llao_Llao_Peninsula.jpg/1920px-Llao_Llao_Peninsula.jpg",
+      "acquiredSha256": "04c9b542968ae591ad75916ff687dd1cea09f959fa80aff0fc2e17c2b281fe51",
+      "acquiredOn": "2026-11-21",
+      "modification": "Auto-orientation applied; metadata stripped; resized without upscaling; encoded to WebP quality 82. Browser object-fit crops use authored focal coordinates. No generative edits.",
+      "heroFocalPercent": null,
+      "derivatives": [
+        {
+          "path": "images/angostura-lake-480.webp",
+          "width": 480,
+          "dimensions": "480x320",
+          "bytes": 28912,
+          "sha256": "8ea1232eac75eaaa98d838c3f38c8c4c1ce5c123c8ddd9ed7623eaabc43da853"
+        },
+        {
+          "path": "images/angostura-lake-960.webp",
+          "width": 960,
+          "dimensions": "960x640",
+          "bytes": 129546,
+          "sha256": "446ca5e23a55a5990aba095d8d85860970cb25a458e550dd15bc770d507196af"
+        },
+        {
+          "path": "images/angostura-lake-1600.webp",
+          "width": 1600,
+          "dimensions": "1600x1067",
+          "bytes": 382628,
+          "sha256": "69e6d8a4c3adc7cc738ae33f896cd3f6ff0ae4c347c35e9c13ae4076b6ac3ef8"
+        }
+      ]
+    },
+    {
+      "title": "File:Modern house exterior with red roof and landscaped garden under clear blue sky.jpg",
+      "id": "canning-minimal",
+      "status": "verified-visually-aligned-replacement",
+      "exactReferencePhoto": false,
+      "roles": [
+        "cover:casa-minimal-canning",
+        "detail:casa-minimal-canning"
+      ],
+      "itemUrl": "https://commons.wikimedia.org/wiki/File:Modern_house_exterior_with_red_roof_and_landscaped_garden_under_clear_blue_sky.jpg",
+      "creator": "Shixart1985",
+      "source": "Own work",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "derivativeLicense": "CC BY 2.0",
+      "attributionRequired": true,
+      "originalItemFileUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Modern_house_exterior_with_red_roof_and_landscaped_garden_under_clear_blue_sky.jpg",
+      "acquiredFileUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Modern_house_exterior_with_red_roof_and_landscaped_garden_under_clear_blue_sky.jpg/1920px-Modern_house_exterior_with_red_roof_and_landscaped_garden_under_clear_blue_sky.jpg",
+      "acquiredSha256": "8d29738d855f4f55e542045a1f1a01720166f40cca5fbf5f32f494933c55636f",
+      "acquiredOn": "2026-11-21",
+      "modification": "Auto-orientation applied; metadata stripped; resized without upscaling; encoded to WebP quality 82. Browser object-fit crops use authored focal coordinates. No generative edits.",
+      "heroFocalPercent": null,
+      "derivatives": [
+        {
+          "path": "images/canning-minimal-480.webp",
+          "width": 480,
+          "dimensions": "480x320",
+          "bytes": 27724,
+          "sha256": "f7129b326453b7597ab02dd7d131a796fab52fb0991e210eaf879902cb3038d9"
+        },
+        {
+          "path": "images/canning-minimal-960.webp",
+          "width": 960,
+          "dimensions": "960x640",
+          "bytes": 126410,
+          "sha256": "c015058e669bdb1fe322c4afb1d8a091958514857575bbb427266fe37862f945"
+        },
+        {
+          "path": "images/canning-minimal-1600.webp",
+          "width": 1600,
+          "dimensions": "1600x1067",
+          "bytes": 438706,
+          "sha256": "b35d393033574fbc25b36a4a27e425b9efa53e147d6af7e3349ef33d13fabda1"
+        }
+      ]
+    },
+    {
+      "title": "File:ARKEN stairs interior.jpg",
+      "id": "colegiales-stairs",
+      "status": "verified-visually-aligned-replacement",
+      "exactReferencePhoto": false,
+      "roles": [
+        "hero:02-entras",
+        "cover:loft-colegiales",
+        "detail:loft-colegiales"
+      ],
+      "itemUrl": "https://commons.wikimedia.org/wiki/File:ARKEN_stairs_interior.jpg",
+      "creator": "Till Niermann",
+      "source": "Own work",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "derivativeLicense": "CC BY 3.0",
+      "attributionRequired": true,
+      "originalItemFileUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/ARKEN_stairs_interior.jpg",
+      "acquiredFileUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/ARKEN_stairs_interior.jpg/1920px-ARKEN_stairs_interior.jpg",
+      "acquiredSha256": "317556f241b513458a57cf076806d895e3078e4c4b2a5ae3870f6ac899f58bdb",
+      "acquiredOn": "2026-11-21",
+      "modification": "Auto-orientation applied; metadata stripped; resized without upscaling; encoded to WebP quality 82. Browser object-fit crops use authored focal coordinates. No generative edits.",
+      "heroFocalPercent": [
+        46,
+        52
+      ],
+      "derivatives": [
+        {
+          "path": "images/colegiales-stairs-480.webp",
+          "width": 480,
+          "dimensions": "480x360",
+          "bytes": 32434,
+          "sha256": "0323766fb0eb116fe4814e3acf7a56790a01d341635c793db4569d579395e658"
+        },
+        {
+          "path": "images/colegiales-stairs-960.webp",
+          "width": 960,
+          "dimensions": "960x720",
+          "bytes": 131308,
+          "sha256": "91e85c7055d236812ab5302477af26b5894942facc61ffe70a007f9885fa4392"
+        },
+        {
+          "path": "images/colegiales-stairs-1600.webp",
+          "width": 1600,
+          "dimensions": "1600x1200",
+          "bytes": 388502,
+          "sha256": "30769b428dd58dcf94f354e29b1e38bf96b39969d66db06e936d54879466d9d3"
+        }
+      ]
+    },
+    {
+      "title": "File:Snowy cabin in the woods (Unsplash).jpg",
+      "id": "exaltacion-forest",
+      "status": "verified-visually-aligned-replacement",
+      "exactReferencePhoto": false,
+      "roles": [
+        "cover:casa-de-campo-exaltacion",
+        "detail:casa-de-campo-exaltacion"
+      ],
+      "itemUrl": "https://commons.wikimedia.org/wiki/File:Snowy_cabin_in_the_woods_(Unsplash).jpg",
+      "creator": "Ales Krivec  aleskrivec",
+      "source": "https://unsplash.com/photos/gQR4STZ24kM \n  Image  at the    Wayback Machine    \n \n  Gallery  at the    Wayback Machine",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0",
+      "derivativeLicense": "CC0",
+      "attributionRequired": false,
+      "originalItemFileUrl": "https://upload.wikimedia.org/wikipedia/commons/3/31/Snowy_cabin_in_the_woods_%28Unsplash%29.jpg",
+      "acquiredFileUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Snowy_cabin_in_the_woods_%28Unsplash%29.jpg/1920px-Snowy_cabin_in_the_woods_%28Unsplash%29.jpg",
+      "acquiredSha256": "b83104a99baabfe76eafb700d4d0db984fc78cc9c7c1290920d9c3ccd6b99673",
+      "acquiredOn": "2026-11-21",
+      "modification": "Auto-orientation applied; metadata stripped; resized without upscaling; encoded to WebP quality 82. Browser object-fit crops use authored focal coordinates. No generative edits.",
+      "heroFocalPercent": null,
+      "derivatives": [
+        {
+          "path": "images/exaltacion-forest-480.webp",
+          "width": 480,
+          "dimensions": "480x320",
+          "bytes": 16998,
+          "sha256": "07cf4a44621af6f8b5aed918db70ac8511cc95a64bd1fb415239ecb5316e1675"
+        },
+        {
+          "path": "images/exaltacion-forest-960.webp",
+          "width": 960,
+          "dimensions": "960x641",
+          "bytes": 67088,
+          "sha256": "6c29804b3772db4aa66a597535d1ca274bf27a2d9124c8133b763b45b593bedd"
+        },
+        {
+          "path": "images/exaltacion-forest-1600.webp",
+          "width": 1600,
+          "dimensions": "1600x1068",
+          "bytes": 223968,
+          "sha256": "e1caa4eed31efa7ef694a83830855499e8bebef37ae8ee32706f27b135518894"
+        }
+      ]
+    },
+    {
+      "title": "File:Philip Johnson Glass House The House.jpg",
+      "id": "hero-arrival",
+      "status": "verified-visually-aligned-replacement",
+      "exactReferencePhoto": false,
+      "roles": [
+        "hero:01-llegas"
+      ],
+      "itemUrl": "https://commons.wikimedia.org/wiki/File:Philip_Johnson_Glass_House_The_House.jpg",
+      "creator": "A. Latina Brown",
+      "source": "Own work",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "derivativeLicense": "CC BY-SA 4.0",
+      "attributionRequired": true,
+      "originalItemFileUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Philip_Johnson_Glass_House_The_House.jpg",
+      "acquiredFileUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Philip_Johnson_Glass_House_The_House.jpg/1920px-Philip_Johnson_Glass_House_The_House.jpg",
+      "acquiredSha256": "20ad0a3cdf3434ee9d5bf75e0fb2a4171d3671c56740dba23106801102179e16",
+      "acquiredOn": "2026-11-21",
+      "modification": "Auto-orientation applied; metadata stripped; resized without upscaling; encoded to WebP quality 82. Browser object-fit crops use authored focal coordinates. No generative edits.",
+      "heroFocalPercent": [
+        50,
+        58
+      ],
+      "derivatives": [
+        {
+          "path": "images/hero-arrival-480.webp",
+          "width": 480,
+          "dimensions": "480x307",
+          "bytes": 59092,
+          "sha256": "71d36cdfbf3ac4458ec1f1321d6f2818388926900661595f05eff4a1e8e2813e"
+        },
+        {
+          "path": "images/hero-arrival-960.webp",
+          "width": 960,
+          "dimensions": "960x614",
+          "bytes": 301350,
+          "sha256": "3752aad34865048f5a2848907d0520a56c73f89659cb1fe17236ae864b6e1347"
+        },
+        {
+          "path": "images/hero-arrival-1600.webp",
+          "width": 1600,
+          "dimensions": "1600x1023",
+          "bytes": 912360,
+          "sha256": "cc9a8c790e78d4761a9fcdd2264572d097bb4cfc6028040ca3d6823b34da2bf2"
+        }
+      ]
+    },
+    {
+      "title": "File:Farnsworth House by Mies Van Der Rohe - interior kitchen.jpg",
+      "id": "laguna-kitchen",
+      "status": "verified-visually-aligned-replacement",
+      "exactReferencePhoto": false,
+      "roles": [
+        "hero:04-imaginas"
+      ],
+      "itemUrl": "https://commons.wikimedia.org/wiki/File:Farnsworth_House_by_Mies_Van_Der_Rohe_-_interior_kitchen.jpg",
+      "creator": "Victor Grigas",
+      "source": "Own work",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "derivativeLicense": "CC BY-SA 3.0",
+      "attributionRequired": true,
+      "originalItemFileUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Farnsworth_House_by_Mies_Van_Der_Rohe_-_interior_kitchen.jpg",
+      "acquiredFileUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Farnsworth_House_by_Mies_Van_Der_Rohe_-_interior_kitchen.jpg/1920px-Farnsworth_House_by_Mies_Van_Der_Rohe_-_interior_kitchen.jpg",
+      "acquiredSha256": "33a386d1c2f33022acf482762a175c6bb0e37f8c9d3f7822911117c5defc1de5",
+      "acquiredOn": "2026-11-21",
+      "modification": "Auto-orientation applied; metadata stripped; resized without upscaling; encoded to WebP quality 82. Browser object-fit crops use authored focal coordinates. No generative edits.",
+      "heroFocalPercent": [
+        52,
+        50
+      ],
+      "derivatives": [
+        {
+          "path": "images/laguna-kitchen-480.webp",
+          "width": 480,
+          "dimensions": "320x480",
+          "bytes": 11900,
+          "sha256": "a22654de94d3fe4dcc79afa5d9eef3a4a141f8f51c8e76f6197fe453f801eca0"
+        },
+        {
+          "path": "images/laguna-kitchen-960.webp",
+          "width": 960,
+          "dimensions": "640x960",
+          "bytes": 34610,
+          "sha256": "cccaa0de3940173a0b18aaed2b93a55dff6a0cfb32c99bd38d480159385c687d"
+        },
+        {
+          "path": "images/laguna-kitchen-1600.webp",
+          "width": 1600,
+          "dimensions": "1067x1600",
+          "bytes": 80846,
+          "sha256": "03562ef8a4033b0d3f10a87ebee92fd9a9aa023d70f4cdc0f920734f86b048bd"
+        }
+      ]
+    },
+    {
+      "title": "File:Farnsworth House by Mies Van Der Rohe - interior-2.jpg",
+      "id": "laguna-living",
+      "status": "verified-visually-aligned-replacement",
+      "exactReferencePhoto": false,
+      "roles": [
+        "hero:03-recorres",
+        "home:editorial-room-tour-seam"
+      ],
+      "itemUrl": "https://commons.wikimedia.org/wiki/File:Farnsworth_House_by_Mies_Van_Der_Rohe_-_interior-2.jpg",
+      "creator": "Victor Grigas",
+      "source": "Own work",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "derivativeLicense": "CC BY-SA 3.0",
+      "attributionRequired": true,
+      "originalItemFileUrl": "https://upload.wikimedia.org/wikipedia/commons/7/71/Farnsworth_House_by_Mies_Van_Der_Rohe_-_interior-2.jpg",
+      "acquiredFileUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Farnsworth_House_by_Mies_Van_Der_Rohe_-_interior-2.jpg/1920px-Farnsworth_House_by_Mies_Van_Der_Rohe_-_interior-2.jpg",
+      "acquiredSha256": "5753fe6a9183118d3cc57027b5176cac2e8de337a365a48e425ba5d8a2928d7e",
+      "acquiredOn": "2026-11-21",
+      "modification": "Auto-orientation applied; metadata stripped; resized without upscaling; encoded to WebP quality 82. Browser object-fit crops use authored focal coordinates. No generative edits.",
+      "heroFocalPercent": [
+        58,
+        50
+      ],
+      "derivatives": [
+        {
+          "path": "images/laguna-living-480.webp",
+          "width": 480,
+          "dimensions": "480x320",
+          "bytes": 19908,
+          "sha256": "3a98e4c3d1a1114ebcb1d4d468255ee66d1d9cd3526bce6270f4fc43bf93f029"
+        },
+        {
+          "path": "images/laguna-living-960.webp",
+          "width": 960,
+          "dimensions": "960x640",
+          "bytes": 67944,
+          "sha256": "1468dfb2b54d4e3260286201774bb131e2597c284679415b054473ee53ede624"
+        },
+        {
+          "path": "images/laguna-living-1600.webp",
+          "width": 1600,
+          "dimensions": "1600x1067",
+          "bytes": 168318,
+          "sha256": "8afffe28113e8197d965ee35e987eb10a48df430909b15351bcdb1379620458f"
+        }
+      ]
+    },
+    {
+      "title": "File:Philip Johnson Glass House Martini Swimming Pool.jpg",
+      "id": "laguna-pool",
+      "status": "verified-visually-aligned-replacement",
+      "exactReferencePhoto": false,
+      "roles": [
+        "cover:casa-laguna-nordelta",
+        "detail:casa-laguna-nordelta"
+      ],
+      "itemUrl": "https://commons.wikimedia.org/wiki/File:Philip_Johnson_Glass_House_Martini_Swimming_Pool.jpg",
+      "creator": "A. Latina Brown",
+      "source": "Own work",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "derivativeLicense": "CC BY-SA 4.0",
+      "attributionRequired": true,
+      "originalItemFileUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Philip_Johnson_Glass_House_Martini_Swimming_Pool.jpg",
+      "acquiredFileUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Philip_Johnson_Glass_House_Martini_Swimming_Pool.jpg/1920px-Philip_Johnson_Glass_House_Martini_Swimming_Pool.jpg",
+      "acquiredSha256": "7fa43cdf997146d6190257fe7c742d5e742dba39fc7f34c65f79bbfd6593dce4",
+      "acquiredOn": "2026-11-21",
+      "modification": "Auto-orientation applied; metadata stripped; resized without upscaling; encoded to WebP quality 82. Browser object-fit crops use authored focal coordinates. No generative edits.",
+      "heroFocalPercent": null,
+      "derivatives": [
+        {
+          "path": "images/laguna-pool-480.webp",
+          "width": 480,
+          "dimensions": "480x199",
+          "bytes": 35252,
+          "sha256": "e8f4d7457503e724c9911746289e2d1bebb7bb4fc57954322712b55009cb230f"
+        },
+        {
+          "path": "images/laguna-pool-960.webp",
+          "width": 960,
+          "dimensions": "960x397",
+          "bytes": 160016,
+          "sha256": "414a3c99443a945cd40a52271f8b9a2082995d6642a8c0d1e6e6c3525753abeb"
+        },
+        {
+          "path": "images/laguna-pool-1600.webp",
+          "width": 1600,
+          "dimensions": "1600x662",
+          "bytes": 441464,
+          "sha256": "8240dbd2f6b12dc8f0e97c70999a3b8f790439d2c4740d0bab54591509bd96e9"
+        }
+      ]
+    },
+    {
+      "title": "Modern Luxury Villa with Pool Exterior at Twilight",
+      "id": "hero-villa-pool",
+      "status": "verified-visually-aligned-replacement",
+      "exactReferencePhoto": false,
+      "roles": [
+        "hero:05-te-quedas"
+      ],
+      "itemUrl": "https://www.pexels.com/photo/modern-luxury-villa-with-pool-exterior-at-twilight-30781823/",
+      "creator": "aksinfo7 universe",
+      "source": "Pexels item 30781823",
+      "license": "Pexels License",
+      "licenseUrl": "https://www.pexels.com/license/",
+      "derivativeLicense": "Pexels License",
+      "attributionRequired": false,
+      "originalItemFileUrl": "https://images.pexels.com/photos/30781823/pexels-photo-30781823.jpeg",
+      "acquiredFileUrl": "https://images.pexels.com/photos/30781823/pexels-photo-30781823.jpeg?cs=srgb&dl=pexels-aksinfo7-30781823.jpg&fm=jpg",
+      "acquiredSha256": "36acb8eb6188553c4bebc013b2eaeb870b3855d44b37743149886a950ed47e54",
+      "acquiredOn": "2026-11-21",
+      "modification": "Auto-orientation applied; metadata stripped; resized without upscaling; encoded to WebP quality 82. Browser object-fit crops use authored focal coordinates. No generative edits.",
+      "heroFocalPercent": [
+        60,
+        50
+      ],
+      "derivatives": [
+        {
+          "path": "images/hero-villa-pool-480.webp",
+          "width": 480,
+          "dimensions": "480x320",
+          "bytes": 16276,
+          "sha256": "3e709155b505a5283311cbcebddfd8ad7f6238f2b9520ab785d9fb0a19d9762a"
+        },
+        {
+          "path": "images/hero-villa-pool-960.webp",
+          "width": 960,
+          "dimensions": "960x640",
+          "bytes": 48572,
+          "sha256": "84e5bbf0365a361414b9795ffab64dcc5931328543676fa41c872659649cf888"
+        },
+        {
+          "path": "images/hero-villa-pool-1600.webp",
+          "width": 1600,
+          "dimensions": "1600x1067",
+          "bytes": 109578,
+          "sha256": "bee6d37aea689906b78c677adeda3bff452401e802e9afd5f01573870c5377e5"
+        }
+      ]
+    },
+    {
+      "title": "File:Curved modern apartment building with glass stairwell tower.jpg",
+      "id": "palermo-building",
+      "status": "verified-visually-aligned-replacement",
+      "exactReferencePhoto": false,
+      "roles": [
+        "cover:departamento-palermo-soho",
+        "detail:departamento-palermo-soho"
+      ],
+      "itemUrl": "https://commons.wikimedia.org/wiki/File:Curved_modern_apartment_building_with_glass_stairwell_tower.jpg",
+      "creator": "Wiki.cullin",
+      "source": "Own work",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0",
+      "derivativeLicense": "CC0",
+      "attributionRequired": false,
+      "originalItemFileUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Curved_modern_apartment_building_with_glass_stairwell_tower.jpg",
+      "acquiredFileUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Curved_modern_apartment_building_with_glass_stairwell_tower.jpg/1920px-Curved_modern_apartment_building_with_glass_stairwell_tower.jpg",
+      "acquiredSha256": "163c7ca11627c5b904e251134ae59d123d85fbb07d9c4a070705e5aa2583dcfd",
+      "acquiredOn": "2026-11-21",
+      "modification": "Auto-orientation applied; metadata stripped; resized without upscaling; encoded to WebP quality 82. Browser object-fit crops use authored focal coordinates. No generative edits.",
+      "heroFocalPercent": null,
+      "derivatives": [
+        {
+          "path": "images/palermo-building-480.webp",
+          "width": 480,
+          "dimensions": "480x360",
+          "bytes": 21004,
+          "sha256": "7788190f0e8b40e15aee9d21aff69f748a05c18ea4e2237f8504a0bd5e8683b1"
+        },
+        {
+          "path": "images/palermo-building-960.webp",
+          "width": 960,
+          "dimensions": "960x720",
+          "bytes": 64156,
+          "sha256": "05251e807865132e6c0b119a284a277365fa7bfb806f10af39a99e4939bc35e1"
+        },
+        {
+          "path": "images/palermo-building-1600.webp",
+          "width": 1600,
+          "dimensions": "1600x1200",
+          "bytes": 147026,
+          "sha256": "73d899f980651013f7a55667c51e840ea56094d2693abc10a7a94b49de387695"
+        }
+      ]
+    },
+    {
+      "title": "File:Green and yellow fields (Unsplash).jpg",
+      "id": "pilar-lawn",
+      "status": "verified-visually-aligned-replacement",
+      "exactReferencePhoto": false,
+      "roles": [
+        "cover:lote-pilar-del-este",
+        "detail:lote-pilar-del-este"
+      ],
+      "itemUrl": "https://commons.wikimedia.org/wiki/File:Green_and_yellow_fields_(Unsplash).jpg",
+      "creator": "Loren Gu  lorengu",
+      "source": "https://unsplash.com/photos/IG1EdbuYCy8 \n  Image  at the    Wayback Machine    \n \n  Gallery  at the    Wayback Machine",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0",
+      "derivativeLicense": "CC0",
+      "attributionRequired": false,
+      "originalItemFileUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Green_and_yellow_fields_%28Unsplash%29.jpg",
+      "acquiredFileUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/Green_and_yellow_fields_%28Unsplash%29.jpg/1920px-Green_and_yellow_fields_%28Unsplash%29.jpg",
+      "acquiredSha256": "a3b2522e3496c06e9a2796f4bd91295e672602fd454e80da9f0a0df23a9b28c9",
+      "acquiredOn": "2026-11-21",
+      "modification": "Auto-orientation applied; metadata stripped; resized without upscaling; encoded to WebP quality 82. Browser object-fit crops use authored focal coordinates. No generative edits.",
+      "heroFocalPercent": null,
+      "derivatives": [
+        {
+          "path": "images/pilar-lawn-480.webp",
+          "width": 480,
+          "dimensions": "480x233",
+          "bytes": 34658,
+          "sha256": "f01cc3aebc3fa57836bae3b37da53df5d467c30663edcd6ecd68310df8d5739c"
+        },
+        {
+          "path": "images/pilar-lawn-960.webp",
+          "width": 960,
+          "dimensions": "960x466",
+          "bytes": 145350,
+          "sha256": "dd61cb9e12307e03ad5d71783a3c3a23754a89353de99e4617a678fdc62a7d19"
+        },
+        {
+          "path": "images/pilar-lawn-1600.webp",
+          "width": 1600,
+          "dimensions": "1600x777",
+          "bytes": 403902,
+          "sha256": "063174bc57295ab4158cde4bf7de0df0717768517ce56c54b6561aafd1e36f44"
+        }
+      ]
+    },
+    {
+      "title": "File:Moland House 01.JPG",
+      "id": "san-isidro-classic",
+      "status": "verified-visually-aligned-replacement",
+      "exactReferencePhoto": false,
+      "roles": [
+        "cover:casa-clasica-san-isidro",
+        "detail:casa-clasica-san-isidro"
+      ],
+      "itemUrl": "https://commons.wikimedia.org/wiki/File:Moland_House_01.JPG",
+      "creator": "Shuvaev",
+      "source": "Own work",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "derivativeLicense": "CC BY-SA 3.0",
+      "attributionRequired": true,
+      "originalItemFileUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Moland_House_01.JPG",
+      "acquiredFileUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Moland_House_01.JPG/1920px-Moland_House_01.JPG",
+      "acquiredSha256": "37a708404932e06cc8f36e99bdebb1d9bd4601764af93bbc68f7c7197038723b",
+      "acquiredOn": "2026-11-21",
+      "modification": "Auto-orientation applied; metadata stripped; resized without upscaling; encoded to WebP quality 82. Browser object-fit crops use authored focal coordinates. No generative edits.",
+      "heroFocalPercent": null,
+      "derivatives": [
+        {
+          "path": "images/san-isidro-classic-480.webp",
+          "width": 480,
+          "dimensions": "480x320",
+          "bytes": 43210,
+          "sha256": "fec812dc537628efd8e358f0bcef6af9c2f99f04a36b58c1c4e4d75ca5f136f5"
+        },
+        {
+          "path": "images/san-isidro-classic-960.webp",
+          "width": 960,
+          "dimensions": "960x640",
+          "bytes": 169170,
+          "sha256": "d7f4ca433e5b56d5634c1610a4f22f4c1f31de27211453c6e0c35debc2bbdfba"
+        },
+        {
+          "path": "images/san-isidro-classic-1600.webp",
+          "width": 1600,
+          "dimensions": "1600x1067",
+          "bytes": 421018,
+          "sha256": "0c1457b4a0327add403aed8731d7a154f9a0df6ba27863153d75c086502957bd"
+        }
+      ]
+    }
+  ]
+}

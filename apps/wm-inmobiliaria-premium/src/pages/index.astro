@@ -1,0 +1,110 @@
+---
+import Base from "../layouts/Base.astro";
+import HeroWalk from "../components/HeroWalk";
+import PropertyCard from "../components/PropertyCard";
+import MapView from "../components/MapView";
+import RoomTour from "../components/RoomTour";
+import SolarLot from "../components/SolarLot";
+import { CASA_LAGUNA_TOUR, SOLAR_BY_SLUG } from "../lib/experiences";
+import { properties } from "../lib/properties";
+import { href, propertyHref } from "../lib/urls";
+const casa = properties[0];
+const lote = properties.find((property) => property.experience === "lot")!;
+const loteSolar = SOLAR_BY_SLUG[lote.slug] ?? SOLAR_BY_SLUG["lote-pilar-del-este"];
+---
+<Base title="Estudio Real State — Recorré tu próxima casa">
+  <HeroWalk client:load />
+
+  <section class="overflow-hidden py-24 sm:py-28" aria-labelledby="destacadas">
+    <div class="mb-10 flex items-end justify-between gap-4 px-4 sm:px-8">
+      <div>
+        <p class="text-xs tracking-[0.25em] text-brass uppercase">Selección</p>
+        <h2 id="destacadas" class="mt-2 font-serif text-[clamp(2.6rem,6vw,5.5rem)] leading-[0.9]">Propiedades <span class="italic">destacadas</span></h2>
+      </div>
+      <div class="hidden items-center gap-2 sm:flex">
+        <button type="button" data-carousel-direction="-1" aria-label="Propiedades anteriores" class="flex h-11 w-11 items-center justify-center rounded-full border border-ink/20 hover:bg-ink hover:text-ivory">←</button>
+        <button type="button" data-carousel-direction="1" aria-label="Más propiedades" class="flex h-11 w-11 items-center justify-center rounded-full border border-ink/20 hover:bg-ink hover:text-ivory">→</button>
+      </div>
+    </div>
+    <p class="mb-5 px-4 text-xs tracking-[0.12em] text-ink/45 uppercase sm:hidden">Deslizá para descubrir →</p>
+    <ul data-featured-track tabindex="0" role="region" aria-label="Carrusel de propiedades destacadas" class="featured-track no-scrollbar m-0 flex list-none gap-6 overflow-x-auto p-0 px-4 pb-4 sm:px-8">
+      {properties.map((property) => (
+        <li class="w-[82vw] max-w-[420px] shrink-0 sm:w-[42vw] lg:w-[30vw]">
+          <PropertyCard property={property} client:visible />
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="bg-ink px-4 py-24 text-ivory sm:px-8 sm:py-28" aria-labelledby="recorrido-editorial" data-featured-tour>
+    <div class="mx-auto max-w-[1400px]">
+      <div class="mb-10 grid gap-6 lg:grid-cols-2 lg:items-end">
+        <h2 id="recorrido-editorial" class="font-serif text-[clamp(2.6rem,6vw,5.5rem)] leading-[0.9]">Una casa se entiende<br /><span class="italic text-brass">caminándola.</span></h2>
+        <p class="max-w-md text-lg leading-relaxed text-ivory/70 lg:justify-self-end">Entrá a Casa Laguna y recorré cinco paradas en fotos, desde la llegada hasta el atardecer. Avanzá ambiente por ambiente o elegí dónde detenerte.</p>
+      </div>
+      <RoomTour rooms={CASA_LAGUNA_TOUR} propertyTitle="Casa Laguna" client:visible />
+      <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+        <p class="text-sm text-ivory/60">En la ficha completa encontrás la galería, el plano del terreno y los simuladores.</p>
+        <a href={`${propertyHref(casa.slug)}#experiencia`} class="w-fit rounded-full border border-ivory/30 px-6 py-3 text-sm transition-colors hover:bg-ivory hover:text-ink">Ver la ficha de Casa Laguna →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-4 py-24 sm:px-8 sm:py-28" aria-labelledby="terreno-editorial" data-home-solar>
+    <div class="mx-auto grid max-w-[1400px] items-start gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+      <div>
+        <p class="text-xs tracking-[0.25em] text-brass uppercase">Terrenos y orientación</p>
+        <h2 id="terreno-editorial" class="mt-2 font-serif text-[clamp(2.6rem,5vw,5rem)] leading-[0.9]">Antes de comprar un lote, <span class="italic">mirá dónde da el sol.</span></h2>
+        <p class="mt-6 max-w-md text-lg leading-relaxed text-ink/70">Ubicá la calle, el norte y las medidas del lote en una vista desde arriba. Después mové la hora y compará cómo cambia la sombra en verano e invierno.</p>
+        <ul class="mt-8 space-y-3 text-ink/80">
+          {["Medidas de frente y fondo", "Calle y orientación del lote", "Sol y sombra sobre una huella ilustrativa"].map((item) => <li class="flex gap-3"><span aria-hidden="true" class="text-brass">✦</span>{item}</li>)}
+        </ul>
+        <a href={propertyHref(lote.slug)} class="button-ink mt-10">Ver {lote.title} →</a>
+      </div>
+      <SolarLot lot={loteSolar} propertyTitle={lote.title} client:visible />
+    </div>
+  </section>
+
+  <section class="px-4 pb-24 sm:px-8 sm:pb-28" aria-labelledby="mapa-home">
+    <div class="mx-auto max-w-[1400px]">
+      <p class="text-xs tracking-[0.25em] text-brass uppercase">Una mirada amplia</p>
+      <h2 id="mapa-home" class="mt-2 mb-10 font-serif text-[clamp(2.6rem,5vw,5rem)] leading-[0.9]">Dónde <span class="italic">estamos</span></h2>
+      <div class="grid gap-6 lg:grid-cols-[1fr_320px]">
+        <MapView items={properties} className="h-[60vh] min-h-[420px]" />
+        <ul class="space-y-1">
+          {properties.map((property) => <li><a href={propertyHref(property.slug)} class="flex items-center justify-between rounded-2xl px-4 py-3 transition-colors hover:bg-sand"><span><span class="block font-serif text-xl leading-tight">{property.title}</span><span class="text-xs text-ink/50">{property.barrio} · {property.op}</span></span><span aria-hidden="true">→</span></a></li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="tasacion" class="scroll-mt-24 bg-moss px-4 py-24 text-ivory sm:px-8 sm:py-28" aria-labelledby="tasacion-title">
+    <div class="mx-auto grid max-w-[1400px] gap-10 lg:grid-cols-2 lg:items-end">
+      <div>
+        <p class="text-xs tracking-[0.25em] text-brass uppercase">Tasación con contexto</p>
+        <h2 id="tasacion-title" class="mt-2 font-serif text-[clamp(2.6rem,6vw,5.5rem)] leading-[0.9]">¿Cuánto vale <span class="italic">tu propiedad?</span></h2>
+      </div>
+      <div class="max-w-xl lg:justify-self-end">
+        <p class="text-lg leading-relaxed text-ivory/75">Barrio, tipología y metros son el comienzo. Una estimación orientativa nunca reemplaza la mirada profesional sobre el estado, la orientación y los detalles que hacen único a cada lugar.</p>
+        <p class="mt-5 rounded-2xl border border-ivory/15 p-4 text-sm leading-relaxed text-ivory/60">Simuladores 100% locales en cada ficha: tasación, cuota y visita de prueba. Esta demo no solicita, guarda ni transmite datos personales.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href={href("propiedades")} class="inline-flex rounded-full bg-ivory px-6 py-3 text-sm text-ink transition-colors hover:bg-sand">Explorar propiedades →</a>
+          <a href={`${propertyHref(casa.slug)}#simuladores`} class="inline-flex rounded-full border border-ivory/30 px-6 py-3 text-sm transition-colors hover:bg-ivory hover:text-ink">Probar simuladores →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const track = document.querySelector<HTMLElement>("[data-featured-track]");
+    document.querySelectorAll<HTMLButtonElement>("[data-carousel-direction]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!track) return;
+        const direction = Number(button.dataset.carouselDirection ?? 1);
+        const card = track.querySelector<HTMLElement>("li");
+        const distance = (card?.offsetWidth ?? track.clientWidth * 0.8) + 24;
+        track.scrollBy({ left: direction * distance, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      });
+    });
+  </script>
+</Base>
